@@ -1,5 +1,5 @@
 import { InputVariableT } from "@/types"
-import { useState, Dispatch, SetStateAction } from "react"
+import { useState, Dispatch, SetStateAction, useEffect } from "react"
 import AddIcon from "@mui/icons-material/Add"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
@@ -7,6 +7,8 @@ import ListItemText from "@mui/material/ListItemText"
 import IconButton from "@mui/material/IconButton"
 import EditIcon from "@mui/icons-material/Edit"
 import RemoveIcon from "@mui/icons-material/Remove"
+import * as React from "react"
+import { InputVariableFormDialog } from "./InputVariableFormDialog"
 
 interface InputVariableFormProps {
   inputVariables: Array<InputVariableT>
@@ -76,6 +78,14 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
 
   return (
     <>
+      <InputVariableFormDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        inputVariables={inputVariables}
+        setInputVariables={setInputVariables}
+        indx={inputVariableIndx}
+      ></InputVariableFormDialog>
+
       <IconButton color="primary" onClick={onClickAddVariable}>
         <AddIcon />
       </IconButton>
