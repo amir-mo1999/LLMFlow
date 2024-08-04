@@ -1,11 +1,13 @@
 "use client"
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import InputVariableForm from "./InputVariableForm"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
 import { InputVariableT, OutputAssertionT } from "@/types"
 import OutputAssertionsForm from "./OutputAssertionsForm"
+import Button from "@mui/material/Button"
+import { AIFunctionRouteInput } from "@/models"
 
 interface AIFunctionFormProps {}
 
@@ -32,6 +34,27 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   // output assertions stuff
   const [outputAssertions, setOutputAssertions] = useState<Array<OutputAssertionT>>([])
 
+  const [disableCreateButton, setDisableCreateButton] = useState<boolean>(true)
+  function checkDisableCreateButton() {
+    if (functionName === "" || description === "") {
+      setDisableCreateButton(true)
+    } else {
+      setDisableCreateButton(false)
+    }
+  }
+  useEffect(checkDisableCreateButton, [])
+  useEffect(checkDisableCreateButton, [functionName, description])
+
+  function onCreate() {
+    const aiFunction = AIFunctionRouteInput.parse({
+      name: functionName,
+      description: description,
+      input_variables: inputVariables,
+      output_assertions: outputAssertions,
+    })
+
+    console.log(aiFunction)
+  }
   return (
     <>
       <Typography>AI Function Name</Typography>
@@ -66,6 +89,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
         outputAssertions={outputAssertions}
         setOutputAssertions={setOutputAssertions}
       ></OutputAssertionsForm>
+      <Button variant="contained" disabled={disableCreateButton} onClick={onCreate}>
+        Create
+      </Button>
     </>
   )
 }
