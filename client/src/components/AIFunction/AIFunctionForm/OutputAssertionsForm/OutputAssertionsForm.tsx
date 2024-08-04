@@ -9,6 +9,7 @@ import EditIcon from "@mui/icons-material/Edit"
 import RemoveIcon from "@mui/icons-material/Remove"
 import * as React from "react"
 import { OutputAssertionsFormDialog } from "./OutputAssertionsFormDialog"
+import { Typography } from "@mui/material"
 
 interface OutputAssertionsFormProps {
   outputAssertions: Array<OutputAssertionT>
@@ -59,7 +60,7 @@ const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
       </IconButton>
 
       <List sx={{ width: "100%", maxHeight: "20%", overflow: "auto" }}>
-        {outputAssertions.map((outputAssertions, indx) => {
+        {outputAssertions.map((assertion, indx) => {
           const labelId = `checkbox-list-label-${indx}`
           return (
             <ListItem
@@ -75,7 +76,10 @@ const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
                 </>
               }
             >
-              <ListItemText id={labelId} primary={"Placeholder"} />
+              <ListItemText
+                id={labelId}
+                primary={<Typography>{assertion.type + assertion.weight.toString()}</Typography>}
+              />
             </ListItem>
           )
         })}

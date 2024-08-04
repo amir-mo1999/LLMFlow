@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem"
 import Tooltip from "@mui/material/Tooltip"
 import IconButton from "@mui/material/IconButton"
 import HelpIcon from "@mui/icons-material/Help"
+import { OutputAssertion } from "@/models"
 
 interface OutputAssertionsFormDialogProps {
   open: boolean
@@ -30,13 +31,21 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
 }) => {
   const addingNewAssertion = indx >= outputAssertions.length
 
-  const [assertionType, setAssertionType] = useState<OutputAssertionT["type"]>("")
+  const [assertionType, setAssertionType] = useState<OutputAssertionT["type"]>(
+    addingNewAssertion ? "" : outputAssertions[indx].type
+  )
+  const [assertionWeight, setAssertionWeight] = useState<OutputAssertionT["weight"]>(
+    addingNewAssertion ? 1 : outputAssertions[indx].weight
+  )
 
   function onAssertionTypeChange(e: SelectChangeEvent<OutputAssertionT["type"]>) {
     setAssertionType(e.target.value as OutputAssertionT["type"])
   }
 
-  // event handler for when dialog is closed
+  function onAssertionChangeWeight(e: SelectChangeEvent) {
+    setAssertionWeight(parseFloat(e.target.value))
+  }
+
   function onClose(reason: string) {
     const f = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (reason !== "backdropClick") {
@@ -46,17 +55,24 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
     return f
   }
 
-  // event handler create button is clicked in dialog
   function onCreate() {
+    const assertion = OutputAssertion.parse({ type: assertionType, weight: assertionWeight })
     const auxArray = outputAssertions
     if (indx >= outputAssertions.length) {
+      auxArray.push(assertion)
     } else {
+      auxArray[indx] = assertion
     }
     setOutputAssertions([...auxArray])
     setOpen(false)
   }
 
-  // variable for checking if the create button should be disabled
+  function resetForm() {
+    setAssertionType(addingNewAssertion ? "" : outputAssertions[indx].type)
+    setAssertionWeight(addingNewAssertion ? 1 : outputAssertions[indx].weight)
+  }
+  useEffect(resetForm, [open])
+
   const [disableCreateButton, setDisableCreateButton] = useState<boolean>(false)
 
   const renderMenuItem = (
@@ -97,6 +113,20 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
                 "contains",
                 "Assert that the output contains a given substring"
               )}
+            </Select>
+            <Typography>Weight</Typography>
+            <Select
+              labelId="select-label"
+              id="select"
+              value={assertionWeight.toString()}
+              label="Select Value"
+              onChange={onAssertionChangeWeight}
+            >
+              {Array.from({ length: 20 }, (_, i) => 1 - i * 0.05).map((value) => (
+                <MenuItem key={value} value={value}>
+                  {value.toFixed(2)}
+                </MenuItem>
+              ))}
             </Select>
           </Box>
         </DialogContent>
