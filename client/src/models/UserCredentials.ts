@@ -5,4 +5,4 @@ const UserCredentials = z.object({
   password: z.string() || z.undefined,
 })
 
-export { UserCredentials }
+export default UserCredentials

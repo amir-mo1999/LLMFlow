@@ -4,9 +4,8 @@ import { useState } from "react"
 import InputVariableForm from "./InputVariableForm"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
-import { InputVariableT } from "@/types"
-
-//TODO: add validation for the function name so there is no doubles
+import { InputVariableT, OutputAssertionT } from "@/types"
+import OutputAssertionsForm from "./OutputAssertionsForm"
 
 interface AIFunctionFormProps {}
 
@@ -30,6 +29,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   // input variables stuff
   const [inputVariables, setInputVariables] = useState<Array<InputVariableT>>([])
 
+  // output assertions stuff
+  const [outputAssertions, setOutputAssertions] = useState<Array<OutputAssertionT>>([])
+
   return (
     <>
       <Typography>AI Function Name</Typography>
@@ -52,11 +54,18 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
         minRows={10}
         maxRows={10}
       ></TextField>
+
       <Typography>Variables</Typography>
       <InputVariableForm
         inputVariables={inputVariables}
         setInputVariables={setInputVariables}
       ></InputVariableForm>
+
+      <Typography>Output Assertions</Typography>
+      <OutputAssertionsForm
+        outputAssertions={outputAssertions}
+        setOutputAssertions={setOutputAssertions}
+      ></OutputAssertionsForm>
     </>
   )
 }

@@ -1,5 +1,5 @@
-import { InputVariableT } from "@/types"
-import { useState, Dispatch, SetStateAction } from "react"
+import { OutputAssertionT } from "@/types"
+import { useState, Dispatch, SetStateAction, useEffect } from "react"
 import AddIcon from "@mui/icons-material/Add"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
@@ -8,29 +8,29 @@ import IconButton from "@mui/material/IconButton"
 import EditIcon from "@mui/icons-material/Edit"
 import RemoveIcon from "@mui/icons-material/Remove"
 import * as React from "react"
-import { InputVariableFormDialog } from "./InputVariableFormDialog"
+import { OutputAssertionsFormDialog } from "./OutputAssertionsFormDialog"
 
-interface InputVariableFormProps {
-  inputVariables: Array<InputVariableT>
-  setInputVariables: Dispatch<SetStateAction<Array<InputVariableT>>>
+interface OutputAssertionsFormProps {
+  outputAssertions: Array<OutputAssertionT>
+  setOutputAssertions: Dispatch<SetStateAction<Array<OutputAssertionT>>>
 }
 
-const InputVariableForm: React.FC<InputVariableFormProps> = ({
-  inputVariables,
-  setInputVariables,
+const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
+  outputAssertions,
+  setOutputAssertions,
 }) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false)
 
-  const [inputVariableIndx, setInputVariableIndx] = useState<number>(0)
+  const [assertionIndx, setAssertionIndx] = useState<number>(0)
 
   function onClickAddVariable() {
-    setInputVariableIndx(inputVariables.length + 1)
+    setAssertionIndx(outputAssertions.length + 1)
     setOpenDialog(true)
   }
 
   const onEdit = (indx: number) => {
     const f = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      setInputVariableIndx(indx)
+      setAssertionIndx(indx)
       setOpenDialog(true)
     }
     return f
@@ -38,28 +38,28 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
 
   const onDelete = (indx: number) => {
     const f = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const aux = inputVariables.filter((item, i) => i !== indx)
-      setInputVariables([...aux])
+      const aux = outputAssertions.filter((item, i) => i !== indx)
+      setOutputAssertions([...aux])
     }
     return f
   }
 
   return (
     <>
-      <InputVariableFormDialog
+      <OutputAssertionsFormDialog
         open={openDialog}
         setOpen={setOpenDialog}
-        inputVariables={inputVariables}
-        setInputVariables={setInputVariables}
-        indx={inputVariableIndx}
-      ></InputVariableFormDialog>
+        outputAssertions={outputAssertions}
+        setOutputAssertions={setOutputAssertions}
+        indx={assertionIndx}
+      ></OutputAssertionsFormDialog>
 
       <IconButton color="primary" onClick={onClickAddVariable}>
         <AddIcon />
       </IconButton>
 
       <List sx={{ width: "100%", maxHeight: "20%", overflow: "auto" }}>
-        {inputVariables.map((inputVariable, indx) => {
+        {outputAssertions.map((outputAssertions, indx) => {
           const labelId = `checkbox-list-label-${indx}`
           return (
             <ListItem
@@ -75,7 +75,7 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
                 </>
               }
             >
-              <ListItemText id={labelId} primary={inputVariable.name} />
+              <ListItemText id={labelId} primary={"Placeholder"} />
             </ListItem>
           )
         })}
@@ -84,4 +84,4 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
   )
 }
 
-export default InputVariableForm
+export default OutputAssertionsForm

@@ -4,4 +4,4 @@ const InputVariable = z.object({
   name: z.string(),
 })
 
-export { InputVariable }
+export default InputVariable
