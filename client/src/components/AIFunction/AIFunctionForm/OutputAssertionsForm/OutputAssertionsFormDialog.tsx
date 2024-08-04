@@ -73,7 +73,16 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
   }
   useEffect(resetForm, [open])
 
-  const [disableCreateButton, setDisableCreateButton] = useState<boolean>(false)
+  const [disableCreateButton, setDisableCreateButton] = useState<boolean>(true)
+  function checkDisableCreateButton() {
+    if (assertionType === "") {
+      setDisableCreateButton(true)
+    } else {
+      setDisableCreateButton(false)
+    }
+  }
+  useEffect(checkDisableCreateButton, [])
+  useEffect(checkDisableCreateButton, [assertionType])
 
   const renderMenuItem = (
     value: OutputAssertionT["type"],
