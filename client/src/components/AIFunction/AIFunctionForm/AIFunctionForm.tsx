@@ -1,6 +1,5 @@
 "use client"
 import * as React from "react"
-import { MainContentWrapper } from "@/components"
 import { useState } from "react"
 import InputVariableForm from "./InputVariableForm"
 import Typography from "@mui/material/Typography"
@@ -32,7 +31,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   const [inputVariables, setInputVariables] = useState<Array<InputVariableT>>([])
 
   return (
-    <MainContentWrapper>
+    <>
       <Typography>AI Function Name</Typography>
       <TextField
         value={functionName}
@@ -53,13 +52,12 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
         minRows={10}
         maxRows={10}
       ></TextField>
-
       <Typography>Variables</Typography>
       <InputVariableForm
         inputVariables={inputVariables}
         setInputVariables={setInputVariables}
       ></InputVariableForm>
-    </MainContentWrapper>
+    </>
   )
 }
 
