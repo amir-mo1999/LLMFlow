@@ -1,0 +1,46 @@
+services:
+  client:
+    container_name: client
+    hostname: client
+    build:
+      context: client/.
+    volumes:
+      - ./client/src:/home/appuser/src
+    env_file:
+      - ./client/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  backend:
+    container_name: backend
+    hostname: backend
+    volumes:
+      - ./backend/App:/home/appuser/App
+    build:
+      context: backend/.
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+
+  mongo:
+    container_name: mongo
+    hostname: mongo
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
