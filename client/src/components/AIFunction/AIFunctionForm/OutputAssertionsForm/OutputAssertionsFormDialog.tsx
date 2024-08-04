@@ -21,25 +21,6 @@ interface OutputAssertionsFormDialogProps {
   indx: number
 }
 
-const renderMenuItem = (
-  value: OutputAssertionT["type"],
-  valueAlias: string,
-  tooltipHTML: React.ReactNode
-) => {
-  return (
-    <MenuItem value={value}>
-      <Box display="flex" justifyContent="space-between" width="100%" alignItems={"center"}>
-        <Typography>{valueAlias}</Typography>
-        <Tooltip placement="right" title={tooltipHTML}>
-          <IconButton>
-            <HelpIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    </MenuItem>
-  )
-}
-
 const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
   open,
   setOpen,
@@ -78,6 +59,25 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
   // variable for checking if the create button should be disabled
   const [disableCreateButton, setDisableCreateButton] = useState<boolean>(false)
 
+  const renderMenuItem = (
+    value: OutputAssertionT["type"],
+    valueAlias: string,
+    tooltipText: string
+  ) => {
+    return (
+      <MenuItem value={value}>
+        <Box display="flex" justifyContent="space-between" width="100%" alignItems={"center"}>
+          <Typography>{valueAlias}</Typography>
+          <Tooltip placement="right" title={<Typography>{tooltipText}</Typography>}>
+            <IconButton>
+              <HelpIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </MenuItem>
+    )
+  }
+
   return (
     <React.Fragment>
       <Dialog open={open}>
@@ -95,7 +95,7 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
               {renderMenuItem(
                 "contains",
                 "contains",
-                <Typography>Assert that the output contains a substring</Typography>
+                "Assert that the output contains a given substring"
               )}
             </Select>
           </Box>
