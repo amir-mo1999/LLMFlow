@@ -78,7 +78,16 @@ const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
             >
               <ListItemText
                 id={labelId}
-                primary={<Typography>{assertion.type + assertion.weight.toString()}</Typography>}
+                primary={
+                  <Typography>
+                    {"type: " +
+                      assertion.type +
+                      " weight: " +
+                      assertion.weight.toString() +
+                      " value: " +
+                      assertion.value}
+                  </Typography>
+                }
               />
             </ListItem>
           )

@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import Box from "@mui/material/Box"
+import TextField from "@mui/material/TextField"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import { OutputAssertionT } from "@/types"
@@ -38,12 +39,18 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
     addingNewAssertion ? 1 : outputAssertions[indx].weight
   )
 
+  const [assertionValue, setAssertionValue] = useState<OutputAssertionT["value"]>()
+
   function onAssertionTypeChange(e: SelectChangeEvent<OutputAssertionT["type"]>) {
     setAssertionType(e.target.value as OutputAssertionT["type"])
   }
 
-  function onAssertionChangeWeight(e: SelectChangeEvent) {
+  function onAssertionWeightChange(e: SelectChangeEvent) {
     setAssertionWeight(parseFloat(e.target.value))
+  }
+
+  function onAssertionValueChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setAssertionValue(e.target.value)
   }
 
   function onClose(reason: string) {
@@ -56,7 +63,13 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
   }
 
   function onCreate() {
-    const assertion = OutputAssertion.parse({ type: assertionType, weight: assertionWeight })
+    let assertion = OutputAssertion.parse({
+      type: assertionType,
+      weight: assertionWeight,
+    })
+    if (assertionValue !== "") {
+      assertion = OutputAssertion.parse({ ...assertion, value: assertionValue })
+    }
     const auxArray = outputAssertions
     if (indx >= outputAssertions.length) {
       auxArray.push(assertion)
@@ -129,7 +142,7 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
               id="select"
               value={assertionWeight.toString()}
               label="Select Value"
-              onChange={onAssertionChangeWeight}
+              onChange={onAssertionWeightChange}
             >
               {Array.from({ length: 20 }, (_, i) => 1 - i * 0.05).map((value) => (
                 <MenuItem key={value} value={value}>
@@ -137,6 +150,11 @@ const OutputAssertionsFormDialog: React.FC<OutputAssertionsFormDialogProps> = ({
                 </MenuItem>
               ))}
             </Select>
+            <Typography>Value</Typography>
+            <TextField
+              value={assertionValue ? assertionValue : ""}
+              onChange={onAssertionValueChange}
+            ></TextField>
           </Box>
         </DialogContent>
         <DialogActions>
