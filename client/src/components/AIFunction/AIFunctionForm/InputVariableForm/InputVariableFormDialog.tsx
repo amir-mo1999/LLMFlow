@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle"
 import TextField from "@mui/material/TextField"
 import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import { InputVariableT } from "@/types"
+import { Typography } from "@mui/material"
 
 interface InputVariableFormDialogProps {
   open: boolean
@@ -82,7 +83,6 @@ const InputVariableFormDialog: React.FC<InputVariableFormDialogProps> = ({
   return (
     <React.Fragment>
       <Dialog open={open}>
-        <DialogTitle sx={{ paddingBottom: "10px" }}>Define Input Variable</DialogTitle>
         <DialogContent>
           <Box
             sx={{
@@ -93,7 +93,8 @@ const InputVariableFormDialog: React.FC<InputVariableFormDialogProps> = ({
             }}
           >
             {/* Field for the input variable name */}
-            <TextField value={name} onChange={onNameChange} label="variable name"></TextField>
+            <Typography>Variable Name</Typography>
+            <TextField value={name} onChange={onNameChange}></TextField>
           </Box>
         </DialogContent>
         <DialogActions>

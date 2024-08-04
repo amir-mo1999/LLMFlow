@@ -54,7 +54,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
         maxRows={10}
       ></TextField>
 
-      <Typography>Input Variables</Typography>
+      <Typography>Variables</Typography>
       <InputVariableForm
         inputVariables={inputVariables}
         setInputVariables={setInputVariables}
