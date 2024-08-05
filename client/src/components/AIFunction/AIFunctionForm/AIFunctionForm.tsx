@@ -11,6 +11,7 @@ import { AIFunctionRouteInput } from "@/models"
 import DatasetForm from "./DatasetForm"
 import { useSession } from "next-auth/react"
 import { api } from "@/network"
+import { useRouter } from "next/navigation"
 
 interface AIFunctionFormProps {}
 
@@ -18,6 +19,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   // get current session
   const { data: session } = useSession()
   const accessToken = session?.user.access_token as string
+
+  // router
+  const router = useRouter()
 
   // function Name stuff
   const [functionName, setFunctionName] = useState<string>("")
@@ -66,6 +70,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
 
     api.postAIFunction(accessToken, aiFunction)
     console.log("Posting AI Function:", aiFunction)
+    router.push("/")
   }
   return (
     <>
