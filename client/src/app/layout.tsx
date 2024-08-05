@@ -2,8 +2,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import Box from "@mui/material/Box"
-import { Providers } from "@/components"
-
+import { Providers, SessionLoaded } from "@/components"
 import { ThemeProvider } from "@mui/material"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -22,20 +21,22 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              backgroundColor: "#F3F2F7",
-              paddingX: "4rem",
-              paddingY: "1rem",
-              height: "100%",
-              width: "100%",
-              overflowY: "auto",
-            }}
-          >
-            {children}
-          </Box>
+          <SessionLoaded>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                backgroundColor: "#F3F2F7",
+                paddingX: "4rem",
+                paddingY: "1rem",
+                height: "100%",
+                width: "100%",
+                overflowY: "auto",
+              }}
+            >
+              {children}
+            </Box>
+          </SessionLoaded>
         </Providers>
       </body>
     </html>

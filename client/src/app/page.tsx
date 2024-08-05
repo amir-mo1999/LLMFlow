@@ -1,5 +1,5 @@
-import { AIFunctionForm } from "@/components"
+import { AIFunctionOverview } from "@/components"
 
 export default function Home() {
-  return "Home"
+  return <AIFunctionOverview></AIFunctionOverview>
 }
