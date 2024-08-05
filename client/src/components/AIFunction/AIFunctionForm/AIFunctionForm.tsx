@@ -9,10 +9,16 @@ import OutputAssertionsForm from "./OutputAssertionsForm"
 import Button from "@mui/material/Button"
 import { AIFunctionRouteInput } from "@/models"
 import DatasetForm from "./DatasetForm"
+import { useSession } from "next-auth/react"
+import { api } from "@/network"
 
 interface AIFunctionFormProps {}
 
 const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
+  // get current session
+  const { data: session } = useSession()
+  const accessToken = session?.user.access_token as string
+
   // function Name stuff
   const [functionName, setFunctionName] = useState<string>("")
   const [functionNameError, setFunctionNameError] = useState<boolean>(false)
@@ -58,7 +64,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
       dataset: dataset,
     })
 
-    console.log(aiFunction)
+    api.postAIFunction(accessToken, aiFunction)
+    console.log("Posting AI Function:", aiFunction)
   }
   return (
     <>

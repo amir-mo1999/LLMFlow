@@ -5,7 +5,7 @@ from pydantic import (
     NonNegativeInt,
     EmailStr,
 )
-from typing import Annotated, List
+from typing import Annotated, List, Dict
 from .objectID import PydanticObjectId
 from datetime import datetime
 from .input_variable import InputVariable
@@ -25,6 +25,8 @@ class AIFunctionRouteInput(BaseModel):
     input_variables: List[InputVariable]
 
     output_assertions: List[OutputAssertion]
+
+    dataset: List[Dict[str, str]]
 
 
 class AIFunction(AIFunctionRouteInput):
