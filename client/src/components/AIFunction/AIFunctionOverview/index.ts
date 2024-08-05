@@ -1,3 +1,3 @@
 import AIFunctionOverview from "./AIFunctionOverview"
-
-export default AIFunctionOverview
+import AIFunctionDetailedOverview from "./AIFunctionDetailedOverview"
+export { AIFunctionDetailedOverview, AIFunctionOverview }

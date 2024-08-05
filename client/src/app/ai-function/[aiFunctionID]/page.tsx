@@ -1,6 +1,7 @@
 "use client"
 
 import { useAIFunction } from "@/hooks"
+import { AIFunctionDetailedOverview } from "@/components"
 
 export default function Page({ params }: { params: { aiFunctionID: string } }) {
   const aiFunction = useAIFunction(params.aiFunctionID)
@@ -10,5 +11,5 @@ export default function Page({ params }: { params: { aiFunctionID: string } }) {
   }
 
   console.log("AI Function:", aiFunction)
-  return <div>AI Function ID: {params.aiFunctionID}</div>
+  return <AIFunctionDetailedOverview aiFunction={aiFunction}></AIFunctionDetailedOverview>
 }
