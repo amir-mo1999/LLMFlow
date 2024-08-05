@@ -2,6 +2,7 @@
 import os
 from typing import Annotated
 from datetime import datetime
+from bson import ObjectId
 
 # import FastAPI stuff
 from fastapi import APIRouter, HTTPException, Depends
@@ -19,6 +20,7 @@ from App.models import (
     AIFunction,
     AIFunctionRouteInput,
     AIFunctionList,
+    AIFunctionWithID
 )
 
 # import from other files
@@ -113,3 +115,32 @@ async def get_ai_functions(
     ai_functions = AIFunctionList(ai_function_list=ai_functions)
 
     return ai_functions
+
+@ai_function_router.get(
+    "/ai-function/{ai_function_id}", tags=["Database Operations"], response_model=AIFunction
+)
+async def get_ai_function(
+    ai_function_id: str,
+    access_token: Annotated[str, Depends(oauth2_scheme)],
+):
+    # try decoding the token
+    try:
+        decoded_token = decode_token(access_token)
+    except JWTError:
+        raise HTTPException(status_code=400, detail="invalid access token")
+
+    # get the username from the token
+    username = decoded_token.sub
+
+    # get ai function collection
+    ai_function_collection = db["ai-functions"]
+    ai_function = ai_function_collection.find_one({"_id": ObjectId(ai_function_id), "username": username})
+
+    if not ai_function:
+        raise HTTPException(status_code=404, detail=f"AI Function with the id {ai_function_id} was not founds")
+
+    ai_function = AIFunctionWithID(**ai_function)
+    
+    return ai_function
+
+
