@@ -76,7 +76,7 @@ export const api = {
     return postRequest("/db/ai-function", body, "application/json", accessToken)
   },
 
-  getAIFunction: (accessToken: string) => {
+  getAIFunctions: (accessToken: string) => {
     return getRequest("/db/ai-function", undefined, undefined, accessToken)
   },
 
@@ -88,5 +88,9 @@ export const api = {
 
   getFileMetaData: (accessToken: string, objectID: string) => {
     return getRequest(`/db/get-file-meta-data/${objectID}`, undefined, undefined, accessToken)
+  },
+
+  getAIFunction: (accessToken: string, aiFunctionID: string) => {
+    return getRequest(`/db/ai-function/${aiFunctionID}`, undefined, undefined, accessToken)
   },
 }

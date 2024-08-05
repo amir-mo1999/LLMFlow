@@ -117,7 +117,7 @@ async def get_ai_functions(
     return ai_functions
 
 @ai_function_router.get(
-    "/ai-function/{ai_function_id}", tags=["Database Operations"], response_model=AIFunction
+    "/ai-function/{ai_function_id}", tags=["Database Operations"], response_model=AIFunctionWithID
 )
 async def get_ai_function(
     ai_function_id: str,
@@ -140,7 +140,7 @@ async def get_ai_function(
         raise HTTPException(status_code=404, detail=f"AI Function with the id {ai_function_id} was not founds")
 
     ai_function = AIFunctionWithID(**ai_function)
-    
+    print(ai_function)
     return ai_function
 
 

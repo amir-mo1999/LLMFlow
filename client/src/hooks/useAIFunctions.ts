@@ -12,7 +12,7 @@ const useAIFunctions = () => {
 
   useEffect(() => {
     api
-      .getAIFunction(access_token)
+      .getAIFunctions(access_token)
       .then((response) => {
         return response.json()
       })
@@ -22,4 +22,4 @@ const useAIFunctions = () => {
   return AIFunctions
 }
 
-export { useAIFunctions }
+export default useAIFunctions

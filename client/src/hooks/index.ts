@@ -1,1 +1,4 @@
-export { useAIFunctions } from "./useAIFunctions"
+import useAIFunctions from "./useAIFunctions"
+import useAIFunction from "./useAIFunction"
+
+export { useAIFunctions, useAIFunction }
