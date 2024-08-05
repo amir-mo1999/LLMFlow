@@ -7,6 +7,7 @@ const AIFunctionRouteInput = z.object({
   description: z.string().min(1).max(1000),
   input_variables: z.array(InputVariable),
   output_assertions: z.array(OutputAssertion),
+  dataset: z.array(z.record(z.string())),
 })
 
 const AIFunction = z.object({
@@ -15,6 +16,7 @@ const AIFunction = z.object({
   description: z.string().min(1).max(1000),
   input_variables: z.array(InputVariable),
   output_assertions: z.array(OutputAssertion),
+  dataset: z.array(z.record(z.string())),
 })
 
 export { AIFunctionRouteInput, AIFunction }

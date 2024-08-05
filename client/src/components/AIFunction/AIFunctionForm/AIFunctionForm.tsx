@@ -4,10 +4,11 @@ import { useState, useEffect } from "react"
 import InputVariableForm from "./InputVariableForm"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
-import { InputVariableT, OutputAssertionT } from "@/types"
+import { AIFunctionT, InputVariableT, OutputAssertionT } from "@/types"
 import OutputAssertionsForm from "./OutputAssertionsForm"
 import Button from "@mui/material/Button"
 import { AIFunctionRouteInput } from "@/models"
+import DatasetForm from "./DatasetForm"
 
 interface AIFunctionFormProps {}
 
@@ -34,6 +35,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   // output assertions stuff
   const [outputAssertions, setOutputAssertions] = useState<Array<OutputAssertionT>>([])
 
+  // validation dataset stuff
+  const [dataset, setDataset] = useState<AIFunctionT["dataset"]>([])
+
   const [disableCreateButton, setDisableCreateButton] = useState<boolean>(true)
   function checkDisableCreateButton() {
     if (functionName === "" || description === "") {
@@ -51,6 +55,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
       description: description,
       input_variables: inputVariables,
       output_assertions: outputAssertions,
+      dataset: dataset,
     })
 
     console.log(aiFunction)
@@ -89,6 +94,13 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
         outputAssertions={outputAssertions}
         setOutputAssertions={setOutputAssertions}
       ></OutputAssertionsForm>
+
+      <Typography>Validation Dataset</Typography>
+      <DatasetForm
+        inputVariables={inputVariables}
+        dataset={dataset}
+        setDataset={setDataset}
+      ></DatasetForm>
       <Button variant="contained" disabled={disableCreateButton} onClick={onCreate}>
         Create
       </Button>

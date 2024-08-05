@@ -1,5 +1,6 @@
-import { OutputAssertionT } from "@/types"
-import { useState, Dispatch, SetStateAction, useEffect } from "react"
+import { AIFunctionT } from "@/types"
+import { Dispatch, SetStateAction, useState, useEffect } from "react"
+import DatasetFormDialog from "./DatasetFormDialog"
 import AddIcon from "@mui/icons-material/Add"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
@@ -7,31 +8,28 @@ import ListItemText from "@mui/material/ListItemText"
 import IconButton from "@mui/material/IconButton"
 import EditIcon from "@mui/icons-material/Edit"
 import RemoveIcon from "@mui/icons-material/Remove"
-import * as React from "react"
-import { OutputAssertionsFormDialog } from "./OutputAssertionsFormDialog"
 import Typography from "@mui/material/Typography"
+import { InputVariableT } from "@/types"
 
-interface OutputAssertionsFormProps {
-  outputAssertions: Array<OutputAssertionT>
-  setOutputAssertions: Dispatch<SetStateAction<Array<OutputAssertionT>>>
+interface DatasetFormProps {
+  inputVariables: Array<InputVariableT>
+  dataset: AIFunctionT["dataset"]
+  setDataset: Dispatch<SetStateAction<AIFunctionT["dataset"]>>
 }
 
-const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
-  outputAssertions,
-  setOutputAssertions,
-}) => {
+const DatasetForm: React.FC<DatasetFormProps> = ({ dataset, setDataset, inputVariables }) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false)
 
-  const [assertionIndx, setAssertionIndx] = useState<number>(0)
+  const [datasetIndx, setDatasetIndx] = useState<number>(0)
 
-  function onClickAddVariable() {
-    setAssertionIndx(outputAssertions.length + 1)
+  function onClickAddRecord() {
+    setDatasetIndx(dataset.length + 1)
     setOpenDialog(true)
   }
 
   const onEdit = (indx: number) => {
     const f = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      setAssertionIndx(indx)
+      setDatasetIndx(indx)
       setOpenDialog(true)
     }
     return f
@@ -39,28 +37,28 @@ const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
 
   const onDelete = (indx: number) => {
     const f = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const aux = outputAssertions.filter((item, i) => i !== indx)
-      setOutputAssertions([...aux])
+      const aux = dataset.filter((item, i) => i !== indx)
+      setDataset([...aux])
     }
     return f
   }
-
   return (
     <>
-      <OutputAssertionsFormDialog
+      <DatasetFormDialog
         open={openDialog}
         setOpen={setOpenDialog}
-        outputAssertions={outputAssertions}
-        setOutputAssertions={setOutputAssertions}
-        indx={assertionIndx}
-      ></OutputAssertionsFormDialog>
+        dataset={dataset}
+        setDataset={setDataset}
+        inputVariables={inputVariables}
+        indx={datasetIndx}
+      ></DatasetFormDialog>
 
-      <IconButton color="primary" onClick={onClickAddVariable}>
+      <IconButton color="primary" onClick={onClickAddRecord}>
         <AddIcon />
       </IconButton>
 
       <List sx={{ width: "100%", maxHeight: "20%", overflow: "auto" }}>
-        {outputAssertions.map((assertion, indx) => {
+        {dataset.map((record, indx) => {
           const labelId = `checkbox-list-label-${indx}`
           return (
             <ListItem
@@ -76,19 +74,7 @@ const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
                 </>
               }
             >
-              <ListItemText
-                id={labelId}
-                primary={
-                  <Typography>
-                    {"type: " +
-                      assertion.type +
-                      " weight: " +
-                      assertion.weight.toString() +
-                      " value: " +
-                      assertion.value}
-                  </Typography>
-                }
-              />
+              <ListItemText id={labelId} primary={<Typography>{"placeholder"}</Typography>} />
             </ListItem>
           )
         })}
@@ -97,4 +83,4 @@ const OutputAssertionsForm: React.FC<OutputAssertionsFormProps> = ({
   )
 }
 
-export default OutputAssertionsForm
+export default DatasetForm
