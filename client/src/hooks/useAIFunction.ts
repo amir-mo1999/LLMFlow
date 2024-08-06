@@ -3,17 +3,6 @@ import { AIFunctionT } from "@/types"
 import { AIFunction } from "@/models"
 import { api } from "@/network"
 import { useSession } from "next-auth/react"
-import { z } from "zod"
-
-const datetimeSchema = z.string().refine(
-  (val) => {
-    const date = new Date(val)
-    return !isNaN(date.getTime())
-  },
-  {
-    message: "Invalid datetime format",
-  }
-)
 
 const useAIFunction = (aiFunctionID: string) => {
   const [aiFunction, setAIFunction] = useState<AIFunctionT>()
