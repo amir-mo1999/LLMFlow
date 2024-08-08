@@ -84,7 +84,7 @@ async def get_file_meta_data(
 ):
     # try decoding the token
     try:
-        decoded_token = decode_token(access_token)
+        decode_token(access_token)
     except JWTError:
         raise HTTPException(status_code=400, detail="invalid access token")
 
