@@ -12,7 +12,6 @@ from .input_variable import InputVariable
 from .output_assertion import OutputAssertion
 
 
-
 class AIFunctionRouteInput(BaseModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
         ..., example="Summarize Texts"

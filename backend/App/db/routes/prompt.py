@@ -75,6 +75,13 @@ async def post_prompt(
         username=username,
     )
 
+    # check if the same prompt already exists
+    if prompt_collection.find_one(prompt.model_dump(exclude="creation_time")):
+        raise HTTPException(
+            status_code=400,
+            detail="The same prompt already exists",
+        )
+
     # insert it to the collection
     prompt_collection.insert_one(prompt.model_dump())
 

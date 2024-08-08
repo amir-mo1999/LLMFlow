@@ -20,7 +20,7 @@ class Message(BaseModel):
 
 # Define the prompt schema
 class PromptRouteInput(BaseModel):
-    promptType: Union[Literal["single_shot"], Literal["chat"]] = Field(
+    prompt_type: Union[Literal["single_shot"], Literal["chat"]] = Field(
         ..., example="single_shot"
     )
     messages: List[Message] = Field(
@@ -33,10 +33,10 @@ class PromptRouteInput(BaseModel):
 
     @model_validator(mode="after")
     def check_messages(cls, values):
-        promptType = values.promptType
+        prompt_type = values.prompt_type
         messages = values.messages
 
-        if promptType == "single_shot":
+        if prompt_type == "single_shot":
             if len(messages) == 0:
                 return values
             elif len(messages) == 1 and messages[0].role == "user":
