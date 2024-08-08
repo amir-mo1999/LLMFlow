@@ -24,6 +24,8 @@ const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
   aiFunctionID,
   variables,
 }) => {
+  const router = useRouter()
+
   // get access token
   const { data: session } = useSession()
   const accessToken = session?.user.access_token as string
@@ -50,6 +52,8 @@ const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
       .postPrompt(accessToken, promptRouteInput)
       .then((res) => res.json())
       .then((data) => console.log(data))
+
+    router.push(`/ai-function/${aiFunctionID}`)
   }
 
   function updateDisableSubmit() {
