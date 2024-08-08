@@ -15,17 +15,17 @@ services:
     depends_on:
       - backend
 
-  backend:
-    container_name: backend
-    hostname: backend
+  service:
+    container_name: service
+    hostname: service
     volumes:
-      - ./backend/App:/home/appuser/App
+      - ./service/App:/home/appuser/App
     build:
-      context: backend/.
+      context: service/.
     ports:
       - "4000:4000"
     env_file:
-      - ./backend/.env
+      - ./service/.env
     networks:
       - app-network
 
