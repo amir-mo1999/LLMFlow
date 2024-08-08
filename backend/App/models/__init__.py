@@ -8,5 +8,4 @@ from .ai_function import (
     AIFunctionRouteInput,
     AIFunctionWithID,
 )
-from .input_variable import InputVariable
 from .prompt import Prompt, PromptRouteInput

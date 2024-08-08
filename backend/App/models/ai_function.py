@@ -8,8 +8,11 @@ from pydantic import (
 from typing import Annotated, List, Dict
 from .objectID import PydanticObjectId
 from datetime import datetime
-from .input_variable import InputVariable
 from .output_assertion import OutputAssertion
+
+
+class InputVariable(BaseModel):
+    name: Annotated[str, StringConstraints(min_length=1, max_length=40)]
 
 
 class AIFunctionRouteInput(BaseModel):

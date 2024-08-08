@@ -10,7 +10,7 @@ const Messages = z.object({
 })
 
 // Define the prompt schema
-const Prompt = z
+const PromptRouteInput = z
   .object({
     promptType: z.union([z.literal("single_shot"), z.literal("chat")]).default("single_shot"),
     messages: z.array(Messages).default([]),
@@ -30,4 +30,4 @@ const Prompt = z
     }
   )
 
-export default Prompt
+export default PromptRouteInput
