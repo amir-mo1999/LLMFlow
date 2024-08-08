@@ -32,7 +32,7 @@ const PromptRouteInput = z
 
 const Prompt = z
   .object({
-    id: z.string(),
+    _id: z.string(),
     promptType: z.union([z.literal("single_shot"), z.literal("chat")]).default("single_shot"),
     messages: z.array(Messages).default([]),
   })
