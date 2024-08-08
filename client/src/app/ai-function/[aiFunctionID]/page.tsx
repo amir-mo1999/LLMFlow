@@ -10,6 +10,5 @@ export default function Page({ params }: { params: { aiFunctionID: string } }) {
     return <></>
   }
 
-  console.log("AI Function:", aiFunction)
   return <AIFunctionDetailedOverview aiFunction={aiFunction}></AIFunctionDetailedOverview>
 }

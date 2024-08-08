@@ -13,7 +13,6 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = () => {
 
   const aiFunctions = useAIFunctions()
 
-  console.log("AI Functions:", aiFunctions)
   // if there are no AI functions yet return empty html
   if (aiFunctions.length === 0) {
     return <></>

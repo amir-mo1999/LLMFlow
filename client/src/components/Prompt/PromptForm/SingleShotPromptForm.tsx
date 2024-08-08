@@ -36,7 +36,6 @@ const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
     setPromptMessage(e.target.value)
   }
 
-  console.log(aiFunctionID)
   function onSubmit() {
     // construct the prompt route input object
     const promptRouteInput = PromptRouteInput.parse({
@@ -46,8 +45,11 @@ const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
     })
 
     // post the prompt
-    api.postPrompt(accessToken, promptRouteInput)
-    console.log("Posted Prompt:", promptRouteInput)
+    console.log("Trying to post prompt:", promptRouteInput)
+    api
+      .postPrompt(accessToken, promptRouteInput)
+      .then((res) => res.json())
+      .then((data) => console.log(data))
   }
 
   function updateDisableSubmit() {
