@@ -3,7 +3,7 @@ import UserCredentials from "./UserCredentials"
 import { AIFunctionRouteInput, AIFunction } from "./AIFunction"
 import { DecodedToken } from "./DecodedToken"
 import OutputAssertion from "./OutputAssertion"
-import Prompt from "./Prompt"
+import { Prompt, PromptRouteInput } from "./Prompt"
 
 export {
   UserCredentials,
@@ -13,4 +13,5 @@ export {
   AIFunctionRouteInput,
   OutputAssertion,
   Prompt,
+  PromptRouteInput,
 }

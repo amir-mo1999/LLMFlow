@@ -9,7 +9,9 @@ const AIFunctionRouteInput = z.object({
   output_assertions: z.array(OutputAssertion),
   dataset: z.array(z.record(z.string())),
 })
+
 const AIFunction = AIFunctionRouteInput.extend({
+  _id: z.string(),
   number_of_prompts: z.number().nonnegative(),
   username: z.string().email(),
   creation_time: z.string().refine(
