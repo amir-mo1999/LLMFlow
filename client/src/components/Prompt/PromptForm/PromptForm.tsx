@@ -30,7 +30,11 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunction }) => {
         <MenuItem value={"chat"}>Chat Prompt</MenuItem>
       </Select>
       {prompt.promptType === "single_shot" ? (
-        <SingleShotPromptForm prompt={prompt} setPrompt={setPrompt}></SingleShotPromptForm>
+        <SingleShotPromptForm
+          prompt={prompt}
+          setPrompt={setPrompt}
+          variables={aiFunction.input_variables}
+        ></SingleShotPromptForm>
       ) : prompt.promptType === "chat" ? (
         <ChatPromptForm prompt={prompt} setPrompt={setPrompt}></ChatPromptForm>
       ) : (
