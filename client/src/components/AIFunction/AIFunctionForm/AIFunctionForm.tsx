@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation"
 interface AIFunctionFormProps {}
 
 const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
-  // get current session
+  // get access token
   const { data: session } = useSession()
   const accessToken = session?.user.access_token as string
 

@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from "react"
-import { PromptT } from "@/types"
+import { PromptRouteInputT } from "@/types"
 
 interface ChatPromptFormProps {
-  prompt: PromptT
-  setPrompt: Dispatch<SetStateAction<PromptT>>
+  prompt: PromptRouteInputT
+  setPrompt: Dispatch<SetStateAction<PromptRouteInputT>>
 }
 
 const ChatPromptForm: React.FC<ChatPromptFormProps> = ({ prompt, setPrompt }) => {

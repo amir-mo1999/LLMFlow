@@ -1,23 +1,33 @@
 "use client"
 
 import { Dispatch, SetStateAction } from "react"
-import { PromptT, InputVariableT } from "@/types"
+import { PromptRouteInputT, InputVariableT } from "@/types"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useState, useEffect } from "react"
 import { Typography } from "@mui/material"
+import { useRouter } from "next/navigation"
+import { api } from "@/network"
+import { PromptRouteInput } from "@/models"
+import { useSession } from "next-auth/react"
 
 interface SingleShotPromptFormProps {
-  prompt: PromptT
-  setPrompt: Dispatch<SetStateAction<PromptT>>
+  promptType: PromptRouteInputT["prompt_type"]
+  setPrompt: Dispatch<SetStateAction<PromptRouteInputT>>
+  aiFunctionID: string
   variables: Array<InputVariableT>
 }
 
 const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
-  prompt,
+  promptType,
   setPrompt,
+  aiFunctionID,
   variables,
 }) => {
+  // get access token
+  const { data: session } = useSession()
+  const accessToken = session?.user.access_token as string
+
   const [promptMessage, setPromptMessage] = useState<string>("")
 
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
@@ -26,7 +36,19 @@ const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
     setPromptMessage(e.target.value)
   }
 
-  function onSubmit() {}
+  console.log(aiFunctionID)
+  function onSubmit() {
+    // construct the prompt route input object
+    const promptRouteInput = PromptRouteInput.parse({
+      ai_function_id: aiFunctionID,
+      prompt_type: promptType,
+      messages: [{ role: "user", content: promptMessage }],
+    })
+
+    // post the prompt
+    api.postPrompt(accessToken, promptRouteInput)
+    console.log("Posted Prompt:", promptRouteInput)
+  }
 
   function updateDisableSubmit() {
     let disable = false
