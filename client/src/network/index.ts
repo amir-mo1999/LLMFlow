@@ -1,5 +1,5 @@
 import { UserCredentialsT } from "@/types"
-import { AIFunctionRouteInputT } from "@/types"
+import { AIFunctionRouteInputT, PromptRouteInputT } from "@/types"
 
 const baseUrlClient = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || ""
 const baseUrlServer = process.env.NEXT_PUBLIC_BASE_API_URL_SERVER || ""
@@ -92,5 +92,9 @@ export const api = {
 
   getAIFunction: (accessToken: string, aiFunctionID: string) => {
     return getRequest(`/db/ai-function/${aiFunctionID}`, undefined, undefined, accessToken)
+  },
+
+  postPrompt: (accessToken: string, body: PromptRouteInputT) => {
+    return postRequest("/db/prompt", body, "application/json", accessToken)
   },
 }
