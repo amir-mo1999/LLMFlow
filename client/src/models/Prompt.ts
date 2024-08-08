@@ -1,31 +1,32 @@
 import z from "zod"
 
+// Define the role enum
+const RoleEnum = z.enum(["system", "user", "assistant"])
+
+// Define the message schema
+const Messages = z.object({
+  role: RoleEnum,
+  content: z.string(),
+})
+
+// Define the prompt schema
 const Prompt = z
   .object({
     promptType: z.union([z.literal("single_shot"), z.literal("chat")]).default("single_shot"),
-    content: z
-      .union([
-        z.string(),
-        z.record(
-          z.union([z.literal("system"), z.literal("user"), z.literal("assistant")]),
-          z.string()
-        ),
-      ])
-      .default(""),
+    messages: z.array(Messages).default([]),
   })
   .refine(
     (data) => {
       if (data.promptType === "single_shot") {
-        return typeof data.content === "string"
-      }
-      if (data.promptType === "chat") {
-        return typeof data.content === "object" && !Array.isArray(data.content)
-      }
-      return false
+        if (data.messages.length === 0) return true
+        else if (data.messages.length === 1) return data.messages[0].role === "user"
+        else return false
+      } else return true
     },
     {
-      message: "Content type does not match the promptType",
-      path: ["content"],
+      message:
+        "When promptType is 'single_shot', messages should contain exactly one message with the role 'user'.",
+      path: ["messages"],
     }
   )
 

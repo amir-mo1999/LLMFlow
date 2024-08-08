@@ -19,11 +19,6 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunction }) => {
   function onPromptTypeChange(e: SelectChangeEvent) {
     const aux = prompt
     aux.promptType = e.target.value as PromptT["promptType"]
-    if (aux.promptType == "single_shot") {
-      aux.content = ""
-    } else if (aux.promptType === "chat") {
-      aux.content = {}
-    }
     setPrompt({ ...aux })
   }
 
