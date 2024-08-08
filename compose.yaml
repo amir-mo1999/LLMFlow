@@ -13,19 +13,36 @@ services:
     networks:
       - app-network
     depends_on:
-      - backend
+      - server
 
-  service:
-    container_name: service
-    hostname: service
+  server:
+    container_name: server
+    hostname: server
     volumes:
-      - ./service/App:/home/appuser/App
+      - ./server/App:/home/appuser/App
     build:
-      context: service/.
+      context: server/.
     ports:
       - "4000:4000"
     env_file:
-      - ./service/.env
+      - ./server/.env
+    networks:
+      - app-network
+    depends_on:
+      - promptfoo-server
+      - mongo
+
+  promptfoo-server:
+    container_name: promptfoo-server
+    hostname: promptfoo-server
+    volumes:
+      - ./promptfoo-server/app.js://usr/src/app/app.js
+    build:
+      context: promptfoo-server/.
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./promptfoo-server/.env
     networks:
       - app-network
 
