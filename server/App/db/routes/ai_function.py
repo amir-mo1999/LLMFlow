@@ -107,7 +107,7 @@ async def get_ai_function(
     if not ai_function:
         raise HTTPException(
             status_code=404,
-            detail=f"AI Function with the id {ai_function_id} was not founds",
+            detail=f"AI Function with the id {ai_function_id} was not found",
         )
 
     ai_function = AIFunctionWithID(**ai_function)
