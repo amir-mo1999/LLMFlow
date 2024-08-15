@@ -1,5 +1,3 @@
-# import Python stuff
-import os
 from typing import Annotated
 from datetime import datetime
 from bson import ObjectId
@@ -8,9 +6,6 @@ from bson import ObjectId
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 
-
-# import mongo client
-from pymongo.mongo_client import MongoClient
 
 # import stuff from other modules
 from App.models import (
@@ -21,21 +16,18 @@ from App.models import (
 )
 
 # import from other files
-from App.dependencies import username
+from App.dependencies import username, db
 
-# set up mongo client
-uri = os.environ.get("MONGO_CON_STRING")
-client = MongoClient(uri)
-db = client["prompt-broker"]
+from motor.motor_asyncio import AsyncIOMotorClient
 
-
-ai_function_router = APIRouter()
+AI_FUNCTION_ROUTER = APIRouter()
 
 
-@ai_function_router.post("/ai-function", tags=["Database Operations"])
+@AI_FUNCTION_ROUTER.post("/ai-function", tags=["Database Operations"])
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
     username: Annotated[str, Depends(username)],
+    db: Annotated[AsyncIOMotorClient, Depends(db)],
 ):
     # get ai function collection
     ai_function_collection = db["ai-functions"]
@@ -44,14 +36,14 @@ async def post_ai_function(
     user_collection = db["users"]
 
     # check if username (email) exists in user collection
-    if not user_collection.find_one({"email": username}):
+    if not await user_collection.find_one({"email": username}):
         raise HTTPException(
             status_code=400,
             detail=f"User with the E-Mail {username} does not exist",
         )
 
     # check if a ai function with this name and user id already exists
-    if ai_function_collection.find_one(
+    if await ai_function_collection.find_one(
         {"name": ai_function_input.name, "username": username}
     ):
         raise HTTPException(
@@ -73,29 +65,30 @@ async def post_ai_function(
     )
 
     # insert it to the collection
-    ai_function_collection.insert_one(ai_function.model_dump())
+    await ai_function_collection.insert_one(ai_function.model_dump(by_alias=True))
 
     return JSONResponse(content={"message": "AI function created"}, status_code=200)
 
 
-@ai_function_router.get(
+@AI_FUNCTION_ROUTER.get(
     "/ai-function", tags=["Database Operations"], response_model=AIFunctionList
 )
 async def get_ai_functions(
     username: Annotated[str, Depends(username)],
+    db: Annotated[AsyncIOMotorClient, Depends(db)],
 ):
     # get ai function collection
     ai_function_collection = db["ai-functions"]
 
     # get all ai functions for user
     ai_functions = ai_function_collection.find({"username": username})
-    ai_functions = list(ai_functions)
+    ai_functions = await ai_functions.to_list(10000000000)
     ai_functions = AIFunctionList(ai_function_list=ai_functions)
 
     return ai_functions
 
 
-@ai_function_router.get(
+@AI_FUNCTION_ROUTER.get(
     "/ai-function/{ai_function_id}",
     tags=["Database Operations"],
     response_model=AIFunctionWithID,
@@ -103,10 +96,11 @@ async def get_ai_functions(
 async def get_ai_function(
     ai_function_id: str,
     username: Annotated[str, Depends(username)],
+    db: Annotated[AsyncIOMotorClient, Depends(db)],
 ):
     # get ai function collection
     ai_function_collection = db["ai-functions"]
-    ai_function = ai_function_collection.find_one(
+    ai_function = await ai_function_collection.find_one(
         {"_id": ObjectId(ai_function_id), "username": username}
     )
 

@@ -1,4 +1,4 @@
-from .auth import auth_router
+from .auth import AUTH_ROUTER
 from .db import db_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,5 +19,5 @@ app.add_middleware(
 )
 
 # add routers to application
-app.include_router(auth_router)
+app.include_router(AUTH_ROUTER)
 app.include_router(db_router)

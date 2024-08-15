@@ -5,15 +5,11 @@ from passlib.context import CryptContext
 from datetime import datetime
 from jose import jwt
 import os
-from ..models import User, Token, DecodedToken
-from .db_utils import get_user
+from ..models import Token
 import pytz
 
 # create encryption object to hash passwords
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# get environment mode
-mode = os.getenv("MODE")
+PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # set secret key
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -22,7 +18,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
 # set timezone
-tz = pytz.timezone("Europe/Berlin")
+TZ = pytz.timezone("Europe/Berlin")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -35,7 +31,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         bool: True if passwords match, False otherwise
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    return PWD_CONTEXT.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
@@ -47,43 +43,7 @@ def get_password_hash(password: str) -> str:
     Returns:
         str: hashed password
     """
-    return pwd_context.hash(password)
-
-
-def decode_token(access_token: str) -> DecodedToken:
-    """Decode a jwt token.
-
-    Args:
-        token (str): jwt token
-
-    Returns:
-        DecodedToken: the decoded jwt token.
-    """
-    decoded_token = DecodedToken(
-        access_token=access_token,
-        token_type="Bearer",
-        **jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
-    )
-    return decoded_token
-
-
-def authenticate_user(username: str, password: str) -> User:
-    """Authenticates user by username and password.
-    Returns user object if credentials match a user in the database.
-
-    Args:
-        username (str): username
-        password (str): password
-
-    Returns:
-        User: user object
-    """
-    user = get_user(username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
+    return PWD_CONTEXT.hash(password)
 
 
 def create_jwt_token(data: dict, expires_delta: Union[timedelta, None] = None) -> Token:
@@ -100,13 +60,13 @@ def create_jwt_token(data: dict, expires_delta: Union[timedelta, None] = None) -
     to_encode = data.copy()
 
     # add iat to encoded data (issued at time)
-    to_encode.update({"iat": datetime.now(tz)})
+    to_encode.update({"iat": datetime.now(TZ)})
 
     # add expiration time to to the encoded data
     if expires_delta:
-        expire = datetime.now(tz) + expires_delta
+        expire = datetime.now(TZ) + expires_delta
     else:
-        expire = datetime.now(tz) + timedelta(minutes=60)
+        expire = datetime.now(TZ) + timedelta(minutes=60)
     to_encode.update({"exp": expire})
 
     # add jti to encoded data

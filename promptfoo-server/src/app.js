@@ -1,6 +1,6 @@
 import express from "express";
 import "dotenv/config";
-import promptfoo from "promptfoo";
+import promptfoo, { assertions } from "promptfoo";
 
 const app = express();
 const port = parseInt(process.env.PORT);
@@ -13,6 +13,7 @@ app.get("/", async (req, res) => {
         "Rephrase this like a pirate: {{body}}",
       ],
       providers: ["openai:gpt-4o-mini"],
+      defaultTest: { assert: [{ type: "contains", value: "H" }] },
       tests: [
         {
           vars: {

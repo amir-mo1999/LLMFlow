@@ -1,5 +1,4 @@
 # import Python stuff
-import os
 from typing import Annotated
 from datetime import datetime
 
@@ -7,41 +6,27 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 
-
-# import mongo client
-from pymongo.mongo_client import MongoClient
-
 # import stuff from other modules
 from App.models import Prompt, PromptRouteInput
 
 # import from other files
-from App.dependencies import username
+from App.dependencies import username, db
 
-# set up mongo client
-uri = os.environ.get("MONGO_CON_STRING")
-client = MongoClient(uri)
-db = client["prompt-broker"]
+from motor.motor_asyncio import AsyncIOMotorClient
 
 
-prompt_router = APIRouter()
+PROMPT_ROUTER = APIRouter()
 
 
-@prompt_router.post("/prompt", tags=["Database Operations"])
+@PROMPT_ROUTER.post("/prompt", tags=["Database Operations"])
 async def post_prompt(
     prompt: PromptRouteInput,
     username: Annotated[str, Depends(username)],
+    db: Annotated[AsyncIOMotorClient, Depends(db)],
 ):
     # get collections
     prompt_collection = db["prompts"]
-    user_collection = db["users"]
     ai_function_collection = db["ai-functions"]
-
-    # check if username (email) exists in user collection
-    if not user_collection.find_one({"email": username}):
-        raise HTTPException(
-            status_code=400,
-            detail=f"User with the E-Mail {username} does not exist",
-        )
 
     # check if ai function exists
     if not ai_function_collection.find_one(
@@ -63,7 +48,7 @@ async def post_prompt(
     )
 
     # check if the same prompt already exists
-    if prompt_collection.find_one(prompt.model_dump(exclude="creation_time")):
+    if await prompt_collection.find_one(prompt.model_dump(exclude="creation_time")):
         raise HTTPException(
             status_code=400,
             detail="The same prompt already exists",

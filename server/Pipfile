@@ -15,6 +15,7 @@ mongo = "*"
 pydantic-mongo = "*"
 pytz = "*"
 python-multipart = "*"
+motor = "*"
 
 [dev-packages]
 
