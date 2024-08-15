@@ -13,7 +13,7 @@ class RoleEnum(str, Enum):
 
 
 # Define the message schema
-class Message(BaseModel):
+class PromptMessage(BaseModel):
     role: RoleEnum
     content: str
 
@@ -23,10 +23,10 @@ class PromptRouteInput(BaseModel):
     prompt_type: Union[Literal["single_shot"], Literal["chat"]] = Field(
         ..., example="single_shot"
     )
-    messages: List[Message] = Field(
+    messages: List[PromptMessage] = Field(
         ...,
         example=[
-            Message(role="user", content="Summarize the following text: {{text}}")
+            PromptMessage(role="user", content="Summarize the following text: {{text}}")
         ],
     )
     ai_function_id: PydanticObjectId
