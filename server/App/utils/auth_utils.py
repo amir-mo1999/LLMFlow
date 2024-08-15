@@ -1,4 +1,4 @@
-from typing import Union, Any
+from typing import Union
 import uuid
 from datetime import timedelta
 from passlib.context import CryptContext

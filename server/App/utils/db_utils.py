@@ -1,7 +1,6 @@
 from ..models import User
 from pymongo.mongo_client import MongoClient
 import os
-from bson import ObjectId
 import hashlib
 
 # set up mongo client

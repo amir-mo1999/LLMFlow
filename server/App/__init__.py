@@ -1,9 +1,7 @@
 from .auth import auth_router
 from .db import db_router
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 
 
 app = FastAPI(
