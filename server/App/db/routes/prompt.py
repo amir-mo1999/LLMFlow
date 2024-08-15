@@ -11,15 +11,11 @@ from fastapi.responses import JSONResponse
 # import mongo client
 from pymongo.mongo_client import MongoClient
 
-# jwt stuff
-from jose import JWTError
-
 # import stuff from other modules
 from App.models import Prompt, PromptRouteInput
 
 # import from other files
-from App.utils import decode_token
-from App.auth import oauth2_scheme
+from App.dependencies import username
 
 # set up mongo client
 uri = os.environ.get("MONGO_CON_STRING")
@@ -33,17 +29,8 @@ prompt_router = APIRouter()
 @prompt_router.post("/prompt", tags=["Database Operations"])
 async def post_prompt(
     prompt: PromptRouteInput,
-    access_token: Annotated[str, Depends(oauth2_scheme)],
+    username: Annotated[str, Depends(username)],
 ):
-    # try decoding the token
-    try:
-        decoded_token = decode_token(access_token)
-    except JWTError:
-        raise HTTPException(status_code=400, detail="invalid access token")
-
-    # get the username from the token
-    username = decoded_token.sub
-
     # get collections
     prompt_collection = db["prompts"]
     user_collection = db["users"]

@@ -12,20 +12,16 @@ from fastapi.responses import JSONResponse
 # import mongo client
 from pymongo.mongo_client import MongoClient
 
-# jwt stuff
-from jose import JWTError
-
 # import stuff from other modules
 from App.models import (
     AIFunction,
     AIFunctionRouteInput,
     AIFunctionList,
-    AIFunctionWithID
+    AIFunctionWithID,
 )
 
 # import from other files
-from App.utils import decode_token
-from App.auth import oauth2_scheme
+from App.dependencies import username
 
 # set up mongo client
 uri = os.environ.get("MONGO_CON_STRING")
@@ -39,17 +35,8 @@ ai_function_router = APIRouter()
 @ai_function_router.post("/ai-function", tags=["Database Operations"])
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
-    access_token: Annotated[str, Depends(oauth2_scheme)],
+    username: Annotated[str, Depends(username)],
 ):
-    # try decoding the token
-    try:
-        decoded_token = decode_token(access_token)
-    except JWTError:
-        raise HTTPException(status_code=400, detail="invalid access token")
-
-    # get the username from the token
-    username = decoded_token.sub
-
     # get ai function collection
     ai_function_collection = db["ai-functions"]
 
@@ -95,17 +82,8 @@ async def post_ai_function(
     "/ai-function", tags=["Database Operations"], response_model=AIFunctionList
 )
 async def get_ai_functions(
-    access_token: Annotated[str, Depends(oauth2_scheme)],
+    username: Annotated[str, Depends(username)],
 ):
-    # try decoding the token
-    try:
-        decoded_token = decode_token(access_token)
-    except JWTError:
-        raise HTTPException(status_code=400, detail="invalid access token")
-
-    # get the username from the token
-    username = decoded_token.sub
-
     # get ai function collection
     ai_function_collection = db["ai-functions"]
 
@@ -116,31 +94,27 @@ async def get_ai_functions(
 
     return ai_functions
 
+
 @ai_function_router.get(
-    "/ai-function/{ai_function_id}", tags=["Database Operations"], response_model=AIFunctionWithID
+    "/ai-function/{ai_function_id}",
+    tags=["Database Operations"],
+    response_model=AIFunctionWithID,
 )
 async def get_ai_function(
     ai_function_id: str,
-    access_token: Annotated[str, Depends(oauth2_scheme)],
+    username: Annotated[str, Depends(username)],
 ):
-    # try decoding the token
-    try:
-        decoded_token = decode_token(access_token)
-    except JWTError:
-        raise HTTPException(status_code=400, detail="invalid access token")
-
-    # get the username from the token
-    username = decoded_token.sub
-
     # get ai function collection
     ai_function_collection = db["ai-functions"]
-    ai_function = ai_function_collection.find_one({"_id": ObjectId(ai_function_id), "username": username})
+    ai_function = ai_function_collection.find_one(
+        {"_id": ObjectId(ai_function_id), "username": username}
+    )
 
     if not ai_function:
-        raise HTTPException(status_code=404, detail=f"AI Function with the id {ai_function_id} was not founds")
+        raise HTTPException(
+            status_code=404,
+            detail=f"AI Function with the id {ai_function_id} was not founds",
+        )
 
     ai_function = AIFunctionWithID(**ai_function)
-    print(ai_function)
     return ai_function
-
-
