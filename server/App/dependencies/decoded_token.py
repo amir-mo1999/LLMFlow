@@ -1,10 +1,11 @@
-from typing import Annotated
-from fastapi import Depends, HTTPException
-from jose import JWTError
-from fastapi.security import OAuth2PasswordBearer
-from App.models import DecodedToken
 import os
-from jose import jwt
+from typing import Annotated
+
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+
+from App.models import DecodedToken
 
 # define oauth2_scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")

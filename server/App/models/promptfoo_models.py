@@ -1,7 +1,9 @@
 from typing import List
+
 from pydantic import BaseModel, Field
-from .prompt import PromptMessage
+
 from .output_assertion import OutputAssertion
+from .prompt import PromptMessage
 
 
 class TestCase(BaseModel):

@@ -1,12 +1,13 @@
-from typing import Union
-import uuid
-from datetime import timedelta
-from passlib.context import CryptContext
-from datetime import datetime
-from jose import jwt
 import os
-from ..models import Token
+import uuid
+from datetime import datetime, timedelta
+from typing import Union
+
 import pytz
+from jose import jwt
+from passlib.context import CryptContext
+
+from ..models import Token
 
 # create encryption object to hash passwords
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")

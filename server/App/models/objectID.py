@@ -1,4 +1,5 @@
 from typing import Annotated, Any, Callable
+
 from bson import ObjectId
 from pydantic_core import core_schema
 

@@ -1,16 +1,16 @@
-from fastapi import APIRouter, HTTPException, Path, Depends
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, Path
 from fastapi.responses import JSONResponse
+from motor.motor_asyncio import AsyncIOMotorClient
+
+from App.dependencies import db
 
 # import stuff from other modules
 from App.models import (
     User,
     UserRouteInput,
 )
-from App.dependencies import db
-
-from motor.motor_asyncio import AsyncIOMotorClient
-
-from typing import Annotated
 
 user_router = APIRouter()
 

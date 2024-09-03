@@ -1,17 +1,17 @@
 # import python stuff
-from typing import Annotated
 import os
+from typing import Annotated
 
 # import fast api stuff
-from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from motor.motor_asyncio import AsyncIOMotorClient
+
+from App.dependencies import db, user
+from App.models import User, UserWithAccessToken
 
 # import other modules
 from .utils import create_jwt_token, timedelta, verify_password
-from App.models import UserWithAccessToken, User
-from App.dependencies import user, db
-
-from motor.motor_asyncio import AsyncIOMotorClient
 
 # define router object
 AUTH_ROUTER = APIRouter(prefix="/auth")

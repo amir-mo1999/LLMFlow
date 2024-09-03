@@ -1,5 +1,7 @@
-from pydantic import BaseModel, EmailStr, StringConstraints, Field
 from typing import Annotated, Literal
+
+from pydantic import BaseModel, EmailStr, Field, StringConstraints
+
 from .objectID import PydanticObjectId
 
 

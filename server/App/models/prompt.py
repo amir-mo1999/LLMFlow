@@ -1,8 +1,10 @@
+from datetime import datetime
 from enum import Enum
 from typing import List, Literal, Union
-from pydantic import BaseModel, Field, model_validator, EmailStr
+
+from pydantic import BaseModel, EmailStr, Field, model_validator
+
 from .objectID import PydanticObjectId
-from datetime import datetime
 
 
 # Define the role enum
@@ -43,7 +45,8 @@ class PromptRouteInput(BaseModel):
                 return values
             else:
                 raise ValueError(
-                    "When promptType is 'single_shot', messages should contain exactly one message with the role 'user'."
+                    """When promptType is 'single_shot',
+                    messages should contain exactly one message with the role 'user'."""
                 )
         return values
 

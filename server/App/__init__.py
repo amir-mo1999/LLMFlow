@@ -1,8 +1,8 @@
-from .auth import AUTH_ROUTER
-from .db import db_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .auth import AUTH_ROUTER
+from .db import db_router
 
 app = FastAPI(
     title="Backend",

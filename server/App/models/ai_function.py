@@ -1,13 +1,15 @@
+from datetime import datetime
+from typing import Annotated, Dict, List
+
 from pydantic import (
     BaseModel,
-    StringConstraints,
+    EmailStr,
     Field,
     NonNegativeInt,
-    EmailStr,
+    StringConstraints,
 )
-from typing import Annotated, List, Dict
+
 from .objectID import PydanticObjectId
-from datetime import datetime
 from .output_assertion import OutputAssertion
 
 

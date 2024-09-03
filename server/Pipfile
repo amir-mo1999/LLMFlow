@@ -17,6 +17,7 @@ pytz = "*"
 python-multipart = "*"
 motor = "*"
 bcrypt = "*"
+pre-commit = "*"
 
 [dev-packages]
 

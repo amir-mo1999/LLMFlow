@@ -1,24 +1,18 @@
-from typing import Annotated
 from datetime import datetime
+from typing import Annotated
+
 from bson import ObjectId
-
-# import FastAPI stuff
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
+from motor.motor_asyncio import AsyncIOMotorClient
 
-
-# import stuff from other modules
+from App.dependencies import db, username
 from App.models import (
     AIFunction,
-    AIFunctionRouteInput,
     AIFunctionList,
+    AIFunctionRouteInput,
     AIFunctionWithID,
 )
-
-# import from other files
-from App.dependencies import username, db
-
-from motor.motor_asyncio import AsyncIOMotorClient
 
 AI_FUNCTION_ROUTER = APIRouter()
 

@@ -1,5 +1,6 @@
-from pydantic import BaseModel, confloat, Field
-from typing import Optional, Literal, Annotated
+from typing import Annotated, Literal, Optional
+
+from pydantic import BaseModel, Field, confloat
 
 
 class OutputAssertion(BaseModel):
