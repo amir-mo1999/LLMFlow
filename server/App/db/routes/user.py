@@ -5,8 +5,6 @@ from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from App.dependencies import db
-
-# import stuff from other modules
 from App.models import (
     User,
     UserRouteInput,

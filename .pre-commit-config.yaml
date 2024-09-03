@@ -3,7 +3,7 @@ repos:
     rev: v0.0.282 # Use the latest stable version of ruff
     hooks:
       - id: ruff
-        args: ["--select=I", "--fix"]
+        args: ["--select=I,F401", "--fix"]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0 # Use the latest stable version of pre-commit-hooks
