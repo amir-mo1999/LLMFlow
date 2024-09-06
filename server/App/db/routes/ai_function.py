@@ -17,7 +17,7 @@ from App.models import (
 AI_FUNCTION_ROUTER = APIRouter()
 
 
-@AI_FUNCTION_ROUTER.post("/ai-function", tags=["Database Operations"])
+@AI_FUNCTION_ROUTER.post("/ai-function")
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
     username: Annotated[str, Depends(username)],
@@ -64,9 +64,7 @@ async def post_ai_function(
     return JSONResponse(content={"message": "AI function created"}, status_code=200)
 
 
-@AI_FUNCTION_ROUTER.get(
-    "/ai-function", tags=["Database Operations"], response_model=AIFunctionList
-)
+@AI_FUNCTION_ROUTER.get("/ai-function", response_model=AIFunctionList)
 async def get_ai_functions(
     username: Annotated[str, Depends(username)],
     db: Annotated[AsyncIOMotorClient, Depends(db)],
@@ -84,7 +82,6 @@ async def get_ai_functions(
 
 @AI_FUNCTION_ROUTER.get(
     "/ai-function/{ai_function_id}",
-    tags=["Database Operations"],
     response_model=AIFunctionWithID,
 )
 async def get_ai_function(

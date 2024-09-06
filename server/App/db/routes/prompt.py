@@ -11,7 +11,7 @@ from App.models import Prompt, PromptRouteInput
 PROMPT_ROUTER = APIRouter()
 
 
-@PROMPT_ROUTER.post("/prompt", tags=["Database Operations"])
+@PROMPT_ROUTER.post("/prompt")
 async def post_prompt(
     prompt: PromptRouteInput,
     username: Annotated[str, Depends(username)],

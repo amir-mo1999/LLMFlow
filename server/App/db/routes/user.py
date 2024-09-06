@@ -14,7 +14,7 @@ USER_ROUTER = APIRouter()
 
 
 ## User routes
-@USER_ROUTER.post("/user", tags=["Database Operations"])
+@USER_ROUTER.post("/user")
 async def post_user(
     user: UserRouteInput,
     db: Annotated[AsyncIOMotorClient, Depends(db)],
@@ -33,7 +33,7 @@ async def post_user(
         return JSONResponse(content={"message": "User created"}, status_code=200)
 
 
-@USER_ROUTER.get("/user/{username}", response_model=User, tags=["Database Operations"])
+@USER_ROUTER.get("/user/{username}", response_model=User)
 async def get_user_route(
     db: Annotated[AsyncIOMotorClient, Depends(db)],
     username: str = Path(..., description="Email of the user to retrieve"),
