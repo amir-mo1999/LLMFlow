@@ -10,11 +10,11 @@ from App.models import (
     UserRouteInput,
 )
 
-user_router = APIRouter()
+USER_ROUTER = APIRouter()
 
 
 ## User routes
-@user_router.post("/user", tags=["Database Operations"])
+@USER_ROUTER.post("/user", tags=["Database Operations"])
 async def post_user(
     user: UserRouteInput,
     db: Annotated[AsyncIOMotorClient, Depends(db)],
@@ -33,7 +33,7 @@ async def post_user(
         return JSONResponse(content={"message": "User created"}, status_code=200)
 
 
-@user_router.get("/user/{username}", response_model=User, tags=["Database Operations"])
+@USER_ROUTER.get("/user/{username}", response_model=User, tags=["Database Operations"])
 async def get_user_route(
     db: Annotated[AsyncIOMotorClient, Depends(db)],
     username: str = Path(..., description="Email of the user to retrieve"),

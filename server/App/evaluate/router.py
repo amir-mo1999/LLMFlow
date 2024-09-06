@@ -1,10 +1,8 @@
-
 from fastapi import APIRouter
 
-# define router object
-AUTH_ROUTER = APIRouter(prefix="/evaluate")
+EVAL_ROUTER = APIRouter(prefix="/evaluate")
 
 
-@AUTH_ROUTER.get("/")
+@EVAL_ROUTER.get("/{ai_function_id}/{prompt_id}")
 def evaluate():
     return ""

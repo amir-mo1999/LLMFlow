@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .auth import AUTH_ROUTER
-from .db import db_router
+from .db import DB_ROUTER
+from .evaluate import EVAL_ROUTER
 
 app = FastAPI(
     title="Backend",
@@ -19,5 +19,5 @@ app.add_middleware(
 )
 
 # add routers to application
-app.include_router(AUTH_ROUTER)
-app.include_router(db_router)
+app.include_router(EVAL_ROUTER)
+app.include_router(DB_ROUTER)

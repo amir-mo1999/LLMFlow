@@ -1,3 +1,3 @@
-from .routes import db_router
+from .routes import DB_ROUTER
 
-__all__ = [db_router]
+__all__ = [DB_ROUTER]
