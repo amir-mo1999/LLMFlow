@@ -1,12 +1,11 @@
 from datetime import datetime
 from typing import Annotated
 
-from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.dependencies import db, username, valid_object_id
+from App.dependencies import ai_function, ai_functions, db, username
 from App.models import (
     AIFunction,
     AIFunctionList,
@@ -66,17 +65,8 @@ async def post_ai_function(
 
 @AI_FUNCTION_ROUTER.get("/ai-function", response_model=AIFunctionList)
 async def get_ai_functions(
-    username: Annotated[str, Depends(username)],
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    ai_functions: Annotated[AIFunctionList, Depends(ai_functions)],
 ):
-    # get ai function collection
-    ai_function_collection = db["ai-functions"]
-
-    # get all ai functions for user
-    ai_functions = ai_function_collection.find({"username": username})
-    ai_functions = await ai_functions.to_list(10000000000)
-    ai_functions = AIFunctionList(ai_function_list=ai_functions)
-
     return ai_functions
 
 
@@ -85,23 +75,6 @@ async def get_ai_functions(
     response_model=AIFunctionWithID,
 )
 async def get_ai_function(
-    ai_function_id: Annotated[
-        str, Depends(lambda ai_function_id: valid_object_id(ai_function_id))
-    ],
-    username: Annotated[str, Depends(username)],
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    ai_function_id: Annotated[str, Depends(ai_function)],
 ):
-    # get ai function collection
-    ai_function_collection = db["ai-functions"]
-    ai_function = await ai_function_collection.find_one(
-        {"_id": ObjectId(ai_function_id), "username": username}
-    )
-
-    if not ai_function:
-        raise HTTPException(
-            status_code=404,
-            detail=f"AI Function with the id {ai_function_id} was not found",
-        )
-
-    ai_function = AIFunctionWithID(**ai_function)
-    return ai_function
+    return ai_function_id

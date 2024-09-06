@@ -5,9 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.db.utils import get_ai_function, get_prompt
-from App.dependencies import db, username, valid_object_id
-from App.models import Prompt, PromptRouteInput, PromptWithID
+from App.dependencies import db, prompt, username
+from App.models import Prompt, PromptRouteInput
 
 PROMPT_ROUTER = APIRouter()
 
@@ -56,33 +55,6 @@ async def post_prompt(
 
 @PROMPT_ROUTER.get("/prompt/{prompt_id}")
 async def get_prompt_route(
-    prompt_id: Annotated[str, Depends(lambda prompt_id: valid_object_id(prompt_id))],
-    username: Annotated[str, Depends(username)],
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    prompt_id: Annotated[str, Depends(prompt)],
 ):
-    # get prompt
-    prompt = await get_prompt(prompt_id, username, db)
-
-    # check if prompt exists
-    if not prompt:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Prompt {prompt_id} does not exist",
-        )
-
-    # construct the prompt object
-    prompt = PromptWithID(
-        **dict(prompt),
-    )
-
-    # get ai function
-    ai_function = await get_ai_function(prompt.ai_function_id, username, db)
-
-    # check if ai function exists
-    if not ai_function:
-        raise HTTPException(
-            status_code=400,
-            detail=f"AI Function {prompt.ai_function_id} does not exist",
-        )
-
-    return prompt
+    return prompt_id
