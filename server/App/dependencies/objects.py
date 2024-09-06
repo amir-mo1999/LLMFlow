@@ -1,12 +1,14 @@
+from typing import Annotated
+
 from bson import ObjectId
 from bson.errors import InvalidId
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
+from motor.motor_asyncio import AsyncIOMotorClient
+
+from App.models import AIFunctionList, AIFunctionWithID, PromptWithID
+
 from .db import db
 from .user import username
-from fastapi import Depends
-from typing import Annotated
-from motor.motor_asyncio import AsyncIOMotorClient
-from App.models import AIFunctionWithID, AIFunctionList, PromptWithID
 
 
 def valid_object_id(object_id: str):
