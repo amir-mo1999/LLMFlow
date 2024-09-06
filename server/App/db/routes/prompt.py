@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import Annotated
 
-from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
+from App.db.utils import get_ai_function, get_prompt
 from App.dependencies import db, username, valid_object_id
 from App.models import Prompt, PromptRouteInput, PromptWithID
 
@@ -55,25 +55,19 @@ async def post_prompt(
 
 
 @PROMPT_ROUTER.get("/prompt/{prompt_id}")
-async def get_prompt(
+async def get_prompt_route(
     prompt_id: Annotated[str, Depends(lambda prompt_id: valid_object_id(prompt_id))],
     username: Annotated[str, Depends(username)],
     db: Annotated[AsyncIOMotorClient, Depends(db)],
 ):
-    # get collections
-    prompt_collection = db["prompts"]
-    ai_function_collection = db["ai-functions"]
-
     # get prompt
-    prompt = await prompt_collection.find_one(
-        {"_id": ObjectId(prompt_id), "username": username}
-    )
+    prompt = await get_prompt(prompt_id, username, db)
 
     # check if prompt exists
     if not prompt:
         raise HTTPException(
             status_code=400,
-            detail=f"Prompt {prompt_collection} does not exist",
+            detail=f"Prompt {prompt_id} does not exist",
         )
 
     # construct the prompt object
@@ -82,9 +76,7 @@ async def get_prompt(
     )
 
     # get ai function
-    ai_function = await ai_function_collection.find_one(
-        {"_id": prompt.ai_function_id, "username": username}
-    )
+    ai_function = await get_ai_function(prompt.ai_function_id, username, db)
 
     # check if ai function exists
     if not ai_function:
