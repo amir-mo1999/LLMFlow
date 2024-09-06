@@ -6,7 +6,7 @@ from .ai_function import (
 )
 from .objectID import ObjectId
 from .prompt import Prompt, PromptRouteInput, PromptWithID
-from .promptfoo_models import EvaluateInput, TestCase
+from .promptfoo_models import EvaluateInput
 from .token import DecodedToken, Token
 from .user import User, UserRouteInput, UserWithAccessToken
 
@@ -25,5 +25,4 @@ __all__ = [
     PromptRouteInput,
     PromptWithID,
     EvaluateInput,
-    TestCase,
 ]

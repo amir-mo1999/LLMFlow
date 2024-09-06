@@ -10,11 +10,18 @@ from pydantic import (
 )
 
 from .objectID import PydanticObjectId
-from .output_assertion import OutputAssertion
+from .output_assertion import OutputAssertions
 
 
 class InputVariable(BaseModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)]
+
+
+class TestCase(BaseModel):
+    _vars: Dict[str, str]
+
+    class Config:
+        fields = {"_vars": "vars"}
 
 
 class AIFunctionRouteInput(BaseModel):
@@ -30,9 +37,22 @@ class AIFunctionRouteInput(BaseModel):
         ..., example=[{"name": "text"}, {"name": "number_of_sentences"}]
     )
 
-    output_assertions: List[OutputAssertion]
+    output_assertions: OutputAssertions = Field(
+        ...,
+        example={"assert": [{"type": "contains", "value": "sea", "weight": 0.5}]},
+    )
 
-    dataset: List[Dict[str, str]]
+    test_cases: List[TestCase] = Field(
+        ...,
+        example=[
+            {
+                "vars": {
+                    "text": "The sea is blue and full of fish. It is the home to many species. It spans over more than two thirds of the world",
+                    "number_of_sentences": "1",
+                }
+            }
+        ],
+    )
 
 
 class AIFunction(AIFunctionRouteInput):

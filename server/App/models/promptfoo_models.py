@@ -1,21 +1,16 @@
-from typing import List
+from typing import List, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
-from .output_assertion import OutputAssertion
+from .ai_function import TestCase
+from .output_assertion import OutputAssertions
 from .prompt import PromptMessage
 
 
-class TestCase(BaseModel):
-    test_case_vars: dict = Field(..., alias="vars")
-
-
-class Assert(BaseModel):
-    assertions: List[OutputAssertion] = Field(..., alias="assert")
-
-
 class EvaluateInput(BaseModel):
-    prompts: List[PromptMessage]
-    providers: List[str]  # TODO: change str with new LLM Providers model
-    defaultTest: Assert
+    prompts: List[List[PromptMessage]]
+    providers: Literal["openai:gpt-4o-mini"] = (
+        "openai:gpt-4o-mini"  # TODO: change with new LLM Providers model
+    )
+    defaultTest: OutputAssertions
     tests: List[TestCase]

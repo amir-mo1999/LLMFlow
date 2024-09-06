@@ -9,11 +9,15 @@ app.get("/", async (req, res) => {
   const results = await promptfoo.evaluate(
     {
       prompts: [
-        "Rephrase this in French: {{body}}",
-        "Rephrase this like a pirate: {{body}}",
+        [{ role: "user", content: "Rephrase this in French: {{body}}" }],
       ],
-      providers: ["openai:gpt-4o-mini"],
-      defaultTest: { assert: [{ type: "contains", value: "H" }] },
+      providers: ["openai:gpt-3.5-turbo"],
+      defaultTest: {
+        assert: [
+          { type: "contains", value: "B", weight: 0.5 },
+          { type: "contains", value: "Bhtrjh" },
+        ],
+      },
       tests: [
         {
           vars: {
@@ -26,7 +30,6 @@ app.get("/", async (req, res) => {
           },
         },
       ],
-      writeLatestResults: true, // write results to disk so they can be viewed in web viewer
     },
     {
       maxConcurrency: 2,

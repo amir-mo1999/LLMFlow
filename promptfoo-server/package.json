@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "npx nodemon src/app.js --legacy-watch"
+    "start-dev": "npx nodemon src/app.js"
   },
   "author": "",
   "license": "ISC",
