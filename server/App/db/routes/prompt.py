@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Annotated
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
