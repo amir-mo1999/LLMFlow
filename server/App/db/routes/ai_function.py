@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -75,6 +75,8 @@ async def get_ai_functions(
     response_model=AIFunctionWithID,
 )
 async def get_ai_function(
-    ai_function_id: Annotated[str, Depends(ai_function)],
+    ai_function: Annotated[str, Depends(ai_function)] = Path(
+        ..., alias="ai_function_id"
+    ),
 ):
-    return ai_function_id
+    return ai_function

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -55,6 +55,6 @@ async def post_prompt(
 
 @PROMPT_ROUTER.get("/prompt/{prompt_id}")
 async def get_prompt_route(
-    prompt_id: Annotated[str, Depends(prompt)],
+    prompt: Annotated[str, Depends(prompt)] = Path(..., alias="prompt_id"),
 ):
-    return prompt_id
+    return prompt
