@@ -3,6 +3,7 @@ from typing import Annotated, Dict, List
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     EmailStr,
     Field,
     NonNegativeInt,
@@ -18,10 +19,8 @@ class InputVariable(BaseModel):
 
 
 class TestCase(BaseModel):
-    _vars: Dict[str, str]
-
-    class Config:
-        fields = {"_vars": "vars"}
+    variables: Dict[str, str] = Field(..., alias="vars")
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class AIFunctionRouteInput(BaseModel):
@@ -39,14 +38,18 @@ class AIFunctionRouteInput(BaseModel):
 
     output_assertions: OutputAssertions = Field(
         ...,
-        example={"assert": [{"type": "contains", "value": "sea", "weight": 0.5}]},
+        example={
+            "assertions": [
+                {"assertion_type": "contains", "value": "sea", "weight": 0.5}
+            ]
+        },
     )
 
     test_cases: List[TestCase] = Field(
         ...,
         example=[
             {
-                "vars": {
+                "variables": {
                     "text": "The sea is blue and full of fish. It is the home to many species. It spans over more than two thirds of the world",
                     "number_of_sentences": "1",
                 }

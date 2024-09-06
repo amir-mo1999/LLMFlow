@@ -19,6 +19,9 @@ class PromptMessage(BaseModel):
     role: RoleEnum
     content: str
 
+    class Config:
+        use_enum_values = True
+
 
 # Define the prompt schema
 class PromptRouteInput(BaseModel):

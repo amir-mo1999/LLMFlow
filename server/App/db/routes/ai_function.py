@@ -58,7 +58,7 @@ async def post_ai_function(
     )
 
     # insert it to the collection
-    await ai_function_collection.insert_one(ai_function.model_dump(by_alias=True))
+    await ai_function_collection.insert_one(ai_function.model_dump())
 
     return JSONResponse(content={"message": "AI function created"}, status_code=200)
 

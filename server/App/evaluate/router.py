@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Path  #
 
 from App.dependencies import ai_function, prompt
-from App.models import AIFunctionWithID, PromptWithID
+from App.models import AIFunctionWithID, EvaluateInput, PromptWithID
 
 EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 
@@ -18,11 +18,15 @@ async def evaluate(
     ),
     prompt: Annotated[PromptWithID, Depends(prompt)] = Path(..., alias="prompt_id"),
 ):
-    prompts = [prompt.messages]
+    ai_function = ai_function.model_dump(by_alias=True)
+    prompt = prompt.model_dump(by_alias=True)
 
-    defaultTest = 2
+    prompts = [prompt["messages"]]
+    defaultTest = ai_function["output_assertions"]
+    tests = ai_function["test_cases"]
 
-    for output_assertion in ai_function.output_assertions:
-        print(output_assertion)
+    evaluate_input = EvaluateInput(
+        prompts=prompts, defaultTest=defaultTest, tests=tests
+    )
 
-    return ""
+    return evaluate_input

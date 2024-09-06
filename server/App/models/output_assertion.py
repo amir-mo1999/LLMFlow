@@ -1,6 +1,6 @@
 from typing import Annotated, List, Literal, Optional
 
-from pydantic import BaseModel, Field, confloat
+from pydantic import BaseModel, ConfigDict, Field, confloat
 
 
 class OutputAssertion(BaseModel):
@@ -8,12 +8,9 @@ class OutputAssertion(BaseModel):
     value: Optional[str]
     weight: Annotated[float, confloat(ge=0.05, le=1)] = 1
 
-    class Config:
-        fields = {"assertion_type": "type"}
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class OutputAssertions(BaseModel):
     assertions: List[OutputAssertion] = Field(..., alias="assert")
-
-    class Config:
-        fields = {"assertions": "assert"}
+    model_config = ConfigDict(populate_by_name=True)
