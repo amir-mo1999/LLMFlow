@@ -26,7 +26,9 @@ class AIFunctionRouteInput(BaseModel):
         Field(..., example="Summarizes english texts to a given number of sentences.")
     )
 
-    input_variables: List[InputVariable]
+    input_variables: List[InputVariable] = Field(
+        ..., example=[{"name": "text"}, {"name": "number_of_sentences"}]
+    )
 
     output_assertions: List[OutputAssertion]
 

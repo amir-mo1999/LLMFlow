@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.dependencies import db, username
+from App.dependencies import db, username, valid_object_id
 from App.models import (
     AIFunction,
     AIFunctionList,
@@ -85,7 +85,9 @@ async def get_ai_functions(
     response_model=AIFunctionWithID,
 )
 async def get_ai_function(
-    ai_function_id: str,
+    ai_function_id: Annotated[
+        str, Depends(lambda ai_function_id: valid_object_id(ai_function_id))
+    ],
     username: Annotated[str, Depends(username)],
     db: Annotated[AsyncIOMotorClient, Depends(db)],
 ):
