@@ -1,8 +1,5 @@
-import os
-from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
+from fastapi import APIRouter
 
 # define router object
 AUTH_ROUTER = APIRouter(prefix="/evaluate")
