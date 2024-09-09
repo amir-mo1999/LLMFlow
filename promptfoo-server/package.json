@@ -1,21 +1,21 @@
 {
   "name": "promptfoo-server",
   "version": "1.0.0",
-  "main": "./src/app.js",
+  "main": ".src/app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "npx nodemon src/app.js"
+    "start": "npx nodemon ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "promptfoo": "^0.75.2"
+    "promptfoo": "^0.85.0"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5",
     "nodemon": "^3.1.4"
   }
 }
