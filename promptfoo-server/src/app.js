@@ -4,39 +4,15 @@ import promptfoo, { assertions } from "promptfoo";
 
 const app = express();
 const port = parseInt(process.env.PORT);
+app.use(express.json());
 
 app.get("/", async (req, res) => {
-  const results = await promptfoo.evaluate(
-    {
-      prompts: [
-        [{ role: "user", content: "Rephrase this in French: {{body}}" }],
-      ],
-      providers: ["openai:gpt-3.5-turbo"],
-      defaultTest: {
-        assert: [
-          { type: "contains", value: "B", weight: 0.5 },
-          { type: "contains", value: "Bhtrjh" },
-        ],
-      },
-      tests: [
-        {
-          vars: {
-            body: "Hello world",
-          },
-        },
-        {
-          vars: {
-            body: "I'm hungry",
-          },
-        },
-      ],
-    },
-    {
-      maxConcurrency: 2,
-    }
-  );
+  res.send("Promptfoo Server running");
+});
 
-  res.send(results);
+app.post("/", async (req, res) => {
+  const result = await promptfoo.evaluate(req.body);
+  res.send(result);
 });
 
 app.listen(port, () => {

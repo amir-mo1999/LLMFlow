@@ -18,6 +18,7 @@ python-multipart = "*"
 motor = "*"
 bcrypt = "*"
 pre-commit = "*"
+aiohttp = "*"
 
 [dev-packages]
 
