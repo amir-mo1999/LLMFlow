@@ -3,7 +3,7 @@ from bson.errors import InvalidId
 from fastapi import HTTPException
 
 
-def valid_object_id(object_id: str, message: str = None):
+def valid_object_id(object_id: str, message: str | None = None):
     if message is None:
         message = "Invalid object ID format"
     try:
