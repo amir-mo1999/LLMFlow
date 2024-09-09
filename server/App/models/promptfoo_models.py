@@ -2,8 +2,7 @@ from typing import List, Literal
 
 from pydantic import BaseModel
 
-from .ai_function import TestCase
-from .output_assertion import OutputAssertions
+from .ai_function import TestCase, OutputAssertions
 from .prompt import PromptMessage
 
 

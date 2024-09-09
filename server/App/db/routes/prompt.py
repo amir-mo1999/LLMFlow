@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from App.dependencies import db, prompt, username
-from App.models import Prompt, PromptRouteInput
+from App.models import PromptNoID, PromptRouteInput, Prompt
 
 PROMPT_ROUTER = APIRouter()
 
@@ -34,7 +34,7 @@ async def post_prompt(
     now = datetime.now()
 
     # construct the prompt object
-    prompt = Prompt(
+    prompt = PromptNoID(
         **dict(prompt),
         creation_time=now,
         username=username,
@@ -48,12 +48,12 @@ async def post_prompt(
         )
 
     # insert it to the collection
-    prompt_collection.insert_one(prompt.model_dump())
+    prompt_collection.insert_one(prompt.model_dump(by_alias=True))
 
     return JSONResponse(content={"message": "Prompt created"}, status_code=200)
 
 
-@PROMPT_ROUTER.get("/prompt/{prompt_id}")
+@PROMPT_ROUTER.get("/prompt/{prompt_id}", response_model=Prompt)
 async def get_prompt_route(
     prompt: Annotated[str, Depends(prompt)] = Path(..., alias="prompt_id"),
 ):

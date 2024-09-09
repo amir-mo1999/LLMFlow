@@ -7,10 +7,10 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from App.dependencies import ai_function, ai_functions, db, username
 from App.models import (
-    AIFunction,
+    AIFunctionNoID,
     AIFunctionList,
     AIFunctionRouteInput,
-    AIFunctionWithID,
+    AIFunction,
 )
 
 AI_FUNCTION_ROUTER = APIRouter()
@@ -50,7 +50,7 @@ async def post_ai_function(
     number_of_prompts = 0
 
     # create the ai function object
-    ai_function = AIFunction(
+    ai_function = AIFunctionNoID(
         **dict(ai_function_input),
         number_of_prompts=number_of_prompts,
         creation_time=now,
@@ -58,7 +58,7 @@ async def post_ai_function(
     )
 
     # insert it to the collection
-    await ai_function_collection.insert_one(ai_function.model_dump())
+    await ai_function_collection.insert_one(ai_function.model_dump(by_alias=True))
 
     return JSONResponse(content={"message": "AI function created"}, status_code=200)
 
@@ -72,7 +72,7 @@ async def get_ai_functions(
 
 @AI_FUNCTION_ROUTER.get(
     "/ai-function/{ai_function_id}",
-    response_model=AIFunctionWithID,
+    response_model=AIFunction,
 )
 async def get_ai_function(
     ai_function: Annotated[str, Depends(ai_function)] = Path(

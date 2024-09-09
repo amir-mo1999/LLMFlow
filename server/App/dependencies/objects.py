@@ -5,7 +5,7 @@ from bson.errors import InvalidId
 from fastapi import Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.models import AIFunctionList, AIFunctionWithID, PromptWithID
+from App.models import AIFunctionList, AIFunction, Prompt
 
 from .db import db
 from .user import username
@@ -23,7 +23,7 @@ async def ai_function(
     ai_function_id: str,
     db: Annotated[AsyncIOMotorClient, Depends(db)],
     username: Annotated[str, Depends(username)],
-) -> AIFunctionWithID:
+) -> AIFunction:
     if not valid_object_id(ai_function_id):
         raise HTTPException(status_code=400, detail="Invalid Object ID for AI Function")
 
@@ -39,7 +39,7 @@ async def ai_function(
             detail=f"AI Function with the id {ai_function_id} was not found",
         )
 
-    ai_function = AIFunctionWithID(**ai_function)
+    ai_function = AIFunction(**ai_function)
 
     return ai_function
 
@@ -51,7 +51,7 @@ async def ai_functions(
     ai_function_collection = db["ai-functions"]
     ai_functions = ai_function_collection.find({"username": username})
     ai_functions = await ai_functions.to_list(10000000000)
-    ai_functions = AIFunctionList(ai_function_list=ai_functions)
+    ai_functions = AIFunctionList(ai_functions=ai_functions)
 
     return ai_functions
 
@@ -60,7 +60,7 @@ async def prompt(
     prompt_id: str,
     db: Annotated[AsyncIOMotorClient, Depends(db)],
     username: Annotated[str, Depends(username)],
-) -> PromptWithID:
+) -> Prompt:
     if not valid_object_id(prompt_id):
         raise HTTPException(status_code=400, detail="Invalid Object ID for Prompt")
 
@@ -76,6 +76,6 @@ async def prompt(
             detail=f"Prompt with the id {prompt_id} was not found",
         )
 
-    prompt = PromptWithID(**prompt)
+    prompt = Prompt(**prompt)
 
     return prompt

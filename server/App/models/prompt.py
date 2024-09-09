@@ -57,10 +57,10 @@ class PromptRouteInput(BaseModel):
         return values
 
 
-class Prompt(PromptRouteInput):
+class PromptNoID(PromptRouteInput):
     username: EmailStr
     creation_time: datetime
 
 
-class PromptWithID(Prompt):
+class Prompt(PromptNoID):
     id: PydanticObjectId = Field(alias="_id")

@@ -51,11 +51,7 @@ class AIFunctionRouteInput(BaseModel):
 
     output_assertions: OutputAssertions = Field(
         ...,
-        example={
-            "assertions": [
-                {"assertion_type": "contains", "value": "sea", "weight": 0.5}
-            ]
-        },
+        example={"assert": [{"type": "contains", "value": "sea", "weight": 0.5}]},
     )
 
     test_cases: List[TestCase] = Field(
@@ -71,15 +67,15 @@ class AIFunctionRouteInput(BaseModel):
     )
 
 
-class AIFunction(AIFunctionRouteInput):
+class AIFunctionNoID(AIFunctionRouteInput):
     number_of_prompts: NonNegativeInt
     username: EmailStr
     creation_time: datetime
 
 
-class AIFunctionWithID(AIFunction):
+class AIFunction(AIFunctionNoID):
     id: PydanticObjectId = Field(alias="_id")
 
 
 class AIFunctionList(BaseModel):
-    ai_function_list: List[AIFunctionWithID]
+    ai_functions: List[AIFunction]
