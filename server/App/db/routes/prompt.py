@@ -9,6 +9,7 @@ from App.dependencies import db, prompt, username
 from App.models import Prompt, PromptNoID, PromptRouteInput
 
 PROMPT_ROUTER = APIRouter()
+from ..utils import responses
 
 
 @PROMPT_ROUTER.post("/prompt")
@@ -54,7 +55,10 @@ async def post_prompt(
 
 
 @PROMPT_ROUTER.get(
-    "/prompt/{prompt_id}", response_model=Prompt, response_model_by_alias=True
+    "/prompt/{prompt_id}",
+    response_model=Prompt,
+    response_model_by_alias=True,
+    responses=responses,
 )
 async def get_prompt_route(
     prompt: Annotated[str, Depends(prompt)] = Path(..., alias="prompt_id"),

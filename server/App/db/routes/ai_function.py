@@ -13,7 +13,11 @@ from App.models import (
     AIFunctionRouteInput,
 )
 
+from ..utils import responses
+
 AI_FUNCTION_ROUTER = APIRouter()
+
+print(responses)
 
 
 @AI_FUNCTION_ROUTER.post("/ai-function")
@@ -64,7 +68,9 @@ async def post_ai_function(
 
 
 @AI_FUNCTION_ROUTER.get(
-    "/ai-function", response_model=AIFunctionList, response_model_by_alias=True
+    "/ai-function",
+    response_model=AIFunctionList,
+    response_model_by_alias=True,
 )
 async def get_ai_functions(
     ai_functions: Annotated[AIFunctionList, Depends(ai_functions)],
@@ -76,6 +82,7 @@ async def get_ai_functions(
     "/ai-function/{ai_function_id}",
     response_model=AIFunction,
     response_model_by_alias=True,
+    responses=responses,
 )
 async def get_ai_function(
     ai_function: Annotated[str, Depends(ai_function)] = Path(

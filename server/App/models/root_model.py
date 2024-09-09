@@ -1,5 +1,4 @@
-from pydantic import BaseModel, model_serializer
-from typing import Dict, Any
+from pydantic import BaseModel
 
 
 class RootModel(BaseModel):

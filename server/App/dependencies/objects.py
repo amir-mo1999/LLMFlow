@@ -10,6 +10,9 @@ from App.models import AIFunction, AIFunctionList, Prompt
 from .db import db
 from .user import username
 
+INVALID_OBJECT_ID = HTTPException(status_code=400, detail="invalid object id")
+DOCUMENT_NOT_FOUND = HTTPException(status_code=404, detail="document not found")
+
 
 def valid_object_id(object_id: str):
     try:
@@ -25,7 +28,7 @@ async def ai_function(
     username: Annotated[str, Depends(username)],
 ) -> AIFunction:
     if not valid_object_id(ai_function_id):
-        raise HTTPException(status_code=400, detail="Invalid Object ID for AI Function")
+        raise INVALID_OBJECT_ID
 
     ai_function_collection = db["ai-functions"]
 
@@ -34,10 +37,7 @@ async def ai_function(
     )
 
     if not ai_function:
-        raise HTTPException(
-            status_code=404,
-            detail=f"AI Function with the id {ai_function_id} was not found",
-        )
+        raise DOCUMENT_NOT_FOUND
 
     ai_function = AIFunction(**ai_function)
 
@@ -62,7 +62,7 @@ async def prompt(
     username: Annotated[str, Depends(username)],
 ) -> Prompt:
     if not valid_object_id(prompt_id):
-        raise HTTPException(status_code=400, detail="Invalid Object ID for Prompt")
+        raise INVALID_OBJECT_ID
 
     prompt_collection = db["prompts"]
 
@@ -71,10 +71,7 @@ async def prompt(
     )
 
     if not prompt:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Prompt with the id {prompt_id} was not found",
-        )
+        raise DOCUMENT_NOT_FOUND
 
     prompt = Prompt(**prompt)
 
