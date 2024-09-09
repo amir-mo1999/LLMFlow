@@ -5,7 +5,7 @@ from bson.errors import InvalidId
 from fastapi import Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.models import AIFunctionList, AIFunction, Prompt
+from App.models import AIFunction, AIFunctionList, Prompt
 
 from .db import db
 from .user import username

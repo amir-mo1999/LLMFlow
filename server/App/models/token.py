@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from .root_model import RootModel
 
 
-class Token(BaseModel):
+class Token(RootModel):
     """Token model."""
 
     access_token: str

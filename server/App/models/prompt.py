@@ -2,9 +2,10 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Literal, Union
 
-from pydantic import BaseModel, EmailStr, Field, model_validator
+from pydantic import EmailStr, Field, model_validator
 
 from .objectID import PydanticObjectId
+from .root_model import RootModel
 
 
 # Define the role enum
@@ -15,7 +16,7 @@ class RoleEnum(str, Enum):
 
 
 # Define the message schema
-class PromptMessage(BaseModel):
+class PromptMessage(RootModel):
     role: RoleEnum
     content: str
 
@@ -24,7 +25,7 @@ class PromptMessage(BaseModel):
 
 
 # Define the prompt schema
-class PromptRouteInput(BaseModel):
+class PromptRouteInput(RootModel):
     prompt_type: Union[Literal["single_shot"], Literal["chat"]] = Field(
         ..., example="single_shot"
     )

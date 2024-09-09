@@ -2,28 +2,28 @@ from datetime import datetime
 from typing import Annotated, Dict, List, Literal, Optional
 
 from pydantic import (
-    BaseModel,
     ConfigDict,
     EmailStr,
     Field,
     NonNegativeInt,
-    confloat,
     StringConstraints,
+    confloat,
 )
 
 from .objectID import PydanticObjectId
+from .root_model import RootModel
 
 
-class InputVariable(BaseModel):
+class InputVariable(RootModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)]
 
 
-class TestCase(BaseModel):
+class TestCase(RootModel):
     variables: Dict[str, str] = Field(..., alias="vars")
     model_config = ConfigDict(populate_by_name=True)
 
 
-class OutputAssertion(BaseModel):
+class OutputAssertion(RootModel):
     assertion_type: Literal["contains", "contains-sql", ""] = Field(..., alias="type")
     value: Optional[str]
     weight: Annotated[float, confloat(ge=0.05, le=1)] = 1
@@ -31,12 +31,12 @@ class OutputAssertion(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
-class OutputAssertions(BaseModel):
+class OutputAssertions(RootModel):
     assertions: List[OutputAssertion] = Field(..., alias="assert")
     model_config = ConfigDict(populate_by_name=True)
 
 
-class AIFunctionRouteInput(BaseModel):
+class AIFunctionRouteInput(RootModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
         ..., example="Summarize Texts"
     )
@@ -77,5 +77,5 @@ class AIFunction(AIFunctionNoID):
     id: PydanticObjectId = Field(alias="_id")
 
 
-class AIFunctionList(BaseModel):
+class AIFunctionList(RootModel):
     ai_functions: List[AIFunction]
