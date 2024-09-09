@@ -4,7 +4,6 @@ from .ai_function import (
     AIFunctionNoID,
     AIFunctionRouteInput,
 )
-from .objectID import ObjectId
 from .prompt import Prompt, PromptNoID, PromptRouteInput
 from .promptfoo_models import EvaluateInput
 from .token import DecodedToken, Token
@@ -16,7 +15,6 @@ __all__ = [
     UserWithAccessToken,
     Token,
     DecodedToken,
-    ObjectId,
     AIFunctionNoID,
     AIFunctionList,
     AIFunctionRouteInput,
