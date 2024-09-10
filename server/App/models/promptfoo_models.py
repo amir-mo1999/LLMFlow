@@ -10,13 +10,13 @@ from .root_model import RootModel
 
 class TokenUsage(RootModel):
     total: int
-    prompt: int
-    completion: int
+    prompt: Optional[int] = None
+    completion: Optional[int] = None
     cached: int
 
 
 class ProviderResponse(RootModel):
-    cached: Optional[bool] = None
+    cached: Optional[int] = None
     cost: Optional[float] = None
     error: Optional[str] = None
     logProbs: Optional[List[float]] = None
@@ -120,7 +120,6 @@ class EvaluateResult(RootModel):
 
 
 class EvaluateSummary(RootModel):
-    version: int
     timestamp: datetime
     results: List[EvaluateResult]
     stats: EvaluateStats

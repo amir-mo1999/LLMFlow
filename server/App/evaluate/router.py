@@ -5,7 +5,7 @@ import aiohttp
 from fastapi import APIRouter, Depends, Path  #
 
 from App.dependencies import ai_function, prompt
-from App.models import AIFunction, EvaluateInput, Prompt
+from App.models import AIFunction, EvaluateInput, EvaluateSummary, Prompt
 
 EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 
@@ -40,4 +40,9 @@ async def evaluate(
         )
 
         data = await res.json()
-        return data
+
+        summary = EvaluateSummary(
+            timestamp=data["timestamp"], results=data["results"], stats=data["stats"]
+        )
+
+        return summary

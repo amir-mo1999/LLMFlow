@@ -5,7 +5,7 @@ from .ai_function import (
     AIFunctionRouteInput,
 )
 from .prompt import Prompt, PromptNoID, PromptRouteInput
-from .promptfoo_models import EvaluateInput
+from .promptfoo_models import EvaluateInput, EvaluateSummary
 from .token import DecodedToken, Token
 from .user import User, UserRouteInput, UserWithAccessToken
 
@@ -23,4 +23,5 @@ __all__ = [
     PromptRouteInput,
     Prompt,
     EvaluateInput,
+    EvaluateSummary,
 ]

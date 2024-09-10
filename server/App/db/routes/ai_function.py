@@ -17,8 +17,6 @@ from ..utils import responses
 
 AI_FUNCTION_ROUTER = APIRouter()
 
-print(responses)
-
 
 @AI_FUNCTION_ROUTER.post("/ai-function")
 async def post_ai_function(

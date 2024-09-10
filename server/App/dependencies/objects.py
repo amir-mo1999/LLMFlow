@@ -39,7 +39,6 @@ async def ai_function(
     if not ai_function:
         raise DOCUMENT_NOT_FOUND
 
-    print(ai_function)
     ai_function = AIFunction(**ai_function)
 
     return ai_function
