@@ -23,7 +23,7 @@ async def evaluate(
     prompt = prompt.model_dump(by_alias=True)
 
     prompts = [prompt["messages"]]
-    defaultTest = ai_function["output_assertions"]
+    defaultTest = ai_function["assertions"]
     tests = ai_function["test_cases"]
 
     evaluate_input = EvaluateInput(

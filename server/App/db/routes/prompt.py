@@ -49,7 +49,7 @@ async def post_prompt(
         )
 
     # insert it to the collection
-    prompt_collection.insert_one(prompt.model_dump())
+    prompt_collection.insert_one(prompt.model_dump(by_alias=True))
 
     return JSONResponse(content={"message": "Prompt created"}, status_code=200)
 
