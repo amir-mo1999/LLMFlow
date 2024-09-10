@@ -9,10 +9,10 @@ from .root_model import RootModel
 
 
 class TokenUsage(RootModel):
-    total: int
-    prompt: Optional[int] = None
-    completion: Optional[int] = None
-    cached: int
+    total: Optional[int] = 0
+    prompt: Optional[int] = 0
+    completion: Optional[int] = 0
+    cached: Optional[int] = 0
 
 
 class ProviderResponse(RootModel):
@@ -69,13 +69,6 @@ class BaseAssertionTypes(str, Enum):
 
 
 AssertionValue = Union[str, List[str], Dict[str, Any]]
-
-
-class TokenUsage(RootModel):
-    cached: Optional[int] = None
-    completion: Optional[int] = None
-    prompt: Optional[int] = None
-    total: Optional[int] = None
 
 
 class EvaluateStats(RootModel):
