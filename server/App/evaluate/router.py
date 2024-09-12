@@ -23,10 +23,6 @@ async def evaluate(ai_function_id: str, prompt_id: str, db: Annotated[DB, Depend
     if ai_function is None or prompt is None:
         raise DocumentNotFound
 
-    # dump data
-    # ai_function = ai_function.model_dump(by_alias=True)
-    # prompt = prompt.model_dump(by_alias=True)
-
     prompts = [prompt.messages]
     defaultTest = ai_function.assertions
     tests = ai_function.test_cases
