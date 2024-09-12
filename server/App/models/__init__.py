@@ -4,6 +4,7 @@ from .ai_function import (
     AIFunctionNoID,
     AIFunctionRouteInput,
 )
+from .objectID import PydanticObjectId
 from .prompt import Prompt, PromptNoID, PromptRouteInput
 from .promptfoo_models import EvaluateInput, EvaluateSummary
 from .token import DecodedToken, Token
@@ -24,4 +25,5 @@ __all__ = [
     Prompt,
     EvaluateInput,
     EvaluateSummary,
+    PydanticObjectId,
 ]

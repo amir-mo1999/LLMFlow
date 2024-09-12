@@ -1,4 +1,4 @@
-from .db import db
+from .db import DB, db
 from .decoded_token import decoded_token
 from .objects import ai_function, ai_functions, prompt
 from .user import user, username
@@ -8,6 +8,7 @@ __all__ = [
     username,
     decoded_token,
     db,
+    DB,
     user,
     prompt,
     valid_object_id,

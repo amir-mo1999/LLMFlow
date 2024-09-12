@@ -1,19 +1,16 @@
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, List
 
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
-from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.dependencies import ai_function, ai_functions, db, username
+from App.dependencies import DB, db, username
+from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
     AIFunction,
-    AIFunctionList,
     AIFunctionNoID,
     AIFunctionRouteInput,
 )
-
-from ..utils import responses
 
 AI_FUNCTION_ROUTER = APIRouter()
 
@@ -22,29 +19,8 @@ AI_FUNCTION_ROUTER = APIRouter()
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
     username: Annotated[str, Depends(username)],
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    db: Annotated[DB, Depends(db)],
 ):
-    # get ai function collection
-    ai_function_collection = db["ai-functions"]
-
-    # get user collection
-    user_collection = db["users"]
-
-    # check if username (email) exists in user collection
-    if not await user_collection.find_one({"email": username}):
-        raise HTTPException(
-            status_code=400,
-            detail=f"User with the E-Mail {username} does not exist",
-        )
-
-    # check if a ai function with this name and user id already exists
-    if await ai_function_collection.find_one(
-        {"name": ai_function_input.name, "username": username}
-    ):
-        raise HTTPException(
-            status_code=409, detail="AI Function with this name already exists"
-        )
-
     # get time stamp
     now = datetime.now()
 
@@ -59,32 +35,32 @@ async def post_ai_function(
         username=username,
     )
 
-    # insert it to the collection
-    await ai_function_collection.insert_one(ai_function.model_dump(by_alias=True))
+    # try posting it
+    result = await db.insert(ai_function, "ai-functions", ["username", "name"])
 
-    return JSONResponse(content={"message": "AI function created"}, status_code=200)
+    if result:
+        return JSONResponse(content={"message": "AI function created"}, status_code=200)
+    else:
+        raise DuplicateDocument
 
 
 @AI_FUNCTION_ROUTER.get(
-    "/ai-function",
-    response_model=AIFunctionList,
-    response_model_by_alias=True,
+    "/ai-function", response_model_by_alias=True, response_model=List[AIFunction]
 )
-async def get_ai_functions(
-    ai_functions: Annotated[AIFunctionList, Depends(ai_functions)],
-):
-    return ai_functions
+async def get_ai_functions(db: Annotated[DB, Depends(db)]):
+    ai_functions = await db.get_all_ai_functions()
+    return ai_functions.values()
 
 
 @AI_FUNCTION_ROUTER.get(
     "/ai-function/{ai_function_id}",
     response_model=AIFunction,
     response_model_by_alias=True,
-    responses=responses,
 )
-async def get_ai_function(
-    ai_function: Annotated[str, Depends(ai_function)] = Path(
-        ..., alias="ai_function_id"
-    ),
-):
+async def get_ai_function(ai_function_id: str, db: Annotated[DB, Depends(db)]):
+    ai_function = await db.get_ai_function_by_id(ai_function_id)
+
+    if ai_function is None:
+        raise DocumentNotFound
+
     return ai_function

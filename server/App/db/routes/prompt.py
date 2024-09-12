@@ -5,27 +5,28 @@ from fastapi import APIRouter, Depends, HTTPException, Path
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.dependencies import db, prompt, username
+from App.dependencies import db, prompt, username, DB
 from App.models import Prompt, PromptNoID, PromptRouteInput
+from App.http_exceptions import DocumentNotFound, DuplicateDocument
+
 
 PROMPT_ROUTER = APIRouter()
-from ..utils import responses
 
 
 @PROMPT_ROUTER.post("/prompt")
 async def post_prompt(
     prompt: PromptRouteInput,
     username: Annotated[str, Depends(username)],
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    db: Annotated[DB, Depends(db)],
 ):
-    # get collections
-    prompt_collection = db["prompts"]
-    ai_function_collection = db["ai-functions"]
+    # get ai function for prompt
+    ai_function_collection = db.get_collection("ai-functions")
+    ai_function = await ai_function_collection.find_one(
+        {"_id": prompt.ai_function_id, "username": username}
+    )
 
     # check if ai function exists
-    if not ai_function_collection.find_one(
-        {"_id": prompt.ai_function_id, "username": username}
-    ):
+    if ai_function is None:
         raise HTTPException(
             status_code=400,
             detail=f"AI Function {prompt.ai_function_id} does not exist",
@@ -41,15 +42,13 @@ async def post_prompt(
         username=username,
     )
 
-    # check if the same prompt already exists
-    if await prompt_collection.find_one(prompt.model_dump(exclude="creation_time")):
-        raise HTTPException(
-            status_code=400,
-            detail="The same prompt already exists",
-        )
+    compare_fields = list(
+        prompt.model_dump(exclude="creation_time", by_alias=True).keys()
+    )
 
-    # insert it to the collection
-    prompt_collection.insert_one(prompt.model_dump(by_alias=True))
+    result = await db.insert(prompt, "prompts", compare_fields=compare_fields)
+    if result is None:
+        raise DuplicateDocument
 
     return JSONResponse(content={"message": "Prompt created"}, status_code=200)
 
@@ -58,9 +57,11 @@ async def post_prompt(
     "/prompt/{prompt_id}",
     response_model=Prompt,
     response_model_by_alias=True,
-    responses=responses,
 )
-async def get_prompt_route(
-    prompt: Annotated[str, Depends(prompt)] = Path(..., alias="prompt_id"),
-):
+async def get_prompt_route(prompt_id: str, db: Annotated[DB, Depends(db)]):
+    prompt = await db.get_prompt_by_id(prompt_id)
+
+    if prompt is None:
+        raise DocumentNotFound
+
     return prompt

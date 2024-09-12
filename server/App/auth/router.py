@@ -3,9 +3,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.dependencies import db, user
+from App.dependencies import DB, db, user
 from App.models import User, UserWithAccessToken
 
 from .utils import create_jwt_token, timedelta, verify_password
@@ -20,7 +19,7 @@ ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINU
 @AUTH_ROUTER.post("/login", response_model=UserWithAccessToken, tags=["Authentication"])
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    db: Annotated[DB, Depends(db)],
 ):
     """
     Endpoint for the login procedure. Takes username and password as form-data input.
@@ -32,16 +31,12 @@ async def login(
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-    # get user document
-    user_collection = db["users"]
-    user = await user_collection.find_one({"email": form_data.username})
+    # get user
+    user = await db.get_user(form_data.username)
 
     # return exception if user was not found
     if not user:
         raise e
-
-    # parse user as user object
-    user = User(**user)
 
     # return exception if password is not correct
     if not verify_password(form_data.password, user.hashed_password):
