@@ -90,10 +90,17 @@ class DB:
     async def get_ai_function_by_id(
         self, ai_function_id: ObjectId | str
     ) -> AIFunction | None:
-        return await self.get_by_id("ai-functions", ai_function_id)
+        ai_function = await self.get_by_id("ai-functions", ai_function_id)
+
+        if ai_function is None:
+            return None
+        return AIFunction(**ai_function)
 
     async def get_prompt_by_id(self, prompt_id: ObjectId | str) -> Prompt | None:
-        return await self.get_by_id("prompts", prompt_id)
+        prompt = await self.get_by_id("prompts", prompt_id)
+        if prompt is None:
+            return None
+        return Prompt(**prompt)
 
 
 async def client():

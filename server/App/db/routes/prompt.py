@@ -45,10 +45,10 @@ async def post_prompt(
     )
 
     result = await db.insert(prompt, "prompts", compare_fields=compare_fields)
-    if result is None:
-        raise DuplicateDocument
+    if result:
+        return JSONResponse(content={"message": "Prompt created"}, status_code=200)
 
-    return JSONResponse(content={"message": "Prompt created"}, status_code=200)
+    raise DuplicateDocument
 
 
 @PROMPT_ROUTER.get(

@@ -2,10 +2,11 @@ import os
 from typing import Annotated
 
 import aiohttp
-from fastapi import APIRouter, Depends, Path  #
+from fastapi import APIRouter, Depends
 
-from App.dependencies import ai_function, prompt
-from App.models import AIFunction, EvaluateInput, EvaluateSummary, Prompt
+from App.dependencies import DB, db
+from App.http_exceptions import DocumentNotFound
+from App.models import EvaluateInput, EvaluateSummary
 
 EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 
@@ -13,18 +14,22 @@ PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 
 
 @EVAL_ROUTER.get("/{ai_function_id}/{prompt_id}")
-async def evaluate(
-    ai_function: Annotated[AIFunction, Depends(ai_function)] = Path(
-        ..., alias="ai_function_id"
-    ),
-    prompt: Annotated[Prompt, Depends(prompt)] = Path(..., alias="prompt_id"),
-):
-    ai_function = ai_function.model_dump(by_alias=True)
-    prompt = prompt.model_dump(by_alias=True)
+async def evaluate(ai_function_id: str, prompt_id: str, db: Annotated[DB, Depends(db)]):
+    # get prompt and ai function
+    ai_function = await db.get_ai_function_by_id(ai_function_id)
+    prompt = await db.get_prompt_by_id(prompt_id)
 
-    prompts = [prompt["messages"]]
-    defaultTest = ai_function["assertions"]
-    tests = ai_function["test_cases"]
+    # raise error if not found
+    if ai_function is None or prompt is None:
+        raise DocumentNotFound
+
+    # dump data
+    # ai_function = ai_function.model_dump(by_alias=True)
+    # prompt = prompt.model_dump(by_alias=True)
+
+    prompts = [prompt.messages]
+    defaultTest = ai_function.assertions
+    tests = ai_function.test_cases
 
     evaluate_input = EvaluateInput(
         prompts=prompts, defaultTest=defaultTest, tests=tests

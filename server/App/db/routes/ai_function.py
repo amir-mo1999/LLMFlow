@@ -40,8 +40,8 @@ async def post_ai_function(
 
     if result:
         return JSONResponse(content={"message": "AI function created"}, status_code=200)
-    else:
-        raise DuplicateDocument
+
+    raise DuplicateDocument
 
 
 @AI_FUNCTION_ROUTER.get(

@@ -1,10 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, Path
 from fastapi.responses import JSONResponse
-from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.dependencies import db
+from App.dependencies import DB, db
+from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
     User,
     UserRouteInput,
@@ -17,29 +17,23 @@ USER_ROUTER = APIRouter()
 @USER_ROUTER.post("/user")
 async def post_user(
     user: UserRouteInput,
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    db: Annotated[DB, Depends(db)],
 ):
-    # get user collection
-    user_collection = db["users"]
+    result = await db.insert(user, collection="users", compare_fields=["email"])
 
-    # check if user with this email exists; if not insert
-    if await user_collection.find_one({"email": user.email}):
-        raise HTTPException(
-            status_code=409, detail="User with this email already exists"
-        )
-    else:
-        await user_collection.insert_one(dict(user))
-
+    if result:
         return JSONResponse(content={"message": "User created"}, status_code=200)
+
+    raise DuplicateDocument
 
 
 @USER_ROUTER.get("/user/{username}", response_model=User)
 async def get_user_route(
-    db: Annotated[AsyncIOMotorClient, Depends(db)],
+    db: Annotated[DB, Depends(db)],
     username: str = Path(..., description="Email of the user to retrieve"),
 ):
     # get user collection
-    user_collection = db["users"]
+    user_collection = db.get_collection("users")
 
     # Check if the user with the given email exists
     user_data = await user_collection.find_one({"email": username})
@@ -48,4 +42,4 @@ async def get_user_route(
         user = User(**user_data)
         return user
     else:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise DocumentNotFound
