@@ -1,14 +1,12 @@
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from motor.motor_asyncio import AsyncIOMotorClient
 
-from App.dependencies import db, prompt, username, DB
-from App.models import Prompt, PromptNoID, PromptRouteInput
+from App.dependencies import DB, db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-
+from App.models import Prompt, PromptNoID, PromptRouteInput
 
 PROMPT_ROUTER = APIRouter()
 
