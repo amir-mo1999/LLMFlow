@@ -2,16 +2,15 @@ from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
 
 from App.dependencies import DB, db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import Prompt, PromptNoID, PromptRouteInput
+from App.models import Prompt, PromptNoID, PromptRouteInput, SuccessResponse
 
 PROMPT_ROUTER = APIRouter()
 
 
-@PROMPT_ROUTER.post("/prompt")
+@PROMPT_ROUTER.post("/prompt", response_model=SuccessResponse)
 async def post_prompt(
     prompt: PromptRouteInput,
     username: Annotated[str, Depends(username)],
@@ -46,7 +45,7 @@ async def post_prompt(
 
     result = await db.insert(prompt, "prompts", compare_fields=compare_fields)
     if result:
-        return JSONResponse(content={"message": "Prompt created"}, status_code=200)
+        return SuccessResponse
 
     raise DuplicateDocument
 

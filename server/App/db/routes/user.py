@@ -1,11 +1,11 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Path
-from fastapi.responses import JSONResponse
 
 from App.dependencies import DB, db
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
+    SuccessResponse,
     User,
     UserRouteInput,
 )
@@ -14,7 +14,7 @@ USER_ROUTER = APIRouter()
 
 
 ## User routes
-@USER_ROUTER.post("/user")
+@USER_ROUTER.post("/user", response_model=SuccessResponse)
 async def post_user(
     user: UserRouteInput,
     db: Annotated[DB, Depends(db)],
@@ -22,7 +22,7 @@ async def post_user(
     result = await db.insert(user, collection="users", compare_fields=["email"])
 
     if result:
-        return JSONResponse(content={"message": "User created"}, status_code=200)
+        return SuccessResponse
 
     raise DuplicateDocument
 

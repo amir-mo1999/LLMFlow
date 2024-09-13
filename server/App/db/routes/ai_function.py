@@ -2,20 +2,15 @@ from datetime import datetime
 from typing import Annotated, List
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
 
 from App.dependencies import DB, db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import (
-    AIFunction,
-    AIFunctionNoID,
-    AIFunctionRouteInput,
-)
+from App.models import AIFunction, AIFunctionNoID, AIFunctionRouteInput, SuccessResponse
 
 AI_FUNCTION_ROUTER = APIRouter()
 
 
-@AI_FUNCTION_ROUTER.post("/ai-function")
+@AI_FUNCTION_ROUTER.post("/ai-function", response_model=SuccessResponse)
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
     username: Annotated[str, Depends(username)],
@@ -39,13 +34,15 @@ async def post_ai_function(
     result = await db.insert(ai_function, "ai-functions", ["username", "name"])
 
     if result:
-        return JSONResponse(content={"message": "AI function created"}, status_code=200)
+        return SuccessResponse()
 
     raise DuplicateDocument
 
 
 @AI_FUNCTION_ROUTER.get(
-    "/ai-function", response_model_by_alias=True, response_model=List[AIFunction]
+    "/ai-function",
+    response_model_by_alias=True,
+    response_model=List[AIFunction],
 )
 async def get_ai_functions(db: Annotated[DB, Depends(db)]):
     ai_functions = await db.get_all_ai_functions()
