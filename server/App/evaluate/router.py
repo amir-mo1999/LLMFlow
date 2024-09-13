@@ -2,7 +2,7 @@ import os
 from typing import Annotated
 
 import aiohttp
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, db
 from App.http_exceptions import DocumentNotFound
@@ -13,7 +13,7 @@ EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 
 
-@EVAL_ROUTER.get("/{ai_function_id}/{prompt_id}")
+@EVAL_ROUTER.get("/{ai_function_id}/{prompt_id}", response_model=EvaluateSummary)
 async def evaluate(ai_function_id: str, prompt_id: str, db: Annotated[DB, Depends(db)]):
     # get prompt and ai function
     ai_function = await db.get_ai_function_by_id(ai_function_id)
@@ -27,9 +27,12 @@ async def evaluate(ai_function_id: str, prompt_id: str, db: Annotated[DB, Depend
     defaultTest = ai_function.assertions
     tests = ai_function.test_cases
 
-    evaluate_input = EvaluateInput(
-        prompts=prompts, defaultTest=defaultTest, tests=tests
-    )
+    try:
+        evaluate_input = EvaluateInput(
+            prompts=prompts, defaultTest=defaultTest, tests=tests
+        )
+    except ValueError as e:
+        raise HTTPException(422, str(e))
 
     dump = evaluate_input.model_dump(by_alias=True)
 

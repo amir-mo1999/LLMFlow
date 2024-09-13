@@ -1,12 +1,7 @@
 from datetime import datetime
 from typing import Annotated, List
 
-from pydantic import (
-    EmailStr,
-    Field,
-    NonNegativeInt,
-    StringConstraints,
-)
+from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
 from .objectID import PydanticObjectId
 from .promptfoo_models import OutputAssertions, TestCase
@@ -46,6 +41,39 @@ class AIFunctionRouteInput(RootModel):
             }
         ],
     )
+
+    @model_validator(mode="after")
+    def assert_input_variables_are_unique(self):
+        # get variable names of ai function
+        variable_names = [var.name for var in self.input_variables]
+        variable_names.sort()
+
+        # create a set from the input variable and cast it to a sorted list
+        aux = set(variable_names)
+        aux = list(aux)
+        aux.sort()
+
+        # these are not equal if there are duplicates
+        if variable_names != aux:
+            raise ValueError("duplicate input variables are not allowed")
+        return self
+
+    @model_validator(mode="after")
+    def validate_test_cases(self):
+        # get variable names
+        var_names = [var.name for var in self.input_variables]
+        var_names.sort()
+
+        # assert that all test cases contain each input variable
+        for i, test in enumerate(self.test_cases):
+            keys = list(test.variables.keys())
+            keys.sort()
+            if var_names != keys:
+                raise ValueError(
+                    f"Missmatch between Input Variables of AI Function: {var_names} and variables of Test Case {i}: {keys}"
+                )
+
+        return self
 
 
 class AIFunctionNoID(AIFunctionRouteInput):

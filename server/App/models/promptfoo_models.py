@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from .prompt import PromptMessage
 from .root_model import RootModel
@@ -129,3 +129,23 @@ class EvaluateInput(RootModel):
     )
     defaultTest: OutputAssertions
     tests: List[TestCase]
+
+    @model_validator(mode="after")
+    def assert_input_variables_are_present_in_prompts(self):
+        # get input variable names; all test cases have same input variables, this is asserted in the AiFunction Model
+        var_names = []
+        if len(self.tests) > 0:
+            var_names = self.tests[0].variables.keys()
+
+        # check that all var names are included in at least one message of the prompt
+        for prompt in self.prompts:
+            messages = "; ".join([message.content for message in prompt])
+            for name in var_names:
+                # a variable is always included between two
+                name = "{{" + name + "}}"
+                if name not in messages:
+                    raise ValueError(
+                        f"Prompt: {prompt} must contain the variables: {list(var_names)}"
+                    )
+
+        return self
