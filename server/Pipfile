@@ -19,6 +19,7 @@ motor = "*"
 bcrypt = "*"
 pre-commit = "*"
 aiohttp = "*"
+ipykernel = "*"
 
 [dev-packages]
 
