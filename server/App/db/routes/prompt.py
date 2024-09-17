@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import Prompt, PromptNoID, PromptRouteInput, SuccessResponse
+from App.models import AIFunction, Prompt, PromptNoID, PromptRouteInput, SuccessResponse
 
 PROMPT_ROUTER = APIRouter()
 
@@ -29,21 +29,28 @@ async def post_prompt(
             detail=f"AI Function {prompt.ai_function_id} does not exist",
         )
 
+    # parse ai function for type hints
+    ai_function = AIFunction(**ai_function)
+
     # get time stamp
     now = datetime.now()
 
-    # construct the prompt object
-    prompt = PromptNoID(
-        **dict(prompt),
-        creation_time=now,
-        username=username,
-    )
+    # try parsing prompt, return validation error if fails
+    try:
+        prompt = PromptNoID.model_validate(
+            {**dict(prompt), "creation_time": now, "username": username},
+            context=[var.name for var in ai_function.input_variables],
+        )
+    except ValueError as e:
+        raise HTTPException(422, detail=str(e))
 
+    # insert document if no duplicate exists
     compare_fields = list(
         prompt.model_dump(exclude="creation_time", by_alias=True).keys()
     )
 
     result = await db.insert(prompt, "prompts", compare_fields=compare_fields)
+
     if result:
         return SuccessResponse
 
