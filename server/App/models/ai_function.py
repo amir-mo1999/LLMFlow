@@ -4,7 +4,7 @@ from typing import Annotated, List
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
 from .objectID import PydanticObjectId
-from .promptfoo_models import OutputAssertions, TestCase
+from .promptfoo_models import Assertion, TestCase
 from .root_model import RootModel
 
 
@@ -25,9 +25,10 @@ class AIFunctionRouteInput(RootModel):
         ..., example=[{"name": "text"}, {"name": "number_of_sentences"}]
     )
 
-    assertions: OutputAssertions = Field(
+    assertions: List[Assertion] = Field(
         ...,
-        example={"assert": [{"type": "contains", "value": "sea", "weight": 0.5}]},
+        example=[{"type": "contains", "value": "sea", "weight": 0.5}],
+        alias="assert",
     )
 
     test_cases: List[TestCase] = Field(
@@ -35,10 +36,18 @@ class AIFunctionRouteInput(RootModel):
         example=[
             {
                 "vars": {
-                    "text": "The sea is blue and full of fish. It is the home to many species. It spans over more than two thirds of the world",
-                    "number_of_sentences": "1",
-                }
-            }
+                    "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise.",
+                    "number_of_sentences": "2",
+                },
+                "assert": [{"type": "icontains", "value": "serendipity"}],
+            },
+            {
+                "vars": {
+                    "text": "The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy.",
+                    "number_of_sentences": "2",
+                },
+                "assert": [{"type": "icontains", "value": "minimalism"}],
+            },
         ],
     )
 

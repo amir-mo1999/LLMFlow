@@ -67,10 +67,6 @@ class Assertion(RootModel):
     metric: Optional[str] = None
 
 
-class OutputAssertions(RootModel):
-    assertions: List[Assertion] = Field(..., alias="assert")
-
-
 class GradingResult(RootModel):
     passed: bool = Field(..., alias="pass")
     score: float
@@ -102,6 +98,7 @@ class EvaluateSummary(RootModel):
 
 class TestCase(RootModel):
     variables: Dict[str, str] = Field(..., alias="vars")
+    assertions: Optional[List[Assertion]] = Field(..., alias="assert")
 
 
 class EvaluateInput(RootModel):
@@ -109,5 +106,5 @@ class EvaluateInput(RootModel):
     providers: Literal["openai:gpt-4o-mini"] = (
         "openai:gpt-4o-mini"  # TODO: change this with new LLM Providers model
     )
-    defaultTest: OutputAssertions
+    defaultTest: List[Assertion] = Field(..., alias="assert")
     tests: List[TestCase]
