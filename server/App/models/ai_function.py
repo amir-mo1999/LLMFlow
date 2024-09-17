@@ -27,7 +27,10 @@ class AIFunctionRouteInput(RootModel):
 
     assertions: List[Assertion] = Field(
         ...,
-        example=[{"type": "contains", "value": "sea", "weight": 0.5}],
+        example=[
+            {"type": "icontains", "value": "the", "weight": 1},
+            {"type": "contains", "value": "thgewgewgewgewge", "weight": 1},
+        ],
         alias="assert",
     )
 
@@ -39,14 +42,14 @@ class AIFunctionRouteInput(RootModel):
                     "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise.",
                     "number_of_sentences": "2",
                 },
-                "assert": [{"type": "icontains", "value": "serendipity"}],
+                "assert": [{"type": "icontains", "value": "serendipity", "weight": 5}],
             },
             {
                 "vars": {
                     "text": "The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy.",
                     "number_of_sentences": "2",
                 },
-                "assert": [{"type": "icontains", "value": "minimalism"}],
+                "assert": [{"type": "icontains", "value": "minimalism", "weight": 5}],
             },
         ],
     )

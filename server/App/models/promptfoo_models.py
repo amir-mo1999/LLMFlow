@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import Field
+from pydantic import Field, confloat
 
 from .prompt import PromptMessage
 from .root_model import RootModel
@@ -63,16 +63,16 @@ class Assertion(RootModel):
     type: BaseAssertionTypes
     value: Optional["AssertionValue"] = None
     threshold: Optional[float] = None
-    weight: Optional[float] = None
+    weight: Optional[confloat(ge=1)] = None
     metric: Optional[str] = None
 
 
 class GradingResult(RootModel):
     passed: bool = Field(..., alias="pass")
     score: float | None
-    reason: str
-    namedScores: Optional[Dict[str, float]] = None
-    tokensUsed: Optional[TokenUsage] = None
+    # reason: str
+    # namedScores: Optional[Dict[str, float]] = None
+    # tokensUsed: Optional[TokenUsage] = None
     componentResults: Optional[List["GradingResult"]] = None
     assertion: Optional[Assertion] = None
     comment: Optional[str] = None
