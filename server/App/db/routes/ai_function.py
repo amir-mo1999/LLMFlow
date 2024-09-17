@@ -44,8 +44,11 @@ async def post_ai_function(
     response_model_by_alias=True,
     response_model=List[AIFunction],
 )
-async def get_ai_functions(db: Annotated[DB, Depends(db)]):
-    ai_functions = await db.get_all_ai_functions()
+async def get_ai_functions(
+    db: Annotated[DB, Depends(db)],
+    username: Annotated[str, Depends(username)],
+):
+    ai_functions = await db.get_all_ai_functions(username=username)
     return ai_functions.values()
 
 
@@ -54,7 +57,11 @@ async def get_ai_functions(db: Annotated[DB, Depends(db)]):
     response_model=AIFunction,
     response_model_by_alias=True,
 )
-async def get_ai_function(ai_function_id: str, db: Annotated[DB, Depends(db)]):
+async def get_ai_function(
+    ai_function_id: str,
+    db: Annotated[DB, Depends(db)],
+    username: Annotated[str, Depends(username)],
+):
     ai_function = await db.get_ai_function_by_id(ai_function_id)
 
     if ai_function is None:

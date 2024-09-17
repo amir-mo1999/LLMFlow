@@ -22,7 +22,7 @@ async def post_user(
     result = await db.insert(
         user,
         collection="users",
-        compare_fields=["email"],
+        compare_fields=["username"],
         additional_data={"hashed_password": user.hashed_password},
     )
 

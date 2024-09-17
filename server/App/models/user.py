@@ -7,7 +7,7 @@ from .root_model import RootModel
 
 
 class UserRouteInput(RootModel):
-    email: EmailStr
+    username: EmailStr
     first_name: Annotated[str, StringConstraints(min_length=1)]
     last_name: Annotated[str, StringConstraints(min_length=1)]
     role: Literal["developer", "prompt_engineer", "admin"]
@@ -20,7 +20,7 @@ class User(UserRouteInput):
 
 class UserWithAccessToken(RootModel):
     access_token: str
-    email: EmailStr
+    username: EmailStr
     first_name: Annotated[str, StringConstraints(min_length=1)]
     last_name: Annotated[str, StringConstraints(min_length=1)]
     role: Literal["developer", "prompt_engineer", "admin"]

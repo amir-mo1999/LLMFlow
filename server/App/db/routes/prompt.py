@@ -62,8 +62,12 @@ async def post_prompt(
     response_model=Prompt,
     response_model_by_alias=True,
 )
-async def get_prompt_route(prompt_id: str, db: Annotated[DB, Depends(db)]):
-    prompt = await db.get_prompt_by_id(prompt_id)
+async def get_prompt_route(
+    prompt_id: str,
+    db: Annotated[DB, Depends(db)],
+    username: Annotated[str, Depends(username)],
+):
+    prompt = await db.get_prompt_by_id(prompt_id, username)
 
     if prompt is None:
         raise DocumentNotFound

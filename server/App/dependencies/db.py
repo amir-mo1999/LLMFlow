@@ -25,13 +25,17 @@ class DB:
         docs = await docs.to_list(self.length)
         return docs
 
-    async def get_by_id(self, collection: Collection, object_id: ObjectId | str):
+    async def get_by_id_and_username(
+        self, collection: Collection, object_id: ObjectId | str, username: str
+    ):
         if isinstance(object_id, str):
             try:
                 object_id = ObjectId(object_id)
             except InvalidId:
                 return None
-        doc = await self.get_collection(collection).find_one({"_id": object_id})
+        doc = await self.get_collection(collection).find_one(
+            {"_id": object_id, "username": username}
+        )
         return doc
 
     async def insert(
@@ -63,28 +67,19 @@ class DB:
 
         return True
 
-    async def get_all_users(self) -> List[User]:
-        users = await self.get_all("users")
-
-        user_objects = []
-
-        for user in users:
-            user_objects.append = User(user)
-
-        return user_objects
-
-    async def get_all_ai_functions(self) -> Dict[str, AIFunction]:
+    async def get_all_ai_functions(self, username: str) -> Dict[str, AIFunction]:
         ai_functions = await self.get_all("ai-functions")
         ai_function_objects = {}
 
         for ai_function in ai_functions:
             ai_function = AIFunction(**ai_function)
-            ai_function_objects[str(ai_function.id)] = ai_function
+            if ai_function.username == username:
+                ai_function_objects[str(ai_function.id)] = ai_function
 
         return ai_function_objects
 
     async def get_user(self, username: str) -> User | None:
-        user = await self.get_collection("users").find_one({"email": username})
+        user = await self.get_collection("users").find_one({"username": username})
         if user is None:
             return None
 
@@ -92,18 +87,27 @@ class DB:
         return user
 
     async def get_ai_function_by_id(
-        self, ai_function_id: ObjectId | str
+        self,
+        ai_function_id: ObjectId | str,
+        username: str,
     ) -> AIFunction | None:
-        ai_function = await self.get_by_id("ai-functions", ai_function_id)
+        ai_function = await self.get_by_id_and_username(
+            "ai-functions", ai_function_id, username
+        )
 
         if ai_function is None:
             return None
+
         return AIFunction(**ai_function)
 
-    async def get_prompt_by_id(self, prompt_id: ObjectId | str) -> Prompt | None:
-        prompt = await self.get_by_id("prompts", prompt_id)
+    async def get_prompt_by_id(
+        self, prompt_id: ObjectId | str, username: str
+    ) -> Prompt | None:
+        prompt = await self.get_by_id_and_username("prompts", prompt_id, username)
+
         if prompt is None:
             return None
+
         return Prompt(**prompt)
 
 
