@@ -20,8 +20,8 @@ class DB:
     def get_collection(self, collection: Collection) -> AsyncIOMotorCollection:
         return self.db.get_collection(collection)
 
-    async def get_all(self, collection: Collection) -> List[Any]:
-        docs = self.get_collection(collection).find({})
+    async def get_all(self, collection: Collection, username: str) -> List[Any]:
+        docs = self.get_collection(collection).find({"username": username})
         docs = await docs.to_list(self.length)
         return docs
 
@@ -68,13 +68,12 @@ class DB:
         return True
 
     async def get_all_ai_functions(self, username: str) -> Dict[str, AIFunction]:
-        ai_functions = await self.get_all("ai-functions")
+        ai_functions = await self.get_all("ai-functions", username)
         ai_function_objects = {}
 
         for ai_function in ai_functions:
             ai_function = AIFunction(**ai_function)
-            if ai_function.username == username:
-                ai_function_objects[str(ai_function.id)] = ai_function
+            ai_function_objects[ai_function.id] = ai_function
 
         return ai_function_objects
 
