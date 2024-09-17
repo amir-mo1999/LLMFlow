@@ -19,7 +19,12 @@ async def post_user(
     user: UserRouteInput,
     db: Annotated[DB, Depends(db)],
 ):
-    result = await db.insert(user, collection="users", compare_fields=["email"])
+    result = await db.insert(
+        user,
+        collection="users",
+        compare_fields=["email"],
+        additional_data={"hashed_password": user.hashed_password},
+    )
 
     if result:
         return SuccessResponse

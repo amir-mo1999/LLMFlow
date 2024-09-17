@@ -35,7 +35,11 @@ class DB:
         return doc
 
     async def insert(
-        self, document: Object, collection: Collection, compare_fields: List[str] = []
+        self,
+        document: Object,
+        collection: Collection,
+        compare_fields: List[str] = [],
+        additional_data: Dict[Any, Any] = {},
     ) -> bool:
         coll = self.get_collection(collection)
 
@@ -55,7 +59,7 @@ class DB:
         if existing_document is not None:
             return False
 
-        await coll.insert_one(document.model_dump(by_alias=True))
+        await coll.insert_one({**document.model_dump(by_alias=True), **additional_data})
 
         return True
 
