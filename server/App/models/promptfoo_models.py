@@ -69,7 +69,7 @@ class Assertion(RootModel):
 
 class GradingResult(RootModel):
     passed: bool = Field(..., alias="pass")
-    score: float
+    score: float | None
     reason: str
     namedScores: Optional[Dict[str, float]] = None
     tokensUsed: Optional[TokenUsage] = None
@@ -80,9 +80,9 @@ class GradingResult(RootModel):
 
 class EvaluateResult(RootModel):
     response: Optional[ProviderResponse] = None
-    error: Optional[str] = None
-    success: bool
-    score: float
+    # error: Optional[str] = None
+    # success: bool
+    # score: float | None
     latencyMs: int
     gradingResult: Optional[GradingResult] = None
     namedScores: Dict[str, float]
@@ -106,5 +106,5 @@ class EvaluateInput(RootModel):
     providers: Literal["openai:gpt-4o-mini"] = (
         "openai:gpt-4o-mini"  # TODO: change this with new LLM Providers model
     )
-    defaultTest: List[Assertion] = Field(..., alias="assert")
+    defaultTest: Dict[Literal["assert"], List[Assertion]]
     tests: List[TestCase]
