@@ -69,10 +69,7 @@ class PromptNoID(PromptRouteInput):
     ):
         # context must be given
         if info.context is None:
-            raise ValueError(
-                "AI Function variable names must be provided in validation context"
-            )
-
+            return messages
         # variable names from validation context
         var_names = info.context
 
