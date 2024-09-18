@@ -80,6 +80,7 @@ class GradingResult(RootModel):
 
 class EvaluateResult(RootModel):
     response: Optional[ProviderResponse] = None
+    vars: Dict[str, str] = None
     # error: Optional[str] = None
     # success: bool
     # score: float | None
