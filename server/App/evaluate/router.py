@@ -13,19 +13,22 @@ EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 
 
-@EVAL_ROUTER.get("/{ai_function_id}/{prompt_id}")
+@EVAL_ROUTER.get("/{prompt_id}", response_model=EvaluateSummary)
 async def evaluate(
-    ai_function_id: str,
     prompt_id: str,
     db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
-    # get prompt and ai function
-    ai_function = await db.get_ai_function_by_id(ai_function_id, username)
+    # get prompt
     prompt = await db.get_prompt_by_id(prompt_id, username)
 
-    # raise error if not found
-    if ai_function is None or prompt is None:
+    if prompt is None:
+        raise DocumentNotFound
+
+    # get ai function
+    ai_function = await db.get_ai_function_by_id(prompt.ai_function_id, username)
+
+    if ai_function is None:
         raise DocumentNotFound
 
     prompts = [prompt.messages]
