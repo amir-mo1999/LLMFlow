@@ -16,7 +16,12 @@ AUTH_ROUTER = APIRouter(prefix="/auth")
 ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
 
 
-@AUTH_ROUTER.post("/login", response_model=UserWithAccessToken, tags=["Authentication"])
+@AUTH_ROUTER.post(
+    "/login",
+    response_model=UserWithAccessToken,
+    tags=["Authentication"],
+    responses={401: {"detail": "Incorrect username or password"}},
+)
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Annotated[DB, Depends(get_db)],
@@ -56,12 +61,15 @@ async def login(
 
 
 @AUTH_ROUTER.get(
-    "/refresh-token", response_model=UserWithAccessToken, tags=["Authentication"]
+    "/refresh-token",
+    response_model=UserWithAccessToken,
+    tags=["Authentication"],
+    responses={401: {"detail": "Not authenticated"}},
 )
 async def refresh_token(user: Annotated[User, Depends(user)]):
     # if token is valid create a new one
     token = create_jwt_token(
-        data={"sub": user.email}, expires_delta=ACCESS_TOKEN_EXPIRES
+        data={"sub": user.username}, expires_delta=ACCESS_TOKEN_EXPIRES
     )
 
     # return user data together with access token

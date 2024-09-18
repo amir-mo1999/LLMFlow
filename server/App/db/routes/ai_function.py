@@ -10,7 +10,11 @@ from App.models import AIFunction, AIFunctionNoID, AIFunctionRouteInput, Success
 AI_FUNCTION_ROUTER = APIRouter()
 
 
-@AI_FUNCTION_ROUTER.post("/ai-function", response_model=SuccessResponse)
+@AI_FUNCTION_ROUTER.post(
+    "/ai-function",
+    response_model=SuccessResponse,
+    responses={401: {"detail": "Not authenticated"}},
+)
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
     username: Annotated[str, Depends(username)],
@@ -43,6 +47,7 @@ async def post_ai_function(
     "/ai-function",
     response_model_by_alias=True,
     response_model=List[AIFunction],
+    responses={401: {"detail": "Not authenticated"}},
 )
 async def get_ai_functions(
     db: Annotated[DB, Depends(get_db)],
@@ -56,6 +61,10 @@ async def get_ai_functions(
     "/ai-function/{ai_function_id}",
     response_model=AIFunction,
     response_model_by_alias=True,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
 )
 async def get_ai_function(
     ai_function_id: str,

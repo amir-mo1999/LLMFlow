@@ -14,7 +14,10 @@ USER_ROUTER = APIRouter()
 
 
 ## User routes
-@USER_ROUTER.post("/user", response_model=SuccessResponse)
+@USER_ROUTER.post(
+    "/user",
+    response_model=SuccessResponse,
+)
 async def post_user(
     user: UserRouteInput,
     db: Annotated[DB, Depends(get_db)],
@@ -32,7 +35,13 @@ async def post_user(
     raise DuplicateDocument
 
 
-@USER_ROUTER.get("/user/{username}", response_model=User)
+@USER_ROUTER.get(
+    "/user/{username}",
+    response_model=User,
+    responses={
+        404: {"detail": "document not found"},
+    },
+)
 async def get_user_route(
     db: Annotated[DB, Depends(get_db)],
     username: str = Path(..., description="Email of the user to retrieve"),

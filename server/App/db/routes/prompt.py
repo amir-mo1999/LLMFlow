@@ -10,7 +10,14 @@ from App.models import AIFunction, Prompt, PromptNoID, PromptRouteInput, Success
 PROMPT_ROUTER = APIRouter()
 
 
-@PROMPT_ROUTER.post("/prompt", response_model=SuccessResponse)
+@PROMPT_ROUTER.post(
+    "/prompt",
+    response_model=SuccessResponse,
+    responses={
+        401: {"detail": "Not authenticated"},
+        400: {"detail": "AI Function does not exist"},
+    },
+)
 async def post_prompt(
     prompt: PromptRouteInput,
     username: Annotated[str, Depends(username)],
@@ -61,6 +68,10 @@ async def post_prompt(
     "/prompt/{prompt_id}",
     response_model=Prompt,
     response_model_by_alias=True,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
 )
 async def get_prompt_route(
     prompt_id: str,
