@@ -30,13 +30,16 @@ export interface AIFunction {
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
   input_variables: InputVariable[];
-  /** @example {"assert":[{"type":"contains","value":"sea","weight":0.5}]} */
-  assertions: OutputAssertionsOutput;
+  /**
+   * Assert
+   * @example [{"type":"icontains","value":"the","weight":1},{"type":"contains","value":"thgewgewgewgewge","weight":1}]
+   */
+  assert: Assertion[];
   /**
    * Test Cases
-   * @example [{"vars":{"number_of_sentences":"1","text":"The sea is blue and full of fish. It is the home to many species. It spans over more than two thirds of the world"}}]
+   * @example [{"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}},{"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}]
    */
-  test_cases: TestCase[];
+  test_cases: TestCaseOutput[];
   /**
    * Number Of Prompts
    * @min 0
@@ -77,13 +80,16 @@ export interface AIFunctionRouteInput {
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
   input_variables: InputVariable[];
-  /** @example {"assert":[{"type":"contains","value":"sea","weight":0.5}]} */
-  assertions: OutputAssertionsInput;
+  /**
+   * Assert
+   * @example [{"type":"icontains","value":"the","weight":1},{"type":"contains","value":"thgewgewgewgewge","weight":1}]
+   */
+  assert: Assertion[];
   /**
    * Test Cases
-   * @example [{"vars":{"number_of_sentences":"1","text":"The sea is blue and full of fish. It is the home to many species. It spans over more than two thirds of the world"}}]
+   * @example [{"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}},{"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}]
    */
-  test_cases: TestCase[];
+  test_cases: TestCaseInput[];
 }
 
 /** Assertion */
@@ -101,46 +107,28 @@ export interface Assertion {
 
 /** BaseAssertionTypes */
 export enum BaseAssertionTypes {
-  AnswerRelevance = "answer-relevance",
+  Contains = "contains",
   ContainsAll = "contains-all",
   ContainsAny = "contains-any",
   ContainsJson = "contains-json",
   ContainsSql = "contains-sql",
   ContainsXml = "contains-xml",
-  Contains = "contains",
-  ContextFaithfulness = "context-faithfulness",
-  ContextRecall = "context-recall",
-  ContextRelevance = "context-relevance",
   Cost = "cost",
   Equals = "equals",
-  Factuality = "factuality",
-  Human = "human",
-  IcontainsAll = "icontains-all",
-  IcontainsAny = "icontains-any",
   Icontains = "icontains",
+  IcontainsAll = "icontains-all",
   IsJson = "is-json",
   IsSql = "is-sql",
-  IsValidOpenaiFunctionCall = "is-valid-openai-function-call",
-  IsValidOpenaiToolsCall = "is-valid-openai-tools-call",
   IsXml = "is-xml",
   Javascript = "javascript",
   Latency = "latency",
   Levenshtein = "levenshtein",
-  LlmRubric = "llm-rubric",
-  ModelGradedClosedqa = "model-graded-closedqa",
-  ModelGradedFactuality = "model-graded-factuality",
-  Moderation = "moderation",
   PerplexityScore = "perplexity-score",
   Perplexity = "perplexity",
   Python = "python",
   Regex = "regex",
-  RougeL = "rouge-l",
   RougeN = "rouge-n",
-  RougeS = "rouge-s",
-  SelectBest = "select-best",
-  Similar = "similar",
   StartsWith = "starts-with",
-  Webhook = "webhook",
 }
 
 /** Body_login_auth_login_post */
@@ -165,12 +153,8 @@ export interface BodyLoginAuthLoginPost {
 /** EvaluateResult */
 export interface EvaluateResult {
   response?: ProviderResponse | null;
-  /** Error */
-  error?: string | null;
-  /** Success */
-  success: boolean;
-  /** Score */
-  score: number;
+  /** Vars */
+  vars?: Record<string, string>;
   /** Latencyms */
   latencyMs: number;
   gradingResult?: GradingResult | null;
@@ -208,12 +192,7 @@ export interface GradingResult {
   /** Pass */
   pass: boolean;
   /** Score */
-  score: number;
-  /** Reason */
-  reason: string;
-  /** Namedscores */
-  namedScores?: Record<string, number> | null;
-  tokensUsed?: TokenUsage | null;
+  score: number | null;
   /** Componentresults */
   componentResults?: GradingResult[] | null;
   assertion?: Assertion | null;
@@ -235,18 +214,6 @@ export interface InputVariable {
    * @maxLength 40
    */
   name: string;
-}
-
-/** OutputAssertions */
-export interface OutputAssertionsInput {
-  /** Assert */
-  assert: Assertion[];
-}
-
-/** OutputAssertions */
-export interface OutputAssertionsOutput {
-  /** Assert */
-  assert: Assertion[];
 }
 
 /** Prompt */
@@ -324,10 +291,29 @@ export enum RoleEnum {
   Assistant = "assistant",
 }
 
+/** SuccessResponse */
+export interface SuccessResponse {
+  /**
+   * Message
+   * @default "Success"
+   */
+  message?: string;
+}
+
 /** TestCase */
-export interface TestCase {
+export interface TestCaseInput {
   /** Vars */
   vars: Record<string, string>;
+  /** Assert */
+  assert: Assertion[] | null;
+}
+
+/** TestCase */
+export interface TestCaseOutput {
+  /** Vars */
+  vars: Record<string, string>;
+  /** Assert */
+  assert: Assertion[] | null;
 }
 
 /** TokenUsage */
@@ -357,10 +343,10 @@ export interface TokenUsage {
 /** User */
 export interface User {
   /**
-   * Email
+   * Username
    * @format email
    */
-  email: string;
+  username: string;
   /**
    * First Name
    * @minLength 1
@@ -380,10 +366,10 @@ export interface User {
 /** UserRouteInput */
 export interface UserRouteInput {
   /**
-   * Email
+   * Username
    * @format email
    */
-  email: string;
+  username: string;
   /**
    * First Name
    * @minLength 1
@@ -405,10 +391,10 @@ export interface UserWithAccessToken {
   /** Access Token */
   access_token: string;
   /**
-   * Email
+   * Username
    * @format email
    */
-  email: string;
+  username: string;
   /**
    * First Name
    * @minLength 1
@@ -660,7 +646,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/auth/login
      */
     loginAuthLoginPost: (data: BodyLoginAuthLoginPost, params: RequestParams = {}) =>
-      this.request<UserWithAccessToken, HTTPValidationError>({
+      this.request<UserWithAccessToken, void | HTTPValidationError>({
         path: `/auth/login`,
         method: "POST",
         body: data,
@@ -679,7 +665,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     refreshTokenAuthRefreshTokenGet: (params: RequestParams = {}) =>
-      this.request<UserWithAccessToken, any>({
+      this.request<UserWithAccessToken, void>({
         path: `/auth/refresh-token`,
         method: "GET",
         secure: true,
@@ -692,14 +678,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Evaluate
-     * @name EvaluateEvaluateAiFunctionIdPromptIdGet
+     * @name EvaluateEvaluatePromptIdGet
      * @summary Evaluate
-     * @request GET:/evaluate/{ai_function_id}/{prompt_id}
+     * @request GET:/evaluate/{prompt_id}
+     * @secure
      */
-    evaluateEvaluateAiFunctionIdPromptIdGet: (aiFunctionId: string, promptId: string, params: RequestParams = {}) =>
+    evaluateEvaluatePromptIdGet: (promptId: string, params: RequestParams = {}) =>
       this.request<EvaluateSummary, HTTPValidationError>({
-        path: `/evaluate/${aiFunctionId}/${promptId}`,
+        path: `/evaluate/${promptId}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -714,7 +702,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/db/user
      */
     postUserDbUserPost: (data: UserRouteInput, params: RequestParams = {}) =>
-      this.request<any, HTTPValidationError>({
+      this.request<SuccessResponse, HTTPValidationError>({
         path: `/db/user`,
         method: "POST",
         body: data,
@@ -732,7 +720,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/db/user/{username}
      */
     getUserRouteDbUserUsernameGet: (username: string, params: RequestParams = {}) =>
-      this.request<User, HTTPValidationError>({
+      this.request<User, void | HTTPValidationError>({
         path: `/db/user/${username}`,
         method: "GET",
         format: "json",
@@ -746,11 +734,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetAiFunctionsDbAiFunctionGet
      * @summary Get Ai Functions
      * @request GET:/db/ai-function
+     * @secure
      */
     getAiFunctionsDbAiFunctionGet: (params: RequestParams = {}) =>
-      this.request<AIFunction[], any>({
+      this.request<AIFunction[], void>({
         path: `/db/ai-function`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -765,7 +755,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     postAiFunctionDbAiFunctionPost: (data: AIFunctionRouteInput, params: RequestParams = {}) =>
-      this.request<any, HTTPValidationError>({
+      this.request<SuccessResponse, void | HTTPValidationError>({
         path: `/db/ai-function`,
         method: "POST",
         body: data,
@@ -782,11 +772,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetAiFunctionDbAiFunctionAiFunctionIdGet
      * @summary Get Ai Function
      * @request GET:/db/ai-function/{ai_function_id}
+     * @secure
      */
     getAiFunctionDbAiFunctionAiFunctionIdGet: (aiFunctionId: string, params: RequestParams = {}) =>
-      this.request<AIFunction, HTTPValidationError>({
+      this.request<AIFunction, void | HTTPValidationError>({
         path: `/db/ai-function/${aiFunctionId}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -801,7 +793,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     postPromptDbPromptPost: (data: PromptRouteInput, params: RequestParams = {}) =>
-      this.request<any, HTTPValidationError>({
+      this.request<SuccessResponse, void | HTTPValidationError>({
         path: `/db/prompt`,
         method: "POST",
         body: data,
@@ -818,11 +810,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetPromptRouteDbPromptPromptIdGet
      * @summary Get Prompt Route
      * @request GET:/db/prompt/{prompt_id}
+     * @secure
      */
     getPromptRouteDbPromptPromptIdGet: (promptId: string, params: RequestParams = {}) =>
-      this.request<Prompt, HTTPValidationError>({
+      this.request<Prompt, void | HTTPValidationError>({
         path: `/db/prompt/${promptId}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
