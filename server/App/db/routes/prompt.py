@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from App.dependencies import DB, db, username
+from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import AIFunction, Prompt, PromptNoID, PromptRouteInput, SuccessResponse
 
@@ -14,7 +14,7 @@ PROMPT_ROUTER = APIRouter()
 async def post_prompt(
     prompt: PromptRouteInput,
     username: Annotated[str, Depends(username)],
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
 ):
     # get ai function for prompt
     ai_function_collection = db.get_collection("ai-functions")
@@ -64,7 +64,7 @@ async def post_prompt(
 )
 async def get_prompt_route(
     prompt_id: str,
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
     prompt = await db.get_prompt_by_id(prompt_id, username)

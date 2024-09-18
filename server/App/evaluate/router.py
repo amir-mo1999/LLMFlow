@@ -4,7 +4,7 @@ from typing import Annotated
 import aiohttp
 from fastapi import APIRouter, Depends, HTTPException
 
-from App.dependencies import DB, db, username
+from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound
 from App.models import EvaluateInput, EvaluateSummary
 
@@ -17,7 +17,7 @@ PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 async def evaluate(
     ai_function_id: str,
     prompt_id: str,
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
     # get prompt and ai function

@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Path
 
-from App.dependencies import DB, db
+from App.dependencies import DB, get_db
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
     SuccessResponse,
@@ -17,7 +17,7 @@ USER_ROUTER = APIRouter()
 @USER_ROUTER.post("/user", response_model=SuccessResponse)
 async def post_user(
     user: UserRouteInput,
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
 ):
     result = await db.insert(
         user,
@@ -34,7 +34,7 @@ async def post_user(
 
 @USER_ROUTER.get("/user/{username}", response_model=User)
 async def get_user_route(
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
     username: str = Path(..., description="Email of the user to retrieve"),
 ):
     # get user collection

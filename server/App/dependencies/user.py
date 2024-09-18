@@ -4,7 +4,7 @@ from fastapi import Depends
 
 from App.models import DecodedToken, User
 
-from .db import DB, db
+from .db import DB, get_db
 from .decoded_token import decoded_token
 
 
@@ -17,6 +17,6 @@ async def username(
 
 async def user(
     username: Annotated[str, Depends(username)],
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
 ) -> User:
     return await db.get_user(username)

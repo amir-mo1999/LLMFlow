@@ -3,7 +3,7 @@ from typing import Annotated, List
 
 from fastapi import APIRouter, Depends
 
-from App.dependencies import DB, db, username
+from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import AIFunction, AIFunctionNoID, AIFunctionRouteInput, SuccessResponse
 
@@ -14,7 +14,7 @@ AI_FUNCTION_ROUTER = APIRouter()
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
     username: Annotated[str, Depends(username)],
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
 ):
     # get time stamp
     now = datetime.now()
@@ -45,7 +45,7 @@ async def post_ai_function(
     response_model=List[AIFunction],
 )
 async def get_ai_functions(
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
     ai_functions = await db.get_all_ai_functions(username=username)
@@ -59,7 +59,7 @@ async def get_ai_functions(
 )
 async def get_ai_function(
     ai_function_id: str,
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
     ai_function = await db.get_ai_function_by_id(ai_function_id, username)

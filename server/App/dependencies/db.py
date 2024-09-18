@@ -110,7 +110,7 @@ class DB:
         return Prompt(**prompt)
 
 
-async def client():
+async def get_client():
     uri = os.environ.get("MONGO_CON_STRING")
     client = AsyncIOMotorClient(uri)
     try:
@@ -119,6 +119,6 @@ async def client():
         client.close()
 
 
-async def db(client: AsyncIOMotorClient = Depends(client)):
+async def get_db(client: AsyncIOMotorClient = Depends(get_client)):
     db = DB(client)
     return db

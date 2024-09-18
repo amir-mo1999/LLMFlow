@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from App.dependencies import DB, db, user
+from App.dependencies import DB, get_db, user
 from App.models import User, UserWithAccessToken
 
 from .utils import create_jwt_token, timedelta, verify_password
@@ -19,7 +19,7 @@ ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINU
 @AUTH_ROUTER.post("/login", response_model=UserWithAccessToken, tags=["Authentication"])
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    db: Annotated[DB, Depends(db)],
+    db: Annotated[DB, Depends(get_db)],
 ):
     """
     Endpoint for the login procedure. Takes username and password as form-data input.
