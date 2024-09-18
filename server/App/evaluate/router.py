@@ -21,8 +21,8 @@ async def evaluate(
     username: Annotated[str, Depends(username)],
 ):
     # get prompt and ai function
-    ai_function = await db.get_ai_function_by_id(ai_function_id)
-    prompt = await db.get_prompt_by_id(prompt_id)
+    ai_function = await db.get_ai_function_by_id(ai_function_id, username)
+    prompt = await db.get_prompt_by_id(prompt_id, username)
 
     # raise error if not found
     if ai_function is None or prompt is None:
