@@ -117,6 +117,24 @@ class DB:
             {"$set": {"last_eval": eval_summary.model_dump(by_alias=True)}},
         )
 
+    async def get_prompts_by_ai_function_id(
+        self, ai_function_id: str | ObjectId
+    ) -> List[Prompt]:
+        prompt_coll = self.db.get_collection("prompts")
+
+        if isinstance(ai_function_id, str):
+            ai_function_id = ObjectId(ai_function_id)
+
+        prompts_cursor = prompt_coll.find({"ai_function_id": ai_function_id})
+
+        prompt_dumps = await prompts_cursor.to_list(self.length)
+
+        prompts = []
+        for prompt_dump in prompt_dumps:
+            prompts.append(Prompt(**prompt_dump))
+
+        return prompts
+
 
 async def get_client():
     uri = os.environ.get("MONGO_CON_STRING")

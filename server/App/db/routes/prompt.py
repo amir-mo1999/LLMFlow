@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -86,3 +86,29 @@ async def get_prompt_route(
         raise DocumentNotFound
 
     return prompt
+
+
+@PROMPT_ROUTER.get(
+    "/prompts/{ai_function_id}",
+    response_model=List[Prompt],
+    response_model_by_alias=True,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def get_all_prompts_ai_function(
+    ai_function_id: str,
+    db: Annotated[DB, Depends(get_db)],
+    username: Annotated[str, Depends(username)],
+):
+    # check if ai function exists
+    ai_function = await db.get_ai_function_by_id(ai_function_id, username)
+
+    if ai_function is None:
+        raise DocumentNotFound
+
+    # get all prompts
+    prompts = await db.get_prompts_by_ai_function_id(ai_function_id)
+
+    return prompts
