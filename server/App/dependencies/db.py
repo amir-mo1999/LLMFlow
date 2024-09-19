@@ -6,7 +6,7 @@ from bson.errors import InvalidId
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 
-from App.models import AIFunction, Prompt, User
+from App.models import AIFunction, EvaluateSummary, Prompt, User
 
 Collection = Literal["ai-functions", "prompts", "users"]
 Object = Union[AIFunction, Prompt, User]
@@ -108,6 +108,14 @@ class DB:
             return None
 
         return Prompt(**prompt)
+
+    async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: ObjectId | str):
+        prompt_coll = self.get_collection("prompts")
+
+        await prompt_coll.update_one(
+            {"_id": prompt_id},
+            {"$set": {"last_eval": eval_summary.model_dump(by_alias=True)}},
+        )
 
 
 async def get_client():

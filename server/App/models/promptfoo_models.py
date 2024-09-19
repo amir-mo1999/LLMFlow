@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
 from pydantic import Field, confloat
+
 from .root_model import RootModel
 
 
