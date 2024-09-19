@@ -6,22 +6,7 @@ from pydantic import EmailStr, Field, ValidationInfo, field_validator, model_val
 
 from .objectID import PydanticObjectId
 from .root_model import RootModel
-
-
-# Define the role enum
-class RoleEnum(str, Enum):
-    system = "system"
-    user = "user"
-    assistant = "assistant"
-
-
-# Define the message schema
-class PromptMessage(RootModel):
-    role: RoleEnum
-    content: str
-
-    class Config:
-        use_enum_values = True
+from .promptfoo_models import PromptMessage, EvaluateSummary
 
 
 # Define the prompt schema
@@ -61,6 +46,8 @@ class PromptRouteInput(RootModel):
 class PromptNoID(PromptRouteInput):
     username: EmailStr
     creation_time: datetime
+    last_eval_time: datetime | None = None
+    last_eval: EvaluateSummary | None = None
 
     @field_validator("messages")
     @classmethod

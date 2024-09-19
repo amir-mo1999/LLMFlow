@@ -53,7 +53,9 @@ async def post_prompt(
 
     # insert document if no duplicate exists
     compare_fields = list(
-        prompt.model_dump(exclude="creation_time", by_alias=True).keys()
+        prompt.model_dump(
+            exclude=["creation_time", "last_eval_time", "last_eval"], by_alias=True
+        ).keys()
     )
 
     result = await db.insert(prompt, "prompts", compare_fields=compare_fields)

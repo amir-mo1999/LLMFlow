@@ -3,8 +3,6 @@ from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
 from pydantic import Field, confloat
-
-from .prompt import PromptMessage
 from .root_model import RootModel
 
 
@@ -100,6 +98,22 @@ class EvaluateSummary(RootModel):
 class TestCase(RootModel):
     variables: Dict[str, str] = Field(..., alias="vars")
     assertions: Optional[List[Assertion]] = Field(..., alias="assert")
+
+
+# Define the role enum
+class RoleEnum(str, Enum):
+    system = "system"
+    user = "user"
+    assistant = "assistant"
+
+
+# Define the message schema
+class PromptMessage(RootModel):
+    role: RoleEnum
+    content: str
+
+    class Config:
+        use_enum_values = True
 
 
 class EvaluateInput(RootModel):
