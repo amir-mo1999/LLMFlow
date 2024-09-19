@@ -1,5 +1,5 @@
 import { ApiContext } from "./apiContext"
-
+import { getSession } from "next-auth/react"
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || "" // TODO: add your baseUrl
 
 export type ErrorWrapper<TError> = TError | { status: "unknown"; payload: string }
@@ -45,6 +45,10 @@ export async function apiFetch<
     if (requestHeaders["Content-Type"].toLowerCase().includes("multipart/form-data")) {
       delete requestHeaders["Content-Type"]
     }
+
+    // add the authorization header by default
+    const session = await getSession()
+    requestHeaders["Authorization"] = `Bearer ${session?.user.access_token}`
 
     const response = await window.fetch(`${baseUrl}${resolveUrl(url, queryParams, pathParams)}`, {
       signal,
