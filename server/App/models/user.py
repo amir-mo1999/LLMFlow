@@ -2,7 +2,6 @@ from typing import Annotated, Literal
 
 from pydantic import EmailStr, Field, StringConstraints
 
-from .objectID import PydanticObjectId
 from .root_model import RootModel
 
 
@@ -15,7 +14,7 @@ class UserRouteInput(RootModel):
 
 
 class User(UserRouteInput):
-    id: PydanticObjectId = Field(alias="_id")
+    id: str = Field(alias="_id")
 
 
 class UserWithAccessToken(RootModel):
@@ -24,4 +23,4 @@ class UserWithAccessToken(RootModel):
     first_name: Annotated[str, StringConstraints(min_length=1)]
     last_name: Annotated[str, StringConstraints(min_length=1)]
     role: Literal["developer", "prompt_engineer", "admin"]
-    id: PydanticObjectId = Field(alias="_id")
+    id: str = Field(alias="_id")

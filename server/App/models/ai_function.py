@@ -3,7 +3,6 @@ from typing import Annotated, List
 
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
-from .objectID import PydanticObjectId
 from .promptfoo_models import Assertion, TestCase
 from .root_model import RootModel
 
@@ -95,7 +94,7 @@ class AIFunctionNoID(AIFunctionRouteInput):
 
 
 class AIFunction(AIFunctionNoID):
-    id: PydanticObjectId = Field(alias="_id")
+    id: str = Field(alias="_id")
 
 
 class AIFunctionList(RootModel):

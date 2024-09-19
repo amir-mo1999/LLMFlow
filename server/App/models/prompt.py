@@ -3,7 +3,6 @@ from typing import List, Literal, Union
 
 from pydantic import EmailStr, Field, ValidationInfo, field_validator, model_validator
 
-from .objectID import PydanticObjectId
 from .promptfoo_models import EvaluateSummary, PromptMessage
 from .root_model import RootModel
 
@@ -22,7 +21,7 @@ class PromptRouteInput(RootModel):
             )
         ],
     )
-    ai_function_id: PydanticObjectId
+    ai_function_id: str
 
     @model_validator(mode="after")
     def check_messages(self):
@@ -72,4 +71,4 @@ class PromptNoID(PromptRouteInput):
 
 
 class Prompt(PromptNoID):
-    id: PydanticObjectId = Field(alias="_id")
+    id: str = Field(alias="_id")

@@ -62,7 +62,7 @@ class Assertion(RootModel):
     type: BaseAssertionTypes
     value: Optional["AssertionValue"] = None
     threshold: Optional[float] = None
-    weight: Optional[confloat(ge=1)] = None
+    weight: Optional[confloat(ge=1)] = None  # type: ignore
     metric: Optional[str] = None
 
 
