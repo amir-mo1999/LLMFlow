@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import AIFunction, AIFunctionNoID, AIFunctionRouteInput, SuccessResponse
+from App.models import AIFunction, AIFunctionRouteInput, SuccessResponse
 
 AI_FUNCTION_ROUTER = APIRouter()
 
@@ -27,7 +27,7 @@ async def post_ai_function(
     number_of_prompts = 0
 
     # create the ai function object
-    ai_function = AIFunctionNoID(
+    ai_function = AIFunction(
         **ai_function_input.model_dump(by_alias=True),
         number_of_prompts=number_of_prompts,
         creation_time=now,

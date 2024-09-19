@@ -1,5 +1,6 @@
+import uuid
 from datetime import datetime
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
@@ -12,6 +13,7 @@ class InputVariable(RootModel):
 
 
 class AIFunctionRouteInput(RootModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
         ..., example="Summarize Texts"
     )
@@ -87,15 +89,7 @@ class AIFunctionRouteInput(RootModel):
         return self
 
 
-class AIFunctionNoID(AIFunctionRouteInput):
+class AIFunction(AIFunctionRouteInput):
     number_of_prompts: NonNegativeInt
     username: EmailStr
     creation_time: datetime
-
-
-class AIFunction(AIFunctionNoID):
-    id: str = Field(alias="_id")
-
-
-class AIFunctionList(RootModel):
-    ai_functions: List[AIFunction]

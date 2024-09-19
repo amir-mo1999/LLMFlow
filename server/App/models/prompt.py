@@ -1,5 +1,6 @@
+import uuid
 from datetime import datetime
-from typing import List, Literal, Union
+from typing import List, Literal, Optional, Union
 
 from pydantic import EmailStr, Field, ValidationInfo, field_validator, model_validator
 
@@ -9,6 +10,8 @@ from .root_model import RootModel
 
 # Define the prompt schema
 class PromptRouteInput(RootModel):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+
     prompt_type: Union[Literal["single_shot"], Literal["chat"]] = Field(
         ..., example="single_shot"
     )
@@ -41,7 +44,7 @@ class PromptRouteInput(RootModel):
         return self
 
 
-class PromptNoID(PromptRouteInput):
+class Prompt(PromptRouteInput):
     username: EmailStr
     creation_time: datetime
     last_eval: EvaluateSummary | None = None
@@ -68,7 +71,3 @@ class PromptNoID(PromptRouteInput):
                 )
 
         return messages
-
-
-class Prompt(PromptNoID):
-    id: str = Field(alias="_id")

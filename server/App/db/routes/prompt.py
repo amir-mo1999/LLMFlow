@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import AIFunction, Prompt, PromptNoID, PromptRouteInput, SuccessResponse
+from App.models import AIFunction, Prompt, PromptRouteInput, SuccessResponse
 
 PROMPT_ROUTER = APIRouter()
 
@@ -44,7 +44,7 @@ async def post_prompt(
 
     # try parsing prompt, return validation error if fails
     try:
-        prompt = PromptNoID.model_validate(
+        prompt = Prompt.model_validate(
             {**dict(prompt), "creation_time": now, "username": username},
             context=[var.name for var in ai_function.input_variables],
         )

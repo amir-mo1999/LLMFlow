@@ -7,7 +7,6 @@ from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
     SuccessResponse,
     User,
-    UserRouteInput,
 )
 
 USER_ROUTER = APIRouter()
@@ -19,7 +18,7 @@ USER_ROUTER = APIRouter()
     response_model=SuccessResponse,
 )
 async def post_user(
-    user: UserRouteInput,
+    user: User,
     db: Annotated[DB, Depends(get_db)],
 ):
     result = await db.insert(
@@ -46,14 +45,10 @@ async def get_user_route(
     db: Annotated[DB, Depends(get_db)],
     username: str = Path(..., description="Email of the user to retrieve"),
 ):
-    # get user collection
-    user_collection = db.get_collection("users")
-
     # Check if the user with the given email exists
-    user_data = await user_collection.find_one({"email": username})
+    user = await db.get_user(username)
 
-    if user_data:
-        user = User(**user_data)
+    if user:
         return user
     else:
         raise DocumentNotFound

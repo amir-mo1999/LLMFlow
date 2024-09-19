@@ -1,8 +1,6 @@
 import os
 from typing import Any, Dict, List, Literal, Union
 
-from bson import ObjectId
-from bson.errors import InvalidId
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 
@@ -26,13 +24,8 @@ class DB:
         return docs
 
     async def get_by_id_and_username(
-        self, collection: Collection, object_id: ObjectId | str, username: str
+        self, collection: Collection, object_id: str, username: str
     ):
-        if isinstance(object_id, str):
-            try:
-                object_id = ObjectId(object_id)
-            except InvalidId:
-                return None
         doc = await self.get_collection(collection).find_one(
             {"_id": object_id, "username": username}
         )
@@ -87,7 +80,7 @@ class DB:
 
     async def get_ai_function_by_id(
         self,
-        ai_function_id: ObjectId | str,
+        ai_function_id: str,
         username: str,
     ) -> AIFunction | None:
         ai_function = await self.get_by_id_and_username(
@@ -99,9 +92,7 @@ class DB:
 
         return AIFunction(**ai_function)
 
-    async def get_prompt_by_id(
-        self, prompt_id: ObjectId | str, username: str
-    ) -> Prompt | None:
+    async def get_prompt_by_id(self, prompt_id: str, username: str) -> Prompt | None:
         prompt = await self.get_by_id_and_username("prompts", prompt_id, username)
 
         if prompt is None:
@@ -109,7 +100,7 @@ class DB:
 
         return Prompt(**prompt)
 
-    async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: ObjectId | str):
+    async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: str):
         prompt_coll = self.get_collection("prompts")
 
         await prompt_coll.update_one(
@@ -117,13 +108,8 @@ class DB:
             {"$set": {"last_eval": eval_summary.model_dump(by_alias=True)}},
         )
 
-    async def get_prompts_by_ai_function_id(
-        self, ai_function_id: str | ObjectId
-    ) -> List[Prompt]:
+    async def get_prompts_by_ai_function_id(self, ai_function_id: str) -> List[Prompt]:
         prompt_coll = self.db.get_collection("prompts")
-
-        if isinstance(ai_function_id, str):
-            ai_function_id = ObjectId(ai_function_id)
 
         prompts_cursor = prompt_coll.find({"ai_function_id": ai_function_id})
 
