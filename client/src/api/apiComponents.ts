@@ -9,40 +9,35 @@ import type * as Fetcher from "./apiFetcher";
 import { apiFetch } from "./apiFetcher";
 import type * as Schemas from "./apiSchemas";
 
-export type LoginAuthLoginPostError = Fetcher.ErrorWrapper<{
+export type LoginError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type LoginAuthLoginPostVariables = ApiContext["fetcherOptions"];
+export type LoginVariables = ApiContext["fetcherOptions"];
 
 /**
  * Endpoint for the login procedure. Takes username and password as form-data input.
  * If credentials match a user in the database return user data and access token else return 401.
  */
-export const fetchLoginAuthLoginPost = (
-  variables: LoginAuthLoginPostVariables,
-  signal?: AbortSignal,
-) =>
-  apiFetch<
-    Schemas.UserWithAccessToken,
-    LoginAuthLoginPostError,
-    undefined,
-    {},
-    {},
-    {}
-  >({ url: "/auth/login", method: "post", ...variables, signal });
+export const fetchLogin = (variables: LoginVariables, signal?: AbortSignal) =>
+  apiFetch<Schemas.UserWithAccessToken, LoginError, undefined, {}, {}, {}>({
+    url: "/auth/login",
+    method: "post",
+    ...variables,
+    signal,
+  });
 
 /**
  * Endpoint for the login procedure. Takes username and password as form-data input.
  * If credentials match a user in the database return user data and access token else return 401.
  */
-export const useLoginAuthLoginPost = (
+export const useLogin = (
   options?: Omit<
     reactQuery.UseMutationOptions<
       Schemas.UserWithAccessToken,
-      LoginAuthLoginPostError,
-      LoginAuthLoginPostVariables
+      LoginError,
+      LoginVariables
     >,
     "mutationFn"
   >,
@@ -50,42 +45,38 @@ export const useLoginAuthLoginPost = (
   const { fetcherOptions } = useApiContext();
   return reactQuery.useMutation<
     Schemas.UserWithAccessToken,
-    LoginAuthLoginPostError,
-    LoginAuthLoginPostVariables
+    LoginError,
+    LoginVariables
   >({
-    mutationFn: (variables: LoginAuthLoginPostVariables) =>
-      fetchLoginAuthLoginPost({ ...fetcherOptions, ...variables }),
+    mutationFn: (variables: LoginVariables) =>
+      fetchLogin({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
 
-export type RefreshTokenAuthRefreshTokenGetError =
-  Fetcher.ErrorWrapper<undefined>;
+export type RefreshTokenError = Fetcher.ErrorWrapper<undefined>;
 
-export type RefreshTokenAuthRefreshTokenGetVariables =
-  ApiContext["fetcherOptions"];
+export type RefreshTokenVariables = ApiContext["fetcherOptions"];
 
-export const fetchRefreshTokenAuthRefreshTokenGet = (
-  variables: RefreshTokenAuthRefreshTokenGetVariables,
+export const fetchRefreshToken = (
+  variables: RefreshTokenVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.UserWithAccessToken,
-    RefreshTokenAuthRefreshTokenGetError,
+    RefreshTokenError,
     undefined,
     {},
     {},
     {}
   >({ url: "/auth/refresh-token", method: "get", ...variables, signal });
 
-export const useRefreshTokenAuthRefreshTokenGet = <
-  TData = Schemas.UserWithAccessToken,
->(
-  variables: RefreshTokenAuthRefreshTokenGetVariables,
+export const useRefreshToken = <TData = Schemas.UserWithAccessToken,>(
+  variables: RefreshTokenVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
       Schemas.UserWithAccessToken,
-      RefreshTokenAuthRefreshTokenGetError,
+      RefreshTokenError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -94,112 +85,96 @@ export const useRefreshTokenAuthRefreshTokenGet = <
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
   return reactQuery.useQuery<
     Schemas.UserWithAccessToken,
-    RefreshTokenAuthRefreshTokenGetError,
+    RefreshTokenError,
     TData
   >({
     queryKey: queryKeyFn({
       path: "/auth/refresh-token",
-      operationId: "refreshTokenAuthRefreshTokenGet",
+      operationId: "refreshToken",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchRefreshTokenAuthRefreshTokenGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+      fetchRefreshToken({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
 };
 
-export type EvaluateEvaluatePromptIdGetPathParams = {
+export type EvaluatePathParams = {
   promptId: string;
 };
 
-export type EvaluateEvaluatePromptIdGetError = Fetcher.ErrorWrapper<{
+export type EvaluateError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type EvaluateEvaluatePromptIdGetVariables = {
-  pathParams: EvaluateEvaluatePromptIdGetPathParams;
+export type EvaluateVariables = {
+  pathParams: EvaluatePathParams;
 } & ApiContext["fetcherOptions"];
 
-export const fetchEvaluateEvaluatePromptIdGet = (
-  variables: EvaluateEvaluatePromptIdGetVariables,
+export const fetchEvaluate = (
+  variables: EvaluateVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.EvaluateSummary,
-    EvaluateEvaluatePromptIdGetError,
+    EvaluateError,
     undefined,
     {},
     {},
-    EvaluateEvaluatePromptIdGetPathParams
+    EvaluatePathParams
   >({ url: "/evaluate/{promptId}", method: "get", ...variables, signal });
 
-export const useEvaluateEvaluatePromptIdGet = <
-  TData = Schemas.EvaluateSummary,
->(
-  variables: EvaluateEvaluatePromptIdGetVariables,
+export const useEvaluate = <TData = Schemas.EvaluateSummary,>(
+  variables: EvaluateVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.EvaluateSummary,
-      EvaluateEvaluatePromptIdGetError,
-      TData
-    >,
+    reactQuery.UseQueryOptions<Schemas.EvaluateSummary, EvaluateError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    Schemas.EvaluateSummary,
-    EvaluateEvaluatePromptIdGetError,
-    TData
-  >({
+  return reactQuery.useQuery<Schemas.EvaluateSummary, EvaluateError, TData>({
     queryKey: queryKeyFn({
       path: "/evaluate/{promptId}",
-      operationId: "evaluateEvaluatePromptIdGet",
+      operationId: "evaluate",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchEvaluateEvaluatePromptIdGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+      fetchEvaluate({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
 };
 
-export type PostUserDbUserPostError = Fetcher.ErrorWrapper<{
+export type PostUserError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type PostUserDbUserPostVariables = {
+export type PostUserVariables = {
   body: Schemas.UserInput;
 } & ApiContext["fetcherOptions"];
 
-export const fetchPostUserDbUserPost = (
-  variables: PostUserDbUserPostVariables,
+export const fetchPostUser = (
+  variables: PostUserVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.SuccessResponse,
-    PostUserDbUserPostError,
+    PostUserError,
     Schemas.UserInput,
     {},
     {},
     {}
   >({ url: "/db/user", method: "post", ...variables, signal });
 
-export const usePostUserDbUserPost = (
+export const usePostUser = (
   options?: Omit<
     reactQuery.UseMutationOptions<
       Schemas.SuccessResponse,
-      PostUserDbUserPostError,
-      PostUserDbUserPostVariables
+      PostUserError,
+      PostUserVariables
     >,
     "mutationFn"
   >,
@@ -207,105 +182,88 @@ export const usePostUserDbUserPost = (
   const { fetcherOptions } = useApiContext();
   return reactQuery.useMutation<
     Schemas.SuccessResponse,
-    PostUserDbUserPostError,
-    PostUserDbUserPostVariables
+    PostUserError,
+    PostUserVariables
   >({
-    mutationFn: (variables: PostUserDbUserPostVariables) =>
-      fetchPostUserDbUserPost({ ...fetcherOptions, ...variables }),
+    mutationFn: (variables: PostUserVariables) =>
+      fetchPostUser({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
 
-export type GetUserRouteDbUserUsernameGetPathParams = {
+export type GetUserPathParams = {
   /**
    * Email of the user to retrieve
    */
   username: string;
 };
 
-export type GetUserRouteDbUserUsernameGetError = Fetcher.ErrorWrapper<{
+export type GetUserError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type GetUserRouteDbUserUsernameGetVariables = {
-  pathParams: GetUserRouteDbUserUsernameGetPathParams;
+export type GetUserVariables = {
+  pathParams: GetUserPathParams;
 } & ApiContext["fetcherOptions"];
 
-export const fetchGetUserRouteDbUserUsernameGet = (
-  variables: GetUserRouteDbUserUsernameGetVariables,
+export const fetchGetUser = (
+  variables: GetUserVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.UserOutput,
-    GetUserRouteDbUserUsernameGetError,
+    GetUserError,
     undefined,
     {},
     {},
-    GetUserRouteDbUserUsernameGetPathParams
+    GetUserPathParams
   >({ url: "/db/user/{username}", method: "get", ...variables, signal });
 
-export const useGetUserRouteDbUserUsernameGet = <TData = Schemas.UserOutput,>(
-  variables: GetUserRouteDbUserUsernameGetVariables,
+export const useGetUser = <TData = Schemas.UserOutput,>(
+  variables: GetUserVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.UserOutput,
-      GetUserRouteDbUserUsernameGetError,
-      TData
-    >,
+    reactQuery.UseQueryOptions<Schemas.UserOutput, GetUserError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    Schemas.UserOutput,
-    GetUserRouteDbUserUsernameGetError,
-    TData
-  >({
+  return reactQuery.useQuery<Schemas.UserOutput, GetUserError, TData>({
     queryKey: queryKeyFn({
       path: "/db/user/{username}",
-      operationId: "getUserRouteDbUserUsernameGet",
+      operationId: "getUser",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetUserRouteDbUserUsernameGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+      fetchGetUser({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
 };
 
-export type GetAiFunctionsDbAiFunctionGetError =
-  Fetcher.ErrorWrapper<undefined>;
+export type GetAiFunctionsError = Fetcher.ErrorWrapper<undefined>;
 
-export type GetAiFunctionsDbAiFunctionGetResponse = Schemas.AIFunction[];
+export type GetAiFunctionsResponse = Schemas.AIFunction[];
 
-export type GetAiFunctionsDbAiFunctionGetVariables =
-  ApiContext["fetcherOptions"];
+export type GetAiFunctionsVariables = ApiContext["fetcherOptions"];
 
-export const fetchGetAiFunctionsDbAiFunctionGet = (
-  variables: GetAiFunctionsDbAiFunctionGetVariables,
+export const fetchGetAiFunctions = (
+  variables: GetAiFunctionsVariables,
   signal?: AbortSignal,
 ) =>
-  apiFetch<
-    GetAiFunctionsDbAiFunctionGetResponse,
-    GetAiFunctionsDbAiFunctionGetError,
-    undefined,
-    {},
-    {},
-    {}
-  >({ url: "/db/ai-function", method: "get", ...variables, signal });
+  apiFetch<GetAiFunctionsResponse, GetAiFunctionsError, undefined, {}, {}, {}>({
+    url: "/db/ai-function",
+    method: "get",
+    ...variables,
+    signal,
+  });
 
-export const useGetAiFunctionsDbAiFunctionGet = <
-  TData = GetAiFunctionsDbAiFunctionGetResponse,
->(
-  variables: GetAiFunctionsDbAiFunctionGetVariables,
+export const useGetAiFunctions = <TData = GetAiFunctionsResponse,>(
+  variables: GetAiFunctionsVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      GetAiFunctionsDbAiFunctionGetResponse,
-      GetAiFunctionsDbAiFunctionGetError,
+      GetAiFunctionsResponse,
+      GetAiFunctionsError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -313,53 +271,50 @@ export const useGetAiFunctionsDbAiFunctionGet = <
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
   return reactQuery.useQuery<
-    GetAiFunctionsDbAiFunctionGetResponse,
-    GetAiFunctionsDbAiFunctionGetError,
+    GetAiFunctionsResponse,
+    GetAiFunctionsError,
     TData
   >({
     queryKey: queryKeyFn({
       path: "/db/ai-function",
-      operationId: "getAiFunctionsDbAiFunctionGet",
+      operationId: "getAiFunctions",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetAiFunctionsDbAiFunctionGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+      fetchGetAiFunctions({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
 };
 
-export type PostAiFunctionDbAiFunctionPostError = Fetcher.ErrorWrapper<{
+export type PostAiFunctionError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type PostAiFunctionDbAiFunctionPostVariables = {
+export type PostAiFunctionVariables = {
   body: Schemas.AIFunctionRouteInput;
 } & ApiContext["fetcherOptions"];
 
-export const fetchPostAiFunctionDbAiFunctionPost = (
-  variables: PostAiFunctionDbAiFunctionPostVariables,
+export const fetchPostAiFunction = (
+  variables: PostAiFunctionVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.SuccessResponse,
-    PostAiFunctionDbAiFunctionPostError,
+    PostAiFunctionError,
     Schemas.AIFunctionRouteInput,
     {},
     {},
     {}
   >({ url: "/db/ai-function", method: "post", ...variables, signal });
 
-export const usePostAiFunctionDbAiFunctionPost = (
+export const usePostAiFunction = (
   options?: Omit<
     reactQuery.UseMutationOptions<
       Schemas.SuccessResponse,
-      PostAiFunctionDbAiFunctionPostError,
-      PostAiFunctionDbAiFunctionPostVariables
+      PostAiFunctionError,
+      PostAiFunctionVariables
     >,
     "mutationFn"
   >,
@@ -367,40 +322,39 @@ export const usePostAiFunctionDbAiFunctionPost = (
   const { fetcherOptions } = useApiContext();
   return reactQuery.useMutation<
     Schemas.SuccessResponse,
-    PostAiFunctionDbAiFunctionPostError,
-    PostAiFunctionDbAiFunctionPostVariables
+    PostAiFunctionError,
+    PostAiFunctionVariables
   >({
-    mutationFn: (variables: PostAiFunctionDbAiFunctionPostVariables) =>
-      fetchPostAiFunctionDbAiFunctionPost({ ...fetcherOptions, ...variables }),
+    mutationFn: (variables: PostAiFunctionVariables) =>
+      fetchPostAiFunction({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
 
-export type GetAiFunctionDbAiFunctionAiFunctionIdGetPathParams = {
+export type GetAiFunctionPathParams = {
   aiFunctionId: string;
 };
 
-export type GetAiFunctionDbAiFunctionAiFunctionIdGetError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
+export type GetAiFunctionError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
-export type GetAiFunctionDbAiFunctionAiFunctionIdGetVariables = {
-  pathParams: GetAiFunctionDbAiFunctionAiFunctionIdGetPathParams;
+export type GetAiFunctionVariables = {
+  pathParams: GetAiFunctionPathParams;
 } & ApiContext["fetcherOptions"];
 
-export const fetchGetAiFunctionDbAiFunctionAiFunctionIdGet = (
-  variables: GetAiFunctionDbAiFunctionAiFunctionIdGetVariables,
+export const fetchGetAiFunction = (
+  variables: GetAiFunctionVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.AIFunction,
-    GetAiFunctionDbAiFunctionAiFunctionIdGetError,
+    GetAiFunctionError,
     undefined,
     {},
     {},
-    GetAiFunctionDbAiFunctionAiFunctionIdGetPathParams
+    GetAiFunctionPathParams
   >({
     url: "/db/ai-function/{aiFunctionId}",
     method: "get",
@@ -408,68 +362,55 @@ export const fetchGetAiFunctionDbAiFunctionAiFunctionIdGet = (
     signal,
   });
 
-export const useGetAiFunctionDbAiFunctionAiFunctionIdGet = <
-  TData = Schemas.AIFunction,
->(
-  variables: GetAiFunctionDbAiFunctionAiFunctionIdGetVariables,
+export const useGetAiFunction = <TData = Schemas.AIFunction,>(
+  variables: GetAiFunctionVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.AIFunction,
-      GetAiFunctionDbAiFunctionAiFunctionIdGetError,
-      TData
-    >,
+    reactQuery.UseQueryOptions<Schemas.AIFunction, GetAiFunctionError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    Schemas.AIFunction,
-    GetAiFunctionDbAiFunctionAiFunctionIdGetError,
-    TData
-  >({
+  return reactQuery.useQuery<Schemas.AIFunction, GetAiFunctionError, TData>({
     queryKey: queryKeyFn({
       path: "/db/ai-function/{aiFunctionId}",
-      operationId: "getAiFunctionDbAiFunctionAiFunctionIdGet",
+      operationId: "getAiFunction",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetAiFunctionDbAiFunctionAiFunctionIdGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+      fetchGetAiFunction({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
 };
 
-export type PostPromptDbPromptPostError = Fetcher.ErrorWrapper<{
+export type PostPromptError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type PostPromptDbPromptPostVariables = {
+export type PostPromptVariables = {
   body: Schemas.PromptRouteInput;
 } & ApiContext["fetcherOptions"];
 
-export const fetchPostPromptDbPromptPost = (
-  variables: PostPromptDbPromptPostVariables,
+export const fetchPostPrompt = (
+  variables: PostPromptVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.SuccessResponse,
-    PostPromptDbPromptPostError,
+    PostPromptError,
     Schemas.PromptRouteInput,
     {},
     {},
     {}
   >({ url: "/db/prompt", method: "post", ...variables, signal });
 
-export const usePostPromptDbPromptPost = (
+export const usePostPrompt = (
   options?: Omit<
     reactQuery.UseMutationOptions<
       Schemas.SuccessResponse,
-      PostPromptDbPromptPostError,
-      PostPromptDbPromptPostVariables
+      PostPromptError,
+      PostPromptVariables
     >,
     "mutationFn"
   >,
@@ -477,132 +418,106 @@ export const usePostPromptDbPromptPost = (
   const { fetcherOptions } = useApiContext();
   return reactQuery.useMutation<
     Schemas.SuccessResponse,
-    PostPromptDbPromptPostError,
-    PostPromptDbPromptPostVariables
+    PostPromptError,
+    PostPromptVariables
   >({
-    mutationFn: (variables: PostPromptDbPromptPostVariables) =>
-      fetchPostPromptDbPromptPost({ ...fetcherOptions, ...variables }),
+    mutationFn: (variables: PostPromptVariables) =>
+      fetchPostPrompt({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
 
-export type GetPromptRouteDbPromptPromptIdGetPathParams = {
+export type GetPromptPathParams = {
   promptId: string;
 };
 
-export type GetPromptRouteDbPromptPromptIdGetError = Fetcher.ErrorWrapper<{
+export type GetPromptError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type GetPromptRouteDbPromptPromptIdGetVariables = {
-  pathParams: GetPromptRouteDbPromptPromptIdGetPathParams;
+export type GetPromptVariables = {
+  pathParams: GetPromptPathParams;
 } & ApiContext["fetcherOptions"];
 
-export const fetchGetPromptRouteDbPromptPromptIdGet = (
-  variables: GetPromptRouteDbPromptPromptIdGetVariables,
+export const fetchGetPrompt = (
+  variables: GetPromptVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
     Schemas.Prompt,
-    GetPromptRouteDbPromptPromptIdGetError,
+    GetPromptError,
     undefined,
     {},
     {},
-    GetPromptRouteDbPromptPromptIdGetPathParams
+    GetPromptPathParams
   >({ url: "/db/prompt/{promptId}", method: "get", ...variables, signal });
 
-export const useGetPromptRouteDbPromptPromptIdGet = <TData = Schemas.Prompt,>(
-  variables: GetPromptRouteDbPromptPromptIdGetVariables,
+export const useGetPrompt = <TData = Schemas.Prompt,>(
+  variables: GetPromptVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.Prompt,
-      GetPromptRouteDbPromptPromptIdGetError,
-      TData
-    >,
+    reactQuery.UseQueryOptions<Schemas.Prompt, GetPromptError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    Schemas.Prompt,
-    GetPromptRouteDbPromptPromptIdGetError,
-    TData
-  >({
+  return reactQuery.useQuery<Schemas.Prompt, GetPromptError, TData>({
     queryKey: queryKeyFn({
       path: "/db/prompt/{promptId}",
-      operationId: "getPromptRouteDbPromptPromptIdGet",
+      operationId: "getPrompt",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetPromptRouteDbPromptPromptIdGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+      fetchGetPrompt({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
 };
 
-export type GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetPathParams = {
+export type GetPromptsPathParams = {
   aiFunctionId: string;
 };
 
-export type GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
+export type GetPromptsError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
 
-export type GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetResponse =
-  Schemas.Prompt[];
+export type GetPromptsResponse = Schemas.Prompt[];
 
-export type GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetVariables = {
-  pathParams: GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetPathParams;
+export type GetPromptsVariables = {
+  pathParams: GetPromptsPathParams;
 } & ApiContext["fetcherOptions"];
 
-export const fetchGetAllPromptsAiFunctionDbPromptsAiFunctionIdGet = (
-  variables: GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetVariables,
+export const fetchGetPrompts = (
+  variables: GetPromptsVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
-    GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetResponse,
-    GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetError,
+    GetPromptsResponse,
+    GetPromptsError,
     undefined,
     {},
     {},
-    GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetPathParams
+    GetPromptsPathParams
   >({ url: "/db/prompts/{aiFunctionId}", method: "get", ...variables, signal });
 
-export const useGetAllPromptsAiFunctionDbPromptsAiFunctionIdGet = <
-  TData = GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetResponse,
->(
-  variables: GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetVariables,
+export const useGetPrompts = <TData = GetPromptsResponse,>(
+  variables: GetPromptsVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<
-      GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetResponse,
-      GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetError,
-      TData
-    >,
+    reactQuery.UseQueryOptions<GetPromptsResponse, GetPromptsError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetResponse,
-    GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetError,
-    TData
-  >({
+  return reactQuery.useQuery<GetPromptsResponse, GetPromptsError, TData>({
     queryKey: queryKeyFn({
       path: "/db/prompts/{aiFunctionId}",
-      operationId: "getAllPromptsAiFunctionDbPromptsAiFunctionIdGet",
+      operationId: "getPrompts",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchGetAllPromptsAiFunctionDbPromptsAiFunctionIdGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+      fetchGetPrompts({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
@@ -611,36 +526,36 @@ export const useGetAllPromptsAiFunctionDbPromptsAiFunctionIdGet = <
 export type QueryOperation =
   | {
       path: "/auth/refresh-token";
-      operationId: "refreshTokenAuthRefreshTokenGet";
-      variables: RefreshTokenAuthRefreshTokenGetVariables;
+      operationId: "refreshToken";
+      variables: RefreshTokenVariables;
     }
   | {
       path: "/evaluate/{promptId}";
-      operationId: "evaluateEvaluatePromptIdGet";
-      variables: EvaluateEvaluatePromptIdGetVariables;
+      operationId: "evaluate";
+      variables: EvaluateVariables;
     }
   | {
       path: "/db/user/{username}";
-      operationId: "getUserRouteDbUserUsernameGet";
-      variables: GetUserRouteDbUserUsernameGetVariables;
+      operationId: "getUser";
+      variables: GetUserVariables;
     }
   | {
       path: "/db/ai-function";
-      operationId: "getAiFunctionsDbAiFunctionGet";
-      variables: GetAiFunctionsDbAiFunctionGetVariables;
+      operationId: "getAiFunctions";
+      variables: GetAiFunctionsVariables;
     }
   | {
       path: "/db/ai-function/{aiFunctionId}";
-      operationId: "getAiFunctionDbAiFunctionAiFunctionIdGet";
-      variables: GetAiFunctionDbAiFunctionAiFunctionIdGetVariables;
+      operationId: "getAiFunction";
+      variables: GetAiFunctionVariables;
     }
   | {
       path: "/db/prompt/{promptId}";
-      operationId: "getPromptRouteDbPromptPromptIdGet";
-      variables: GetPromptRouteDbPromptPromptIdGetVariables;
+      operationId: "getPrompt";
+      variables: GetPromptVariables;
     }
   | {
       path: "/db/prompts/{aiFunctionId}";
-      operationId: "getAllPromptsAiFunctionDbPromptsAiFunctionIdGet";
-      variables: GetAllPromptsAiFunctionDbPromptsAiFunctionIdGetVariables;
+      operationId: "getPrompts";
+      variables: GetPromptsVariables;
     };

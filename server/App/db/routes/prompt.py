@@ -75,7 +75,7 @@ async def post_prompt(
         404: {"detail": "document not found"},
     },
 )
-async def get_prompt_route(
+async def get_prompt(
     prompt_id: str,
     db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
@@ -97,7 +97,7 @@ async def get_prompt_route(
         404: {"detail": "document not found"},
     },
 )
-async def get_all_prompts_ai_function(
+async def get_prompts(
     ai_function_id: str,
     db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],

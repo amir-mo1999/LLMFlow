@@ -1,1 +1,1 @@
-npx openapi-codegen gen api
+`sh generate_client_bindings.sh`

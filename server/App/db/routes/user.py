@@ -41,7 +41,7 @@ async def post_user(
         404: {"detail": "document not found"},
     },
 )
-async def get_user_route(
+async def get_user(
     db: Annotated[DB, Depends(get_db)],
     username: str = Path(..., description="Email of the user to retrieve"),
 ):
