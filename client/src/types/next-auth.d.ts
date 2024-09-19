@@ -1,16 +1,10 @@
 import NextAuth from "next-auth"
 import { JWT } from "next-auth/jwt"
 import DecodedToken from "./DecodedTokenT"
+import { UserWithAccessToken } from "@/api/apiSchemas"
 
 declare module "next-auth" {
-  interface User {
-    access_token: string
-    email: string
-    first_name: string
-    last_name: string
-    role: string
-    _id: string
-  }
+  interface User extends UserWithAccessToken {}
 
   interface Session {
     user: User

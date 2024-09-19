@@ -1,5 +1,5 @@
-import { AIFunctionOverview } from "@/components"
+import Box from "@mui/material/Box"
 
 export default function Home() {
-  return <AIFunctionOverview></AIFunctionOverview>
+  return <Box></Box>
 }

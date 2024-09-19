@@ -32,8 +32,6 @@ export function formatDateTime(dateTimeString: string) {
   const day = date.getDate()
   let hours = date.getHours()
   const minutes = date.getMinutes().toString().padStart(2, "0")
-  const seconds = date.getSeconds().toString().padStart(2, "0")
-  const milliseconds = date.getMilliseconds().toString().padStart(3, "0")
 
   // Determine AM/PM period
   const ampm = hours >= 12 ? "PM" : "AM"
