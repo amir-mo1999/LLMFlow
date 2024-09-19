@@ -1,12 +1,11 @@
 from datetime import datetime
-from enum import Enum
 from typing import List, Literal, Union
 
 from pydantic import EmailStr, Field, ValidationInfo, field_validator, model_validator
 
 from .objectID import PydanticObjectId
+from .promptfoo_models import EvaluateSummary, PromptMessage
 from .root_model import RootModel
-from .promptfoo_models import PromptMessage, EvaluateSummary
 
 
 # Define the prompt schema
@@ -46,7 +45,6 @@ class PromptRouteInput(RootModel):
 class PromptNoID(PromptRouteInput):
     username: EmailStr
     creation_time: datetime
-    last_eval_time: datetime | None = None
     last_eval: EvaluateSummary | None = None
 
     @field_validator("messages")
