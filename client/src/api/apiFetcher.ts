@@ -1,7 +1,7 @@
 import { ApiContext } from "./apiContext"
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || "" // TODO: add your baseUrl
-console.log("Base url", baseUrl)
+
 export type ErrorWrapper<TError> = TError | { status: "unknown"; payload: string }
 
 export type ApiFetcherOptions<TBody, THeaders, TQueryParams, TPathParams> = {

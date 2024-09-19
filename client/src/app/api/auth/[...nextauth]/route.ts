@@ -1,8 +1,9 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import jwt from "jsonwebtoken"
-import { api } from "@/network"
-import { DecodedTokenT } from "@/types"
+import { DecodedToken } from "next-auth"
+
+const apiUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || ""
 
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -36,26 +37,28 @@ const handler = NextAuth({
         if (credentials.username === undefined || credentials.password === undefined) {
           return null
         }
-        // send credentials to login route and get result
-        const res = await api.login({
-          username: credentials.username,
-          password: credentials.password,
-        })
 
-        // check if response was successful
-        if (res.status !== 200) {
+        // create formdata with username and password
+        const formData = new FormData()
+        formData.append("username", credentials.username)
+        formData.append("password", credentials.password)
+
+        // send login request
+        try {
+          const response = await fetch(apiUrl + "/auth/login", {
+            method: "POST",
+            body: formData,
+          })
+
+          if (response.ok) {
+            const result = await response.json()
+            return result
+          } else {
+            return null
+          }
+        } catch (error) {
           return null
         }
-
-        // get user data
-        const user = await res.json()
-
-        // If no error and we have and token data return them both
-        if (res.ok && user) {
-          return user
-        }
-        // Return null if user data could not be retrieved
-        return null
       },
     }),
   ],
@@ -70,10 +73,10 @@ const handler = NextAuth({
     async session({ session, token }) {
       //TODO: add logic to refresh jwt
       // decode the token coming from the backend
-      const decodedToken: DecodedTokenT = jwt.verify(
+      const decodedToken: DecodedToken = jwt.verify(
         token.access_token as string,
         process.env.NEXTAUTH_SECRET as string
-      ) as DecodedTokenT
+      ) as DecodedToken
 
       // create session object and return it
       session = { ...session, user: token.user, decodedToken: decodedToken }

@@ -6,6 +6,13 @@ import { UserWithAccessToken } from "@/api/apiSchemas"
 declare module "next-auth" {
   interface User extends UserWithAccessToken {}
 
+  interface DecodedToken {
+    exp: number
+    iat: number
+    jti: string
+    sub: string
+  }
+
   interface Session {
     user: User
     decodedToken: DecodedToken
