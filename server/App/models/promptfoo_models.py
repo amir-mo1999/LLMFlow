@@ -35,6 +35,7 @@ class BaseAssertionTypes(str, Enum):
     equals = "equals"
     icontains = "icontains"
     icontains_all = "icontains-all"
+    icontains_any = "icontains-any"
     is_json = "is-json"
     is_sql = "is-sql"
     is_xml = "is-xml"

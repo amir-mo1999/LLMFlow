@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
@@ -14,6 +14,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   const [inputVariables, setInputVariables] = useState<AIFunctionRouteInput["input_variables"]>([])
   const [assertions, setAssertions] = useState<AIFunctionRouteInput["assert"]>([])
 
+  useEffect(() => console.log("all assertions", assertions), [assertions])
   return (
     <Box>
       <Typography>Name</Typography>

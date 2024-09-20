@@ -1,14 +1,17 @@
 "use client"
 import { Assertion, BaseAssertionTypes } from "@/api/apiSchemas"
-import StringTypeForm from "./StringTypes"
+import StringTypeForm from "./StringTypesForm"
+import ListTypesForm from "./ListTypesForm"
 
 interface AssertionTypeFormProps {
+  open: boolean
   type: BaseAssertionTypes
   value: Assertion["value"]
   setValue: React.Dispatch<React.SetStateAction<Assertion["value"]>>
 }
 
-const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({ type, value, setValue }) => {
+const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({ open, type, value, setValue }) => {
+  let componentToRender: React.ReactElement
   switch (type) {
     case "contains":
     case "equals":
@@ -18,8 +21,21 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({ type, value, setV
     case "python":
     case "regex":
     case "starts-with":
-      return <StringTypeForm value={value} setValue={setValue}></StringTypeForm>
+      componentToRender = <StringTypeForm value={value} setValue={setValue}></StringTypeForm>
+      break
+    case "contains-all":
+    case "contains-any":
+    case "icontains-all":
+    case "icontains-any":
+      componentToRender = (
+        <ListTypesForm open={open} values={value} setValues={setValue}></ListTypesForm>
+      )
+      break
+    default:
+      componentToRender = <></>
   }
+
+  return componentToRender
 }
 
 export default AssertionTypeForm

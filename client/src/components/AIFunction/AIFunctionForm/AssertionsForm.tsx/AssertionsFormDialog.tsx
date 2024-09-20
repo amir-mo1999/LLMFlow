@@ -47,6 +47,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
       if (assertion) {
         setType(assertion.type)
         if (assertion.weight) setWeight(assertion.weight)
+        if (assertion.value) setValue(assertion.value)
       } else {
         resetForm()
       }
@@ -99,7 +100,12 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
               </MenuItem>
             ))}
           </Select>
-          <AssertionTypeForm type={type} value={value} setValue={setValue}></AssertionTypeForm>
+          <AssertionTypeForm
+            open={open}
+            type={type}
+            value={value}
+            setValue={setValue}
+          ></AssertionTypeForm>
         </Box>
       </DialogContent>
       <DialogActions>

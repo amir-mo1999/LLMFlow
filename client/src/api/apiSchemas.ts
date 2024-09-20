@@ -96,6 +96,7 @@ export type BaseAssertionTypes =
   | "equals"
   | "icontains"
   | "icontains-all"
+  | "icontains-any"
   | "is-json"
   | "is-sql"
   | "is-xml"
@@ -120,6 +121,7 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "equals",
   "icontains",
   "icontains-all",
+  "icontains-any",
   "is-json",
   "is-sql",
   "is-xml",
