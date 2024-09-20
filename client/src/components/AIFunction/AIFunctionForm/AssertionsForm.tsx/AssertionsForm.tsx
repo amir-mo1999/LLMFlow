@@ -1,15 +1,14 @@
 // AssertionsForm.tsx
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import AssertionFormDialog from "./AssertionsFormDialog"
-import { AIFunctionRouteInput } from "@/api/apiSchemas"
 import { Assertion } from "@/api/apiSchemas"
 
 interface AssertionsFormProps {
-  assertions: AIFunctionRouteInput["assert"]
-  setAssertions: React.Dispatch<React.SetStateAction<AIFunctionRouteInput["assert"]>>
+  assertions: Assertion[]
+  setAssertions: (assertions: Assertion[]) => void
 }
 
 const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertions }) => {
@@ -17,8 +16,6 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [currentIndex, setCurrentIndex] = useState<number | null>(null)
   const [currentAssertion, setCurrentAssertion] = useState<Assertion | undefined>(undefined)
-
-  useEffect(() => console.log("current assertion", currentAssertion), [currentAssertion])
 
   const handleOpenAddDialog = () => {
     setIsEditing(false)

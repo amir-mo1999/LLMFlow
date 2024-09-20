@@ -1,9 +1,10 @@
 // TestCasesForm.tsx
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import TestCasesFormDialog from "./TestCasesFormDialog"
+import AssertionsForm from "../AssertionsForm.tsx/AssertionsForm"
 import { TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
 
 interface TestCasesFormProps {
@@ -25,6 +26,7 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
   const handleOpenAddDialog = () => {
     setIsEditing(false)
     setCurrentTestCase(undefined)
+    setCurrentTestCaseIndex(undefined)
     setDialogOpen(true)
   }
 
@@ -51,8 +53,16 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
     setTestCases(updatedTestCases)
   }
 
-  const handleDeleteTestCase = (index: number) => () => {
+  const handleDeleteTestCase = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation() // Prevent triggering the edit dialog
     const updatedTestCases = testCases.filter((_, i) => i !== index)
+    setTestCases(updatedTestCases)
+  }
+
+  // Handler to update assertions for a specific Test Case
+  const handleSetTestCaseAssertions = (index: number, newAssertions: Assertion[]) => {
+    const updatedTestCases = [...testCases]
+    updatedTestCases[index].assert = newAssertions
     setTestCases(updatedTestCases)
   }
 
@@ -63,46 +73,60 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
           <Box
             key={index}
             display="flex"
-            alignItems="center"
-            mb={2}
-            onClick={() => handleOpenEditDialog(index)}
+            flexDirection="column"
+            alignItems="flex-start"
+            mb={4}
             style={{
               cursor: "pointer",
               border: "1px solid #ccc",
-              padding: "8px",
-              borderRadius: "4px",
+              padding: "16px",
+              borderRadius: "8px",
             }}
           >
-            <Box flexGrow={1}>
+            {/* Display Test Case Variables */}
+            <Box mb={2} onClick={() => handleOpenEditDialog(index)}>
               {inputVariables.map((variable, varIndex) => (
                 <Typography key={varIndex}>
                   <strong>{variable.name}:</strong> {testCase.vars[variable.name]}
                 </Typography>
               ))}
             </Box>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleDeleteTestCase(index)
-              }}
-            >
-              ×
-            </Button>
+
+            {/* Display AssertionsForm for this Test Case */}
+            <Box width="100%">
+              <Typography variant="subtitle1" gutterBottom>
+                Assertions:
+              </Typography>
+              <AssertionsForm
+                assertions={testCase.assert || []}
+                setAssertions={(newAssertions) => handleSetTestCaseAssertions(index, newAssertions)}
+              />
+            </Box>
+
+            {/* Delete Button */}
+            <Box alignSelf="flex-end">
+              <Button onClick={handleDeleteTestCase(index)} aria-label="Delete Test Case">
+                ×
+              </Button>
+            </Box>
           </Box>
         ))
       ) : (
         <></>
       )}
+
+      {/* Add Test Case Button */}
       <Button onClick={handleOpenAddDialog} variant="contained" color="primary">
         Add Test Case
       </Button>
 
+      {/* TestCasesFormDialog for Adding/Editing Test Cases */}
       <TestCasesFormDialog
         open={dialogOpen}
         handleClose={handleCloseDialog}
         handleAddTestCase={handleAddTestCase}
         handleUpdateTestCase={
-          currentTestCaseIndex !== undefined && currentTestCase ? handleUpdateTestCase : undefined
+          isEditing && currentTestCaseIndex !== undefined ? handleUpdateTestCase : undefined
         }
         inputVariables={inputVariables}
         initialTestCase={currentTestCase}

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
-import { AIFunctionRouteInput, TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
+import { TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
 import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 
@@ -16,7 +16,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
 
-  useEffect(() => console.log("all assertions", assertions), [assertions])
+  useEffect(() => console.log("Test Cases", testCases), [testCases])
   useEffect(() => setTestCases([]), [inputVariables])
   return (
     <Box>
