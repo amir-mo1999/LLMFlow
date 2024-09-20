@@ -18,6 +18,8 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   const [currentIndex, setCurrentIndex] = useState<number | null>(null)
   const [currentAssertion, setCurrentAssertion] = useState<Assertion | undefined>(undefined)
 
+  useEffect(() => console.log(currentAssertion), [currentAssertion])
+
   const handleOpenAddDialog = () => {
     setIsEditing(false)
     setCurrentAssertion(undefined)

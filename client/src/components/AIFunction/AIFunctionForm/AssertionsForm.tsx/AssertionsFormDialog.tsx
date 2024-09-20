@@ -6,13 +6,12 @@ import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import DialogContent from "@mui/material/DialogContent"
 import DialogActions from "@mui/material/DialogActions"
-import FormControl from "@mui/material/FormControl"
-import InputLabel from "@mui/material/InputLabel"
 import Select from "@mui/material/Select"
 import Typography from "@mui/material/Typography"
 import MenuItem from "@mui/material/MenuItem"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { Assertion, BaseAssertionTypes, baseAssertionTypesArray } from "@/api/apiSchemas"
+import AssertionTypeForm from "./AssertionTypeForm/AssertionTypeForm"
 
 interface AssertionFormDialogProps {
   open: boolean
@@ -35,6 +34,13 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
 }) => {
   const [type, setType] = useState<BaseAssertionTypes>("contains")
   const [weight, setWeight] = useState<number>(1)
+  const [value, setValue] = useState<Assertion["value"]>(null)
+
+  const resetForm = () => {
+    setType("contains")
+    setWeight(1)
+    setValue(null)
+  }
 
   useEffect(() => {
     if (open) {
@@ -42,8 +48,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
         setType(assertion.type)
         if (assertion.weight) setWeight(assertion.weight)
       } else {
-        setType("contains")
-        setWeight(1)
+        resetForm()
       }
     }
   }, [assertion, open])
@@ -58,13 +63,17 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }
 
   const onAdd = () => {
-    handleAdd({ type: type, weight: weight })
+    const newAssertion: Assertion = { type: type, weight: weight }
+    if (value) newAssertion["value"] = value
+    handleAdd(newAssertion)
     handleClose()
   }
 
   const onUpdate = () => {
     if (handleUpdate && index !== undefined) {
-      handleUpdate(index, { type: type, weight: weight })
+      const newAssertion: Assertion = { type: type, weight: weight }
+      if (value) newAssertion["value"] = value
+      handleUpdate(index, newAssertion)
       handleClose()
     }
   }
@@ -90,6 +99,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
               </MenuItem>
             ))}
           </Select>
+          <AssertionTypeForm type={type} value={value} setValue={setValue}></AssertionTypeForm>
         </Box>
       </DialogContent>
       <DialogActions>
