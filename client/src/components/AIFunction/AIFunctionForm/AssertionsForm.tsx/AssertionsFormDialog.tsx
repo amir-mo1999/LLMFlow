@@ -9,6 +9,7 @@ import DialogActions from "@mui/material/DialogActions"
 import FormControl from "@mui/material/FormControl"
 import InputLabel from "@mui/material/InputLabel"
 import Select from "@mui/material/Select"
+import Typography from "@mui/material/Typography"
 import MenuItem from "@mui/material/MenuItem"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { Assertion, BaseAssertionTypes, baseAssertionTypesArray } from "@/api/apiSchemas"
@@ -18,7 +19,7 @@ interface AssertionFormDialogProps {
   handleClose: () => void
   handleAdd: (assertion: Assertion) => void
   handleUpdate?: (index: number, assertion: Assertion) => void
-  initialAssertion?: Assertion
+  assertion?: Assertion
   isEditing?: boolean
   index?: number
 }
@@ -28,32 +29,42 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   handleClose,
   handleAdd,
   handleUpdate,
-  initialAssertion,
+  assertion,
   isEditing = false,
   index,
 }) => {
   const [type, setType] = useState<BaseAssertionTypes>("contains")
+  const [weight, setWeight] = useState<number>(1)
 
   useEffect(() => {
-    if (initialAssertion) {
-      setType(initialAssertion.type)
-    } else {
-      setType("contains")
+    if (open) {
+      if (assertion) {
+        setType(assertion.type)
+        if (assertion.weight) setWeight(assertion.weight)
+      } else {
+        setType("contains")
+        setWeight(1)
+      }
     }
-  }, [initialAssertion, open])
+  }, [assertion, open])
 
   const handleTypeChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
     setType(event.target.value as BaseAssertionTypes)
   }
 
+  const handleWeightChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
+    const n = Number(event.target.value)
+    setWeight(n)
+  }
+
   const onAdd = () => {
-    handleAdd({ type })
+    handleAdd({ type: type, weight: weight })
     handleClose()
   }
 
   const onUpdate = () => {
     if (handleUpdate && index !== undefined) {
-      handleUpdate(index, { type })
+      handleUpdate(index, { type: type, weight: weight })
       handleClose()
     }
   }
@@ -63,21 +74,22 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
       <DialogTitle>{isEditing ? "Edit Assertion" : "Add Assertion"}</DialogTitle>
       <DialogContent>
         <Box mt={2}>
-          <FormControl fullWidth>
-            <InputLabel id="assertion-type-label">Assertion Type</InputLabel>
-            <Select
-              labelId="assertion-type-label"
-              value={type}
-              onChange={handleTypeChange}
-              label="Assertion Type"
-            >
-              {baseAssertionTypesArray.map((type, indx) => (
-                <MenuItem key={indx} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Typography>Type</Typography>
+          <Select value={type} onChange={handleTypeChange}>
+            {baseAssertionTypesArray.map((type, indx) => (
+              <MenuItem key={indx} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+          <Typography>Weight</Typography>
+          <Select value={weight.toString()} onChange={handleWeightChange}>
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
+              <MenuItem key={i} value={i}>
+                {i}
+              </MenuItem>
+            ))}
+          </Select>
         </Box>
       </DialogContent>
       <DialogActions>

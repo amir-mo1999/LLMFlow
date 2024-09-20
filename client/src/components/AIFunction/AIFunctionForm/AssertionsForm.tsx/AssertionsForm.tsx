@@ -1,5 +1,5 @@
 // AssertionsForm.tsx
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
@@ -25,16 +25,16 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   }
 
   const handleOpenEditDialog = (index: number) => {
-    setIsEditing(true)
     setCurrentIndex(index)
     setCurrentAssertion(assertions[index])
+    setIsEditing(true)
     setDialogOpen(true)
   }
 
   const handleCloseDialog = () => {
     setDialogOpen(false)
-    setCurrentIndex(null)
     setCurrentAssertion(undefined)
+    setCurrentIndex(null)
   }
 
   const handleAddAssertion = (assertion: Assertion) => {
@@ -52,18 +52,15 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
     setAssertions(updatedAssertions)
   }
 
-  // Ensure at least one assertion is present
-  const assertionsToRender = assertions.length > 0 ? assertions : [{ type: "" }]
-
   return (
     <Box>
-      {assertionsToRender.map((assertion, index) => (
+      {assertions.map((assertion, index) => (
         <Box key={index} display="flex" alignItems="center" mb={2}>
           <Typography
             onClick={() => handleOpenEditDialog(index)}
             style={{ cursor: "pointer", flexGrow: 1 }}
           >
-            {assertion.type || "No Type Selected"}
+            {assertion.type} weight {assertion.weight?.toString()}
           </Typography>
           <Button onClick={handleDeleteAssertion(index)}>×</Button>
         </Box>
@@ -74,8 +71,8 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
         open={dialogOpen}
         handleClose={handleCloseDialog}
         handleAdd={handleAddAssertion}
-        handleUpdate={currentIndex !== null ? handleUpdateAssertion : undefined}
-        initialAssertion={currentAssertion}
+        handleUpdate={handleUpdateAssertion}
+        assertion={currentAssertion}
         isEditing={isEditing}
         index={currentIndex !== null ? currentIndex : undefined}
       />
