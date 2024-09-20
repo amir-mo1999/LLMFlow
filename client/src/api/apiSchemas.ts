@@ -109,6 +109,31 @@ export type BaseAssertionTypes =
   | "rouge-n"
   | "starts-with"
 
+export const baseAssertionTypesArray: BaseAssertionTypes[] = [
+  "contains",
+  "contains-all",
+  "contains-any",
+  "contains-json",
+  "contains-sql",
+  "contains-xml",
+  "cost",
+  "equals",
+  "icontains",
+  "icontains-all",
+  "is-json",
+  "is-sql",
+  "is-xml",
+  "javascript",
+  "latency",
+  "levenshtein",
+  "perplexity-score",
+  "perplexity",
+  "python",
+  "regex",
+  "rouge-n",
+  "starts-with",
+]
+
 export type BodyLoginAuthLoginPost = {
   grant_type?: string | null
   username: string
