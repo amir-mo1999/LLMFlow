@@ -6,34 +6,31 @@ import DialogTitle from "@mui/material/DialogTitle"
 import DialogContent from "@mui/material/DialogContent"
 import DialogActions from "@mui/material/DialogActions"
 import TextField from "@mui/material/TextField"
-import { TestCaseInput, InputVariable } from "@/api/apiSchemas"
+import { AIFunctionRouteInput, TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
 import { Typography } from "@mui/material"
 
 interface TestCasesFormDialogProps {
   open: boolean
-  inputVariables: InputVariable[]
+  testCaseIndx: number
   handleClose: () => void
-  handleAddTestCase: (testCase: TestCaseInput) => void
+  handleAddAssertionToTestCase: (testCaseIndx: number, assertion: Assertion) => void
+  handleDeleteAssertionFromTestCase: (testCaseIndx: number, assertionIndx: number) => void
+  handleUpdateAssertionFromTestCase: (
+    testCaseIndx: number,
+    assertionIndx: number,
+    assertion: Assertion
+  ) => void
 }
 
 const TestCasesFormDialog: React.FC<TestCasesFormDialogProps> = ({
   open,
   handleClose,
-  handleAddTestCase,
-  inputVariables,
+  testCaseIndx,
+  handleAddAssertionToTestCase,
+  handleDeleteAssertionFromTestCase,
+  handleUpdateAssertionFromTestCase,
 }) => {
-  const [vars, setVars] = useState<Record<string, string>>({})
-
-  useEffect(() => {
-    if (open) {
-      // Initialize testCaseValues with empty strings for each InputVariable
-      const initialVars: Record<string, string> = {}
-      inputVariables.forEach((variable) => {
-        initialVars[variable.name] = ""
-      })
-      setVars(initialVars)
-    }
-  }, [open, inputVariables])
+  const [assertions, setAssertions] = useState<Assertion[]>([])
 
   const handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setVars({

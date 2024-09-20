@@ -1,10 +1,11 @@
 // TestCasesForm.tsx
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import TestCasesFormDialog from "./TestCasesFormDialog"
-import { AIFunctionRouteInput, InputVariable, TestCaseInput } from "@/api/apiSchemas"
+
+import { InputVariable, TestCaseInput, Assertion } from "@/api/apiSchemas"
 
 interface TestCasesFormProps {
   inputVariables: InputVariable[]
