@@ -1,4 +1,4 @@
-import { AIFunctionForm } from "./AIFunctionForm"
+import AIFunctionForm from "./AIFunctionForm"
 import AIFunctionOverview from "./AIFunctionOverview"
-
-export { AIFunctionForm, AIFunctionOverview }
+import AIFunctionSingleOverview from "./AIFunctionSingleOverview"
+export { AIFunctionForm, AIFunctionOverview, AIFunctionSingleOverview }

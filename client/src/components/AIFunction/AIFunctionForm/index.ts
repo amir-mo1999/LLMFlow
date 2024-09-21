@@ -1,3 +1,3 @@
 import AIFunctionForm from "./AIFunctionForm"
 
-export { AIFunctionForm }
+export default AIFunctionForm

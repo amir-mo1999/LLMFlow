@@ -1,11 +1,15 @@
+"use client"
 import React from "react"
 import { Paper, Typography, Grid } from "@mui/material"
 import { useGetAiFunctions } from "@/api/apiComponents"
 import { AIFunction } from "@/api/apiSchemas"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
+import { useRouter } from "next/navigation"
 
 const AIFunctionOverview: React.FC = () => {
+  const router = useRouter()
+
   const { data: aiFunctions } = useGetAiFunctions({})
 
   if (!aiFunctions) return <></>
@@ -28,9 +32,15 @@ const AIFunctionOverview: React.FC = () => {
         // Format the date to 'dd/MM/yyyy'
         const formattedDate = format(zonedDate, "dd/MM/yyyy")
 
+        const redirectOnClick = (aiFunctionID: string | null | undefined) => {
+          const f = () => {
+            if (typeof aiFunctionID === "string") router.push(`/ai-function/${aiFunctionID}`)
+          }
+          return f
+        }
         return (
           <Grid item xs={12} sm={6} md={4} key={aiFunction._id}>
-            <Paper elevation={3} sx={{ padding: "16px" }}>
+            <Paper onClick={redirectOnClick(aiFunction._id)} elevation={3} sx={{ padding: "16px" }}>
               <Typography variant="h6" gutterBottom>
                 {aiFunction.name}
               </Typography>
