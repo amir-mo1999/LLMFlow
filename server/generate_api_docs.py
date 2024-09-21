@@ -7,13 +7,13 @@ load_dotenv()
 
 from App import app
 from fastapi.routing import APIRoute
-from fastapi_camelcase import CamelModel
 from fastapi.utils import create_model_field
+from fastapi_camelcase import CamelModel
 
 
 class HttpExceptionModel(CamelModel):
+    message: str
     status: int
-    detail: str
 
 
 def get_openapi_schema():

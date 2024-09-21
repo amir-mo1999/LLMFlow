@@ -28,8 +28,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
       console.log("Success:", response)
     },
     onError: (err) => {
-      console.log("Error:")
-      console.log(JSON.stringify(err))
+      console.log("error status", err.status)
     },
   })
 
@@ -42,7 +41,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
       test_cases: testCases,
     }
 
-    //console.log(aiFunction)
     postAiFunction({ body: aiFunction })
   }
 

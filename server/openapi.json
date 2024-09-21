@@ -1226,19 +1226,19 @@
             },
             "HttpExceptionModel": {
                 "properties": {
+                    "message": {
+                        "type": "string",
+                        "title": "Message"
+                    },
                     "status": {
                         "type": "integer",
                         "title": "Status"
-                    },
-                    "detail": {
-                        "type": "string",
-                        "title": "Detail"
                     }
                 },
                 "type": "object",
                 "required": [
-                    "status",
-                    "detail"
+                    "message",
+                    "status"
                 ],
                 "title": "HttpExceptionModel"
             },

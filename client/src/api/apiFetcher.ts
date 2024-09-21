@@ -69,20 +69,27 @@ export async function apiFetch<
 
       throw error
     }
-
     if (response.headers.get("content-type")?.includes("json")) {
       return await response.json()
     } else {
       // if it is not a json response, assume it is a blob and cast it to TData
+
       return (await response.blob()) as unknown as TData
     }
   } catch (e) {
-    let errorObject: Error = {
-      name: "unknown" as const,
-      message: e instanceof Error ? `Network error (${e.message})` : "Network error",
-      stack: e as string,
+    let error: ErrorWrapper<TError>
+    if (typeof e === "object") {
+      //@ts-ignore
+      error = { status: e["status"], payload: JSON.stringify(e) }
+      throw error
+    } else {
+      let errorObject: Error = {
+        name: "unknown" as const,
+        message: e instanceof Error ? `Network error (${e.message})` : "Network error",
+        stack: e as string,
+      }
+      throw errorObject
     }
-    throw errorObject
   }
 }
 

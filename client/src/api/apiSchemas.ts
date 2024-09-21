@@ -190,8 +190,8 @@ export type HTTPValidationError = {
 }
 
 export type HttpExceptionModel = {
+  message: string
   status: number
-  detail: string
 }
 
 export type InputVariable = {

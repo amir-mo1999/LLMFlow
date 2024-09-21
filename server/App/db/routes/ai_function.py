@@ -10,6 +10,11 @@ from App.models import AIFunction, AIFunctionRouteInput, SuccessResponse
 AI_FUNCTION_ROUTER = APIRouter()
 
 
+class DuplicateDocumentExc(Exception):
+    def __init__(self, name: str):
+        self.name = name
+
+
 @AI_FUNCTION_ROUTER.post(
     "/ai-function",
     response_model=SuccessResponse,
