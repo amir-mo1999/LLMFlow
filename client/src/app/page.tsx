@@ -1,6 +1,6 @@
 "use client"
-import Box from "@mui/material/Box"
+import { AIFunctionOverview } from "@/components"
 
 export default function Home() {
-  return <Box></Box>
+  return <AIFunctionOverview></AIFunctionOverview>
 }

@@ -50,7 +50,12 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
       <Typography>Name</Typography>
       <TextField value={name} onChange={(e) => setName(e.target.value)} />
       <Typography>Description</Typography>
-      <TextField value={description} onChange={(e) => setDescription(e.target.value)} multiline />
+      <TextField
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        multiline
+        minRows={5}
+      />
       <Typography>Input Variables</Typography>
       <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
       <Typography>Output Assertions</Typography>
