@@ -9,10 +9,16 @@ import type * as Fetcher from "./apiFetcher";
 import { apiFetch } from "./apiFetcher";
 import type * as Schemas from "./apiSchemas";
 
-export type LoginError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type LoginError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type LoginVariables = ApiContext["fetcherOptions"];
 
@@ -54,7 +60,10 @@ export const useLogin = (
   });
 };
 
-export type RefreshTokenError = Fetcher.ErrorWrapper<undefined>;
+export type RefreshTokenError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Schemas.HttpExceptionModel;
+}>;
 
 export type RefreshTokenVariables = ApiContext["fetcherOptions"];
 
@@ -104,10 +113,16 @@ export type EvaluatePathParams = {
   promptId: string;
 };
 
-export type EvaluateError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type EvaluateError = Fetcher.ErrorWrapper<
+  | {
+      status: 409;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type EvaluateVariables = {
   pathParams: EvaluatePathParams;
@@ -147,10 +162,16 @@ export const useEvaluate = <TData = Schemas.EvaluateSummary,>(
   });
 };
 
-export type PostUserError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type PostUserError = Fetcher.ErrorWrapper<
+  | {
+      status: 409;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type PostUserVariables = {
   body: Schemas.UserInput;
@@ -198,10 +219,16 @@ export type GetUserPathParams = {
   username: string;
 };
 
-export type GetUserError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type GetUserError = Fetcher.ErrorWrapper<
+  | {
+      status: 404;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type GetUserVariables = {
   pathParams: GetUserPathParams;
@@ -241,7 +268,10 @@ export const useGetUser = <TData = Schemas.UserOutput,>(
   });
 };
 
-export type GetAiFunctionsError = Fetcher.ErrorWrapper<undefined>;
+export type GetAiFunctionsError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Schemas.HttpExceptionModel;
+}>;
 
 export type GetAiFunctionsResponse = Schemas.AIFunction[];
 
@@ -287,10 +317,20 @@ export const useGetAiFunctions = <TData = GetAiFunctionsResponse,>(
   });
 };
 
-export type PostAiFunctionError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type PostAiFunctionError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 409;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type PostAiFunctionVariables = {
   body: Schemas.AIFunctionRouteInput;
@@ -335,10 +375,20 @@ export type GetAiFunctionPathParams = {
   aiFunctionId: string;
 };
 
-export type GetAiFunctionError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type GetAiFunctionError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 404;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type GetAiFunctionVariables = {
   pathParams: GetAiFunctionPathParams;
@@ -383,10 +433,20 @@ export const useGetAiFunction = <TData = Schemas.AIFunction,>(
   });
 };
 
-export type PostPromptError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type PostPromptError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 401;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type PostPromptVariables = {
   body: Schemas.PromptRouteInput;
@@ -431,10 +491,20 @@ export type GetPromptPathParams = {
   promptId: string;
 };
 
-export type GetPromptError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type GetPromptError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 404;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type GetPromptVariables = {
   pathParams: GetPromptPathParams;
@@ -478,10 +548,20 @@ export type GetPromptsPathParams = {
   aiFunctionId: string;
 };
 
-export type GetPromptsError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
+export type GetPromptsError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 404;
+      payload: Schemas.HttpExceptionModel;
+    }
+  | {
+      status: 422;
+      payload: Schemas.HTTPValidationError;
+    }
+>;
 
 export type GetPromptsResponse = Schemas.Prompt[];
 

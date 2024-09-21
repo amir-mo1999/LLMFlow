@@ -7,6 +7,13 @@ load_dotenv()
 
 from App import app
 from fastapi.routing import APIRoute
+from fastapi_camelcase import CamelModel
+from fastapi.utils import create_model_field
+
+
+class HttpExceptionModel(CamelModel):
+    status: int
+    detail: str
 
 
 def get_openapi_schema():
@@ -21,8 +28,11 @@ def get_openapi_schema():
 
             for status_code, definition in route.responses.items():
                 if status_code >= 400 and "model" not in definition:
-                    pass
-
+                    route.responses[status_code]["model"] = HttpExceptionModel
+                    route.response_fields[status_code] = create_model_field(
+                        name=f"Response_{status_code}_{route.unique_id}",
+                        type_=HttpExceptionModel,
+                    )
     # Generate OpenAPI schema
     openapi_schema = app.openapi()
     return openapi_schema

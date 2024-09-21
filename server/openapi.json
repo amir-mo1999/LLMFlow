@@ -36,6 +36,13 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "Incorrect username or password"
                     },
                     "422": {
@@ -71,6 +78,13 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "Not authenticated"
                     }
                 },
@@ -117,6 +131,13 @@
                     },
                     "409": {
                         "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Conflict"
                     },
                     "422": {
@@ -162,6 +183,13 @@
                     },
                     "409": {
                         "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "document already exists"
                     },
                     "422": {
@@ -210,6 +238,13 @@
                     },
                     "404": {
                         "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Not Found"
                     },
                     "422": {
@@ -249,6 +284,13 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "Not authenticated"
                     }
                 },
@@ -287,10 +329,24 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "Not authenticated"
                     },
                     "409": {
                         "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "document already exists"
                     },
                     "422": {
@@ -347,10 +403,24 @@
                     },
                     "401": {
                         "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Unauthorized"
                     },
                     "404": {
                         "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Not Found"
                     },
                     "422": {
@@ -396,10 +466,24 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "Not authenticated"
                     },
                     "400": {
                         "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "detail": "AI Function does not exist"
                     },
                     "422": {
@@ -456,10 +540,24 @@
                     },
                     "401": {
                         "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Unauthorized"
                     },
                     "404": {
                         "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Not Found"
                     },
                     "422": {
@@ -515,10 +613,24 @@
                     },
                     "401": {
                         "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Unauthorized"
                     },
                     "404": {
                         "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
                         "description": "Not Found"
                     },
                     "422": {
@@ -1111,6 +1223,24 @@
                 },
                 "type": "object",
                 "title": "HTTPValidationError"
+            },
+            "HttpExceptionModel": {
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "title": "Status"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "status",
+                    "detail"
+                ],
+                "title": "HttpExceptionModel"
             },
             "InputVariable": {
                 "properties": {

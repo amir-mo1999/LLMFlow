@@ -189,6 +189,11 @@ export type HTTPValidationError = {
   detail?: ValidationError[]
 }
 
+export type HttpExceptionModel = {
+  status: number
+  detail: string
+}
+
 export type InputVariable = {
   /**
    * @maxLength 40
