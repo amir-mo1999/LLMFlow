@@ -20,6 +20,7 @@ bcrypt = "*"
 pre-commit = "*"
 aiohttp = "*"
 ipykernel = "*"
+fastapi-camelcase = "*"
 
 [dev-packages]
 
