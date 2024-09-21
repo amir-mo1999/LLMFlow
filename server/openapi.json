@@ -115,6 +115,10 @@
                             }
                         }
                     },
+                    "409": {
+                        "detail": "document not found",
+                        "description": "Conflict"
+                    },
                     "422": {
                         "description": "Validation Error",
                         "content": {
@@ -155,6 +159,10 @@
                                 }
                             }
                         }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "detail": "document already exists"
                     },
                     "422": {
                         "description": "Validation Error",
@@ -280,6 +288,10 @@
                     "401": {
                         "description": "Unauthorized",
                         "detail": "Not authenticated"
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "detail": "document already exists"
                     },
                     "422": {
                         "description": "Validation Error",
@@ -836,6 +848,7 @@
                     "equals",
                     "icontains",
                     "icontains-all",
+                    "icontains-any",
                     "is-json",
                     "is-sql",
                     "is-xml",
