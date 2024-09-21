@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
-import { TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
+import { TestCaseInput, InputVariable, Assertion, AIFunctionRouteInput } from "@/api/apiSchemas"
 import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
+import { usePostAiFunction } from "@/api/apiComponents"
 
 interface AIFunctionFormProps {}
 
@@ -16,7 +18,34 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
 
-  useEffect(() => console.log("Test Cases", testCases), [testCases])
+  const {
+    mutate: postAiFunction,
+    isError,
+    data,
+    error,
+  } = usePostAiFunction({
+    onSuccess: (response) => {
+      console.log("Success:", response)
+    },
+    onError: (err) => {
+      console.log("Error:")
+      console.log(JSON.stringify(err))
+    },
+  })
+
+  const onClickSubmit = () => {
+    const aiFunction: AIFunctionRouteInput = {
+      name: name,
+      description: description,
+      input_variables: inputVariables,
+      assert: assertions,
+      test_cases: testCases,
+    }
+
+    //console.log(aiFunction)
+    postAiFunction({ body: aiFunction })
+  }
+
   useEffect(() => setTestCases([]), [inputVariables])
   return (
     <Box>
@@ -34,6 +63,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
         testCases={testCases}
         setTestCases={setTestCases}
       ></TestCasesForm>
+      <Button variant="contained" onClick={onClickSubmit}>
+        Create AI Function
+      </Button>
     </Box>
   )
 }

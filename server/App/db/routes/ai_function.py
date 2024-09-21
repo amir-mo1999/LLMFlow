@@ -13,7 +13,10 @@ AI_FUNCTION_ROUTER = APIRouter()
 @AI_FUNCTION_ROUTER.post(
     "/ai-function",
     response_model=SuccessResponse,
-    responses={401: {"detail": "Not authenticated"}},
+    responses={
+        401: {"detail": "Not authenticated"},
+        409: {"detail": "document already exists"},
+    },
 )
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,

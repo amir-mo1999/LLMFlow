@@ -18,6 +18,11 @@ def get_openapi_schema():
         if isinstance(route, APIRoute):
             route.operation_id = route.name
             route.tags = route.endpoint.__module__.split(".")[1:2]
+
+            for status_code, definition in route.responses.items():
+                if status_code >= 400 and "model" not in definition:
+                    pass
+
     # Generate OpenAPI schema
     openapi_schema = app.openapi()
     return openapi_schema

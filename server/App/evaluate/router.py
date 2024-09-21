@@ -13,7 +13,11 @@ EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 
 
-@EVAL_ROUTER.get("/{prompt_id}", response_model=EvaluateSummary)
+@EVAL_ROUTER.get(
+    "/{prompt_id}",
+    response_model=EvaluateSummary,
+    responses={409: {"detail": "document not found"}},
+)
 async def evaluate(
     prompt_id: str,
     db: Annotated[DB, Depends(get_db)],

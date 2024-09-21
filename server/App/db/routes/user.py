@@ -16,6 +16,11 @@ USER_ROUTER = APIRouter()
 @USER_ROUTER.post(
     "/user",
     response_model=SuccessResponse,
+    responses={
+        409: {
+            "detail": "document already exists",
+        },
+    },
 )
 async def post_user(
     user: User,
@@ -37,9 +42,7 @@ async def post_user(
 @USER_ROUTER.get(
     "/user/{username}",
     response_model=User,
-    responses={
-        404: {"detail": "document not found"},
-    },
+    responses={404: {"detail": "document not found"}},
 )
 async def get_user(
     db: Annotated[DB, Depends(get_db)],
