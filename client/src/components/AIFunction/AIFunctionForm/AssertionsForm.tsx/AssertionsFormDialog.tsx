@@ -34,11 +34,13 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   const [type, setType] = useState<BaseAssertionTypes>("contains")
   const [weight, setWeight] = useState<number>(1)
   const [value, setValue] = useState<Assertion["value"]>(null)
+  const [threshold, setThreshold] = useState<Assertion["threshold"]>(null)
 
   const resetForm = () => {
     setType("contains")
     setWeight(1)
     setValue(null)
+    setThreshold(null)
   }
 
   useEffect(() => {
@@ -47,6 +49,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
         setType(assertion.type)
         if (assertion.weight) setWeight(assertion.weight)
         if (assertion.value) setValue(assertion.value)
+        if (assertion.threshold) setThreshold(assertion.threshold)
       } else {
         resetForm()
       }
@@ -65,6 +68,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   const onAdd = () => {
     const newAssertion: Assertion = { type: type, weight: weight }
     if (value) newAssertion["value"] = value
+    if (threshold) newAssertion["threshold"] = threshold
     handleAdd(newAssertion)
     handleClose()
   }
@@ -73,6 +77,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
     if (handleUpdate && index !== undefined) {
       const newAssertion: Assertion = { type: type, weight: weight }
       if (value) newAssertion["value"] = value
+      if (threshold) newAssertion["threshold"] = threshold
       handleUpdate(index, newAssertion)
       handleClose()
     }
@@ -104,6 +109,8 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
             type={type}
             value={value}
             setValue={setValue}
+            threshold={threshold}
+            setThreshold={setThreshold}
           ></AssertionTypeForm>
         </Box>
       </DialogContent>
