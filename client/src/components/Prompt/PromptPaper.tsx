@@ -45,11 +45,9 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ prompt }) => {
                     </Typography>
                   }
                   secondary={
-                    <>
-                      <Typography variant="body1" color="textPrimary">
-                        {message.content}
-                      </Typography>
-                    </>
+                    <Typography variant="body1" color="textPrimary">
+                      {message.content}
+                    </Typography>
                   }
                 />
               </ListItem>

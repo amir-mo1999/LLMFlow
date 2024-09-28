@@ -11,12 +11,15 @@ import Divider from "@mui/material/Divider"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import { useGetAiFunction, useGetPrompts } from "@/api/apiComponents"
 import { PromptOverview } from "../Prompt"
+import { useRouter } from "next/navigation"
 
 interface AIFunctionSingleOverviewProps {
   aiFunctionID: string
 }
 
 const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiFunctionID }) => {
+  const router = useRouter()
+
   const { data: aiFunction } = useGetAiFunction({ pathParams: { aiFunctionId: aiFunctionID } })
   const { data: prompts } = useGetPrompts({ pathParams: { aiFunctionId: aiFunctionID } })
 
@@ -185,7 +188,12 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
         )}
       </Box>
       {/* Prompts Overview */}
-      {prompts && <PromptOverview prompts={prompts} />}{" "}
+      {prompts && <PromptOverview prompts={prompts} />}
+
+      {/* Add prompt button */}
+      <Button variant="contained" onClick={() => router.push("/create/prompt/" + aiFunctionID)}>
+        Add Prompt
+      </Button>
     </Box>
   )
 }
