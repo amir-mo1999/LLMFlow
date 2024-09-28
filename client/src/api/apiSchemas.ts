@@ -19,7 +19,7 @@ export type AIFunction = {
   description: string
   /**
    * @example {"name":"text"}
-   * @example {"name":"number_of_sentences"}
+   * @example {"name":"number of sentences"}
    */
   input_variables: InputVariable[]
   /**
@@ -28,8 +28,8 @@ export type AIFunction = {
    */
   assert: Assertion[]
   /**
-   * @example {"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}}
-   * @example {"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}
+   * @example {"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number of sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}}
+   * @example {"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number of sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}
    */
   test_cases: TestCaseOutput[]
   /**
@@ -62,7 +62,7 @@ export type AIFunctionRouteInput = {
   description: string
   /**
    * @example {"name":"text"}
-   * @example {"name":"number_of_sentences"}
+   * @example {"name":"number of sentences"}
    */
   input_variables: InputVariable[]
   /**
@@ -71,8 +71,8 @@ export type AIFunctionRouteInput = {
    */
   assert: Assertion[]
   /**
-   * @example {"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}}
-   * @example {"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}
+   * @example {"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number of sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}}
+   * @example {"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number of sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}
    */
   test_cases: TestCaseInput[]
 }
@@ -209,7 +209,7 @@ export type Prompt = {
    */
   prompt_type: "single_shot" | "chat"
   /**
-   * @example {"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}
+   * @example {"content":"Summarize the following text: {{text}} in {{number of sentences}} sentences.","role":"user"}
    */
   messages: PromptMessage[]
   ai_function_id: string
@@ -236,7 +236,7 @@ export type PromptRouteInput = {
    */
   prompt_type: "single_shot" | "chat"
   /**
-   * @example {"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}
+   * @example {"content":"Summarize the following text: {{text}} in {{number of sentences}} sentences.","role":"user"}
    */
   messages: PromptMessage[]
   ai_function_id: string
