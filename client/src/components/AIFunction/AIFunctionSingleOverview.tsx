@@ -9,8 +9,8 @@ import Collapse from "@mui/material/Collapse"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
-import { AIFunction } from "@/api/apiSchemas"
-import { useGetAiFunction } from "@/api/apiComponents"
+import { useGetAiFunction, useGetPrompts } from "@/api/apiComponents"
+import { PromptOverview } from "../Prompt"
 
 interface AIFunctionSingleOverviewProps {
   aiFunctionID: string
@@ -18,6 +18,7 @@ interface AIFunctionSingleOverviewProps {
 
 const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiFunctionID }) => {
   const { data: aiFunction } = useGetAiFunction({ pathParams: { aiFunctionId: aiFunctionID } })
+  const { data: prompts } = useGetPrompts({ pathParams: { aiFunctionId: aiFunctionID } })
 
   const [showAllAssertions, setShowAllAssertions] = useState(false)
   const [showAllTestCases, setShowAllTestCases] = useState(false)
@@ -51,14 +52,11 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
       <Typography variant="h4" gutterBottom>
         {aiFunction.name}
       </Typography>
-
       {/* Description */}
       <Typography variant="body1" gutterBottom>
         {aiFunction.description}
       </Typography>
-
       <Divider sx={{ my: 2 }} />
-
       {/* Input Variables */}
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6">Input Variables</Typography>
@@ -70,9 +68,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
           ))}
         </List>
       </Box>
-
       <Divider sx={{ my: 2 }} />
-
       {/* Output Assertions */}
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6">Output Assertions</Typography>
@@ -112,9 +108,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
           </List>
         )}
       </Box>
-
       <Divider sx={{ my: 2 }} />
-
       {/* Test Cases */}
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6">Test Cases</Typography>
@@ -154,7 +148,9 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
                                 primary={`Type: ${assertion.type}`}
                                 secondary={
                                   <>
-                                    {assertion.value && <Typography>Value: {assertion.value as string}</Typography>}
+                                    {assertion.value && (
+                                      <Typography>Value: {assertion.value as string}</Typography>
+                                    )}
                                     {assertion.threshold !== null &&
                                       assertion.threshold !== undefined && (
                                         <Typography>Threshold: {assertion.threshold}</Typography>
@@ -188,6 +184,8 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
           </List>
         )}
       </Box>
+      {/* Prompts Overview */}
+      {prompts && <PromptOverview prompts={prompts} />}{" "}
     </Box>
   )
 }
