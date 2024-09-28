@@ -4,10 +4,7 @@ from fastapi import APIRouter, Depends, Path
 
 from App.dependencies import DB, get_db
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import (
-    SuccessResponse,
-    User,
-)
+from App.models import SuccessResponse, User, UserRouteInput
 
 USER_ROUTER = APIRouter()
 
@@ -23,9 +20,11 @@ USER_ROUTER = APIRouter()
     },
 )
 async def post_user(
-    user: User,
+    user: UserRouteInput,
     db: Annotated[DB, Depends(get_db)],
 ):
+    user = User(**user.model_dump(by_alias=True), hashed_password=user.hashed_password)
+
     result = await db.insert(
         user,
         collection="users",

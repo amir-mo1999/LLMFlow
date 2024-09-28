@@ -13,7 +13,6 @@ class InputVariable(RootModel):
 
 
 class AIFunctionRouteInput(RootModel):
-    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
         ..., example="Summarize Texts"
     )
@@ -90,6 +89,7 @@ class AIFunctionRouteInput(RootModel):
 
 
 class AIFunction(AIFunctionRouteInput):
+    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     number_of_prompts: NonNegativeInt
     username: EmailStr
     creation_time: datetime
