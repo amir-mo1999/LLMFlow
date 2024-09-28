@@ -6,19 +6,51 @@ import { useState } from "react"
 import SingleShotPromptForm from "./SingleShotPromptForm"
 import ChatPromptForm from "./ChatPromptForm"
 import { PromptRouteInput, PromptMessage } from "@/api/apiSchemas"
-import { useGetAiFunction } from "@/api/apiComponents"
+import { useGetAiFunction, usePostPrompt } from "@/api/apiComponents"
+import Button from "@mui/material/Button"
+import { useRouter } from "next/navigation"
 
 interface PromptFormProps {
   aiFunctionID: string
 }
 
 const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
+  const router = useRouter()
+
   const { data: aiFunction } = useGetAiFunction({
     pathParams: { aiFunctionId: aiFunctionID },
   })
   const [type, setType] = useState<PromptRouteInput["prompt_type"]>("single_shot")
   const [messages, setMessages] = useState<PromptMessage[]>([])
   const [message, setMessage] = useState<string>("")
+
+  const {
+    mutate: postPrompt,
+    isError,
+    data,
+    error,
+  } = usePostPrompt({
+    onSuccess: () => {
+      router.push("/ai-function/" + aiFunctionID)
+    },
+    onError: (err) => {
+      console.log("error status", err.status)
+    },
+  })
+
+  const onClickSubmit = () => {
+    const newPrompt: PromptRouteInput = {
+      prompt_type: type,
+      messages: messages,
+      ai_function_id: aiFunctionID,
+    }
+
+    if (type === "single_shot") {
+      newPrompt.messages = [{ role: "user", content: message }]
+    }
+
+    postPrompt({ body: newPrompt })
+  }
 
   const onPromptTypeChange = (e: SelectChangeEvent) => {
     setType(e.target.value as PromptRouteInput["prompt_type"])
@@ -44,6 +76,9 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
       ) : (
         "Invalid Prompt Type"
       )}
+      <Button variant="contained" onClick={onClickSubmit}>
+        Add Prompt
+      </Button>
     </>
   )
 }

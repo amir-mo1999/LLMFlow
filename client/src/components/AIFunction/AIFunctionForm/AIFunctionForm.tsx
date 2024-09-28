@@ -9,10 +9,13 @@ import { TestCaseInput, InputVariable, Assertion, AIFunctionRouteInput } from "@
 import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import { usePostAiFunction } from "@/api/apiComponents"
+import { useRouter } from "next/navigation"
 
 interface AIFunctionFormProps {}
 
 const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
+  const router = useRouter()
+
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([{ name: "" }])
@@ -26,7 +29,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
     error,
   } = usePostAiFunction({
     onSuccess: (response) => {
-      console.log("Success:", response)
+      router.push("/")
     },
     onError: (err) => {
       console.log("error status", err.status)
