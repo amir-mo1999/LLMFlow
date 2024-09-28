@@ -40,6 +40,12 @@ class DB:
     ) -> bool:
         coll = self.get_collection(collection)
 
+        # always exclude the id field
+        if "_id" in compare_fields:
+            compare_fields.remove("_id")
+        if "id" in compare_fields:
+            compare_fields.remove("id")
+
         # get values of to be inserted items
         query = {}
         doc_dump = document.model_dump()
