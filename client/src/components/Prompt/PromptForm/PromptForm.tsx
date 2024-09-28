@@ -34,7 +34,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
       router.push("/ai-function/" + aiFunctionID)
     },
     onError: (err) => {
-      console.log("error status", err.status)
+      console.log("error status", err)
     },
   })
 

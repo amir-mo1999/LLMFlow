@@ -1,3 +1,4 @@
+import { errorToJSON } from "next/dist/server/render";
 import { ApiContext } from "./apiContext"
 import { getSession } from "next-auth/react"
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || "" // TODO: add your baseUrl
@@ -59,7 +60,11 @@ export async function apiFetch<
     if (!response.ok) {
       let error: ErrorWrapper<TError>
       try {
-        error = await response.json()
+        const payload = await response.json()
+        const status = await response.status
+
+        //@ts-ignore
+        error = {status: status, payload: payload}
       } catch (e) {
         error = {
           status: "unknown" as const,
@@ -80,7 +85,7 @@ export async function apiFetch<
     let error: ErrorWrapper<TError>
     if (typeof e === "object") {
       //@ts-ignore
-      error = { status: e["status"], payload: JSON.stringify(e) }
+      error = e
       throw error
     } else {
       let errorObject: Error = {

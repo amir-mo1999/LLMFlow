@@ -32,7 +32,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
       router.push("/")
     },
     onError: (err) => {
-      console.log("error status", err.status)
+      console.log("error status", err)
     },
   })
 
