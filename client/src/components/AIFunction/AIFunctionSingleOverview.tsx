@@ -84,9 +84,9 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
               .map((assertion, index) => (
                 <ListItem key={index}>
                   <ListItemText
-                    primary={`Type: ${assertion.type}`}
-                    secondary={
+                    primary={
                       <>
+                        <Typography>Type: ${assertion.type}</Typography>
                         {<Typography>Value: {assertion.value as string}</Typography>}
                         {assertion.threshold !== null && assertion.threshold !== undefined && (
                           <Typography>Threshold: {assertion.threshold}</Typography>
