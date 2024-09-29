@@ -107,7 +107,7 @@ const handler = NextAuth({
       const hoursTillExpiration = (exp - now) / 60 / 60
 
       // if token expires in less than 3 hours refresh it
-      if (hoursTillExpiration >= 3) {
+      if (hoursTillExpiration <= 3) {
         // fetch new token and update data
         const newToken = await refreshAccessToken(token.access_token as string)
         token.access_token = newToken

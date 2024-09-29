@@ -7,15 +7,13 @@ import { useGetAiFunctions } from "@/api/apiComponents"
 export default function Home() {
   const router = useRouter()
 
-  const { data: aiFunctions } = useGetAiFunctions({})
-
-  if (!aiFunctions) {
-    return <></>
-  }
+  const { data: aiFunctions, isFetching } = useGetAiFunctions({})
 
   return (
     <>
-      <AIFunctionOverview aiFunctions={aiFunctions}></AIFunctionOverview>
+      <AIFunctionOverview
+        aiFunctions={isFetching || !aiFunctions ? [] : aiFunctions}
+      ></AIFunctionOverview>
       <Button
         variant="contained"
         onClick={() => {
