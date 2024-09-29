@@ -2,7 +2,7 @@
 import Typography from "@mui/material/Typography"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import SingleShotPromptForm from "./SingleShotPromptForm"
 import ChatPromptForm from "./ChatPromptForm"
 import { PromptRouteInput, PromptMessage } from "@/api/apiSchemas"
@@ -20,9 +20,39 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
   const { data: aiFunction } = useGetAiFunction({
     pathParams: { aiFunctionId: aiFunctionID },
   })
+
+  if (!aiFunction) return <>Not Found</>
+
   const [type, setType] = useState<PromptRouteInput["prompt_type"]>("single_shot")
   const [messages, setMessages] = useState<PromptMessage[]>([])
   const [message, setMessage] = useState<string>("")
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
+
+  const inputVarsInMessage = (message: string) => {
+    if (
+      aiFunction.input_variables.every((inputVariable) =>
+        message.includes("{{" + inputVariable.name + "}}")
+      )
+    )
+      return true
+    else return false
+  }
+
+  const updateDisableSubmit = () => {
+    let messagesJoined: string = ""
+
+    if (type === "single_shot") {
+      messagesJoined = message
+    } else if (type === "chat") {
+      messagesJoined = ""
+      messages.forEach((msg) => (messagesJoined += msg.content))
+    }
+
+    if (inputVarsInMessage(messagesJoined)) setDisableSubmit(false)
+    else setDisableSubmit(true)
+  }
+
+  useEffect(updateDisableSubmit, [message, messages])
 
   const {
     mutate: postPrompt,
@@ -56,9 +86,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
     setType(e.target.value as PromptRouteInput["prompt_type"])
   }
 
-  return !aiFunction ? (
-    <>Not Found</>
-  ) : (
+  return (
     <>
       <Typography>Select Prompt Type</Typography>
       <Select value={type} onChange={onPromptTypeChange}>
@@ -76,7 +104,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
       ) : (
         "Invalid Prompt Type"
       )}
-      <Button variant="contained" onClick={onClickSubmit}>
+      <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
         Add Prompt
       </Button>
     </>
