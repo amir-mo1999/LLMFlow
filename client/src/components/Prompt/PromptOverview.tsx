@@ -27,7 +27,7 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts }) => {
         Prompts
       </Typography>
       {prompts.length === 0 ? (
-        <Typography variant="body2">No props defined for this AI Function.</Typography>
+        <Typography variant="body2">No prompts defined for this AI Function.</Typography>
       ) : (
         <>
           {prompts

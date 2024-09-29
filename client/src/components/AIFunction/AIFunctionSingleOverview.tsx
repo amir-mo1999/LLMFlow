@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import List from "@mui/material/List"
@@ -9,7 +9,7 @@ import Collapse from "@mui/material/Collapse"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
-import { useGetAiFunction, useGetPrompts } from "@/api/apiComponents"
+import { useGetAiFunction, useGetPrompts, useEvaluate } from "@/api/apiComponents"
 import { PromptOverview } from "../Prompt"
 import { useRouter } from "next/navigation"
 
@@ -26,6 +26,29 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
   const [showAllAssertions, setShowAllAssertions] = useState(false)
   const [showAllTestCases, setShowAllTestCases] = useState(false)
   const [expandedTestCases, setExpandedTestCases] = useState<{ [key: number]: boolean }>({})
+
+  const {
+    mutate: evaluate,
+    isError,
+    data,
+    error,
+  } = useEvaluate({
+    onSuccess: (response) => {},
+    onError: (err) => {
+      console.log("error status", err)
+    },
+  })
+
+  const evaluatePrompts = (evaluateAll: boolean = false) => {
+    prompts?.forEach((prompt) => {
+      if (!prompt.last_eval || evaluateAll) {
+        console.log("Evaluating:", prompt._id)
+        evaluate({ pathParams: { promptId: prompt._id as string } })
+      }
+    })
+  }
+
+  useEffect(evaluatePrompts, [prompts?.length])
 
   const toggleAssertions = () => {
     setShowAllAssertions((prev) => !prev)

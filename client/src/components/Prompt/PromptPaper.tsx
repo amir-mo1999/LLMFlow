@@ -10,7 +10,7 @@ import Collapse from "@mui/material/Collapse"
 import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
-import { Prompt } from "@/api/apiSchemas"
+import { Prompt, EvaluateResult } from "@/api/apiSchemas"
 
 interface PromptPaperProps {
   prompt: Prompt
@@ -23,11 +23,22 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ prompt }) => {
     setOpen((prev) => !prev)
   }
 
+  const getAverageScore = (results: EvaluateResult[]) => {
+    let avgScore: number = 0
+
+    results.forEach((result) => (avgScore += result.score ? result.score : 0))
+
+    avgScore /= results.length
+
+    return avgScore.toPrecision(3)
+  }
+
   return (
     <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6">
-          Prompt Type: {prompt.prompt_type.replace("-", " ").toUpperCase()}
+        <Typography>Prompt Type: {prompt.prompt_type.replace("_", " ")}</Typography>
+        <Typography>
+          Score: {prompt.last_eval && getAverageScore(prompt.last_eval.results)}
         </Typography>
         <Button onClick={toggleOpen} startIcon={open ? <ExpandLess /> : <ExpandMore />}>
           {open ? "Hide Messages" : "Show Messages"}
@@ -40,14 +51,12 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ prompt }) => {
               <ListItem key={index} alignItems="flex-start">
                 <ListItemText
                   primary={
-                    <Typography variant="subtitle2" color="textSecondary">
-                      Role: {message.role.charAt(0).toUpperCase() + message.role.slice(1)}
-                    </Typography>
-                  }
-                  secondary={
-                    <Typography variant="body1" color="textPrimary">
-                      {message.content}
-                    </Typography>
+                    <>
+                      <Typography>
+                        Role: {message.role.charAt(0).toUpperCase() + message.role.slice(1)}
+                      </Typography>
+                      <Typography>{message.content}</Typography>
+                    </>
                   }
                 />
               </ListItem>

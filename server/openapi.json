@@ -1041,6 +1041,17 @@
                         "type": "object",
                         "title": "Vars"
                     },
+                    "score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Score"
+                    },
                     "latencyMs": {
                         "type": "integer",
                         "title": "Latencyms"
@@ -1087,6 +1098,7 @@
                 },
                 "type": "object",
                 "required": [
+                    "score",
                     "latencyMs",
                     "namedScores"
                 ],

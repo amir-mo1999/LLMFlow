@@ -152,6 +152,7 @@ export type EvaluateResult = {
   vars?: {
     [key: string]: string
   }
+  score: number | null
   latencyMs: number
   gradingResult?: GradingResult | null
   namedScores: {

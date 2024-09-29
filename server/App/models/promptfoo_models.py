@@ -83,7 +83,7 @@ class EvaluateResult(RootModel):
     vars: Dict[str, str] = None
     # error: Optional[str] = None
     # success: bool
-    # score: float | None
+    score: float | None
     latencyMs: int
     gradingResult: Optional[GradingResult] = None
     namedScores: Dict[str, float]
