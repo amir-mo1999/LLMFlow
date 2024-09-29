@@ -115,7 +115,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
                   <ListItemText
                     primary={
                       <>
-                        <Typography>Type: ${assertion.type}</Typography>
+                        <Typography>Type: {assertion.type}</Typography>
                         {<Typography>Value: {assertion.value as string}</Typography>}
                         {assertion.threshold !== null && assertion.threshold !== undefined && (
                           <Typography>Threshold: {assertion.threshold}</Typography>
