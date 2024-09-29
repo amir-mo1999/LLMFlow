@@ -20,8 +20,12 @@ interface AIFunctionSingleOverviewProps {
 const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiFunctionID }) => {
   const router = useRouter()
 
-  const { data: aiFunction } = useGetAiFunction({ pathParams: { aiFunctionId: aiFunctionID } })
-  const { data: prompts } = useGetPrompts({ pathParams: { aiFunctionId: aiFunctionID } })
+  const { data: aiFunction } = useGetAiFunction({
+    pathParams: { aiFunctionId: aiFunctionID },
+  })
+  const { data: prompts, refetch: refetchPrompts } = useGetPrompts({
+    pathParams: { aiFunctionId: aiFunctionID },
+  })
 
   const [showAllAssertions, setShowAllAssertions] = useState(false)
   const [showAllTestCases, setShowAllTestCases] = useState(false)
@@ -33,7 +37,9 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
     data,
     error,
   } = useEvaluate({
-    onSuccess: (response) => {},
+    onSuccess: (response) => {
+      refetchPrompts()
+    },
     onError: (err) => {
       console.log("error status", err)
     },
