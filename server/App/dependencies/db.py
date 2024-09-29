@@ -66,6 +66,20 @@ class DB:
 
         return True
 
+    async def delete(self, document_id, collection: Collection) -> bool:
+        # get collection
+        collection = self.get_collection(collection)
+
+        # delete document
+        await collection.delete_one({"_id": document_id})
+
+        # if the document was an ai function, also delete all prompts for that ai function
+        if collection.name == "ai-functions":
+            collection = self.get_collection("prompts")
+            await collection.delete_many({"ai_function_id": document_id})
+
+        return True
+
     async def get_all_ai_functions(self, username: str) -> Dict[str, AIFunction]:
         ai_functions = await self.get_all("ai-functions", username)
         ai_function_objects = {}

@@ -85,3 +85,28 @@ async def get_ai_function(
         raise DocumentNotFound
 
     return ai_function
+
+
+@AI_FUNCTION_ROUTER.delete(
+    "/ai-function/{ai_function_id}",
+    response_model=SuccessResponse,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def delete_ai_function(
+    ai_function_id: str,
+    db: Annotated[DB, Depends(get_db)],
+    username: Annotated[str, Depends(username)],
+):
+    # try to get ai function
+    await get_ai_function(ai_function_id=ai_function_id, db=db, username=username)
+
+    # if no error was raised it means the ai function was found and can now be deleted
+    res = await db.delete(ai_function_id, "ai-functions")
+
+    if res:
+        return SuccessResponse
+    else:
+        raise DocumentNotFound

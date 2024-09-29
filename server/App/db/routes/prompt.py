@@ -112,3 +112,28 @@ async def get_prompts(
     prompts = await db.get_prompts_by_ai_function_id(ai_function_id)
 
     return prompts
+
+
+@PROMPT_ROUTER.delete(
+    "/prompt/{prompt_id}",
+    response_model=SuccessResponse,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def delete_prompt(
+    prompt_id: str,
+    db: Annotated[DB, Depends(get_db)],
+    username: Annotated[str, Depends(username)],
+):
+    # try to get prompt
+    await get_prompt(prompt_id=prompt_id, db=db, username=username)
+
+    # if no error was raised it means the ai function was found and can now be deleted
+    res = await db.delete(prompt_id, "prompts")
+
+    if res:
+        return SuccessResponse
+    else:
+        raise DocumentNotFound
