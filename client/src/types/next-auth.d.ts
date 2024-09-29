@@ -25,7 +25,7 @@ declare module "next-auth/jwt" {
     user: User
     exp: number
     iat: number
-    jti: number
+    jti: string
     sub: string
   }
 }

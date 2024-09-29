@@ -2,8 +2,34 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import jwt from "jsonwebtoken"
 import { DecodedToken } from "next-auth"
+import { UserWithAccessToken } from "@/api/apiSchemas"
+import { v4 as uuidv4 } from "uuid"
 
 const apiUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || ""
+
+async function refreshAccessToken(access_token: string) {
+  try {
+    const response = await fetch(apiUrl + "/auth/refresh-token", {
+      headers: {
+        Authorization: "Bearer " + access_token,
+      },
+      method: "GET",
+    })
+
+    const userWithToken: UserWithAccessToken = await response.json()
+
+    if (!response.ok) {
+      throw userWithToken
+    }
+
+    return userWithToken.access_token
+  } catch (error) {
+    console.log(error)
+    return {
+      error: "RefreshAccessTokenError",
+    }
+  }
+}
 
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -71,7 +97,21 @@ const handler = NextAuth({
       return { ...token, ...user }
     },
     async session({ session, token }) {
-      //TODO: add logic to refresh jwt
+      // get time till jwt token expires
+      const expTime = token.exp
+      const now = Math.floor(Date.now() / 1000)
+      const hoursTillExpiration = (expTime - now) / 60 / 60
+
+      // if token expires in less than 3 hours refresh it
+      if (hoursTillExpiration <= 3) {
+        // fetch new token and update data
+        const newToken = await refreshAccessToken(token.access_token as string)
+        token.access_token = newToken
+        token.iat = Math.floor(Date.now() / 1000)
+        token.exp = token.iat + 60 * 60 * 24
+        token.jti = uuidv4()
+      }
+
       // decode the token coming from the backend
       const decodedToken: DecodedToken = jwt.verify(
         token.access_token as string,
@@ -89,7 +129,7 @@ const handler = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 24 * 30,
+    maxAge: 60 * 60 * 24,
   },
 })
 
