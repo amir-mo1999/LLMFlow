@@ -24,7 +24,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
   if (!aiFunction) return <>Not Found</>
 
   const [type, setType] = useState<PromptRouteInput["prompt_type"]>("single_shot")
-  const [messages, setMessages] = useState<PromptMessage[]>([])
+  const [messages, setMessages] = useState<PromptMessage[]>([{ role: "user", content: "" }])
   const [message, setMessage] = useState<string>("")
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
@@ -44,8 +44,12 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
     if (type === "single_shot") {
       messagesJoined = message
     } else if (type === "chat") {
-      messagesJoined = ""
-      messages.forEach((msg) => (messagesJoined += msg.content))
+      if (messages.some((msg) => msg.content === "")) {
+        messagesJoined = ""
+      } else {
+        messagesJoined = ""
+        messages.forEach((msg) => (messagesJoined += msg.content))
+      }
     }
 
     if (inputVarsInMessage(messagesJoined)) setDisableSubmit(false)
@@ -54,12 +58,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
 
   useEffect(updateDisableSubmit, [message, messages])
 
-  const {
-    mutate: postPrompt,
-    isError,
-    data,
-    error,
-  } = usePostPrompt({
+  const { mutate: postPrompt } = usePostPrompt({
     onSuccess: () => {
       router.push("/ai-function/" + aiFunctionID)
     },
@@ -69,6 +68,8 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
   })
 
   const onClickSubmit = () => {
+    setDisableSubmit(true)
+
     const newPrompt: PromptRouteInput = {
       prompt_type: type,
       messages: messages,
@@ -94,16 +95,15 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
         <MenuItem value={"chat"}>Chat Prompt</MenuItem>
       </Select>
       {type === "single_shot" ? (
-        <SingleShotPromptForm
-          message={message}
-          setMessage={setMessage}
-          variables={aiFunction ? aiFunction.input_variables : []}
-        ></SingleShotPromptForm>
+        <SingleShotPromptForm message={message} setMessage={setMessage}></SingleShotPromptForm>
       ) : type === "chat" ? (
         <ChatPromptForm messages={messages} setMessages={setMessages}></ChatPromptForm>
       ) : (
         "Invalid Prompt Type"
       )}
+      {aiFunction.input_variables.map((variable, indx) => (
+        <Typography key={indx}>- {variable.name}</Typography>
+      ))}
       <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
         Add Prompt
       </Button>

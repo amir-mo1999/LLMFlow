@@ -1,21 +1,15 @@
 "use client"
 
 import TextField from "@mui/material/TextField"
-import { useState, Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { Typography } from "@mui/material"
-import { InputVariable } from "@/api/apiSchemas"
 
 interface SingleShotPromptFormProps {
   message: string
   setMessage: Dispatch<SetStateAction<string>>
-  variables: InputVariable[]
 }
 
-const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
-  message,
-  setMessage,
-  variables,
-}) => {
+const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({ message, setMessage }) => {
   return (
     <>
       <TextField
@@ -26,9 +20,6 @@ const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({
         maxRows={20}
       ></TextField>
       <Typography>Must include the following variables:</Typography>
-      {variables.map((variable, indx) => (
-        <Typography key={indx}>- {variable.name}</Typography>
-      ))}
     </>
   )
 }
