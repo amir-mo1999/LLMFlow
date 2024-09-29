@@ -18,23 +18,29 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
 
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
-  const [inputVariables, setInputVariables] = useState<InputVariable[]>([{ name: "" }])
+  const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
-  const {
-    mutate: postAiFunction,
-    isError,
-    data,
-    error,
-  } = usePostAiFunction({
-    onSuccess: (response) => {
+  const { mutate: postAiFunction } = usePostAiFunction({
+    onSuccess: () => {
       router.push("/")
     },
     onError: (err) => {
       console.log("error status", err)
     },
   })
+
+  const updateDisableSubmit = () => {
+    if (name === "") setDisableSubmit(true)
+    else if (description === "") setDisableSubmit(true)
+    else if (inputVariables.some((inputVariable) => inputVariable.name === ""))
+      setDisableSubmit(true)
+    else setDisableSubmit(false)
+  }
+
+  useEffect(updateDisableSubmit, [name, description, inputVariables])
 
   const onClickSubmit = () => {
     const aiFunction: AIFunctionRouteInput = {
@@ -70,7 +76,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
         testCases={testCases}
         setTestCases={setTestCases}
       ></TestCasesForm>
-      <Button variant="contained" onClick={onClickSubmit}>
+      <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
         Create AI Function
       </Button>
     </Box>
