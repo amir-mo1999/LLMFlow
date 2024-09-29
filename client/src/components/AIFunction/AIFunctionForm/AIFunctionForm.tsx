@@ -43,6 +43,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   useEffect(updateDisableSubmit, [name, description, inputVariables])
 
   const onClickSubmit = () => {
+    setDisableSubmit(true)
     const aiFunction: AIFunctionRouteInput = {
       name: name,
       description: description,

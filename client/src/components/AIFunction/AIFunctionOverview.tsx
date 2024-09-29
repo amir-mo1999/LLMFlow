@@ -1,17 +1,17 @@
 "use client"
-import React, { useEffect } from "react"
+import React from "react"
 import { Paper, Typography, Grid } from "@mui/material"
-import { useGetAiFunctions } from "@/api/apiComponents"
 import { AIFunction } from "@/api/apiSchemas"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
 import { useRouter } from "next/navigation"
 
-const AIFunctionOverview: React.FC = () => {
-  const router = useRouter()
+interface AIFunctionOverviewProps {
+  aiFunctions: AIFunction[]
+}
 
-  const { data: aiFunctions, error } = useGetAiFunctions({})
-  useEffect(() => console.log(error), [error])
+const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ aiFunctions }) => {
+  const router = useRouter()
 
   if (!aiFunctions) return <></>
 

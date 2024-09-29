@@ -134,7 +134,6 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "rouge-n",
   "starts-with",
 ]
-
 export type BodyLoginAuthLoginPost = {
   grant_type?: string | null
   username: string
@@ -198,6 +197,7 @@ export type InputVariable = {
   /**
    * @maxLength 40
    * @minLength 1
+   * @pattern ^[^\s]+$
    */
   name: string
 }

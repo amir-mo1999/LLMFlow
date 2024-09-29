@@ -351,6 +351,66 @@ export const useGetAiFunction = <TData = Schemas.AIFunction>(
   })
 }
 
+export type DeleteAiFunctionPathParams = {
+  aiFunctionId: string
+}
+
+export type DeleteAiFunctionError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 404
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type DeleteAiFunctionVariables = {
+  pathParams: DeleteAiFunctionPathParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchDeleteAiFunction = (variables: DeleteAiFunctionVariables, signal?: AbortSignal) =>
+  apiFetch<
+    Schemas.SuccessResponse,
+    DeleteAiFunctionError,
+    undefined,
+    {},
+    {},
+    DeleteAiFunctionPathParams
+  >({
+    url: "/db/ai-function/{aiFunctionId}",
+    method: "delete",
+    ...variables,
+    signal,
+  })
+
+export const useDeleteAiFunction = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.SuccessResponse,
+      DeleteAiFunctionError,
+      DeleteAiFunctionVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<
+    Schemas.SuccessResponse,
+    DeleteAiFunctionError,
+    DeleteAiFunctionVariables
+  >({
+    mutationFn: (variables: DeleteAiFunctionVariables) =>
+      fetchDeleteAiFunction({ ...fetcherOptions, ...variables }),
+    ...options,
+  })
+}
+
 export type PostPromptError = Fetcher.ErrorWrapper<
   | {
       status: 400
@@ -440,6 +500,55 @@ export const useGetPrompt = <TData = Schemas.Prompt>(
     queryFn: ({ signal }) => fetchGetPrompt({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
+  })
+}
+
+export type DeletePromptPathParams = {
+  promptId: string
+}
+
+export type DeletePromptError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 404
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type DeletePromptVariables = {
+  pathParams: DeletePromptPathParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchDeletePrompt = (variables: DeletePromptVariables, signal?: AbortSignal) =>
+  apiFetch<Schemas.SuccessResponse, DeletePromptError, undefined, {}, {}, DeletePromptPathParams>({
+    url: "/db/prompt/{promptId}",
+    method: "delete",
+    ...variables,
+    signal,
+  })
+
+export const useDeletePrompt = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.SuccessResponse,
+      DeletePromptError,
+      DeletePromptVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<Schemas.SuccessResponse, DeletePromptError, DeletePromptVariables>({
+    mutationFn: (variables: DeletePromptVariables) =>
+      fetchDeletePrompt({ ...fetcherOptions, ...variables }),
+    ...options,
   })
 }
 

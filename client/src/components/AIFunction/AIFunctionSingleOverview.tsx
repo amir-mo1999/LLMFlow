@@ -9,34 +9,31 @@ import Collapse from "@mui/material/Collapse"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
-import { useGetAiFunction, useGetPrompts, useEvaluate } from "@/api/apiComponents"
+import { useEvaluate, useDeleteAiFunction, useGetPrompts } from "@/api/apiComponents"
 import { PromptOverview } from "../Prompt"
 import { useRouter } from "next/navigation"
+import { AIFunction, Prompt } from "@/api/apiSchemas"
 
 interface AIFunctionSingleOverviewProps {
-  aiFunctionID: string
+  aiFunction: AIFunction
+  prompts: Prompt[]
 }
 
-const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiFunctionID }) => {
+const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
+  aiFunction,
+  prompts,
+}) => {
   const router = useRouter()
-
-  const { data: aiFunction } = useGetAiFunction({
-    pathParams: { aiFunctionId: aiFunctionID },
-  })
-  const { data: prompts, refetch: refetchPrompts } = useGetPrompts({
-    pathParams: { aiFunctionId: aiFunctionID },
-  })
 
   const [showAllAssertions, setShowAllAssertions] = useState(false)
   const [showAllTestCases, setShowAllTestCases] = useState(false)
   const [expandedTestCases, setExpandedTestCases] = useState<{ [key: number]: boolean }>({})
 
-  const {
-    mutate: evaluate,
-    isError,
-    data,
-    error,
-  } = useEvaluate({
+  const { refetch: refetchPrompts } = useGetPrompts({
+    pathParams: { aiFunctionId: aiFunction._id as string },
+  })
+
+  const { mutate: evaluate } = useEvaluate({
     onSuccess: (response) => {
       refetchPrompts()
     },
@@ -45,10 +42,22 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
     },
   })
 
+  const { mutate: deleteAIFunction } = useDeleteAiFunction({
+    onSuccess: () => {
+      router.push("/")
+    },
+    onError: (err) => {
+      console.log("error status", err)
+    },
+  })
+
+  const onClickDelete = () => {
+    deleteAIFunction({ pathParams: { aiFunctionId: aiFunction._id as string } })
+  }
+
   const evaluatePrompts = (evaluateAll: boolean = false) => {
     prompts?.forEach((prompt) => {
       if (!prompt.last_eval || evaluateAll) {
-        console.log("Evaluating:", prompt._id)
         evaluate({ pathParams: { promptId: prompt._id as string } })
       }
     })
@@ -220,8 +229,15 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
       {prompts && <PromptOverview prompts={prompts} />}
 
       {/* Add prompt button */}
-      <Button variant="contained" onClick={() => router.push("/create/prompt/" + aiFunctionID)}>
+      <Button
+        variant="contained"
+        onClick={() => router.push(("/create/prompt/" + aiFunction._id) as string)}
+      >
         Add Prompt
+      </Button>
+      <Divider></Divider>
+      <Button variant="contained" onClick={onClickDelete}>
+        Delete AI Function
       </Button>
     </Box>
   )
