@@ -4,7 +4,6 @@
  * @version 0.1.0
  */
 export type AIFunction = {
-  _id?: string | null
   /**
    * @maxLength 40
    * @minLength 1
@@ -32,6 +31,7 @@ export type AIFunction = {
    * @example {"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}
    */
   test_cases: TestCaseOutput[]
+  _id?: string | null
   /**
    * @minimum 0
    */
@@ -47,7 +47,6 @@ export type AIFunction = {
 }
 
 export type AIFunctionRouteInput = {
-  _id?: string | null
   /**
    * @maxLength 40
    * @minLength 1
@@ -203,7 +202,6 @@ export type InputVariable = {
 }
 
 export type Prompt = {
-  _id?: string | null
   /**
    * @example single_shot
    */
@@ -213,6 +211,7 @@ export type Prompt = {
    */
   messages: PromptMessage[]
   ai_function_id: string
+  _id?: string | null
   /**
    * @format email
    */
@@ -230,7 +229,6 @@ export type PromptMessage = {
 }
 
 export type PromptRouteInput = {
-  _id?: string | null
   /**
    * @example single_shot
    */
@@ -294,8 +292,24 @@ export type TokenUsage = {
   cached?: number | null
 }
 
-export type UserInput = {
+export type User = {
+  /**
+   * @format email
+   */
+  username: string
+  /**
+   * @minLength 1
+   */
+  first_name: string
+  /**
+   * @minLength 1
+   */
+  last_name: string
+  role: "developer" | "prompt_engineer" | "admin"
   _id?: string | null
+}
+
+export type UserRouteInput = {
   /**
    * @format email
    */
@@ -310,23 +324,6 @@ export type UserInput = {
   last_name: string
   role: "developer" | "prompt_engineer" | "admin"
   hashed_password: string
-}
-
-export type UserOutput = {
-  _id?: string | null
-  /**
-   * @format email
-   */
-  username: string
-  /**
-   * @minLength 1
-   */
-  first_name: string
-  /**
-   * @minLength 1
-   */
-  last_name: string
-  role: "developer" | "prompt_engineer" | "admin"
 }
 
 export type UserWithAccessToken = {
