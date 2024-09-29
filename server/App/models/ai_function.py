@@ -9,7 +9,9 @@ from .root_model import RootModel
 
 
 class InputVariable(RootModel):
-    name: Annotated[str, StringConstraints(min_length=1, max_length=40)]
+    name: Annotated[
+        str, StringConstraints(min_length=1, max_length=40, pattern="^[^\s]+$")
+    ]
 
 
 class AIFunctionRouteInput(RootModel):
