@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import List from "@mui/material/List"
@@ -17,11 +17,13 @@ import { AIFunction, Prompt } from "@/api/apiSchemas"
 interface AIFunctionSingleOverviewProps {
   aiFunction: AIFunction
   prompts: Prompt[]
+  setPrompts: Dispatch<SetStateAction<Prompt[]>>
 }
 
 const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   aiFunction,
   prompts,
+  setPrompts,
 }) => {
   const router = useRouter()
 
@@ -226,7 +228,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
         )}
       </Box>
       {/* Prompts Overview */}
-      {prompts && <PromptOverview prompts={prompts} />}
+      {prompts && <PromptOverview prompts={prompts} setPrompts={setPrompts} />}
 
       {/* Add prompt button */}
       <Button

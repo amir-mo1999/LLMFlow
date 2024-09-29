@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, Dispatch, SetStateAction } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import List from "@mui/material/List"
@@ -9,19 +9,24 @@ import ListItemText from "@mui/material/ListItemText"
 import Collapse from "@mui/material/Collapse"
 import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
+import DeleteIcon from "@mui/icons-material/Delete"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import { Prompt, EvaluateResult } from "@/api/apiSchemas"
+import { useDeletePrompt, useGetPrompts } from "@/api/apiComponents"
 
 interface PromptPaperProps {
   prompt: Prompt
+  onDeletePrompt: (promptID: string) => void
 }
 
-const PromptPaper: React.FC<PromptPaperProps> = ({ prompt }) => {
+const PromptPaper: React.FC<PromptPaperProps> = ({ prompt, onDeletePrompt }) => {
   const [open, setOpen] = useState(false)
 
   const toggleOpen = () => {
     setOpen((prev) => !prev)
   }
+
+  const { mutate: deletePrompt, error } = useDeletePrompt({})
 
   const getAverageScore = (results: EvaluateResult[]) => {
     let avgScore: number = 0
@@ -40,8 +45,9 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ prompt }) => {
         <Typography>
           Score: {prompt.last_eval && getAverageScore(prompt.last_eval.results)}
         </Typography>
-        <Button onClick={toggleOpen} startIcon={open ? <ExpandLess /> : <ExpandMore />}>
-          {open ? "Hide Messages" : "Show Messages"}
+        <Button onClick={toggleOpen}>{open ? <ExpandLess /> : <ExpandMore />}</Button>
+        <Button onClick={() => onDeletePrompt(prompt._id as string)}>
+          <DeleteIcon />
         </Button>
       </Box>
       <Collapse in={open} timeout="auto" unmountOnExit>
