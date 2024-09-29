@@ -9,7 +9,12 @@ import Collapse from "@mui/material/Collapse"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
-import { useEvaluate, useDeleteAiFunction, useGetPrompts } from "@/api/apiComponents"
+import {
+  useEvaluate,
+  useDeleteAiFunction,
+  useGetPrompts,
+  useDeletePrompt,
+} from "@/api/apiComponents"
 import { PromptOverview } from "../Prompt"
 import { useRouter } from "next/navigation"
 import { AIFunction, Prompt } from "@/api/apiSchemas"
@@ -42,12 +47,19 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
     },
   })
 
+  const { mutate: deletePrompt } = useDeletePrompt({
+    onSuccess: () => {
+      refetchPrompts()
+    },
+  })
+
+  const onDeletePrompt = (promptID: string) => {
+    deletePrompt({ pathParams: { promptId: promptID } })
+  }
+
   const { mutate: deleteAIFunction } = useDeleteAiFunction({
     onSuccess: () => {
       router.push("/")
-    },
-    onError: (err) => {
-      console.log("error status", err)
     },
   })
 
@@ -226,7 +238,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
         )}
       </Box>
       {/* Prompts Overview */}
-      {prompts && <PromptOverview prompts={prompts} />}
+      {prompts && <PromptOverview prompts={prompts} onDeletePrompt={onDeletePrompt} />}
 
       {/* Add prompt button */}
       <Button

@@ -11,12 +11,14 @@ import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import { Prompt, EvaluateResult } from "@/api/apiSchemas"
+import DeleteIcon from "@mui/icons-material/Delete"
 
 interface PromptPaperProps {
   prompt: Prompt
+  onDeletePrompt: (promptID: string) => void
 }
 
-const PromptPaper: React.FC<PromptPaperProps> = ({ prompt }) => {
+const PromptPaper: React.FC<PromptPaperProps> = ({ prompt, onDeletePrompt }) => {
   const [open, setOpen] = useState(false)
 
   const toggleOpen = () => {
@@ -40,8 +42,9 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ prompt }) => {
         <Typography>
           Score: {prompt.last_eval && getAverageScore(prompt.last_eval.results)}
         </Typography>
-        <Button onClick={toggleOpen} startIcon={open ? <ExpandLess /> : <ExpandMore />}>
-          {open ? "Hide Messages" : "Show Messages"}
+        <Button onClick={toggleOpen}>{open ? <ExpandLess /> : <ExpandMore />} </Button>
+        <Button onClick={() => onDeletePrompt(prompt._id as string)}>
+          <DeleteIcon />
         </Button>
       </Box>
       <Collapse in={open} timeout="auto" unmountOnExit>

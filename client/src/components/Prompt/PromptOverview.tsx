@@ -11,9 +11,10 @@ import { Prompt } from "@/api/apiSchemas"
 
 interface PromptOverviewProps {
   prompts: Prompt[]
+  onDeletePrompt: (promptID: string) => void
 }
 
-const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts }) => {
+const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onDeletePrompt }) => {
   const [showAllPrompts, setShowAllPrompts] = useState(false)
   const MAX_VISIBLE_PROMPTS = 3
 
@@ -33,7 +34,7 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts }) => {
           {prompts
             .slice(0, showAllPrompts ? prompts.length : MAX_VISIBLE_PROMPTS)
             .map((prompt, index) => (
-              <PromptPaper key={index} prompt={prompt} />
+              <PromptPaper key={index} prompt={prompt} onDeletePrompt={onDeletePrompt} />
             ))}
           {prompts.length > MAX_VISIBLE_PROMPTS && (
             <Box textAlign="center">
