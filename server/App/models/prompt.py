@@ -18,7 +18,7 @@ class PromptRouteInput(RootModel):
         example=[
             PromptMessage(
                 role="user",
-                content="Summarize the following text: {{text}} in {{number of sentences}} sentences.",
+                content="Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
             )
         ],
     )
