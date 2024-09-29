@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useEffect } from "react"
 import { Paper, Typography, Grid } from "@mui/material"
 import { useGetAiFunctions } from "@/api/apiComponents"
 import { AIFunction } from "@/api/apiSchemas"
@@ -10,7 +10,8 @@ import { useRouter } from "next/navigation"
 const AIFunctionOverview: React.FC = () => {
   const router = useRouter()
 
-  const { data: aiFunctions } = useGetAiFunctions({})
+  const { data: aiFunctions, error } = useGetAiFunctions({})
+  useEffect(() => console.log(error), [error])
 
   if (!aiFunctions) return <></>
 

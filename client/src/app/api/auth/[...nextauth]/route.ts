@@ -24,7 +24,6 @@ async function refreshAccessToken(access_token: string) {
 
     return userWithToken.access_token
   } catch (error) {
-    console.log(error)
     return {
       error: "RefreshAccessTokenError",
     }
@@ -97,26 +96,22 @@ const handler = NextAuth({
       return { ...token, ...user }
     },
     async session({ session, token }) {
-      // get time till jwt token expires
-      const expTime = token.exp
-      const now = Math.floor(Date.now() / 1000)
-      const hoursTillExpiration = (expTime - now) / 60 / 60
-
-      // if token expires in less than 3 hours refresh it
-      if (hoursTillExpiration <= 3) {
-        // fetch new token and update data
-        const newToken = await refreshAccessToken(token.access_token as string)
-        token.access_token = newToken
-        token.iat = Math.floor(Date.now() / 1000)
-        token.exp = token.iat + 60 * 60 * 24
-        token.jti = uuidv4()
-      }
-
       // decode the token coming from the backend
       const decodedToken: DecodedToken = jwt.verify(
         token.access_token as string,
         process.env.NEXTAUTH_SECRET as string
       ) as DecodedToken
+
+      const exp = decodedToken.exp
+      const now = Math.floor(Date.now() / 1000)
+      const hoursTillExpiration = (exp - now) / 60 / 60
+
+      // if token expires in less than 3 hours refresh it
+      if (hoursTillExpiration >= 3) {
+        // fetch new token and update data
+        const newToken = await refreshAccessToken(token.access_token as string)
+        token.access_token = newToken
+      }
 
       // create session object and return it
       session = { ...session, user: token.user, decodedToken: decodedToken }
