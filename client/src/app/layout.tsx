@@ -2,9 +2,10 @@
 import { Inter } from "next/font/google"
 import "./globals.css"
 import Box from "@mui/material/Box"
-import { Providers, SessionLoaded, MyAppBar } from "@/components"
+import { MyAppBar } from "@/components"
 import { ThemeProvider } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { SessionProvider } from "next-auth/react"
 import { useState } from "react"
 import theme from "@/theme"
 
@@ -19,27 +20,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
+        <SessionProvider>
           <ThemeProvider theme={theme}>
-            <SessionLoaded>
-              <QueryClientProvider client={queryClient}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    backgroundColor: "#F3F2F7",
-                    height: "100%",
-                    width: "100%",
-                    overflowY: "hidden",
-                  }}
-                >
-                  <MyAppBar />
-                  {children}
-                </Box>
-              </QueryClientProvider>
-            </SessionLoaded>
+            <QueryClientProvider client={queryClient}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  backgroundColor: "#F3F2F7",
+                  height: "100%",
+                  width: "100%",
+                  overflowY: "hidden",
+                }}
+              >
+                <MyAppBar />
+                {children}
+              </Box>
+            </QueryClientProvider>
           </ThemeProvider>
-        </Providers>
+        </SessionProvider>
       </body>
     </html>
   )
