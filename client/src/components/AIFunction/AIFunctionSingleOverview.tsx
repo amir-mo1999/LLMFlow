@@ -59,7 +59,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
 
   const { mutate: deleteAIFunction } = useDeleteAiFunction({
     onSuccess: () => {
-      router.push("/")
+      router.push("/ai-functions")
     },
   })
 

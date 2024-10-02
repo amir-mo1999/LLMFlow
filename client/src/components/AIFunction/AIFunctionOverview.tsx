@@ -35,7 +35,7 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ aiFunctions }) 
 
         const redirectOnClick = (aiFunctionID: string | null | undefined) => {
           const f = () => {
-            if (typeof aiFunctionID === "string") router.push(`/ai-function/${aiFunctionID}`)
+            if (typeof aiFunctionID === "string") router.push(`/ai-functions/${aiFunctionID}`)
           }
           return f
         }

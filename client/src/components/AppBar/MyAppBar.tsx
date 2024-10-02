@@ -24,7 +24,6 @@ const MyAppBar: React.FC<AppBarProps> = () => {
       session?.user.first_name.slice(0, 1) + session?.user.last_name.slice(0, 1)
     ).toUpperCase()
   }
-  console.log(initials)
 
   return (
     <AppBar position="static">

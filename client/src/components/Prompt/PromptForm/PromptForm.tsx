@@ -60,7 +60,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
 
   const { mutate: postPrompt } = usePostPrompt({
     onSuccess: () => {
-      router.push("/ai-function/" + aiFunctionID)
+      router.push("/ai-functions/" + aiFunctionID)
     },
     onError: (err) => {
       console.log("error status", err)

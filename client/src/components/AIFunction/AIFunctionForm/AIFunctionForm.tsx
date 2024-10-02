@@ -25,7 +25,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
 
   const { mutate: postAiFunction } = usePostAiFunction({
     onSuccess: () => {
-      router.push("/")
+      router.push("/ai-functions")
     },
     onError: (err) => {
       console.log("error status", err)

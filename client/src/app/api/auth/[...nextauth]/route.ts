@@ -119,7 +119,7 @@ const handler = NextAuth({
     },
     // redirect user to base route after login
     async redirect(params: { url: string; baseUrl: string }) {
-      return process.env.NEXTAUTH_URL as string
+      return (process.env.NEXTAUTH_URL as string) + "/ai-functions"
     },
   },
   session: {
