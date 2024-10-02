@@ -2,7 +2,7 @@
 import { Inter } from "next/font/google"
 import "./globals.css"
 import Box from "@mui/material/Box"
-import { Providers, SessionLoaded } from "@/components"
+import { Providers, SessionLoaded, MyAppBar } from "@/components"
 import { ThemeProvider } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
@@ -28,13 +28,12 @@ export default function RootLayout({
                     display: "flex",
                     flexDirection: "column",
                     backgroundColor: "#F3F2F7",
-                    paddingX: "4rem",
-                    paddingY: "1rem",
                     height: "100%",
                     width: "100%",
-                    overflowY: "auto",
+                    overflowY: "hidden",
                   }}
                 >
+                  <MyAppBar />
                   {children}
                 </Box>
               </QueryClientProvider>
