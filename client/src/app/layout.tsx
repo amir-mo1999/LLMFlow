@@ -30,7 +30,7 @@ export default function RootLayout({
                   backgroundColor: "#F3F2F7",
                   height: "100%",
                   width: "100%",
-                  overflowY: "hidden",
+                  overflow: "hidden",
                 }}
               >
                 <MyAppBar />
