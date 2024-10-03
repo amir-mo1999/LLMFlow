@@ -6,6 +6,7 @@ import {
   PageContainer,
   SearchField,
   AIFunctionSingleOverview,
+  AIFunctionForm,
 } from "@/components"
 import Button from "@mui/material/Button"
 import { useRouter } from "next/navigation"
@@ -19,6 +20,15 @@ export default function Home() {
   const [searchValue, setSearchValue] = useState("")
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number | undefined>()
   const [aiFunctions, setAIFunctions] = useState<AIFunction[]>([])
+  const [showCreateForm, setShowCreateForm] = useState(false)
+
+  const onClickCreate = () => {
+    setShowCreateForm(true)
+  }
+
+  useEffect(() => {
+    if (showCreateForm) setSelectedAIFunctionIndx(undefined)
+  }, [showCreateForm])
 
   const onDeleteAIFunction = (indx: number) => {
     const updatedAIFunctions = aiFunctions.filter((_, i) => i !== indx)
@@ -39,13 +49,7 @@ export default function Home() {
           setValue={setSearchValue}
           placeholder="AI Function Name"
         ></SearchField>
-        <Button
-          sx={{ marginTop: 2 }}
-          variant="contained"
-          onClick={() => {
-            router.push("/create/ai-function")
-          }}
-        >
+        <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
           Create AI Function
         </Button>
         <AIFunctionOverview
@@ -57,11 +61,13 @@ export default function Home() {
       <MainContentContainer>
         {selectedAIFunctionIndx !== undefined && aiFunctions ? (
           <AIFunctionSingleOverview
-          onDeleteAIFunction={onDeleteAIFunction}
+            onDeleteAIFunction={onDeleteAIFunction}
             aiFunction={aiFunctions[selectedAIFunctionIndx]}
             selectedAIFunctionIndx={selectedAIFunctionIndx}
             setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
           ></AIFunctionSingleOverview>
+        ) : showCreateForm ? (
+          <AIFunctionForm></AIFunctionForm>
         ) : (
           <></>
         )}

@@ -4,15 +4,20 @@ import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { AIFunctionRouteInput } from "@/api/apiSchemas"
+import { SxProps } from "@mui/material"
+import AddIcon from "@mui/icons-material/Add"
+import ClearIcon from "@mui/icons-material/Clear"
 
 interface InputVariableFormProps {
   inputVariables: AIFunctionRouteInput["input_variables"]
   setInputVariables: React.Dispatch<React.SetStateAction<AIFunctionRouteInput["input_variables"]>>
+  sx?: SxProps
 }
 
 const InputVariableForm: React.FC<InputVariableFormProps> = ({
   inputVariables,
   setInputVariables,
+  sx,
 }) => {
   const handleNameChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatedVariables = [...inputVariables]
@@ -31,14 +36,18 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
   }
 
   return (
-    <Box>
+    <Box sx={{ ...sx }}>
       {inputVariables.map((inputVar, index) => (
-        <Box key={index} display="flex" alignItems="center" mb={2}>
+        <Box key={index} display="flex" alignItems="center" pb={1}>
           <TextField value={inputVar.name} onChange={handleNameChange(index)} fullWidth />
-          <Button onClick={handleDeleteVariable(index)}>×</Button>
+          <Button onClick={handleDeleteVariable(index)}>
+            <ClearIcon />
+          </Button>
         </Box>
       ))}
-      <Button onClick={handleAddVariable}>+</Button>
+      <Button onClick={handleAddVariable}>
+        <AddIcon />
+      </Button>
     </Box>
   )
 }

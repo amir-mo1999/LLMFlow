@@ -57,18 +57,27 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
 
   useEffect(() => setTestCases([]), [inputVariables])
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       <Typography>Name</Typography>
-      <TextField value={name} onChange={(e) => setName(e.target.value)} />
+      <TextField
+        sx={{ width: "100%", paddingBottom: 2 }}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <Typography>Description</Typography>
       <TextField
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         multiline
         minRows={5}
+        sx={{ width: "100%", paddingBottom: 2 }}
       />
       <Typography>Input Variables</Typography>
-      <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
+      <InputVariableForm
+        inputVariables={inputVariables}
+        setInputVariables={setInputVariables}
+        sx={{ paddingBottom: 2 }}
+      />
       <Typography>Output Assertions</Typography>
       <AssertionsForm assertions={assertions} setAssertions={setAssertions} />
       <Typography>Test Cases</Typography>
