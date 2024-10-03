@@ -110,7 +110,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   }
 
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{ width: "100%" }}>
       {/* AI Function Name */}
       <Typography variant="h4" gutterBottom>
         {aiFunction.name}
