@@ -20,10 +20,18 @@ import { useRouter } from "next/navigation"
 import { AIFunction } from "@/api/apiSchemas"
 
 interface AIFunctionSingleOverviewProps {
+  onDeleteAIFunction: (indx: number) => void
   aiFunction: AIFunction
+  selectedAIFunctionIndx: number
+  setSelectedAIFunctionIndx: React.Dispatch<React.SetStateAction<number | undefined>>
 }
 
-const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiFunction }) => {
+const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
+  onDeleteAIFunction,
+  aiFunction,
+  selectedAIFunctionIndx,
+  setSelectedAIFunctionIndx,
+}) => {
   const router = useRouter()
 
   const [showAllAssertions, setShowAllAssertions] = useState(false)
@@ -64,6 +72,8 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiF
   })
 
   const onClickDelete = () => {
+    onDeleteAIFunction(selectedAIFunctionIndx)
+    setSelectedAIFunctionIndx(undefined)
     deleteAIFunction({ pathParams: { aiFunctionId: aiFunction._id as string } })
   }
 

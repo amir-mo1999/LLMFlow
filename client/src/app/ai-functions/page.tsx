@@ -18,19 +18,18 @@ export default function Home() {
 
   const [searchValue, setSearchValue] = useState("")
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number | undefined>()
+  const [aiFunctions, setAIFunctions] = useState<AIFunction[]>([])
 
-  const { data: aiFunctions, isFetching } = useGetAiFunctions({})
+  const onDeleteAIFunction = (indx: number) => {
+    const updatedAIFunctions = aiFunctions.filter((_, i) => i !== indx)
+    setAIFunctions(updatedAIFunctions)
+  }
 
-  const [selectedAIFunction, setSelectedAIFunction] = useState<AIFunction | undefined>()
+  const { data: aiFunctionsAPI, isFetching } = useGetAiFunctions({})
 
   useEffect(() => {
-    console.log(selectedAIFunctionIndx)
-
-    if (selectedAIFunctionIndx !== undefined && aiFunctions) {
-      setSelectedAIFunction(aiFunctions[selectedAIFunctionIndx])
-      console.log(selectedAIFunctionIndx)
-    }
-  }, [selectedAIFunctionIndx])
+    if (aiFunctionsAPI && !isFetching) setAIFunctions(aiFunctionsAPI)
+  }, [aiFunctionsAPI, isFetching])
 
   return (
     <PageContainer>
@@ -56,8 +55,13 @@ export default function Home() {
         ></AIFunctionOverview>
       </SideBarContainer>
       <MainContentContainer>
-        {selectedAIFunction ? (
-          <AIFunctionSingleOverview aiFunction={selectedAIFunction}></AIFunctionSingleOverview>
+        {selectedAIFunctionIndx !== undefined && aiFunctions ? (
+          <AIFunctionSingleOverview
+          onDeleteAIFunction={onDeleteAIFunction}
+            aiFunction={aiFunctions[selectedAIFunctionIndx]}
+            selectedAIFunctionIndx={selectedAIFunctionIndx}
+            setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
+          ></AIFunctionSingleOverview>
         ) : (
           <></>
         )}
