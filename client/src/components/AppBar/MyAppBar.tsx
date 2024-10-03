@@ -59,7 +59,7 @@ const MyAppBar: React.FC<AppBarProps> = () => {
 
         {/* Right Section: User Avatar */}
         <Box sx={{ ml: 4 }}>
-          <UserAvatar></UserAvatar>
+          <UserAvatar initials={initials}></UserAvatar>
         </Box>
       </Toolbar>
     </AppBar>

@@ -1,6 +1,10 @@
-import { errorToJSON } from "next/dist/server/render";
+import { errorToJSON } from "next/dist/server/render"
 import { ApiContext } from "./apiContext"
 import { getSession } from "next-auth/react"
+import { Session } from "next-auth"
+
+let SESSION: Session | null = null
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || "" // TODO: add your baseUrl
 
 export type ErrorWrapper<TError> = TError | { status: "unknown"; payload: string }
@@ -48,8 +52,12 @@ export async function apiFetch<
     }
 
     // add the authorization header by default
-    const session = await getSession()
-    requestHeaders["Authorization"] = `Bearer ${session?.user.access_token}`
+    if (!SESSION) {
+      console.log("getting session")
+      SESSION = await getSession()
+    }
+
+    requestHeaders["Authorization"] = `Bearer ${SESSION?.user.access_token}`
 
     const response = await window.fetch(`${baseUrl}${resolveUrl(url, queryParams, pathParams)}`, {
       signal,
@@ -64,7 +72,7 @@ export async function apiFetch<
         const status = await response.status
 
         //@ts-ignore
-        error = {status: status, payload: payload}
+        error = { status: status, payload: payload }
       } catch (e) {
         error = {
           status: "unknown" as const,

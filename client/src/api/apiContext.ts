@@ -1,6 +1,5 @@
 import type { QueryKey, UseQueryOptions } from "@tanstack/react-query"
 import { QueryOperation } from "./apiComponents"
-import { getSession } from "next-auth/react"
 
 export type ApiContext = {
   fetcherOptions: {
@@ -45,12 +44,6 @@ export function useApiContext<
   const fetcherOptions = {
     headers: {},
   }
-
-  getSession().then((session) => {
-    fetcherOptions.headers = {
-      Authorization: `Bearer ${session?.user.access_token}`,
-    }
-  })
 
   return {
     fetcherOptions: fetcherOptions,

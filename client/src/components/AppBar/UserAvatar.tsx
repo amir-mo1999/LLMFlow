@@ -10,24 +10,14 @@ import ListItemButton from "@mui/material/ListItemButton"
 import ListItemText from "@mui/material/ListItemText"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import Badge from "@mui/material/Badge"
-import { useSession } from "next-auth/react"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { signOut } from "next-auth/react"
 
-interface UserAvatarProps {}
+interface UserAvatarProps {
+  initials: string
+}
 
-const UserAvatar: React.FC<UserAvatarProps> = () => {
-  const { data: session } = useSession()
-
-  let initials: string
-  if (session?.user === undefined) {
-    initials = "AA"
-  } else {
-    initials = (
-      session?.user.first_name.slice(0, 1) + session?.user.last_name.slice(0, 1)
-    ).toUpperCase()
-  }
-
+const UserAvatar: React.FC<UserAvatarProps> = ({ initials }) => {
   const [avatarEl, setAvatarEl] = React.useState<HTMLButtonElement | null>(null)
 
   const [invisible, setInvisible] = React.useState(true)
