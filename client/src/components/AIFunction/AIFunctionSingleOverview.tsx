@@ -17,17 +17,13 @@ import {
 } from "@/api/apiComponents"
 import { PromptOverview } from "../Prompt"
 import { useRouter } from "next/navigation"
-import { AIFunction, Prompt } from "@/api/apiSchemas"
+import { AIFunction } from "@/api/apiSchemas"
 
 interface AIFunctionSingleOverviewProps {
   aiFunction: AIFunction
-  prompts: Prompt[]
 }
 
-const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
-  aiFunction,
-  prompts,
-}) => {
+const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({ aiFunction }) => {
   const router = useRouter()
 
   const [showAllAssertions, setShowAllAssertions] = useState(false)
@@ -35,6 +31,10 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   const [expandedTestCases, setExpandedTestCases] = useState<{ [key: number]: boolean }>({})
 
   const { refetch: refetchPrompts } = useGetPrompts({
+    pathParams: { aiFunctionId: aiFunction._id as string },
+  })
+
+  const { data: prompts } = useGetPrompts({
     pathParams: { aiFunctionId: aiFunction._id as string },
   })
 

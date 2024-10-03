@@ -12,7 +12,7 @@ const MainContentContainer: React.FC<MainContentContainerProps> = ({ children })
         display: "flex",
         flexDirection: "column",
         margin: 2,
-        flexGrow: 1,
+        width: "60%",
         height: "100%",
         overflow: "auto",
         alignItems: "center",

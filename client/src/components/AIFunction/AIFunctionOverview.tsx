@@ -6,15 +6,17 @@ import Paper from "@mui/material/Paper"
 import { AIFunction } from "@/api/apiSchemas"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
-import { useRouter } from "next/navigation"
 
 interface AIFunctionOverviewProps {
+  selectedAIFunctionIndx: number | undefined
+  setSelectedAIFunctionIndx: React.Dispatch<React.SetStateAction<number | undefined>>
   aiFunctions: AIFunction[]
 }
 
-const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ aiFunctions }) => {
-  const router = useRouter()
-
+const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
+  setSelectedAIFunctionIndx,
+  aiFunctions,
+}) => {
   if (!aiFunctions) return <></>
 
   return (
@@ -43,18 +45,21 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ aiFunctions }) 
         })
 
         // Format the date to 'dd/MM/yyyy'
-        const formattedDate = format(zonedDate, "dd/MM/yyyy")
 
-        const redirectOnClick = (aiFunctionID: string | null | undefined) => {
-          const f = () => {
-            if (typeof aiFunctionID === "string") router.push(`/ai-functions/${aiFunctionID}`)
+        const onClick = (indx: number) => {
+          const f = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            setSelectedAIFunctionIndx(indx)
           }
+
           return f
         }
+
+        const formattedDate = format(zonedDate, "dd/MM/yyyy")
+
         return (
           <Paper
             key={indx}
-            onClick={redirectOnClick(aiFunction._id)}
+            onClick={onClick(indx)}
             elevation={3}
             sx={{
               borderRadius: 5,
