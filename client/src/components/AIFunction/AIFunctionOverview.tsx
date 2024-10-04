@@ -60,7 +60,7 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
           <Paper
             key={indx}
             onClick={onClick(indx)}
-            elevation={3}
+            elevation={2}
             sx={{
               borderRadius: 5,
               paddingX: "10px",

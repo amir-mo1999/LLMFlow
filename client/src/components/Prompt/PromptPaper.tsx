@@ -36,7 +36,7 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ prompt, onDeletePrompt }) => 
   }
 
   return (
-    <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+    <Paper elevation={2} sx={{ padding: 2, marginBottom: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography>Prompt Type: {prompt.prompt_type.replace("_", " ")}</Typography>
         <Typography>

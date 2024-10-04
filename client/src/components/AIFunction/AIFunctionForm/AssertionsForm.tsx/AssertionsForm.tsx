@@ -4,6 +4,10 @@ import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import AssertionFormDialog from "./AssertionsFormDialog"
 import { Assertion } from "@/api/apiSchemas"
+import AddIcon from "@mui/icons-material/Add"
+import AssertionsOverview from "../../AssertionsOverview"
+import Paper from "@mui/material/Paper"
+import { splitArrayIntoChunks } from "@/utils"
 
 interface AssertionsFormProps {
   assertions: Assertion[]
@@ -45,25 +49,21 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
     setAssertions(updatedAssertions)
   }
 
-  const handleDeleteAssertion = (index: number) => () => {
+  const handleDeleteAssertion = (index: number) => {
     const updatedAssertions = assertions.filter((_, i) => i !== index)
     setAssertions(updatedAssertions)
   }
 
   return (
-    <Box>
-      {assertions.map((assertion, index) => (
-        <Box key={index} display="flex" alignItems="center" mb={2}>
-          <Typography
-            onClick={() => handleOpenEditDialog(index)}
-            style={{ cursor: "pointer", flexGrow: 1 }}
-          >
-            {assertion.type} weight {assertion.weight?.toString()}
-          </Typography>
-          <Button onClick={handleDeleteAssertion(index)}>×</Button>
-        </Box>
-      ))}
-      <Button onClick={handleOpenAddDialog}>+</Button>
+    <Box sx={{ display: "flex", width: "100%", flexDirection: "column" }}>
+      <AssertionsOverview
+        assertions={assertions}
+        onClick={handleOpenEditDialog}
+        onDelete={handleDeleteAssertion}
+      ></AssertionsOverview>
+      <Button onClick={handleOpenAddDialog}>
+        <AddIcon />
+      </Button>
 
       <AssertionFormDialog
         open={dialogOpen}

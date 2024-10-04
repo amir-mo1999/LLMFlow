@@ -1,4 +1,4 @@
-export function splitArrayIntoChunks(array: Array<any>, chunkSize: number) {
+export function splitArrayIntoChunks<T>(array: T[], chunkSize: number): T[][] {
   const result: Array<Array<any>> = []
   for (let i = 0; i < array.length; i += chunkSize) {
     result.push(array.slice(i, i + chunkSize))

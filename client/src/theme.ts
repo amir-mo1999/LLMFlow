@@ -1,4 +1,4 @@
-import { createTheme, ThemeOptions } from "@mui/material/styles";
+import { createTheme, ThemeOptions } from "@mui/material/styles"
 
 export const themeOptions: ThemeOptions = {
   palette: {
@@ -21,8 +21,22 @@ export const themeOptions: ThemeOptions = {
       primary: "#000000",
     },
   },
-};
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          transition: "background-color 0.3s",
+          "&:hover": {
+            backgroundColor: "#f0f0f0",
+          },
+          scrollbarWidth: "thin", // Options: 'auto' or 'thin'
+          scrollbarColor: "rgba(80, 60, 128, 0.8) transparent", // Thumb and track colors
+        },
+      },
+    },
+  },
+}
 
-const theme = createTheme(themeOptions);
+const theme = createTheme(themeOptions)
 
-export default theme;
+export default theme
