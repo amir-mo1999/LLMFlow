@@ -62,7 +62,6 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
             onClick={onClick(indx)}
             elevation={2}
             sx={{
-              borderRadius: 5,
               paddingX: "10px",
               paddingTop: "10px",
               width: "100%",

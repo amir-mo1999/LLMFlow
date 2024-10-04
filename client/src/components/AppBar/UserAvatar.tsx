@@ -8,8 +8,6 @@ import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemText from "@mui/material/ListItemText"
-import NotificationsIcon from "@mui/icons-material/Notifications"
-import Badge from "@mui/material/Badge"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { signOut } from "next-auth/react"
 
@@ -55,17 +53,6 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ initials }) => {
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button aria-describedby={id} onClick={handleNotifyOpen}>
-          <Badge
-            color="warning"
-            overlap="circular"
-            badgeContent="1"
-            invisible={invisible}
-            showZero={true}
-          >
-            <NotificationsIcon />
-          </Badge>
-        </Button>
         <Button aria-describedby={id} onClick={handleAvatarClick}>
           <Avatar>{initials}</Avatar>
         </Button>

@@ -52,7 +52,6 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
                   onClick={() => onClick(chunkIndx * 4 + indx)}
                   sx={{
                     width: "20%",
-                    borderRadius: 2,
                     padding: 1,
                     position: "relative",
                     overflow: "auto",

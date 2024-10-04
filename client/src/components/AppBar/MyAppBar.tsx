@@ -3,11 +3,9 @@
 import React from "react"
 import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
-import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
-import HomeIcon from "@mui/icons-material/Home"
 import UserAvatar from "./UserAvatar"
 import { useSession } from "next-auth/react"
 
@@ -30,15 +28,6 @@ const MyAppBar: React.FC<AppBarProps> = () => {
       <Toolbar sx={{ gap: 15 }}>
         {/* Left Section: App Icon and App Name */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="app-icon"
-            sx={{ mr: 2 }}
-          >
-            <HomeIcon />
-          </IconButton>
           <Typography variant="h6" component="div">
             MyApp
           </Typography>

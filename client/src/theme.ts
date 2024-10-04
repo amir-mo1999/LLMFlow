@@ -29,8 +29,19 @@ export const themeOptions: ThemeOptions = {
           "&:hover": {
             backgroundColor: "#f0f0f0",
           },
+          borderRadius: 16,
           scrollbarWidth: "thin", // Options: 'auto' or 'thin'
           scrollbarColor: "rgba(80, 60, 128, 0.8) transparent", // Thumb and track colors
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            backgroundColor: "#503C80",
+          },
+          borderRadius: 0,
         },
       },
     },
