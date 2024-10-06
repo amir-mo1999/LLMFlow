@@ -91,7 +91,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     postAiFunction({ body: aiFunction })
   }
 
-  useEffect(() => setTestCases([]), [inputVariables])
+  //useEffect(() => setTestCases([]), [inputVariables])
   return (
     <Box sx={{ width: "100%" }}>
       <Button variant="contained" onClick={onClickCreateFromExample}>

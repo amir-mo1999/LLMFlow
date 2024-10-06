@@ -16,6 +16,7 @@ import {
   useDeletePrompt,
 } from "@/api/apiComponents"
 import { PromptOverview } from "../Prompt"
+import AssertionsOverview from "./AssertionsOverview"
 import { useRouter } from "next/navigation"
 import { AIFunction } from "@/api/apiSchemas"
 
@@ -138,37 +139,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
         {aiFunction.assert.length === 0 ? (
           <Typography variant="body2">No output assertions defined.</Typography>
         ) : (
-          <List>
-            {aiFunction.assert
-              .slice(0, showAllAssertions ? aiFunction.assert.length : MAX_VISIBLE_ASSERTIONS)
-              .map((assertion, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={
-                      <>
-                        <Typography>Type: {assertion.type}</Typography>
-                        {<Typography>Value: {assertion.value as string}</Typography>}
-                        {assertion.threshold !== null && assertion.threshold !== undefined && (
-                          <Typography>Threshold: {assertion.threshold}</Typography>
-                        )}
-                        {assertion.weight !== null && assertion.weight !== undefined && (
-                          <Typography>Weight: {assertion.weight}</Typography>
-                        )}
-                        {assertion.metric && <Typography>Metric: {assertion.metric}</Typography>}
-                      </>
-                    }
-                  />
-                </ListItem>
-              ))}
-            {aiFunction.assert.length > MAX_VISIBLE_ASSERTIONS && (
-              <Button
-                onClick={toggleAssertions}
-                startIcon={showAllAssertions ? <ExpandLess /> : <ExpandMore />}
-              >
-                {showAllAssertions ? "Show Less" : "Show More"}
-              </Button>
-            )}
-          </List>
+          <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
         )}
       </Box>
       <Divider />

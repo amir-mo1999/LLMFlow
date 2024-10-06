@@ -6,19 +6,15 @@ import Typography from "@mui/material/Typography"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
 import IconButton from "@mui/material/IconButton"
 import Paper from "@mui/material/Paper"
 import { splitArrayIntoChunks } from "@/utils"
-import { StringXor } from "next/dist/compiled/webpack/webpack"
 import theme from "@/theme"
 
 interface AssertionsOverviewProps {
   assertions: Assertion[]
-  mode?: "form" | "edit" | "display"
+  displayOnly?: boolean
   sx?: SxProps
   onClick?: (indx: number) => void
   onDelete?: (indx: number) => void
@@ -27,7 +23,7 @@ interface AssertionsOverviewProps {
 const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
   assertions,
   sx,
-  mode = "display",
+  displayOnly = false,
   onClick = () => {},
   onDelete = () => {},
 }) => {
@@ -96,6 +92,7 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
                     }}
                     size="small"
                     sx={{
+                      display: displayOnly ? "none" : "normal",
                       position: "absolute",
                       top: 1,
                       right: 1,
