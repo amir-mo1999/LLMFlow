@@ -110,7 +110,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
       {/* AI Function Name */}
       <Typography variant="h4" gutterBottom>
         {aiFunction.name}
@@ -119,11 +119,11 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       <Typography variant="body1" gutterBottom>
         {aiFunction.description}
       </Typography>
-      <Divider sx={{ my: 2 }} />
+      <Divider />
       {/* Input Variables */}
-      <Box sx={{ mb: 2 }}>
+      <Box>
         <Typography variant="h6">Input Variables</Typography>
-        <List>
+        <List disablePadding>
           {aiFunction.input_variables.map((input, index) => (
             <ListItem key={index}>
               <ListItemText primary={input.name} />
@@ -131,9 +131,9 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
           ))}
         </List>
       </Box>
-      <Divider sx={{ my: 2 }} />
+      <Divider />
       {/* Output Assertions */}
-      <Box sx={{ mb: 2 }}>
+      <Box>
         <Typography variant="h6">Output Assertions</Typography>
         {aiFunction.assert.length === 0 ? (
           <Typography variant="body2">No output assertions defined.</Typography>
@@ -171,9 +171,9 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
           </List>
         )}
       </Box>
-      <Divider sx={{ my: 2 }} />
+      <Divider />
       {/* Test Cases */}
-      <Box sx={{ mb: 2 }}>
+      <Box>
         <Typography variant="h6">Test Cases</Typography>
         {aiFunction.test_cases.length === 0 ? (
           <Typography variant="body2">No test cases defined.</Typography>
@@ -182,7 +182,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
             {aiFunction.test_cases
               .slice(0, showAllTestCases ? aiFunction.test_cases.length : MAX_VISIBLE_TEST_CASES)
               .map((testCase, index) => (
-                <Box key={index} sx={{ mb: 1 }}>
+                <Box key={index}>
                   <ListItem button onClick={() => toggleTestCase(index)}>
                     <ListItemText primary={`Test Case ${index + 1}`} />
                     {expandedTestCases[index] ? <ExpandLess /> : <ExpandMore />}
@@ -247,16 +247,10 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
           </List>
         )}
       </Box>
+      <Divider></Divider>
       {/* Prompts Overview */}
       {prompts && <PromptOverview prompts={prompts} onDeletePrompt={onDeletePrompt} />}
 
-      {/* Add prompt button */}
-      <Button
-        variant="contained"
-        onClick={() => router.push(("/create/prompt/" + aiFunction._id) as string)}
-      >
-        Add Prompt
-      </Button>
       <Divider></Divider>
       <Button variant="contained" onClick={onClickDelete}>
         Delete AI Function

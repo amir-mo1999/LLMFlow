@@ -23,7 +23,7 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onDeletePrompt
   }
 
   return (
-    <Box sx={{ marginTop: 4 }}>
+    <Box>
       <Typography variant="h5" gutterBottom>
         Prompts
       </Typography>
@@ -48,7 +48,6 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onDeletePrompt
           )}
         </>
       )}
-      <Divider sx={{ marginTop: 2 }} />
     </Box>
   )
 }

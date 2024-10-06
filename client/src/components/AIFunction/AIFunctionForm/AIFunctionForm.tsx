@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
+import Popover from "@mui/material/Popover"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
 import { TestCaseInput, InputVariable, Assertion, AIFunctionRouteInput } from "@/api/apiSchemas"
@@ -10,6 +11,7 @@ import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import { usePostAiFunction } from "@/api/apiComponents"
 import { useRouter } from "next/navigation"
+import examples from "@/examples/aiFunctions.json"
 
 interface AIFunctionFormProps {}
 
@@ -22,6 +24,33 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+  const open = Boolean(anchorEl)
+  const id = open ? "simple-popover" : undefined
+
+  //@ts-ignore
+  let parsedExamples: AIFunctionRouteInput[] = examples
+  const onClickCreateFromExample = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const onClickExample = (aiFunction: AIFunctionRouteInput) => {
+    const f = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+      setName(aiFunction.name)
+      setDescription(aiFunction.description)
+      setInputVariables(aiFunction.input_variables)
+      setAssertions(aiFunction.assert)
+      setTestCases(aiFunction.test_cases)
+      onClosePopover()
+    }
+
+    return f
+  }
+
+  const onClosePopover = () => {
+    setAnchorEl(null)
+  }
 
   const { mutate: postAiFunction } = usePostAiFunction({
     onSuccess: () => {
@@ -58,6 +87,31 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   useEffect(() => setTestCases([]), [inputVariables])
   return (
     <Box sx={{ width: "100%" }}>
+      <Button variant="contained" onClick={onClickCreateFromExample}>
+        Create From Example
+      </Button>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={onClosePopover}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
+        {parsedExamples.map((example, indx) => {
+          return (
+            <Typography
+              key={indx}
+              sx={{ p: 2, userSelect: "none" }}
+              onClick={onClickExample(example)}
+            >
+              {example.name}
+            </Typography>
+          )
+        })}
+      </Popover>
       <Typography>Name</Typography>
       <TextField
         sx={{ width: "100%", paddingBottom: 2 }}

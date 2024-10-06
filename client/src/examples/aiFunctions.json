@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Translate Text",
+    "description": "Translates input text into a specified target language.",
+    "input_variables": [
+      {
+        "name": "text"
+      },
+      {
+        "name": "target_language"
+      }
+    ],
+    "assert": [
+      {
+        "type": "is-json",
+        "weight": 2
+      }
+    ],
+    "test_cases": [
+      {
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "hola",
+            "weight": 5
+          }
+        ],
+        "vars": {
+          "text": "Hello",
+          "target_language": "Spanish"
+        }
+      },
+      {
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "bonjour",
+            "weight": 5
+          }
+        ],
+        "vars": {
+          "text": "Good morning",
+          "target_language": "French"
+        }
+      }
+    ]
+  }
+]

@@ -1,3 +1,6 @@
+import examples from "@/examples/aiFunctions.json"
+import { AIFunctionRouteInput } from "@/api/apiSchemas"
+
 export function splitArrayIntoChunks<T>(array: T[], chunkSize: number): T[][] {
   const result: Array<Array<any>> = []
   for (let i = 0; i < array.length; i += chunkSize) {
