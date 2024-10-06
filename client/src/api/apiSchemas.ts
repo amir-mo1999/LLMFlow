@@ -134,6 +134,7 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "rouge-n",
   "starts-with",
 ]
+
 export type BodyLoginAuthLoginPost = {
   grant_type?: string | null
   username: string

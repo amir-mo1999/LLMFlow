@@ -6,18 +6,24 @@ import Button from "@mui/material/Button"
 import Popover from "@mui/material/Popover"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
-import { TestCaseInput, InputVariable, Assertion, AIFunctionRouteInput } from "@/api/apiSchemas"
+import {
+  TestCaseInput,
+  InputVariable,
+  Assertion,
+  AIFunctionRouteInput,
+  AIFunction,
+} from "@/api/apiSchemas"
 import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import { usePostAiFunction } from "@/api/apiComponents"
-import { useRouter } from "next/navigation"
 import examples from "@/examples/aiFunctions.json"
 
-interface AIFunctionFormProps {}
+interface AIFunctionFormProps {
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>
+  addAIFunction: (aiFunction: AIFunction) => void
+}
 
-const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
-  const router = useRouter()
-
+const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunction }) => {
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
@@ -53,8 +59,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = () => {
   }
 
   const { mutate: postAiFunction } = usePostAiFunction({
-    onSuccess: () => {
-      router.push("/ai-functions")
+    onSuccess: (response) => {
+      setShowForm(false)
+      addAIFunction(response)
     },
     onError: (err) => {
       console.log("error status", err)

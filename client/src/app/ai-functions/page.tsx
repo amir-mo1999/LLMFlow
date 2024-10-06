@@ -9,14 +9,11 @@ import {
   AIFunctionForm,
 } from "@/components"
 import Button from "@mui/material/Button"
-import { useRouter } from "next/navigation"
 import { useGetAiFunctions } from "@/api/apiComponents"
 import { useState, useEffect } from "react"
 import { AIFunction } from "@/api/apiSchemas"
 
 export default function Home() {
-  const router = useRouter()
-
   const [searchValue, setSearchValue] = useState("")
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number | undefined>()
   const [aiFunctions, setAIFunctions] = useState<AIFunction[]>([])
@@ -30,12 +27,16 @@ export default function Home() {
     if (showCreateForm) setSelectedAIFunctionIndx(undefined)
   }, [showCreateForm])
 
+  const addAIFunction = (aiFunction: AIFunction) => {
+    setAIFunctions([...aiFunctions, aiFunction])
+  }
+
   const onDeleteAIFunction = (indx: number) => {
     const updatedAIFunctions = aiFunctions.filter((_, i) => i !== indx)
     setAIFunctions(updatedAIFunctions)
   }
 
-  const { data: aiFunctionsAPI, isFetching } = useGetAiFunctions({})
+  const { data: aiFunctionsAPI, isFetching, refetch } = useGetAiFunctions({})
 
   useEffect(() => {
     if (aiFunctionsAPI && !isFetching) setAIFunctions(aiFunctionsAPI)
@@ -67,7 +68,7 @@ export default function Home() {
             setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
           ></AIFunctionSingleOverview>
         ) : showCreateForm ? (
-          <AIFunctionForm></AIFunctionForm>
+          <AIFunctionForm setShowForm={setShowCreateForm} addAIFunction={addAIFunction}></AIFunctionForm>
         ) : (
           <></>
         )}

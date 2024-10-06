@@ -17,7 +17,7 @@ class DuplicateDocumentExc(Exception):
 
 @AI_FUNCTION_ROUTER.post(
     "/ai-function",
-    response_model=SuccessResponse,
+    response_model=AIFunction,
     responses={
         401: {"detail": "Not authenticated"},
         409: {"detail": "document already exists"},
@@ -46,7 +46,7 @@ async def post_ai_function(
     result = await db.insert(ai_function, "ai-functions", ["username", "name"])
 
     if result:
-        return SuccessResponse()
+        return ai_function
 
     raise DuplicateDocument
 

@@ -271,7 +271,7 @@ export type PostAiFunctionVariables = {
 } & ApiContext["fetcherOptions"]
 
 export const fetchPostAiFunction = (variables: PostAiFunctionVariables, signal?: AbortSignal) =>
-  apiFetch<Schemas.SuccessResponse, PostAiFunctionError, Schemas.AIFunctionRouteInput, {}, {}, {}>({
+  apiFetch<Schemas.AIFunction, PostAiFunctionError, Schemas.AIFunctionRouteInput, {}, {}, {}>({
     url: "/db/ai-function",
     method: "post",
     ...variables,
@@ -280,20 +280,12 @@ export const fetchPostAiFunction = (variables: PostAiFunctionVariables, signal?:
 
 export const usePostAiFunction = (
   options?: Omit<
-    reactQuery.UseMutationOptions<
-      Schemas.SuccessResponse,
-      PostAiFunctionError,
-      PostAiFunctionVariables
-    >,
+    reactQuery.UseMutationOptions<Schemas.AIFunction, PostAiFunctionError, PostAiFunctionVariables>,
     "mutationFn"
   >
 ) => {
   const { fetcherOptions } = useApiContext()
-  return reactQuery.useMutation<
-    Schemas.SuccessResponse,
-    PostAiFunctionError,
-    PostAiFunctionVariables
-  >({
+  return reactQuery.useMutation<Schemas.AIFunction, PostAiFunctionError, PostAiFunctionVariables>({
     mutationFn: (variables: PostAiFunctionVariables) =>
       fetchPostAiFunction({ ...fetcherOptions, ...variables }),
     ...options,
