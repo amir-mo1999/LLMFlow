@@ -52,12 +52,26 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
                     position: "relative",
                     overflow: "auto",
                     overflowX: "hidden",
+                    "&:hover": {
+                      backgroundColor: displayOnly ? "white" : "inherit",
+                    },
                   }}
                   elevation={2}
                 >
                   <Typography>{assertion.type}</Typography>
-
-                  {Array.isArray(assertion.value) ? (
+                  {!assertion.threshold ? (
+                    <></>
+                  ) : (
+                    <>
+                      <Typography noWrap>
+                        <strong>Threshold: </strong>
+                        {assertion.threshold}
+                      </Typography>
+                    </>
+                  )}
+                  {!assertion.value ? (
+                    <></>
+                  ) : Array.isArray(assertion.value) ? (
                     <>
                       <Typography>
                         <strong>Values:</strong>
