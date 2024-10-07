@@ -8,15 +8,11 @@ import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
 
 interface AIFunctionOverviewProps {
-  selectedAIFunctionIndx: number | undefined
-  setSelectedAIFunctionIndx: React.Dispatch<React.SetStateAction<number | undefined>>
+  onClick?: (indx: number) => (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   aiFunctions: AIFunction[]
 }
 
-const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
-  setSelectedAIFunctionIndx,
-  aiFunctions,
-}) => {
+const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ onClick, aiFunctions }) => {
   if (!aiFunctions) return <></>
 
   return (
@@ -44,22 +40,12 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
           if (testCase.assert !== null) numberOfAssertions += testCase.assert.length
         })
 
-        // Format the date to 'dd/MM/yyyy'
-
-        const onClick = (indx: number) => {
-          const f = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            setSelectedAIFunctionIndx(indx)
-          }
-
-          return f
-        }
-
         const formattedDate = format(zonedDate, "dd/MM/yyyy")
 
         return (
           <Paper
             key={indx}
-            onClick={onClick(indx)}
+            onClick={onClick ? onClick(indx) : () => {}}
             elevation={2}
             sx={{
               paddingX: "10px",

@@ -36,7 +36,16 @@ export default function Home() {
     setAIFunctions(updatedAIFunctions)
   }
 
-  const { data: aiFunctionsAPI, isFetching, refetch } = useGetAiFunctions({})
+  const onClickAIFunction = (indx: number) => {
+    const f = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      setSelectedAIFunctionIndx(indx)
+      setShowCreateForm(false)
+    }
+
+    return f
+  }
+
+  const { data: aiFunctionsAPI, isFetching } = useGetAiFunctions({})
 
   useEffect(() => {
     if (aiFunctionsAPI && !isFetching) setAIFunctions(aiFunctionsAPI)
@@ -55,20 +64,22 @@ export default function Home() {
         </Button>
         <AIFunctionOverview
           aiFunctions={isFetching || !aiFunctions ? [] : aiFunctions}
-          selectedAIFunctionIndx={selectedAIFunctionIndx}
-          setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
+          onClick={onClickAIFunction}
         ></AIFunctionOverview>
       </SideBarContainer>
       <MainContentContainer>
-        {selectedAIFunctionIndx !== undefined && aiFunctions ? (
+        {showCreateForm ? (
+          <AIFunctionForm
+            setShowForm={setShowCreateForm}
+            addAIFunction={addAIFunction}
+          ></AIFunctionForm>
+        ) : selectedAIFunctionIndx !== undefined && aiFunctions ? (
           <AIFunctionSingleOverview
             onDeleteAIFunction={onDeleteAIFunction}
             aiFunction={aiFunctions[selectedAIFunctionIndx]}
             selectedAIFunctionIndx={selectedAIFunctionIndx}
             setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
           ></AIFunctionSingleOverview>
-        ) : showCreateForm ? (
-          <AIFunctionForm setShowForm={setShowCreateForm} addAIFunction={addAIFunction}></AIFunctionForm>
         ) : (
           <></>
         )}
