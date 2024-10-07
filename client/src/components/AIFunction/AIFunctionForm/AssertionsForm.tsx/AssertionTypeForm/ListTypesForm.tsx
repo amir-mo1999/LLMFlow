@@ -6,6 +6,7 @@ import Button from "@mui/material/Button"
 import { Assertion } from "@/api/apiSchemas"
 
 interface ListTypesFormProps {
+  required?: boolean
   label?: string
   placeholder?: string
   open: boolean
@@ -13,9 +14,15 @@ interface ListTypesFormProps {
   setValues: React.Dispatch<React.SetStateAction<Assertion["value"]>>
 }
 
-const ListTypesForm: React.FC<ListTypesFormProps> = ({ open, values, setValues, label, placeholder }) => {
+const ListTypesForm: React.FC<ListTypesFormProps> = ({
+  required = false,
+  open,
+  values,
+  setValues,
+  label,
+  placeholder,
+}) => {
   const [valuesList, setValuesList] = useState<string[]>([])
-
   useEffect(() => {
     if (Array.isArray(values)) setValuesList(values)
   }, [open])
@@ -52,7 +59,7 @@ const ListTypesForm: React.FC<ListTypesFormProps> = ({ open, values, setValues, 
             onChange={handleValueChange(index)}
             placeholder={placeholder}
             fullWidth
-            required
+            required={required}
           />
           <Button onClick={handleDeleteValue(index)}>×</Button>
         </Box>

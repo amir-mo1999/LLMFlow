@@ -24,8 +24,8 @@ interface Field {
 }
 
 interface JSONSchemaFormProps {
-  JSONSchema: object
-  setJSONSchema: (schema: object) => void
+  JSONSchema: object | undefined | null
+  setJSONSchema: (schema: object | undefined) => void
   onGenerateAssertion?: () => void
 }
 
@@ -147,7 +147,7 @@ const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
           variant="contained"
           sx={{ mt: 2, ml: 2 }}
           onClick={onGenerateAssertion}
-          disabled={Object.keys(JSONSchema).length === 0 ? true : false}
+          disabled={!JSONSchema ? true : Object.keys(JSONSchema).length === 0 ? true : false}
         >
           Generate Assertion
         </Button>
