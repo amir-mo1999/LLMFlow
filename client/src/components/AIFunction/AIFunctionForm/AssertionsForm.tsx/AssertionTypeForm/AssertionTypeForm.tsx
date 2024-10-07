@@ -8,7 +8,6 @@ import JSONSchemaForm from "@/components/JSONSchemaForm"
 import { useEffect } from "react"
 
 interface AssertionTypeFormProps {
-  setDisableSubmit: (value: boolean) => void
   open: boolean
   type: BaseAssertionTypes
   value: Assertion["value"]
@@ -18,7 +17,6 @@ interface AssertionTypeFormProps {
 }
 
 const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
-  setDisableSubmit,
   open,
   type,
   value,

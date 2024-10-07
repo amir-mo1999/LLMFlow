@@ -115,7 +115,6 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
             setValue={setValue}
             threshold={threshold}
             setThreshold={setThreshold}
-            setDisableSubmit={setDisableSubmit}
           ></AssertionTypeForm>
         </Box>
       </DialogContent>
