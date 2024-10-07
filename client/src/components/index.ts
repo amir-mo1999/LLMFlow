@@ -3,6 +3,8 @@ import MyAppBar from "./AppBar"
 import { MainContentContainer, SideBarContainer, PageContainer } from "./containers"
 import SearchField from "./SearchField"
 import JSONSchemaForm from "./JSONSchemaForm"
+import { PromptSingleOverview, PromptForm, PromptOverview } from "./Prompt"
+
 export {
   AIFunctionForm,
   AIFunctionOverview,
@@ -13,4 +15,7 @@ export {
   PageContainer,
   SearchField,
   JSONSchemaForm,
+  PromptSingleOverview,
+  PromptForm,
+  PromptOverview,
 }

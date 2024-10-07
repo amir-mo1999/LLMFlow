@@ -15,7 +15,6 @@ import {
   useGetPrompts,
   useDeletePrompt,
 } from "@/api/apiComponents"
-import { PromptOverview } from "../Prompt"
 import AssertionsOverview from "./AssertionsOverview"
 import { useRouter } from "next/navigation"
 import { AIFunction } from "@/api/apiSchemas"
@@ -218,9 +217,6 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
           </List>
         )}
       </Box>
-      <Divider></Divider>
-      {/* Prompts Overview */}
-      {prompts && <PromptOverview prompts={prompts} onDeletePrompt={onDeletePrompt} />}
 
       <Divider></Divider>
       <Button variant="contained" onClick={onClickDelete}>

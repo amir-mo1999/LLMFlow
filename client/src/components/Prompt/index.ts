@@ -1,4 +1,4 @@
 import PromptForm from "./PromptForm"
 import PromptOverview from "./PromptOverview"
-
-export { PromptForm, PromptOverview }
+import PromptSingleOverview from "./PromptSingleOverview"
+export { PromptForm, PromptOverview, PromptSingleOverview }
