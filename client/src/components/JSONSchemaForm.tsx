@@ -35,7 +35,6 @@ const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
   onGenerateAssertion,
 }) => {
   const [fields, setFields] = useState<Field[]>([])
-  console.log(JSONSchema)
 
   const addField = () => {
     setFields([...fields, { name: "", type: "string", required: false }])
@@ -72,7 +71,6 @@ const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
 
   useEffect(() => {
     if (fields.length === 0 || fields.some((field) => field.name.trim() === "")) {
-      console.log("resetting schema")
       setJSONSchema({})
       return
     }
