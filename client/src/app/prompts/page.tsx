@@ -51,11 +51,7 @@ export default function Home() {
   return (
     <PageContainer>
       <SideBarContainer>
-        <SearchField
-          value={searchValue}
-          setValue={setSearchValue}
-          placeholder="AI Function Name"
-        ></SearchField>
+        <SearchField value={searchValue} setValue={setSearchValue} placeholder=""></SearchField>
         <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
           Create Prompt
         </Button>
