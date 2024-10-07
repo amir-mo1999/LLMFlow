@@ -45,6 +45,29 @@ export const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "gray",
+          "&.Mui-focused": {
+            color: "#503C80",
+          },
+        },
+        shrink: {
+          color: "#503C80",
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "#503C80", // Color for the unchecked state (border color)
+          "&.Mui-checked": {
+            color: "#503C80", // Color for the checked state (border color)
+          },
+        },
+      },
+    },
   },
 }
 
