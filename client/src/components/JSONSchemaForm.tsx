@@ -32,9 +32,10 @@ interface JSONSchemaFormProps {
 const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
   JSONSchema,
   setJSONSchema,
-  onGenerateAssertion = () => {},
+  onGenerateAssertion,
 }) => {
   const [fields, setFields] = useState<Field[]>([])
+  console.log(JSONSchema)
 
   const addField = () => {
     setFields([...fields, { name: "", type: "string", required: false }])
@@ -52,8 +53,26 @@ const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
     setFields(newFields)
   }
 
+  // Initialize fields from JSONSchema prop
+  useEffect(() => {
+    const schema = JSONSchema as any
+    if (schema && schema.type === "object" && schema.properties) {
+      const props = schema.properties
+      const requiredFields: string[] = schema.required || []
+      const initializedFields: Field[] = Object.keys(props).map((key) => ({
+        name: key,
+        type: props[key].type || "string",
+        required: requiredFields.includes(key),
+      }))
+      setFields(initializedFields)
+    } else {
+      setFields([])
+    }
+  }, [])
+
   useEffect(() => {
     if (fields.length === 0 || fields.some((field) => field.name.trim() === "")) {
+      console.log("resetting schema")
       setJSONSchema({})
       return
     }
@@ -74,9 +93,6 @@ const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
 
     setJSONSchema(generatedSchema)
   }, [fields, setJSONSchema])
-
-  // Check if any field name is empty
-  const isGenerateDisabled = fields.length === 0 || fields.some((field) => field.name.trim() === "")
 
   return (
     <Paper sx={{ p: 3, mb: 4, "&:hover": { backgroundColor: "white" } }}>
@@ -128,14 +144,18 @@ const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
       <Button variant="contained" startIcon={<Add />} onClick={addField} sx={{ mt: 2 }}>
         Add Field
       </Button>
-      <Button
-        variant="contained"
-        sx={{ mt: 2, ml: 2 }}
-        onClick={onGenerateAssertion}
-        disabled={Object.keys(JSONSchema).length === 0 ? true : false}
-      >
-        Generate Assertion
-      </Button>
+      {onGenerateAssertion ? (
+        <Button
+          variant="contained"
+          sx={{ mt: 2, ml: 2 }}
+          onClick={onGenerateAssertion}
+          disabled={Object.keys(JSONSchema).length === 0 ? true : false}
+        >
+          Generate Assertion
+        </Button>
+      ) : (
+        <></>
+      )}
     </Paper>
   )
 }

@@ -3,6 +3,8 @@ import { Assertion, BaseAssertionTypes } from "@/api/apiSchemas"
 import StringTypeForm from "./StringTypesForm"
 import ListTypesForm from "./ListTypesForm"
 import ThresholdTypeForm from "./ThresholdTypeForm"
+import { Typography } from "@mui/material"
+import JSONSchemaForm from "@/components/JSONSchemaForm"
 
 interface AssertionTypeFormProps {
   open: boolean
@@ -37,7 +39,41 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
     case "icontains-all":
     case "icontains-any":
       componentToRender = (
-        <ListTypesForm open={open} values={value} setValues={setValue}></ListTypesForm>
+        <>
+          <Typography>Values</Typography>{" "}
+          <ListTypesForm
+            open={open}
+            values={value}
+            label="value"
+            setValues={setValue}
+          ></ListTypesForm>
+        </>
+      )
+      break
+    case "contains-xml":
+    case "is-xml":
+      componentToRender = (
+        <>
+          <Typography>Required XML Elements </Typography>{" "}
+          <ListTypesForm
+            open={open}
+            values={value}
+            placeholder="root.child"
+            setValues={setValue}
+          ></ListTypesForm>
+        </>
+      )
+      break
+    case "contains-json":
+    case "is-json":
+      componentToRender = (
+        <>
+          <Typography>JSON Schema</Typography>
+          <JSONSchemaForm
+            JSONSchema={value ? (value as Record<string, any>) : {}}
+            setJSONSchema={setValue}
+          ></JSONSchemaForm>
+        </>
       )
       break
     case "cost":

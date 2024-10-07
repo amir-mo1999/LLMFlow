@@ -56,34 +56,30 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
                   elevation={2}
                 >
                   <Typography>{assertion.type}</Typography>
-                  {}
-                  {assertion.value ? (
-                    typeof assertion.value === "string" ? (
-                      <>
-                        <Typography noWrap>
-                          <strong>Value:</strong> {assertion.value}{" "}
-                        </Typography>
-                      </>
-                    ) : (
-                      <>
-                        <Typography>
-                          <strong>Values:</strong>
-                        </Typography>
-                        <List disablePadding>
-                          {assertion.value.map((val: string, indx: number) => {
-                            return (
-                              <ListItem key={indx} disablePadding>
-                                <ListItemText primaryTypographyProps={{ noWrap: true }}>
-                                  • {val}
-                                </ListItemText>
-                              </ListItem>
-                            )
-                          })}
-                        </List>
-                      </>
-                    )
+
+                  {Array.isArray(assertion.value) ? (
+                    <>
+                      <Typography>
+                        <strong>Values:</strong>
+                      </Typography>
+                      <List disablePadding>
+                        {assertion.value.map((val: string, indx: number) => {
+                          return (
+                            <ListItem key={indx} disablePadding>
+                              <ListItemText primaryTypographyProps={{ noWrap: true }}>
+                                • {val}
+                              </ListItemText>
+                            </ListItem>
+                          )
+                        })}
+                      </List>
+                    </>
                   ) : (
-                    <></>
+                    <>
+                      <Typography noWrap>
+                        <strong>Value: {JSON.stringify(assertion.value)}</strong>
+                      </Typography>
+                    </>
                   )}
                   <IconButton
                     onClick={(e) => {
