@@ -114,6 +114,25 @@ async def get_prompts(
     return prompts
 
 
+@PROMPT_ROUTER.get(
+    "/prompts",
+    response_model=List[Prompt],
+    response_model_by_alias=True,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def get_all_prompts(
+    db: Annotated[DB, Depends(get_db)],
+    username: Annotated[str, Depends(username)],
+):
+    # get all prompts
+    prompts = await db.get_all_prompts(username)
+
+    return prompts
+
+
 @PROMPT_ROUTER.delete(
     "/prompt/{prompt_id}",
     response_model=SuccessResponse,

@@ -597,6 +597,49 @@ export const useGetPrompts = <TData = GetPromptsResponse>(
   })
 }
 
+export type GetAllPromptsError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 404
+      payload: Schemas.HttpExceptionModel
+    }
+>
+
+export type GetAllPromptsResponse = Schemas.Prompt[]
+
+export type GetAllPromptsVariables = ApiContext["fetcherOptions"]
+
+export const fetchGetAllPrompts = (variables: GetAllPromptsVariables, signal?: AbortSignal) =>
+  apiFetch<GetAllPromptsResponse, GetAllPromptsError, undefined, {}, {}, {}>({
+    url: "/db/prompts",
+    method: "get",
+    ...variables,
+    signal,
+  })
+
+export const useGetAllPrompts = <TData = GetAllPromptsResponse>(
+  variables: GetAllPromptsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<GetAllPromptsResponse, GetAllPromptsError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
+  return reactQuery.useQuery<GetAllPromptsResponse, GetAllPromptsError, TData>({
+    queryKey: queryKeyFn({
+      path: "/db/prompts",
+      operationId: "getAllPrompts",
+      variables,
+    }),
+    queryFn: ({ signal }) => fetchGetAllPrompts({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  })
+}
+
 export type QueryOperation =
   | {
       path: "/auth/refresh-token"
@@ -627,4 +670,9 @@ export type QueryOperation =
       path: "/db/prompts/{aiFunctionId}"
       operationId: "getPrompts"
       variables: GetPromptsVariables
+    }
+  | {
+      path: "/db/prompts"
+      operationId: "getAllPrompts"
+      variables: GetAllPromptsVariables
     }

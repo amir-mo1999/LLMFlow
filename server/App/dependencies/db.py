@@ -141,6 +141,18 @@ class DB:
 
         return prompts
 
+    async def get_all_prompts(self, username: str) -> List[Prompt]:
+        prompt_coll = self.db.get_collection("prompts")
+        prompts_cursor = prompt_coll.find({"username": username})
+
+        prompt_dumps = await prompts_cursor.to_list(self.length)
+
+        prompts = []
+        for prompt_dump in prompt_dumps:
+            prompts.append(Prompt(**prompt_dump))
+
+        return prompts
+
 
 async def get_client():
     uri = os.environ.get("MONGO_CON_STRING")
