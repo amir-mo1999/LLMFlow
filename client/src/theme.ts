@@ -68,6 +68,17 @@ export const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+          borderColor: "#503C80",
+          fontSize: "1rem",
+          paddingX: "5px",
+          paddingY: "5px",
+        },
+      },
+    },
   },
 }
 

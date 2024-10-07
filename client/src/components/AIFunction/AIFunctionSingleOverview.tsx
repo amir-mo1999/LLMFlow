@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import List from "@mui/material/List"
@@ -9,86 +9,28 @@ import Collapse from "@mui/material/Collapse"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
-import {
-  useEvaluate,
-  useDeleteAiFunction,
-  useGetPrompts,
-  useDeletePrompt,
-} from "@/api/apiComponents"
+import { useDeleteAiFunction } from "@/api/apiComponents"
 import AssertionsOverview from "./AssertionsOverview"
-import { useRouter } from "next/navigation"
 import { AIFunction } from "@/api/apiSchemas"
+import Chip from "@mui/material/Chip"
 
 interface AIFunctionSingleOverviewProps {
-  onDeleteAIFunction: (indx: number) => void
+  onDeleteAIFunction: () => void
   aiFunction: AIFunction
-  selectedAIFunctionIndx: number
-  setSelectedAIFunctionIndx: React.Dispatch<React.SetStateAction<number | undefined>>
 }
 
 const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   onDeleteAIFunction,
   aiFunction,
-  selectedAIFunctionIndx,
-  setSelectedAIFunctionIndx,
 }) => {
-  const router = useRouter()
-
-  const [showAllAssertions, setShowAllAssertions] = useState(false)
   const [showAllTestCases, setShowAllTestCases] = useState(false)
   const [expandedTestCases, setExpandedTestCases] = useState<{ [key: number]: boolean }>({})
 
-  const { refetch: refetchPrompts } = useGetPrompts({
-    pathParams: { aiFunctionId: aiFunction._id as string },
-  })
-
-  const { data: prompts } = useGetPrompts({
-    pathParams: { aiFunctionId: aiFunction._id as string },
-  })
-
-  const { mutate: evaluate } = useEvaluate({
-    onSuccess: (response) => {
-      refetchPrompts()
-    },
-    onError: (err) => {
-      console.log("error status", err)
-    },
-  })
-
-  const { mutate: deletePrompt } = useDeletePrompt({
-    onSuccess: () => {
-      refetchPrompts()
-    },
-  })
-
-  const onDeletePrompt = (promptID: string) => {
-    deletePrompt({ pathParams: { promptId: promptID } })
-  }
-
-  const { mutate: deleteAIFunction } = useDeleteAiFunction({
-    onSuccess: () => {
-      router.push("/ai-functions")
-    },
-  })
+  const { mutate: deleteAIFunction } = useDeleteAiFunction({})
 
   const onClickDelete = () => {
-    onDeleteAIFunction(selectedAIFunctionIndx)
-    setSelectedAIFunctionIndx(undefined)
+    onDeleteAIFunction()
     deleteAIFunction({ pathParams: { aiFunctionId: aiFunction._id as string } })
-  }
-
-  const evaluatePrompts = (evaluateAll: boolean = false) => {
-    prompts?.forEach((prompt) => {
-      if (!prompt.last_eval || evaluateAll) {
-        evaluate({ pathParams: { promptId: prompt._id as string } })
-      }
-    })
-  }
-
-  useEffect(evaluatePrompts, [prompts?.length])
-
-  const toggleAssertions = () => {
-    setShowAllAssertions((prev) => !prev)
   }
 
   const toggleTestCases = () => {
@@ -123,13 +65,11 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       {/* Input Variables */}
       <Box>
         <Typography variant="h6">Input Variables</Typography>
-        <List disablePadding>
-          {aiFunction.input_variables.map((input, index) => (
-            <ListItem key={index}>
-              <ListItemText primary={input.name} />
-            </ListItem>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+          {aiFunction.input_variables.map((inputVar, indx) => (
+            <Chip key={indx} label={inputVar.name} variant="outlined" size="medium"></Chip>
           ))}
-        </List>
+        </Box>
       </Box>
       <Divider />
       {/* Output Assertions */}

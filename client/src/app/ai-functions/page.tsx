@@ -31,9 +31,10 @@ export default function Home() {
     setAIFunctions([...aiFunctions, aiFunction])
   }
 
-  const onDeleteAIFunction = (indx: number) => {
-    const updatedAIFunctions = aiFunctions.filter((_, i) => i !== indx)
+  const onDeleteAIFunction = () => {
+    const updatedAIFunctions = aiFunctions.filter((_, i) => i !== selectedAIFunctionIndx)
     setAIFunctions(updatedAIFunctions)
+    setSelectedAIFunctionIndx(undefined)
   }
 
   const onClickAIFunction = (indx: number) => {
@@ -77,8 +78,6 @@ export default function Home() {
           <AIFunctionSingleOverview
             onDeleteAIFunction={onDeleteAIFunction}
             aiFunction={aiFunctions[selectedAIFunctionIndx]}
-            selectedAIFunctionIndx={selectedAIFunctionIndx}
-            setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
           ></AIFunctionSingleOverview>
         ) : (
           <></>
