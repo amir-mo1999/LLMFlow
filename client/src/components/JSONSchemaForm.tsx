@@ -5,7 +5,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
   FormControl,
   FormControlLabel,
   InputLabel,
@@ -27,9 +26,14 @@ interface Field {
 interface JSONSchemaFormProps {
   JSONSchema: object
   setJSONSchema: (schema: object) => void
+  onGenerateAssertion?: () => void
 }
 
-const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({ JSONSchema, setJSONSchema }) => {
+const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({
+  JSONSchema,
+  setJSONSchema,
+  onGenerateAssertion = () => {},
+}) => {
   const [fields, setFields] = useState<Field[]>([])
 
   const addField = () => {
@@ -75,64 +79,64 @@ const JSONSchemaForm: React.FC<JSONSchemaFormProps> = ({ JSONSchema, setJSONSche
   const isGenerateDisabled = fields.length === 0 || fields.some((field) => field.name.trim() === "")
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        JSON Schema Generator
-      </Typography>
+    <Paper sx={{ p: 3, mb: 4, "&:hover": { backgroundColor: "white" } }}>
+      <Typography gutterBottom>Define Fields</Typography>
 
-      <Box component={Paper} sx={{ p: 3, mb: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Define Fields
-        </Typography>
+      {fields.map((field, index) => (
+        <Box key={index} display="flex" alignItems="center" mb={2} gap={2}>
+          <TextField
+            label="Field Name"
+            variant="outlined"
+            value={field.name}
+            onChange={(e) => handleFieldChange(index, "name", e.target.value)}
+            required
+            fullWidth
+          />
 
-        {fields.map((field, index) => (
-          <Box key={index} display="flex" alignItems="center" mb={2} gap={2}>
-            <TextField
-              label="Field Name"
-              variant="outlined"
-              value={field.name}
-              onChange={(e) => handleFieldChange(index, "name", e.target.value)}
-              required
-              fullWidth
-            />
+          <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+            <InputLabel>Type</InputLabel>
+            <Select
+              label="Type"
+              value={field.type}
+              onChange={(e) => handleFieldChange(index, "type", e.target.value)}
+            >
+              <MenuItem value="string">String</MenuItem>
+              <MenuItem value="number">Number</MenuItem>
+              <MenuItem value="integer">Integer</MenuItem>
+              <MenuItem value="boolean">Boolean</MenuItem>
+              <MenuItem value="array">Array</MenuItem>
+              <MenuItem value="object">Object</MenuItem>
+            </Select>
+          </FormControl>
 
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel>Type</InputLabel>
-              <Select
-                label="Type"
-                value={field.type}
-                onChange={(e) => handleFieldChange(index, "type", e.target.value)}
-              >
-                <MenuItem value="string">String</MenuItem>
-                <MenuItem value="number">Number</MenuItem>
-                <MenuItem value="integer">Integer</MenuItem>
-                <MenuItem value="boolean">Boolean</MenuItem>
-                <MenuItem value="array">Array</MenuItem>
-                <MenuItem value="object">Object</MenuItem>
-              </Select>
-            </FormControl>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field.required}
+                onChange={(e) => handleFieldChange(index, "required", e.target.checked)}
+              />
+            }
+            label="Required"
+          />
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={field.required}
-                  onChange={(e) => handleFieldChange(index, "required", e.target.checked)}
-                />
-              }
-              label="Required"
-            />
+          <IconButton aria-label="delete" onClick={() => removeField(index)} color="primary">
+            <Delete />
+          </IconButton>
+        </Box>
+      ))}
 
-            <IconButton aria-label="delete" color="error" onClick={() => removeField(index)}>
-              <Delete />
-            </IconButton>
-          </Box>
-        ))}
-
-        <Button variant="contained" startIcon={<Add />} onClick={addField} sx={{ mt: 2 }}>
-          Add Field
-        </Button>
-      </Box>
-    </Container>
+      <Button variant="contained" startIcon={<Add />} onClick={addField} sx={{ mt: 2 }}>
+        Add Field
+      </Button>
+      <Button
+        variant="contained"
+        sx={{ mt: 2, ml: 2 }}
+        onClick={onGenerateAssertion}
+        disabled={Object.keys(JSONSchema).length === 0 ? true : false}
+      >
+        Generate Assertion
+      </Button>
+    </Paper>
   )
 }
 

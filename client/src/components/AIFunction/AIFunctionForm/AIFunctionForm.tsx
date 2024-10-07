@@ -17,6 +17,7 @@ import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import { usePostAiFunction } from "@/api/apiComponents"
 import examples from "@/examples/aiFunctions.json"
+import JSONSchemaForm from "@/components/JSONSchemaForm"
 
 interface AIFunctionFormProps {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>
@@ -27,6 +28,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
+  const [outputSchema, setOutputSchema] = useState<Object>({})
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
@@ -68,15 +70,22 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     },
   })
 
+  const onGenerateAssertionFromOutputSchema = () => {
+    const newAssertion: Assertion = { type: "is-json" }
+    setAssertions([...assertions, newAssertion])
+  }
+
   const updateDisableSubmit = () => {
+    console.log()
     if (name === "") setDisableSubmit(true)
     else if (description === "") setDisableSubmit(true)
     else if (inputVariables.some((inputVariable) => inputVariable.name === ""))
       setDisableSubmit(true)
+    else if (Object.keys(outputSchema).length === 0) setDisableSubmit(true)
     else setDisableSubmit(false)
   }
 
-  useEffect(updateDisableSubmit, [name, description, inputVariables])
+  useEffect(updateDisableSubmit, [name, description, inputVariables, outputSchema])
 
   const onClickSubmit = () => {
     setDisableSubmit(true)
@@ -139,6 +148,12 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
         setInputVariables={setInputVariables}
         sx={{ paddingBottom: 2 }}
       />
+      <Typography>Output Schema</Typography>
+      <JSONSchemaForm
+        JSONSchema={outputSchema}
+        setJSONSchema={setOutputSchema}
+        onGenerateAssertion={onGenerateAssertionFromOutputSchema}
+      ></JSONSchemaForm>
       <Typography>Output Assertions</Typography>
       <AssertionsForm assertions={assertions} setAssertions={setAssertions} />
       <Typography>Test Cases</Typography>
