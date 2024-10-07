@@ -58,7 +58,9 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }, [assertion, open])
 
   const handleTypeChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
-    console.log(type)
+    console.log("type:", type)
+    setValue(undefined)
+    setThreshold(undefined)
     setType(event.target.value as BaseAssertionTypes)
   }
 

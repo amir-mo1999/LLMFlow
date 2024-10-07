@@ -33,6 +33,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
   const id = open ? "simple-popover" : undefined
@@ -76,7 +77,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   }
 
   const updateDisableSubmit = () => {
-    console.log()
     if (name === "") setDisableSubmit(true)
     else if (description === "") setDisableSubmit(true)
     else if (inputVariables.some((inputVariable) => inputVariable.name === ""))
