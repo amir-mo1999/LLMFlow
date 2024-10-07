@@ -35,6 +35,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   const [weight, setWeight] = useState<number>(1)
   const [value, setValue] = useState<Assertion["value"]>(null)
   const [threshold, setThreshold] = useState<Assertion["threshold"]>(null)
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(false)
 
   const resetForm = () => {
     setType("contains")
@@ -57,6 +58,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }, [assertion, open])
 
   const handleTypeChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
+    console.log(type)
     setType(event.target.value as BaseAssertionTypes)
   }
 
@@ -111,17 +113,18 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
             setValue={setValue}
             threshold={threshold}
             setThreshold={setThreshold}
+            setDisableSubmit={setDisableSubmit}
           ></AssertionTypeForm>
         </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>
         {isEditing ? (
-          <Button onClick={onUpdate} variant="contained">
+          <Button onClick={onUpdate} disabled={disableSubmit} variant="contained">
             Save
           </Button>
         ) : (
-          <Button onClick={onAdd} variant="contained">
+          <Button onClick={onAdd} disabled={disableSubmit} variant="contained">
             Add
           </Button>
         )}

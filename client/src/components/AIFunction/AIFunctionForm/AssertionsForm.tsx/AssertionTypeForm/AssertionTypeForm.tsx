@@ -5,8 +5,10 @@ import ListTypesForm from "./ListTypesForm"
 import ThresholdTypeForm from "./ThresholdTypeForm"
 import { Typography } from "@mui/material"
 import JSONSchemaForm from "@/components/JSONSchemaForm"
+import { useEffect } from "react"
 
 interface AssertionTypeFormProps {
+  setDisableSubmit: (value: boolean) => void
   open: boolean
   type: BaseAssertionTypes
   value: Assertion["value"]
@@ -16,6 +18,7 @@ interface AssertionTypeFormProps {
 }
 
 const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
+  setDisableSubmit,
   open,
   type,
   value,
@@ -42,6 +45,7 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
         <>
           <Typography>Values</Typography>{" "}
           <ListTypesForm
+            required
             open={open}
             values={value}
             label="value"
@@ -69,10 +73,7 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
       componentToRender = (
         <>
           <Typography>JSON Schema</Typography>
-          <JSONSchemaForm
-            JSONSchema={value ? (value as Record<string, any>) : {}}
-            setJSONSchema={setValue}
-          ></JSONSchemaForm>
+          <JSONSchemaForm JSONSchema={value as object} setJSONSchema={setValue}></JSONSchemaForm>
         </>
       )
       break

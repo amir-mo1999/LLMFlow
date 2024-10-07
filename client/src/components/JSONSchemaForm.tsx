@@ -25,7 +25,7 @@ interface Field {
 
 interface JSONSchemaFormProps {
   JSONSchema: object | undefined | null
-  setJSONSchema: (schema: object | undefined) => void
+  setJSONSchema: React.Dispatch<React.SetStateAction<Object>>
   onGenerateAssertion?: () => void
 }
 
