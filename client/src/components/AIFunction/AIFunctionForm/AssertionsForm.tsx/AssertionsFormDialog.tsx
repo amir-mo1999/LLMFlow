@@ -35,7 +35,55 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   const [weight, setWeight] = useState<number>(1)
   const [value, setValue] = useState<Assertion["value"]>(null)
   const [threshold, setThreshold] = useState<Assertion["threshold"]>(null)
-  const [disableSubmit, setDisableSubmit] = useState<boolean>(false)
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
+
+  const checkDisableSubmit = () => {
+    console.log(value)
+    console.log(threshold)
+    // for all where value is required
+    if (
+      [
+        "contains",
+        "contains-all",
+        "contains-any",
+        "equals",
+        "icontains",
+        "icontains-all",
+        "icontains-any",
+        "javascript",
+        "levenshtein",
+        "python",
+        "regex",
+        "starts-with",
+      ].includes(type)
+    ) {
+      if (!value || value.length === 0) {
+        return true
+      }
+    }
+
+    // for all where value is array
+    if (
+      ["contains-all", "contains-any", "icontains-all", "icontains-any", "contains-xml", "is-xml"]
+    ) {
+      if (Array.isArray(value)) {
+        return !value.every((v) => v !== "")
+      }
+    }
+
+    // for all where threshold is required
+    if (["cost", "latency", "levenshtein", "perplexity-score", "perplexity", "rogue-n"]) {
+      if (threshold === null || threshold === undefined) return true
+    }
+
+    return false
+  }
+
+  useEffect(() => {
+    let aux = checkDisableSubmit()
+    console.log("setting to:", aux)
+    setDisableSubmit(aux)
+  }, [value, threshold, type])
 
   const resetForm = () => {
     setType("contains")
