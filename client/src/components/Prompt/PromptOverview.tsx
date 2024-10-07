@@ -21,8 +21,6 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({
 }) => {
   if (!prompts) return <></>
 
-  console.log(prompts)
-
   return (
     <Box
       sx={{

@@ -32,7 +32,7 @@ const ChatPromptForm: React.FC<ChatPromptFormProps> = ({ messages, setMessages }
   }
 
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{ width: "100%" }}>
       {messages.map((message, index) => (
         <Box key={index} sx={{ marginBottom: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginBottom: 1 }}>

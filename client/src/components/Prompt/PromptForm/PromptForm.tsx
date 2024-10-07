@@ -5,30 +5,26 @@ import MenuItem from "@mui/material/MenuItem"
 import { useEffect, useState } from "react"
 import SingleShotPromptForm from "./SingleShotPromptForm"
 import ChatPromptForm from "./ChatPromptForm"
-import { PromptRouteInput, PromptMessage } from "@/api/apiSchemas"
-import { useGetAiFunction, usePostPrompt } from "@/api/apiComponents"
+import { PromptRouteInput, PromptMessage, AIFunction } from "@/api/apiSchemas"
+import { usePostPrompt } from "@/api/apiComponents"
 import Button from "@mui/material/Button"
-import { useRouter } from "next/navigation"
+import Box from "@mui/material/Box"
 
 interface PromptFormProps {
-  aiFunctionID: string
+  aiFunctions: AIFunction[]
 }
 
-const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
-  const router = useRouter()
-
-  const { data: aiFunction } = useGetAiFunction({
-    pathParams: { aiFunctionId: aiFunctionID },
-  })
-
-  if (!aiFunction) return <>Not Found</>
-
+const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
+  const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number>(0)
   const [type, setType] = useState<PromptRouteInput["prompt_type"]>("single_shot")
   const [messages, setMessages] = useState<PromptMessage[]>([{ role: "user", content: "" }])
   const [message, setMessage] = useState<string>("")
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
   const inputVarsInMessage = (message: string) => {
+    if (!selectedAIFunctionIndx) return false
+
+    const aiFunction = aiFunctions[selectedAIFunctionIndx]
     if (
       aiFunction.input_variables.every((inputVariable) =>
         message.includes("{{" + inputVariable.name + "}}")
@@ -58,22 +54,25 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
 
   useEffect(updateDisableSubmit, [message, messages])
 
+  const onSelectedAIFunctionChange = (e: SelectChangeEvent) => {
+    setSelectedAIFunctionIndx(Number(e.target.value))
+  }
+
   const { mutate: postPrompt } = usePostPrompt({
-    onSuccess: () => {
-      router.push("/ai-functions/" + aiFunctionID)
-    },
-    onError: (err) => {
-      console.log("error status", err)
-    },
+    onSuccess: () => {},
+    onError: (err) => {},
   })
 
   const onClickSubmit = () => {
+    if (!selectedAIFunctionIndx) {
+      return
+    }
     setDisableSubmit(true)
 
     const newPrompt: PromptRouteInput = {
       prompt_type: type,
       messages: messages,
-      ai_function_id: aiFunctionID,
+      ai_function_id: aiFunctions[selectedAIFunctionIndx]._id as string,
     }
 
     if (type === "single_shot") {
@@ -88,7 +87,16 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
   }
 
   return (
-    <>
+    <Box sx={{ width: "100%" }}>
+      <Select value={selectedAIFunctionIndx.toString()} onChange={onSelectedAIFunctionChange}>
+        {aiFunctions.map((aiFunction, indx) => {
+          return (
+            <MenuItem key={indx} value={indx}>
+              {aiFunction.name}
+            </MenuItem>
+          )
+        })}
+      </Select>
       <Typography>Select Prompt Type</Typography>
       <Select value={type} onChange={onPromptTypeChange}>
         <MenuItem value={"single_shot"}>Single Shot Prompt</MenuItem>
@@ -101,13 +109,13 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctionID }) => {
       ) : (
         "Invalid Prompt Type"
       )}
-      {aiFunction.input_variables.map((variable, indx) => (
+      {aiFunctions[selectedAIFunctionIndx].input_variables.map((variable, indx) => (
         <Typography key={indx}>- {variable.name}</Typography>
       ))}
       <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
         Add Prompt
       </Button>
-    </>
+    </Box>
   )
 }
 

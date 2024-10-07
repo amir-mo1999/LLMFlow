@@ -3,6 +3,7 @@
 import TextField from "@mui/material/TextField"
 import { Dispatch, SetStateAction } from "react"
 import { Typography } from "@mui/material"
+import Box from "@mui/material/Box"
 
 interface SingleShotPromptFormProps {
   message: string
@@ -11,7 +12,7 @@ interface SingleShotPromptFormProps {
 
 const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({ message, setMessage }) => {
   return (
-    <>
+    <Box sx={{ width: "100%" }}>
       <TextField
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -20,7 +21,7 @@ const SingleShotPromptForm: React.FC<SingleShotPromptFormProps> = ({ message, se
         maxRows={20}
       ></TextField>
       <Typography>Must include the following variables:</Typography>
-    </>
+    </Box>
   )
 }
 
