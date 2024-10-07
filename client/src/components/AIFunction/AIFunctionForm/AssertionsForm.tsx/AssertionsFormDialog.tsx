@@ -38,8 +38,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
   const checkDisableSubmit = () => {
-    console.log(value)
-    console.log(threshold)
+
     // for all where value is required
     if (
       [
@@ -87,9 +86,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }
 
   useEffect(() => {
-    let aux = checkDisableSubmit()
-    console.log("setting to:", aux)
-    setDisableSubmit(aux)
+    setDisableSubmit(checkDisableSubmit())
   }, [value, threshold, type])
 
   const resetForm = () => {
@@ -113,7 +110,6 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }, [assertion, open])
 
   const handleTypeChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
-    console.log("type:", type)
     setValue(undefined)
     setThreshold(undefined)
     setType(event.target.value as BaseAssertionTypes)
