@@ -27,11 +27,24 @@ export const themeOptions: ThemeOptions = {
         root: {
           transition: "background-color 0.3s",
           "&:hover": {
-            backgroundColor: "#f0f0f0",
+            backgroundColor: "#E8E3F2",
           },
           borderRadius: 16,
           scrollbarWidth: "thin", // Options: 'auto' or 'thin'
           scrollbarColor: "rgba(80, 60, 128, 0.8) transparent", // Thumb and track colors
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#ffffff",
+          "&:hover": {
+            backgroundColor: "#ffffff",
+          },
+          "&:focused": {
+            backgroundColor: "#ffffff",
+          },
         },
       },
     },
@@ -76,6 +89,13 @@ export const themeOptions: ThemeOptions = {
           fontSize: "1rem",
           paddingX: "5px",
           paddingY: "5px",
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          wordBreak: "break-word",
         },
       },
     },

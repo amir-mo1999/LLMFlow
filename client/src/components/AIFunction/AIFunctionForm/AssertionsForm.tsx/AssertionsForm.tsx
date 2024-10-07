@@ -1,13 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
 import AssertionFormDialog from "./AssertionsFormDialog"
 import { Assertion } from "@/api/apiSchemas"
 import AddIcon from "@mui/icons-material/Add"
 import AssertionsOverview from "../../AssertionsOverview"
-import Paper from "@mui/material/Paper"
-import { splitArrayIntoChunks } from "@/utils"
 
 interface AssertionsFormProps {
   assertions: Assertion[]
@@ -27,11 +24,14 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   }
 
   const handleOpenEditDialog = (index: number) => {
+    console.log("opening", index)
     setCurrentIndex(index)
     setCurrentAssertion(assertions[index])
     setIsEditing(true)
     setDialogOpen(true)
   }
+
+  useEffect(() => console.log(currentAssertion), [currentAssertion])
 
   const handleCloseDialog = () => {
     setDialogOpen(false)
