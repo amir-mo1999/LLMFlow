@@ -1,5 +1,5 @@
 import React from "react"
-import Box from "@mui/material/Box"
+import ScrollBox from "../ScrollBox"
 
 interface MainContentContainerProps {
   children?: React.ReactNode
@@ -7,7 +7,7 @@ interface MainContentContainerProps {
 
 const MainContentContainer: React.FC<MainContentContainerProps> = ({ children }) => {
   return (
-    <Box
+    <ScrollBox
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -19,7 +19,7 @@ const MainContentContainer: React.FC<MainContentContainerProps> = ({ children })
       }}
     >
       {children}
-    </Box>
+    </ScrollBox>
   )
 }
 

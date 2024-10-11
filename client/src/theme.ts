@@ -22,6 +22,12 @@ export const themeOptions: ThemeOptions = {
     },
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        scrollbarWidth: "thin", // Options: 'auto' or 'thin'
+        scrollbarColor: "rgba(80, 60, 128, 0.8) transparent", // Thumb and track colors}
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: {

@@ -4,7 +4,7 @@ import { MainContentContainer, SideBarContainer, PageContainer } from "./contain
 import SearchField from "./SearchField"
 import JSONSchemaForm from "./JSONSchemaForm"
 import { PromptSingleOverview, PromptForm, PromptOverview } from "./Prompt"
-
+import ScrollBox from "./ScrollBox"
 export {
   AIFunctionForm,
   AIFunctionOverview,
@@ -16,6 +16,7 @@ export {
   SearchField,
   JSONSchemaForm,
   PromptSingleOverview,
+  ScrollBox,
   PromptForm,
   PromptOverview,
 }

@@ -1,13 +1,12 @@
 import React from "react"
-import Box from "@mui/material/Box"
-
+import ScrollBox from "../ScrollBox"
 interface SideBarContainerProps {
   children?: React.ReactNode
 }
 
 const SideBarContainer: React.FC<SideBarContainerProps> = ({ children }) => {
   return (
-    <Box
+    <ScrollBox
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -20,7 +19,7 @@ const SideBarContainer: React.FC<SideBarContainerProps> = ({ children }) => {
       }}
     >
       {children}
-    </Box>
+    </ScrollBox>
   )
 }
 
