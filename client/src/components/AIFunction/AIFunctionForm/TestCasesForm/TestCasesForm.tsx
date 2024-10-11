@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography"
 import TestCasesFormDialog from "./TestCasesFormDialog"
 import AssertionsForm from "../AssertionsForm.tsx/AssertionsForm"
 import { TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
+import TestCasesOverview from "../../TestCasesOverview"
+import AddIcon from "@mui/icons-material/Add"
 
 interface TestCasesFormProps {
   inputVariables: InputVariable[]
@@ -68,52 +70,12 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
 
   return (
     <Box>
-      {testCases.length > 0 ? (
-        testCases.map((testCase, index) => (
-          <Box
-            key={index}
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-start"
-            mb={4}
-            style={{
-              cursor: "pointer",
-              border: "1px solid #ccc",
-              padding: "16px",
-              borderRadius: "8px",
-            }}
-          >
-            {/* Display Test Case Variables */}
-            <Box mb={2} onClick={() => handleOpenEditDialog(index)}>
-              {inputVariables.map((variable, varIndex) => (
-                <Typography key={varIndex}>
-                  <strong>{variable.name}:</strong> {testCase.vars[variable.name]}
-                </Typography>
-              ))}
-            </Box>
-
-            {/* Display AssertionsForm for this Test Case */}
-            <Box width="100%">
-              <Typography variant="subtitle1" gutterBottom>
-                Assertions:
-              </Typography>
-              <AssertionsForm
-                assertions={testCase.assert || []}
-                setAssertions={(newAssertions) => handleSetTestCaseAssertions(index, newAssertions)}
-              />
-            </Box>
-
-            {/* Delete Button */}
-            <Box alignSelf="flex-end">
-              <Button onClick={handleDeleteTestCase(index)} aria-label="Delete Test Case">
-                ×
-              </Button>
-            </Box>
-          </Box>
-        ))
-      ) : (
-        <></>
-      )}
+      <TestCasesOverview
+        testCases={testCases}
+        setAssertions={handleSetTestCaseAssertions}
+        onClickVars={handleOpenEditDialog}
+        onDelete={handleDeleteTestCase}
+      ></TestCasesOverview>
 
       {/* Add Test Case Button */}
       <Button onClick={handleOpenAddDialog} variant="contained" color="primary">

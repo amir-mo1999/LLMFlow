@@ -19,29 +19,12 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   onDeleteAIFunction,
   aiFunction,
 }) => {
-  const [showAllTestCases, setShowAllTestCases] = useState(false)
-  const [expandedTestCases, setExpandedTestCases] = useState<{ [key: number]: boolean }>({})
-
   const { mutate: deleteAIFunction } = useDeleteAiFunction({})
 
   const onClickDelete = () => {
     onDeleteAIFunction()
     deleteAIFunction({ pathParams: { aiFunctionId: aiFunction._id as string } })
   }
-
-  const toggleTestCases = () => {
-    setShowAllTestCases((prev) => !prev)
-  }
-
-  const toggleTestCase = (index: number) => {
-    setExpandedTestCases((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }))
-  }
-
-  const MAX_VISIBLE_ASSERTIONS = 2
-  const MAX_VISIBLE_TEST_CASES = 2
 
   if (!aiFunction) {
     return <></>
@@ -80,11 +63,11 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       <Divider />
       {/* Test Cases */}
       <Box>
-        <TestCasesOverview testCases={aiFunction.test_cases}></TestCasesOverview>
+        <TestCasesOverview testCases={aiFunction.test_cases} displayOnly></TestCasesOverview>
       </Box>
 
       <Divider></Divider>
-      <Button variant="contained" onClick={onClickDelete}>
+      <Button variant="contained" color="error" onClick={onClickDelete}>
         Delete AI Function
       </Button>
     </Box>

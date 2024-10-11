@@ -7,23 +7,32 @@ import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import AssertionsOverview from "./AssertionsOverview"
-import { Assertion } from "@/api/apiSchemas"
 import theme from "@/theme"
 import ScrollBox from "../ScrollBox"
-
-// Define the structure of a TestCaseInput
-export type TestCaseInput = {
-  vars: {
-    [key: string]: string
-  }
-  assert: Assertion[] | null
-}
+import { TestCaseInput } from "@/api/apiSchemas"
+import { SxProps } from "@mui/material"
+import AssertionsForm from "./AIFunctionForm/AssertionsForm.tsx/AssertionsForm"
+import { Assertion } from "@/api/apiSchemas"
+import IconButton from "@mui/material/IconButton"
+import ClearIcon from "@mui/icons-material/Clear"
 
 interface TestCasesOverviewProps {
   testCases: TestCaseInput[]
+  displayOnly?: boolean
+  sx?: SxProps
+  onClickVars?: (indx: number) => void
+  setAssertions?: (indx: number, newAssertions: Assertion[]) => void
+  onDelete?: (indx: number) => void
 }
 
-const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({ testCases }) => {
+const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
+  testCases,
+  sx,
+  displayOnly = false,
+  onClickVars = () => {},
+  setAssertions = () => {},
+  onDelete = () => {},
+}) => {
   const [showAllTestCases, setShowAllTestCases] = useState(false)
 
   const toggleShowAllTestCases = () => {
@@ -45,14 +54,15 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({ testCases }) => {
     : testCases.slice(0, MAX_VISIBLE_TEST_CASES)
 
   return (
-    <ScrollBox>
+    <ScrollBox sx={{ ...sx }}>
       {testCasesToDisplay.map((testCase, index) => (
         <Box
           key={index}
           sx={{
-            backgroundColor: "rgba(80, 60, 128, 0.05)", // Purple with 80% opacity
+            backgroundColor: "rgba(80, 60, 128, 0.03)", // Purple with 80% opacity
             padding: 2,
             marginBottom: 2,
+            position: "relative",
             borderLeft: 7,
             borderColor: theme.palette.primary.main,
             borderRadius: 1,
@@ -63,12 +73,38 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({ testCases }) => {
             Test Case {index + 1}
           </Typography>
 
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete(index)
+            }}
+            size="small"
+            sx={{
+              display: displayOnly ? "none" : "normal",
+              position: "absolute",
+              top: 1,
+              right: 1,
+              color: theme.palette.primary.main,
+            }}
+          >
+            <ClearIcon />
+          </IconButton>
+
           {/* Variables Section */}
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ mb: 2 }} onClick={() => onClickVars(index)}>
             <Typography variant="subtitle1">Variables</Typography>
             <Box sx={{ mt: 1 }}>
               {Object.entries(testCase.vars).map(([varName, varContent], varIndex) => (
-                <Paper key={varIndex} sx={{ padding: 1, marginBottom: 1 }}>
+                <Paper
+                  key={varIndex}
+                  sx={{
+                    padding: 1,
+                    marginBottom: 1,
+                    "&:hover": {
+                      backgroundColor: displayOnly ? "white" : "",
+                    },
+                  }}
+                >
                   <Typography variant="subtitle2">{varName}</Typography>
                   <Typography variant="body2">{varContent}</Typography>
                 </Paper>
@@ -80,10 +116,17 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({ testCases }) => {
           <Box>
             <Typography variant="subtitle1">Assertions</Typography>
             <Box sx={{ mt: 1 }}>
-              {testCase.assert && testCase.assert.length > 0 ? (
-                <AssertionsOverview assertions={testCase.assert} displayOnly />
+              {testCase.assert && testCase.assert !== null ? (
+                displayOnly ? (
+                  <AssertionsOverview assertions={testCase.assert} displayOnly />
+                ) : (
+                  <AssertionsForm
+                    assertions={testCase.assert}
+                    setAssertions={(assertion) => setAssertions(index, assertion)}
+                  />
+                )
               ) : (
-                <Typography variant="body2">No assertions defined for this Test Case.</Typography>
+                <></>
               )}
             </Box>
           </Box>

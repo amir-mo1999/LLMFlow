@@ -24,14 +24,11 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   }
 
   const handleOpenEditDialog = (index: number) => {
-    console.log("opening", index)
     setCurrentIndex(index)
     setCurrentAssertion(assertions[index])
     setIsEditing(true)
     setDialogOpen(true)
   }
-
-  useEffect(() => console.log(currentAssertion), [currentAssertion])
 
   const handleCloseDialog = () => {
     setDialogOpen(false)

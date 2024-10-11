@@ -12,6 +12,10 @@ export const themeOptions: ThemeOptions = {
     secondary: {
       main: "#EEB86D",
     },
+    error: {
+      main: "#DF5353",
+      contrastText: "#ffffff",
+    },
     background: {
       default: "#F8FBFF",
       paper: "#ffffff",
