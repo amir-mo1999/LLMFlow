@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
-import Popover from "@mui/material/Popover"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
 import {
@@ -13,6 +12,10 @@ import {
   AIFunctionRouteInput,
   AIFunction,
 } from "@/api/apiSchemas"
+import Select from "@mui/material/Select"
+import MenuItem from "@mui/material/MenuItem"
+import Divider from "@mui/material/Divider"
+
 import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import { usePostAiFunction } from "@/api/apiComponents"
@@ -33,7 +36,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
-
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
   const id = open ? "simple-popover" : undefined
@@ -51,14 +53,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       setInputVariables(aiFunction.input_variables)
       setAssertions(aiFunction.assert)
       setTestCases(aiFunction.test_cases)
-      onClosePopover()
     }
 
     return f
-  }
-
-  const onClosePopover = () => {
-    setAnchorEl(null)
   }
 
   const { mutate: postAiFunction } = usePostAiFunction({
@@ -102,66 +99,64 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
 
   //useEffect(() => setTestCases([]), [inputVariables])
   return (
-    <Box sx={{ width: "100%" }}>
-      <Button variant="contained" onClick={onClickCreateFromExample}>
-        Create From Example
-      </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={onClosePopover}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Create from Example
+      </Typography>
+      <Select renderValue={(p) => "Select an Example"} value="0" fullWidth>
         {parsedExamples.map((example, indx) => {
           return (
-            <Typography
-              key={indx}
+            <MenuItem
+              onClick={onClickExample(parsedExamples[indx])}
+              key={indx + 1}
+              value={indx.toString()}
               sx={{ p: 2, userSelect: "none" }}
-              onClick={onClickExample(example)}
             >
               {example.name}
-            </Typography>
+            </MenuItem>
           )
         })}
-      </Popover>
-      <Typography>Name</Typography>
-      <TextField
-        sx={{ width: "100%", paddingBottom: 2 }}
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Typography>Description</Typography>
+      </Select>
+      <Divider sx={{ marginY: 2 }}></Divider>
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Name
+      </Typography>
+      <TextField sx={{ width: "100%" }} value={name} onChange={(e) => setName(e.target.value)} />
+      <Divider sx={{ marginY: 2 }}></Divider>
+
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Description
+      </Typography>
       <TextField
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         multiline
         minRows={5}
-        sx={{ width: "100%", paddingBottom: 2 }}
+        sx={{ width: "100%" }}
       />
-      <Typography>Input Variables</Typography>
-      <InputVariableForm
-        inputVariables={inputVariables}
-        setInputVariables={setInputVariables}
-        sx={{ paddingBottom: 2 }}
-      />
-      <Typography>Output Schema</Typography>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
+      <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
+      <Divider sx={{ marginY: 2 }}></Divider>
+
+      <Typography variant="h5">Output Schema</Typography>
       <JSONSchemaForm
         JSONSchema={outputSchema}
         setJSONSchema={setOutputSchema}
         onGenerateAssertion={onGenerateAssertionFromOutputSchema}
       ></JSONSchemaForm>
-      <Typography>Output Assertions</Typography>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
       <AssertionsForm assertions={assertions} setAssertions={setAssertions} />
-      <Typography>Test Cases</Typography>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
       <TestCasesForm
         inputVariables={inputVariables}
         testCases={testCases}
         setTestCases={setTestCases}
       ></TestCasesForm>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
       <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
         Create AI Function
       </Button>

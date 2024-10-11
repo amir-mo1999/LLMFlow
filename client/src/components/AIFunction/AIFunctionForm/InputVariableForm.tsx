@@ -7,6 +7,7 @@ import { AIFunctionRouteInput } from "@/api/apiSchemas"
 import { SxProps } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
+import Typography from "@mui/material/Typography"
 
 interface InputVariableFormProps {
   inputVariables: AIFunctionRouteInput["input_variables"]
@@ -37,6 +38,13 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
 
   return (
     <Box sx={{ ...sx }}>
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
+        <Typography variant="h5">Input Variables</Typography>
+
+        <Button onClick={handleAddVariable}>
+          <AddIcon />
+        </Button>
+      </Box>
       {inputVariables.map((inputVar, index) => (
         <Box key={index} display="flex" alignItems="center" pb={1}>
           <TextField value={inputVar.name} onChange={handleNameChange(index)} fullWidth />
@@ -45,9 +53,6 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
           </Button>
         </Box>
       ))}
-      <Button onClick={handleAddVariable}>
-        <AddIcon />
-      </Button>
     </Box>
   )
 }

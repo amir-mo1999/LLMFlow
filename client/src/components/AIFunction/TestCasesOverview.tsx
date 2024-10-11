@@ -42,11 +42,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
   const MAX_VISIBLE_TEST_CASES = 2
 
   if (!testCases || testCases.length === 0) {
-    return (
-      <Box>
-        <Typography>No Test Cases available.</Typography>
-      </Box>
-    )
+    return <></>
   }
 
   const testCasesToDisplay = showAllTestCases

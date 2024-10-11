@@ -3,7 +3,7 @@ import { createTheme, ThemeOptions } from "@mui/material/styles"
 export const themeOptions: ThemeOptions = {
   palette: {
     action: {
-      disabledBackground: "#EEB86D",
+      disabledBackground: "#B7AECC",
       disabled: "#000000",
     },
     primary: {
@@ -26,6 +26,25 @@ export const themeOptions: ThemeOptions = {
     },
   },
   components: {
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 0,
+          padding: 0,
+          margin: 0,
+          backgroundColor: "#F8FBFF",
+          "&:hover": {
+            backgroundColor: "#F8FBFF",
+          },
+        },
+        list: {
+          padding: 0,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         scrollbarWidth: "thin", // Options: 'auto' or 'thin'

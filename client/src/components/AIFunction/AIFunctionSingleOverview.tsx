@@ -61,7 +61,6 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
         )}
       </Box>
       <Divider />
-      {/* Test Cases */}
       <Box>
         <TestCasesOverview testCases={aiFunction.test_cases} displayOnly></TestCasesOverview>
       </Box>

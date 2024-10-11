@@ -5,6 +5,7 @@ import AssertionFormDialog from "./AssertionsFormDialog"
 import { Assertion } from "@/api/apiSchemas"
 import AddIcon from "@mui/icons-material/Add"
 import AssertionsOverview from "../../AssertionsOverview"
+import Typography from "@mui/material/Typography"
 
 interface AssertionsFormProps {
   assertions: Assertion[]
@@ -53,14 +54,17 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
 
   return (
     <Box sx={{ display: "flex", width: "100%", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, marginBottom: 1 }}>
+        <Typography variant="h5">Output Assertions</Typography>{" "}
+        <Button onClick={handleOpenAddDialog} color="primary">
+          <AddIcon />
+        </Button>
+      </Box>
       <AssertionsOverview
         assertions={assertions}
         onClick={handleOpenEditDialog}
         onDelete={handleDeleteAssertion}
       ></AssertionsOverview>
-      <Button onClick={handleOpenAddDialog}>
-        <AddIcon />
-      </Button>
 
       <AssertionFormDialog
         open={dialogOpen}

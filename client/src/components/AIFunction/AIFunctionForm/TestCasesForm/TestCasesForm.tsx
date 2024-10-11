@@ -70,17 +70,19 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
 
   return (
     <Box>
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
+        <Typography variant="h5">Test Cases</Typography>
+        <Button onClick={handleOpenAddDialog} color="primary">
+          <AddIcon />
+        </Button>
+      </Box>
+
       <TestCasesOverview
         testCases={testCases}
         setAssertions={handleSetTestCaseAssertions}
         onClickVars={handleOpenEditDialog}
         onDelete={handleDeleteTestCase}
       ></TestCasesOverview>
-
-      {/* Add Test Case Button */}
-      <Button onClick={handleOpenAddDialog} variant="contained" color="primary">
-        Add Test Case
-      </Button>
 
       {/* TestCasesFormDialog for Adding/Editing Test Cases */}
       <TestCasesFormDialog
