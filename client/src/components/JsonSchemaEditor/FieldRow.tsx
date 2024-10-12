@@ -14,6 +14,9 @@ interface FieldRowProps {
   displayOnly?: boolean
   canDelete?: boolean
   fieldNameInit?: string
+  typeInit?: JsonSchemaInput["type"]
+  disableTypeEdit?: boolean
+  indent?: number
 }
 
 type StringSchema = Pick<JsonSchemaInput, "maxLength" | "minLength" | "pattern">
@@ -41,8 +44,11 @@ const FieldRow: React.FC<FieldRowProps> = ({
   setSchema = () => {},
   displayOnly = false,
   canDelete = true,
+  typeInit = "string",
+  disableTypeEdit = false,
+  indent = 0,
 }) => {
-  const [type, setType] = useState<JsonSchemaInput["type"]>(schema.type)
+  const [type, setType] = useState<JsonSchemaInput["type"]>(typeInit)
   const [stringSetting, setStringSettings] = useState<StringSchema>({
     maxLength: schema.maxLength,
     minLength: schema.minLength,
@@ -73,6 +79,8 @@ const FieldRow: React.FC<FieldRowProps> = ({
     required: schema.required,
   })
 
+  const isRoot = fieldNameInit === "root" ? true : false
+
   const showAddProperty = displayOnly
     ? false
     : ["properties", "patternProperties", "additionalProperties"].includes(fieldNameInit)
@@ -100,31 +108,93 @@ const FieldRow: React.FC<FieldRowProps> = ({
     setType(e.target.value as JsonSchemaInput["type"])
   }
 
+  const onDeleteField = () => {}
+
   return (
-    <Box display="flex">
-      <TextField
-        size="small"
-        value={fieldName}
-        onChange={onNameChange}
-        disabled={!canEditFieldName}
-      >
-        newProperty
-      </TextField>
+    <>
+      <Box display="flex" sx={{ marginLeft: indent, marginBottom: 1 }}>
+        <TextField
+          size="small"
+          value={fieldName}
+          onChange={onNameChange}
+          disabled={!canEditFieldName}
+        >
+          newProperty
+        </TextField>
 
-      <Select value={type} onChange={onTypeChange} size="small">
-        {["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
-          <MenuItem key={indx} value={type}>
-            {type}
-          </MenuItem>
-        ))}
-      </Select>
+        <Select value={type} onChange={onTypeChange} size="small" disabled={disableTypeEdit}>
+          {["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
+            <MenuItem key={indx} value={type}>
+              {type}
+            </MenuItem>
+          ))}
+        </Select>
 
-      <Tooltip title="Add property">
-        <IconButton color="primary" sx={{ display: showAddProperty ? "normal" : "none" }}>
-          <AddIcon />
-        </IconButton>
-      </Tooltip>
-    </Box>
+        <Tooltip title="Add property">
+          <IconButton color="primary" sx={{ display: showAddProperty ? "normal" : "none" }}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
+      {type === "array" ? (
+        <>
+          <FieldRow
+            schema={schema}
+            setSchema={setSchema}
+            fieldNameInit="items"
+            displayOnly={displayOnly}
+            typeInit="string"
+            indent={indent + 4}
+          ></FieldRow>
+          <FieldRow
+            schema={schema}
+            setSchema={setSchema}
+            fieldNameInit="contains"
+            displayOnly={displayOnly}
+            typeInit="string"
+            indent={indent + 4}
+          ></FieldRow>
+        </>
+      ) : (
+        <></>
+      )}
+
+      {type === "object" &&
+      (canEditFieldName || isRoot || ["items", "contains"].includes(fieldNameInit)) ? (
+        <>
+          <FieldRow
+            schema={schema}
+            setSchema={setSchema}
+            fieldNameInit="properties"
+            displayOnly={displayOnly}
+            disableTypeEdit
+            typeInit="object"
+            indent={indent + 4}
+          ></FieldRow>
+          <FieldRow
+            schema={schema}
+            setSchema={setSchema}
+            fieldNameInit="patternProperties"
+            displayOnly={displayOnly}
+            disableTypeEdit
+            typeInit="object"
+            indent={indent + 4}
+          ></FieldRow>
+          <FieldRow
+            schema={schema}
+            setSchema={setSchema}
+            fieldNameInit="additionalProperties"
+            displayOnly={displayOnly}
+            disableTypeEdit
+            typeInit="object"
+            indent={indent + 4}
+          ></FieldRow>
+        </>
+      ) : (
+        <></>
+      )}
+    </>
   )
 }
 
