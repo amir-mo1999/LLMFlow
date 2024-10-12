@@ -1474,17 +1474,6 @@
                         ],
                         "title": "Type"
                     },
-                    "title": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Title"
-                    },
                     "enum": {
                         "anyOf": [
                             {
@@ -1773,17 +1762,6 @@
                             "null"
                         ],
                         "title": "Type"
-                    },
-                    "title": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Title"
                     },
                     "enum": {
                         "anyOf": [

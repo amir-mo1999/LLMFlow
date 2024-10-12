@@ -7,7 +7,6 @@ Type = Literal["string", "number", "integer", "boolean", "object", "array", "nul
 
 class JsonSchema(RootModel):
     type: Type
-    title: Optional[str] = None
 
     # string + number + integer
     enum: Optional[List[str] | List[float] | List[int]] = None
