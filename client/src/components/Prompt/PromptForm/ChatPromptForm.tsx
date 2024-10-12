@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import Typography from "@mui/material/Typography"
 import { Dispatch, SetStateAction } from "react"
 import Box from "@mui/material/Box"
 import Select from "@mui/material/Select"
@@ -35,7 +36,14 @@ const ChatPromptForm: React.FC<ChatPromptFormProps> = ({ messages, setMessages }
     <Box sx={{ width: "100%" }}>
       {messages.map((message, index) => (
         <Box key={index} sx={{ marginBottom: 2 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginBottom: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              marginBottom: 1,
+            }}
+          >
             <Box sx={{ minWidth: 120 }}>
               <Select
                 value={message.role}
