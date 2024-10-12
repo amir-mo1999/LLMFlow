@@ -5,8 +5,20 @@ import Select, { SelectChangeEvent } from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import TextField from "@mui/material/TextField"
 import Tooltip from "@mui/material/Tooltip"
+import Checkbox from "@mui/material/Checkbox"
+
 import IconButton from "@mui/material/IconButton"
 import AddIcon from "@mui/icons-material/Add"
+import SettingsIcon from "@mui/icons-material/Settings"
+
+function getValueFromNestedObject(obj: Record<string, any>, keys: string[]): any {
+  return keys.reduce((acc, key) => {
+    if (acc && key in acc) {
+      return acc[key]
+    }
+    return undefined
+  }, obj)
+}
 
 interface FieldRowProps {
   schema: JsonSchemaInput
@@ -17,6 +29,7 @@ interface FieldRowProps {
   typeInit?: JsonSchemaInput["type"]
   disableTypeEdit?: boolean
   indent?: number
+  keys?: string[]
 }
 
 type StringSchema = Pick<JsonSchemaInput, "maxLength" | "minLength" | "pattern">
@@ -47,6 +60,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
   typeInit = "string",
   disableTypeEdit = false,
   indent = 0,
+  keys = [],
 }) => {
   const [type, setType] = useState<JsonSchemaInput["type"]>(typeInit)
   const [stringSetting, setStringSettings] = useState<StringSchema>({
@@ -79,18 +93,11 @@ const FieldRow: React.FC<FieldRowProps> = ({
     required: schema.required,
   })
 
-  const isRoot = fieldNameInit === "root" ? true : false
-
-  const showAddProperty = displayOnly
-    ? false
-    : ["properties", "patternProperties", "additionalProperties"].includes(fieldNameInit)
-      ? true
-      : false
-
   const [fieldName, setFieldName] = useState<string>(fieldNameInit)
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFieldName(e.target.value)
   }
+
   const canEditFieldName = displayOnly
     ? false
     : [
@@ -104,11 +111,26 @@ const FieldRow: React.FC<FieldRowProps> = ({
       ? false
       : true
 
+  const isRoot = fieldNameInit === "root" ? true : false
+
+  const showAddProperty = displayOnly
+    ? false
+    : ["properties", "patternProperties", "additionalProperties"].includes(fieldNameInit)
+      ? true
+      : false
+
+  const showAdvancedSttings = ["properties", "patternProperties", "additionalProperties"].includes(
+    fieldNameInit
+  )
+    ? false
+    : true
+
   const onTypeChange = (e: SelectChangeEvent) => {
     setType(e.target.value as JsonSchemaInput["type"])
   }
 
-  const onDeleteField = () => {}
+  const onAddProperty = () => {}
+  const onDeleteProperty = () => {}
 
   return (
     <>
@@ -130,23 +152,25 @@ const FieldRow: React.FC<FieldRowProps> = ({
           ))}
         </Select>
 
-        <Tooltip title="Add property">
+        <Tooltip title="Add property" placement="top">
           <IconButton color="primary" sx={{ display: showAddProperty ? "normal" : "none" }}>
             <AddIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Advanced Settings" placement="top">
+          <IconButton
+            color="primary"
+            size="small"
+            sx={{ display: showAdvancedSttings ? "normal" : "none" }}
+          >
+            <SettingsIcon />
           </IconButton>
         </Tooltip>
       </Box>
 
       {type === "array" ? (
-        <>
-          <FieldRow
-            schema={schema}
-            setSchema={setSchema}
-            fieldNameInit="items"
-            displayOnly={displayOnly}
-            typeInit="string"
-            indent={indent + 4}
-          ></FieldRow>
+        arraySettings.contains ? (
           <FieldRow
             schema={schema}
             setSchema={setSchema}
@@ -154,8 +178,19 @@ const FieldRow: React.FC<FieldRowProps> = ({
             displayOnly={displayOnly}
             typeInit="string"
             indent={indent + 4}
+            keys={keys.concat(["contains"])}
           ></FieldRow>
-        </>
+        ) : (
+          <FieldRow
+            schema={schema}
+            setSchema={setSchema}
+            fieldNameInit="items"
+            displayOnly={displayOnly}
+            typeInit="string"
+            indent={indent + 4}
+            keys={keys.concat(["items"])}
+          ></FieldRow>
+        )
       ) : (
         <></>
       )}
@@ -171,25 +206,22 @@ const FieldRow: React.FC<FieldRowProps> = ({
             disableTypeEdit
             typeInit="object"
             indent={indent + 4}
+            keys={keys.concat(["properties"])}
           ></FieldRow>
-          <FieldRow
-            schema={schema}
-            setSchema={setSchema}
-            fieldNameInit="patternProperties"
-            displayOnly={displayOnly}
-            disableTypeEdit
-            typeInit="object"
-            indent={indent + 4}
-          ></FieldRow>
-          <FieldRow
-            schema={schema}
-            setSchema={setSchema}
-            fieldNameInit="additionalProperties"
-            displayOnly={displayOnly}
-            disableTypeEdit
-            typeInit="object"
-            indent={indent + 4}
-          ></FieldRow>
+          {objectSettings.additionalProperties ? (
+            <FieldRow
+              schema={schema}
+              setSchema={setSchema}
+              fieldNameInit="additionalProperties"
+              displayOnly={displayOnly}
+              disableTypeEdit
+              typeInit="object"
+              indent={indent + 4}
+              keys={keys.concat(["additionalProperties"])}
+            ></FieldRow>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
         <></>

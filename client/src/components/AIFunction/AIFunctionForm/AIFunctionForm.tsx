@@ -38,6 +38,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
+  useEffect(() => {
+    console.log(outputSchema)
+  }, [outputSchema])
+
   //@ts-ignore
   let parsedExamples: AIFunctionRouteInput[] = examples
 
