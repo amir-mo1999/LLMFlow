@@ -22,6 +22,10 @@ export type AIFunction = {
    */
   input_variables: InputVariable[]
   /**
+   * @example {"type":"string"}
+   */
+  output_schema: JsonSchemaOutput
+  /**
    * @example {"type":"icontains","value":"the","weight":1}
    * @example {"type":"contains","value":"thgewgewgewgewge","weight":1}
    */
@@ -64,6 +68,10 @@ export type AIFunctionRouteInput = {
    * @example {"name":"number_of_sentences"}
    */
   input_variables: InputVariable[]
+  /**
+   * @example {"type":"string"}
+   */
+  output_schema: JsonSchemaInput
   /**
    * @example {"type":"icontains","value":"the","weight":1}
    * @example {"type":"contains","value":"thgewgewgewgewge","weight":1}
@@ -201,6 +209,82 @@ export type InputVariable = {
    * @pattern ^[^\s]+$
    */
   name: string
+}
+
+export type JsonSchemaInput = {
+  type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
+  ["enum"]?: string[] | number[] | number[] | null
+  ["const"]?: void | null
+  maxLength?: number | null
+  minLength?: number | null
+  pattern?: string | null
+  multipleOf?: number | null
+  maximum?: number | null
+  exclusiveMaximum?: number | null
+  minimum?: number | null
+  exclusiveMinimum?: number | null
+  items?: JsonSchemaInput | null
+  contains?: JsonSchemaInput | null
+  maxContains?: number | null
+  minContains?: number | null
+  maxItems?: number | null
+  minItems?: number | null
+  uniqueItems?: boolean | null
+  properties?: {
+    [key: string]: JsonSchemaInput
+  } | null
+  patternProperties?: {
+    [key: string]: JsonSchemaInput
+  } | null
+  additionalProperties?: boolean | JsonSchemaInput | null
+  maxProperties?: number | null
+  minProperties?: number | null
+  required?: string[] | null
+  dependentRequired?: {
+    [key: string]: string[]
+  } | null
+  dependentSchemas?: {
+    [key: string]: JsonSchemaInput
+  } | null
+  propertyNames?: JsonSchemaInput | null
+}
+
+export type JsonSchemaOutput = {
+  type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
+  ["enum"]?: string[] | number[] | number[] | null
+  ["const"]?: void | null
+  maxLength?: number | null
+  minLength?: number | null
+  pattern?: string | null
+  multipleOf?: number | null
+  maximum?: number | null
+  exclusiveMaximum?: number | null
+  minimum?: number | null
+  exclusiveMinimum?: number | null
+  items?: JsonSchemaOutput | null
+  contains?: JsonSchemaOutput | null
+  maxContains?: number | null
+  minContains?: number | null
+  maxItems?: number | null
+  minItems?: number | null
+  uniqueItems?: boolean | null
+  properties?: {
+    [key: string]: JsonSchemaOutput
+  } | null
+  patternProperties?: {
+    [key: string]: JsonSchemaOutput
+  } | null
+  additionalProperties?: boolean | JsonSchemaOutput | null
+  maxProperties?: number | null
+  minProperties?: number | null
+  required?: string[] | null
+  dependentRequired?: {
+    [key: string]: string[]
+  } | null
+  dependentSchemas?: {
+    [key: string]: JsonSchemaOutput
+  } | null
+  propertyNames?: JsonSchemaOutput | null
 }
 
 export type Prompt = {

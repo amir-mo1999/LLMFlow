@@ -1,1897 +1,2688 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Backend",
-    "version": "0.1.0"
-  },
-  "paths": {
-    "/auth/login": {
-      "post": {
-        "tags": ["auth"],
-        "summary": "Login",
-        "description": "Endpoint for the login procedure. Takes username and password as form-data input.\nIf credentials match a user in the database return user data and access token else return 401.",
-        "operationId": "login",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_login_auth_login_post"
-              }
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Backend",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "description": "Endpoint for the login procedure. Takes username and password as form-data input.\nIf credentials match a user in the database return user data and access token else return 401.",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_login_auth_login_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserWithAccessToken"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Incorrect username or password"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          },
-          "required": true
         },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserWithAccessToken"
-                }
-              }
+        "/auth/refresh-token": {
+            "get": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh Token",
+                "operationId": "refresh_token",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserWithAccessToken"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Not authenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "Incorrect username or password"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/refresh-token": {
-      "get": {
-        "tags": ["auth"],
-        "summary": "Refresh Token",
-        "operationId": "refresh_token",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserWithAccessToken"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "Not authenticated"
-          }
         },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/evaluate/{prompt_id}": {
-      "post": {
-        "tags": ["evaluate"],
-        "summary": "Evaluate",
-        "operationId": "evaluate",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "prompt_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Prompt Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EvaluateSummary"
+        "/evaluate/{prompt_id}": {
+            "post": {
+                "tags": [
+                    "evaluate"
+                ],
+                "summary": "Evaluate",
+                "operationId": "evaluate",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "prompt_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Prompt Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EvaluateSummary"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          },
-          "409": {
-            "detail": "document not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/db/user": {
-      "post": {
-        "tags": ["db"],
-        "summary": "Post User",
-        "operationId": "post_user",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserRouteInput"
-              }
-            }
-          },
-          "required": true
         },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+        "/db/user": {
+            "post": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Post User",
+                "operationId": "post_user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRouteInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "document already exists"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "document already exists"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/db/user/{username}": {
-      "get": {
-        "tags": ["db"],
-        "summary": "Get User",
-        "operationId": "get_user",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "Email of the user to retrieve",
-              "title": "Username"
-            },
-            "description": "Email of the user to retrieve"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "404": {
-            "detail": "document not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Not Found"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/db/ai-function": {
-      "get": {
-        "tags": ["db"],
-        "summary": "Get Ai Functions",
-        "operationId": "get_ai_functions",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/AIFunction"
-                  },
-                  "type": "array",
-                  "title": "Response Get Ai Functions Db Ai Function Get"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "Not authenticated"
-          }
         },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": ["db"],
-        "summary": "Post Ai Function",
-        "operationId": "post_ai_function",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AIFunctionRouteInput"
-              }
+        "/db/user/{username}": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get User",
+                "operationId": "get_user",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Email of the user to retrieve",
+                            "title": "Username"
+                        },
+                        "description": "Email of the user to retrieve"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          },
-          "required": true
         },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AIFunction"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
+        "/db/ai-function": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get Ai Functions",
+                "operationId": "get_ai_functions",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/AIFunction"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get Ai Functions Db Ai Function Get"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Not authenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
             },
-            "detail": "Not authenticated"
-          },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "document already exists"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
+            "post": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Post Ai Function",
+                "operationId": "post_ai_function",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AIFunctionRouteInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AIFunction"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Not authenticated"
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "document already exists"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
             }
-          }
         },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/db/ai-function/{ai_function_id}": {
-      "get": {
-        "tags": ["db"],
-        "summary": "Get Ai Function",
-        "operationId": "get_ai_function",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "ai_function_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Ai Function Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AIFunction"
+        "/db/ai-function/{ai_function_id}": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get Ai Function",
+                "operationId": "get_ai_function",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "ai_function_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Ai Function Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AIFunction"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
-            }
-          },
-          "401": {
-            "detail": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
             },
-            "description": "Unauthorized"
-          },
-          "404": {
-            "detail": "document not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
+            "delete": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Delete Ai Function",
+                "operationId": "delete_ai_function",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "ai_function_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Ai Function Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
-            },
-            "description": "Not Found"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
             }
-          }
-        }
-      },
-      "delete": {
-        "tags": ["db"],
-        "summary": "Delete Ai Function",
-        "operationId": "delete_ai_function",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "ai_function_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Ai Function Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "detail": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Unauthorized"
-          },
-          "404": {
-            "detail": "document not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Not Found"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/db/prompt": {
-      "post": {
-        "tags": ["db"],
-        "summary": "Post Prompt",
-        "operationId": "post_prompt",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PromptRouteInput"
-              }
-            }
-          },
-          "required": true
         },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
-                }
-              }
+        "/db/prompt": {
+            "post": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Post Prompt",
+                "operationId": "post_prompt",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PromptRouteInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Not authenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "AI Function does not exist"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "Not authenticated"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "AI Function does not exist"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
         },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/db/prompt/{prompt_id}": {
-      "get": {
-        "tags": ["db"],
-        "summary": "Get Prompt",
-        "operationId": "get_prompt",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "prompt_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Prompt Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Prompt"
+        "/db/prompt/{prompt_id}": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get Prompt",
+                "operationId": "get_prompt",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "prompt_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Prompt Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Prompt"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
-            }
-          },
-          "401": {
-            "detail": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
             },
-            "description": "Unauthorized"
-          },
-          "404": {
-            "detail": "document not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
+            "delete": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Delete Prompt",
+                "operationId": "delete_prompt",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "prompt_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Prompt Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
-            },
-            "description": "Not Found"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
             }
-          }
-        }
-      },
-      "delete": {
-        "tags": ["db"],
-        "summary": "Delete Prompt",
-        "operationId": "delete_prompt",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "prompt_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Prompt Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "detail": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Unauthorized"
-          },
-          "404": {
-            "detail": "document not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Not Found"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/db/prompts/{ai_function_id}": {
-      "get": {
-        "tags": ["db"],
-        "summary": "Get Prompts",
-        "operationId": "get_prompts",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "ai_function_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Ai Function Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Prompt"
-                  },
-                  "title": "Response Get Prompts Db Prompts  Ai Function Id  Get"
-                }
-              }
-            }
-          },
-          "401": {
-            "detail": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Unauthorized"
-          },
-          "404": {
-            "detail": "document not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "description": "Not Found"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/db/prompts": {
-      "get": {
-        "tags": ["db"],
-        "summary": "Get All Prompts",
-        "operationId": "get_all_prompts",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/Prompt"
-                  },
-                  "type": "array",
-                  "title": "Response Get All Prompts Db Prompts Get"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "Not authenticated"
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HttpExceptionModel"
-                }
-              }
-            },
-            "detail": "document not found"
-          }
         },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
+        "/db/prompts/{ai_function_id}": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get Prompts",
+                "operationId": "get_prompts",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "ai_function_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Ai Function Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Prompt"
+                                    },
+                                    "title": "Response Get Prompts Db Prompts  Ai Function Id  Get"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/db/prompts": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get All Prompts",
+                "operationId": "get_all_prompts",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/Prompt"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get All Prompts Db Prompts Get"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Not authenticated"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "document not found"
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AIFunction": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Name",
+                        "example": "Summarize Texts"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 1000,
+                        "minLength": 1,
+                        "title": "Description",
+                        "example": "Summarizes english texts to a given number_of_sentences."
+                    },
+                    "input_variables": {
+                        "items": {
+                            "$ref": "#/components/schemas/InputVariable"
+                        },
+                        "type": "array",
+                        "title": "Input Variables",
+                        "example": [
+                            {
+                                "name": "text"
+                            },
+                            {
+                                "name": "number_of_sentences"
+                            }
+                        ]
+                    },
+                    "output_schema": {
+                        "$ref": "#/components/schemas/JsonSchema-Output",
+                        "example": {
+                            "type": "string"
+                        }
+                    },
+                    "assert": {
+                        "items": {
+                            "$ref": "#/components/schemas/Assertion"
+                        },
+                        "type": "array",
+                        "title": "Assert",
+                        "example": [
+                            {
+                                "type": "icontains",
+                                "value": "the",
+                                "weight": 1
+                            },
+                            {
+                                "type": "contains",
+                                "value": "thgewgewgewgewge",
+                                "weight": 1
+                            }
+                        ]
+                    },
+                    "test_cases": {
+                        "items": {
+                            "$ref": "#/components/schemas/TestCase-Output"
+                        },
+                        "type": "array",
+                        "title": "Test Cases",
+                        "example": [
+                            {
+                                "assert": [
+                                    {
+                                        "type": "icontains",
+                                        "value": "serendipity",
+                                        "weight": 5
+                                    }
+                                ],
+                                "vars": {
+                                    "number_of_sentences": "2",
+                                    "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed\u2014a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."
+                                }
+                            },
+                            {
+                                "assert": [
+                                    {
+                                        "type": "icontains",
+                                        "value": "minimalism",
+                                        "weight": 5
+                                    }
+                                ],
+                                "vars": {
+                                    "number_of_sentences": "2",
+                                    "text": "The art of minimalism is more than just decluttering your space\u2014it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it\u2019s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."
+                                }
+                            }
+                        ]
+                    },
+                    "_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": " Id"
+                    },
+                    "number_of_prompts": {
+                        "type": "integer",
+                        "minimum": 0.0,
+                        "title": "Number Of Prompts"
+                    },
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "description",
+                    "input_variables",
+                    "output_schema",
+                    "assert",
+                    "test_cases",
+                    "number_of_prompts",
+                    "username",
+                    "creation_time"
+                ],
+                "title": "AIFunction"
+            },
+            "AIFunctionRouteInput": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Name",
+                        "example": "Summarize Texts"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 1000,
+                        "minLength": 1,
+                        "title": "Description",
+                        "example": "Summarizes english texts to a given number_of_sentences."
+                    },
+                    "input_variables": {
+                        "items": {
+                            "$ref": "#/components/schemas/InputVariable"
+                        },
+                        "type": "array",
+                        "title": "Input Variables",
+                        "example": [
+                            {
+                                "name": "text"
+                            },
+                            {
+                                "name": "number_of_sentences"
+                            }
+                        ]
+                    },
+                    "output_schema": {
+                        "$ref": "#/components/schemas/JsonSchema-Input",
+                        "example": {
+                            "type": "string"
+                        }
+                    },
+                    "assert": {
+                        "items": {
+                            "$ref": "#/components/schemas/Assertion"
+                        },
+                        "type": "array",
+                        "title": "Assert",
+                        "example": [
+                            {
+                                "type": "icontains",
+                                "value": "the",
+                                "weight": 1
+                            },
+                            {
+                                "type": "contains",
+                                "value": "thgewgewgewgewge",
+                                "weight": 1
+                            }
+                        ]
+                    },
+                    "test_cases": {
+                        "items": {
+                            "$ref": "#/components/schemas/TestCase-Input"
+                        },
+                        "type": "array",
+                        "title": "Test Cases",
+                        "example": [
+                            {
+                                "assert": [
+                                    {
+                                        "type": "icontains",
+                                        "value": "serendipity",
+                                        "weight": 5
+                                    }
+                                ],
+                                "vars": {
+                                    "number_of_sentences": "2",
+                                    "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed\u2014a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."
+                                }
+                            },
+                            {
+                                "assert": [
+                                    {
+                                        "type": "icontains",
+                                        "value": "minimalism",
+                                        "weight": 5
+                                    }
+                                ],
+                                "vars": {
+                                    "number_of_sentences": "2",
+                                    "text": "The art of minimalism is more than just decluttering your space\u2014it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it\u2019s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."
+                                }
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "description",
+                    "input_variables",
+                    "output_schema",
+                    "assert",
+                    "test_cases"
+                ],
+                "title": "AIFunctionRouteInput"
+            },
+            "Assertion": {
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/BaseAssertionTypes"
+                    },
+                    "value": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Value"
+                    },
+                    "threshold": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Threshold"
+                    },
+                    "weight": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "minimum": 1.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Weight"
+                    },
+                    "metric": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Metric"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "Assertion"
+            },
+            "BaseAssertionTypes": {
+                "type": "string",
+                "enum": [
+                    "contains",
+                    "contains-all",
+                    "contains-any",
+                    "contains-json",
+                    "contains-sql",
+                    "contains-xml",
+                    "cost",
+                    "equals",
+                    "icontains",
+                    "icontains-all",
+                    "icontains-any",
+                    "is-json",
+                    "is-sql",
+                    "is-xml",
+                    "javascript",
+                    "latency",
+                    "levenshtein",
+                    "perplexity-score",
+                    "perplexity",
+                    "python",
+                    "regex",
+                    "rouge-n",
+                    "starts-with"
+                ],
+                "title": "BaseAssertionTypes"
+            },
+            "Body_login_auth_login_post": {
+                "properties": {
+                    "grant_type": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "password"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Grant Type"
+                    },
+                    "username": {
+                        "type": "string",
+                        "title": "Username"
+                    },
+                    "password": {
+                        "type": "string",
+                        "title": "Password"
+                    },
+                    "scope": {
+                        "type": "string",
+                        "title": "Scope",
+                        "default": ""
+                    },
+                    "client_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Client Id"
+                    },
+                    "client_secret": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Client Secret"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "password"
+                ],
+                "title": "Body_login_auth_login_post"
+            },
+            "EvaluateResult": {
+                "properties": {
+                    "response": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ProviderResponse"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "vars": {
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "type": "object",
+                        "title": "Vars"
+                    },
+                    "score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Score"
+                    },
+                    "latencyMs": {
+                        "type": "integer",
+                        "title": "Latencyms"
+                    },
+                    "gradingResult": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/GradingResult"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "namedScores": {
+                        "additionalProperties": {
+                            "type": "number"
+                        },
+                        "type": "object",
+                        "title": "Namedscores"
+                    },
+                    "cost": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Cost"
+                    },
+                    "metadata": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Metadata"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "score",
+                    "latencyMs",
+                    "namedScores"
+                ],
+                "title": "EvaluateResult"
+            },
+            "EvaluateStats": {
+                "properties": {
+                    "successes": {
+                        "type": "integer",
+                        "title": "Successes"
+                    },
+                    "failures": {
+                        "type": "integer",
+                        "title": "Failures"
+                    },
+                    "tokenUsage": {
+                        "$ref": "#/components/schemas/TokenUsage"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "successes",
+                    "failures",
+                    "tokenUsage"
+                ],
+                "title": "EvaluateStats"
+            },
+            "EvaluateSummary": {
+                "properties": {
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Timestamp"
+                    },
+                    "results": {
+                        "items": {
+                            "$ref": "#/components/schemas/EvaluateResult"
+                        },
+                        "type": "array",
+                        "title": "Results"
+                    },
+                    "stats": {
+                        "$ref": "#/components/schemas/EvaluateStats"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "timestamp",
+                    "results",
+                    "stats"
+                ],
+                "title": "EvaluateSummary"
+            },
+            "GradingResult": {
+                "properties": {
+                    "pass": {
+                        "type": "boolean",
+                        "title": "Pass"
+                    },
+                    "score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Score"
+                    },
+                    "componentResults": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/GradingResult"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Componentresults"
+                    },
+                    "assertion": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Assertion"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "comment": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Comment"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "pass",
+                    "score"
+                ],
+                "title": "GradingResult"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "HttpExceptionModel": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "title": "Status"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "message",
+                    "status"
+                ],
+                "title": "HttpExceptionModel"
+            },
+            "InputVariable": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "pattern": "^[^\\s]+$",
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "InputVariable"
+            },
+            "JsonSchema-Input": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "string",
+                            "number",
+                            "integer",
+                            "boolean",
+                            "object",
+                            "array",
+                            "null"
+                        ],
+                        "title": "Type"
+                    },
+                    "enum": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "type": "number"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Enum"
+                    },
+                    "const": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Const"
+                    },
+                    "maxLength": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxlength"
+                    },
+                    "minLength": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minlength"
+                    },
+                    "pattern": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Pattern"
+                    },
+                    "multipleOf": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Multipleof"
+                    },
+                    "maximum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maximum"
+                    },
+                    "exclusiveMaximum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Exclusivemaximum"
+                    },
+                    "minimum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minimum"
+                    },
+                    "exclusiveMinimum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Exclusiveminimum"
+                    },
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Input"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "contains": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Input"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "maxContains": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxcontains"
+                    },
+                    "minContains": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mincontains"
+                    },
+                    "maxItems": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxitems"
+                    },
+                    "minItems": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minitems"
+                    },
+                    "uniqueItems": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Uniqueitems"
+                    },
+                    "properties": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/JsonSchema-Input"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Properties"
+                    },
+                    "patternProperties": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/JsonSchema-Input"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Patternproperties"
+                    },
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Input"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Additionalproperties"
+                    },
+                    "maxProperties": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxproperties"
+                    },
+                    "minProperties": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minproperties"
+                    },
+                    "required": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Required"
+                    },
+                    "dependentRequired": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dependentrequired"
+                    },
+                    "dependentSchemas": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/JsonSchema-Input"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dependentschemas"
+                    },
+                    "propertyNames": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Input"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "JsonSchema"
+            },
+            "JsonSchema-Output": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "string",
+                            "number",
+                            "integer",
+                            "boolean",
+                            "object",
+                            "array",
+                            "null"
+                        ],
+                        "title": "Type"
+                    },
+                    "enum": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "type": "number"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "type": "integer"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Enum"
+                    },
+                    "const": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Const"
+                    },
+                    "maxLength": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxlength"
+                    },
+                    "minLength": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minlength"
+                    },
+                    "pattern": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Pattern"
+                    },
+                    "multipleOf": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Multipleof"
+                    },
+                    "maximum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maximum"
+                    },
+                    "exclusiveMaximum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Exclusivemaximum"
+                    },
+                    "minimum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minimum"
+                    },
+                    "exclusiveMinimum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Exclusiveminimum"
+                    },
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Output"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "contains": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Output"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "maxContains": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxcontains"
+                    },
+                    "minContains": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mincontains"
+                    },
+                    "maxItems": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxitems"
+                    },
+                    "minItems": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minitems"
+                    },
+                    "uniqueItems": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Uniqueitems"
+                    },
+                    "properties": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/JsonSchema-Output"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Properties"
+                    },
+                    "patternProperties": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/JsonSchema-Output"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Patternproperties"
+                    },
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Output"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Additionalproperties"
+                    },
+                    "maxProperties": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxproperties"
+                    },
+                    "minProperties": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minproperties"
+                    },
+                    "required": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Required"
+                    },
+                    "dependentRequired": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dependentrequired"
+                    },
+                    "dependentSchemas": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/JsonSchema-Output"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dependentschemas"
+                    },
+                    "propertyNames": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Output"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "JsonSchema"
+            },
+            "Prompt": {
+                "properties": {
+                    "prompt_type": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "enum": [
+                                    "single_shot"
+                                ],
+                                "const": "single_shot"
+                            },
+                            {
+                                "type": "string",
+                                "enum": [
+                                    "chat"
+                                ],
+                                "const": "chat"
+                            }
+                        ],
+                        "title": "Prompt Type",
+                        "example": "single_shot"
+                    },
+                    "messages": {
+                        "items": {
+                            "$ref": "#/components/schemas/PromptMessage"
+                        },
+                        "type": "array",
+                        "title": "Messages",
+                        "example": [
+                            {
+                                "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
+                                "role": "user"
+                            }
+                        ]
+                    },
+                    "ai_function_id": {
+                        "type": "string",
+                        "title": "Ai Function Id"
+                    },
+                    "_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": " Id"
+                    },
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time"
+                    },
+                    "last_eval": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/EvaluateSummary"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt_type",
+                    "messages",
+                    "ai_function_id",
+                    "username",
+                    "creation_time"
+                ],
+                "title": "Prompt"
+            },
+            "PromptMessage": {
+                "properties": {
+                    "role": {
+                        "$ref": "#/components/schemas/RoleEnum"
+                    },
+                    "content": {
+                        "type": "string",
+                        "title": "Content"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "role",
+                    "content"
+                ],
+                "title": "PromptMessage"
+            },
+            "PromptRouteInput": {
+                "properties": {
+                    "prompt_type": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "enum": [
+                                    "single_shot"
+                                ],
+                                "const": "single_shot"
+                            },
+                            {
+                                "type": "string",
+                                "enum": [
+                                    "chat"
+                                ],
+                                "const": "chat"
+                            }
+                        ],
+                        "title": "Prompt Type",
+                        "example": "single_shot"
+                    },
+                    "messages": {
+                        "items": {
+                            "$ref": "#/components/schemas/PromptMessage"
+                        },
+                        "type": "array",
+                        "title": "Messages",
+                        "example": [
+                            {
+                                "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
+                                "role": "user"
+                            }
+                        ]
+                    },
+                    "ai_function_id": {
+                        "type": "string",
+                        "title": "Ai Function Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt_type",
+                    "messages",
+                    "ai_function_id"
+                ],
+                "title": "PromptRouteInput"
+            },
+            "ProviderResponse": {
+                "properties": {
+                    "cached": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Cached"
+                    },
+                    "cost": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Cost"
+                    },
+                    "error": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Error"
+                    },
+                    "logProbs": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "number"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Logprobs"
+                    },
+                    "metadata": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Metadata"
+                    },
+                    "output": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Output"
+                    },
+                    "tokenUsage": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TokenUsage"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "ProviderResponse"
+            },
+            "RoleEnum": {
+                "type": "string",
+                "enum": [
+                    "system",
+                    "user",
+                    "assistant"
+                ],
+                "title": "RoleEnum"
+            },
+            "SuccessResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "title": "Message",
+                        "default": "Success"
+                    }
+                },
+                "type": "object",
+                "title": "SuccessResponse"
+            },
+            "TestCase-Input": {
+                "properties": {
+                    "vars": {
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "type": "object",
+                        "title": "Vars"
+                    },
+                    "assert": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/Assertion"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Assert"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "vars",
+                    "assert"
+                ],
+                "title": "TestCase"
+            },
+            "TestCase-Output": {
+                "properties": {
+                    "vars": {
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "type": "object",
+                        "title": "Vars"
+                    },
+                    "assert": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/Assertion"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Assert"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "vars",
+                    "assert"
+                ],
+                "title": "TestCase"
+            },
+            "TokenUsage": {
+                "properties": {
+                    "total": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Total",
+                        "default": 0
+                    },
+                    "prompt": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Prompt",
+                        "default": 0
+                    },
+                    "completion": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Completion",
+                        "default": 0
+                    },
+                    "cached": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Cached",
+                        "default": 0
+                    }
+                },
+                "type": "object",
+                "title": "TokenUsage"
+            },
+            "User": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "First Name"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "Last Name"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "developer",
+                            "prompt_engineer",
+                            "admin"
+                        ],
+                        "title": "Role"
+                    },
+                    "_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": " Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "first_name",
+                    "last_name",
+                    "role"
+                ],
+                "title": "User"
+            },
+            "UserRouteInput": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "First Name"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "Last Name"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "developer",
+                            "prompt_engineer",
+                            "admin"
+                        ],
+                        "title": "Role"
+                    },
+                    "hashed_password": {
+                        "type": "string",
+                        "title": "Hashed Password"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "first_name",
+                    "last_name",
+                    "role",
+                    "hashed_password"
+                ],
+                "title": "UserRouteInput"
+            },
+            "UserWithAccessToken": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "First Name"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "Last Name"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "developer",
+                            "prompt_engineer",
+                            "admin"
+                        ],
+                        "title": "Role"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": " Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "username",
+                    "first_name",
+                    "last_name",
+                    "role",
+                    "_id"
+                ],
+                "title": "UserWithAccessToken"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "OAuth2PasswordBearer": {
+                "type": "oauth2",
+                "flows": {
+                    "password": {
+                        "scopes": {},
+                        "tokenUrl": "/auth/login"
+                    }
+                }
+            }
+        }
     }
-  },
-  "components": {
-    "schemas": {
-      "AIFunction": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 40,
-            "minLength": 1,
-            "title": "Name",
-            "example": "Summarize Texts"
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 1000,
-            "minLength": 1,
-            "title": "Description",
-            "example": "Summarizes english texts to a given number_of_sentences."
-          },
-          "input_variables": {
-            "items": {
-              "$ref": "#/components/schemas/InputVariable"
-            },
-            "type": "array",
-            "title": "Input Variables",
-            "example": [
-              {
-                "name": "text"
-              },
-              {
-                "name": "number_of_sentences"
-              }
-            ]
-          },
-          "assert": {
-            "items": {
-              "$ref": "#/components/schemas/Assertion"
-            },
-            "type": "array",
-            "title": "Assert",
-            "example": [
-              {
-                "type": "icontains",
-                "value": "the",
-                "weight": 1
-              },
-              {
-                "type": "contains",
-                "value": "thgewgewgewgewge",
-                "weight": 1
-              }
-            ]
-          },
-          "test_cases": {
-            "items": {
-              "$ref": "#/components/schemas/TestCase-Output"
-            },
-            "type": "array",
-            "title": "Test Cases",
-            "example": [
-              {
-                "assert": [
-                  {
-                    "type": "icontains",
-                    "value": "serendipity",
-                    "weight": 5
-                  }
-                ],
-                "vars": {
-                  "number_of_sentences": "2",
-                  "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed\u2014a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."
-                }
-              },
-              {
-                "assert": [
-                  {
-                    "type": "icontains",
-                    "value": "minimalism",
-                    "weight": 5
-                  }
-                ],
-                "vars": {
-                  "number_of_sentences": "2",
-                  "text": "The art of minimalism is more than just decluttering your space\u2014it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it\u2019s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."
-                }
-              }
-            ]
-          },
-          "_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": " Id"
-          },
-          "number_of_prompts": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Number Of Prompts"
-          },
-          "username": {
-            "type": "string",
-            "format": "email",
-            "title": "Username"
-          },
-          "creation_time": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Creation Time"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "description",
-          "input_variables",
-          "assert",
-          "test_cases",
-          "number_of_prompts",
-          "username",
-          "creation_time"
-        ],
-        "title": "AIFunction"
-      },
-      "AIFunctionRouteInput": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 40,
-            "minLength": 1,
-            "title": "Name",
-            "example": "Summarize Texts"
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 1000,
-            "minLength": 1,
-            "title": "Description",
-            "example": "Summarizes english texts to a given number_of_sentences."
-          },
-          "input_variables": {
-            "items": {
-              "$ref": "#/components/schemas/InputVariable"
-            },
-            "type": "array",
-            "title": "Input Variables",
-            "example": [
-              {
-                "name": "text"
-              },
-              {
-                "name": "number_of_sentences"
-              }
-            ]
-          },
-          "assert": {
-            "items": {
-              "$ref": "#/components/schemas/Assertion"
-            },
-            "type": "array",
-            "title": "Assert",
-            "example": [
-              {
-                "type": "icontains",
-                "value": "the",
-                "weight": 1
-              },
-              {
-                "type": "contains",
-                "value": "thgewgewgewgewge",
-                "weight": 1
-              }
-            ]
-          },
-          "test_cases": {
-            "items": {
-              "$ref": "#/components/schemas/TestCase-Input"
-            },
-            "type": "array",
-            "title": "Test Cases",
-            "example": [
-              {
-                "assert": [
-                  {
-                    "type": "icontains",
-                    "value": "serendipity",
-                    "weight": 5
-                  }
-                ],
-                "vars": {
-                  "number_of_sentences": "2",
-                  "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed\u2014a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."
-                }
-              },
-              {
-                "assert": [
-                  {
-                    "type": "icontains",
-                    "value": "minimalism",
-                    "weight": 5
-                  }
-                ],
-                "vars": {
-                  "number_of_sentences": "2",
-                  "text": "The art of minimalism is more than just decluttering your space\u2014it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it\u2019s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."
-                }
-              }
-            ]
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "description",
-          "input_variables",
-          "assert",
-          "test_cases"
-        ],
-        "title": "AIFunctionRouteInput"
-      },
-      "Assertion": {
-        "properties": {
-          "type": {
-            "$ref": "#/components/schemas/BaseAssertionTypes"
-          },
-          "value": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              {
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Value"
-          },
-          "threshold": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Threshold"
-          },
-          "weight": {
-            "anyOf": [
-              {
-                "type": "number",
-                "minimum": 1.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Weight"
-          },
-          "metric": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metric"
-          }
-        },
-        "type": "object",
-        "required": ["type"],
-        "title": "Assertion"
-      },
-      "BaseAssertionTypes": {
-        "type": "string",
-        "enum": [
-          "contains",
-          "contains-all",
-          "contains-any",
-          "contains-json",
-          "contains-sql",
-          "contains-xml",
-          "cost",
-          "equals",
-          "icontains",
-          "icontains-all",
-          "icontains-any",
-          "is-json",
-          "is-sql",
-          "is-xml",
-          "javascript",
-          "latency",
-          "levenshtein",
-          "perplexity-score",
-          "perplexity",
-          "python",
-          "regex",
-          "rouge-n",
-          "starts-with"
-        ],
-        "title": "BaseAssertionTypes"
-      },
-      "Body_login_auth_login_post": {
-        "properties": {
-          "grant_type": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "password"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Grant Type"
-          },
-          "username": {
-            "type": "string",
-            "title": "Username"
-          },
-          "password": {
-            "type": "string",
-            "title": "Password"
-          },
-          "scope": {
-            "type": "string",
-            "title": "Scope",
-            "default": ""
-          },
-          "client_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Client Id"
-          },
-          "client_secret": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Client Secret"
-          }
-        },
-        "type": "object",
-        "required": ["username", "password"],
-        "title": "Body_login_auth_login_post"
-      },
-      "EvaluateResult": {
-        "properties": {
-          "response": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ProviderResponse"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "vars": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "title": "Vars"
-          },
-          "score": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Score"
-          },
-          "latencyMs": {
-            "type": "integer",
-            "title": "Latencyms"
-          },
-          "gradingResult": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/GradingResult"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "namedScores": {
-            "additionalProperties": {
-              "type": "number"
-            },
-            "type": "object",
-            "title": "Namedscores"
-          },
-          "cost": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cost"
-          },
-          "metadata": {
-            "anyOf": [
-              {
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metadata"
-          }
-        },
-        "type": "object",
-        "required": ["score", "latencyMs", "namedScores"],
-        "title": "EvaluateResult"
-      },
-      "EvaluateStats": {
-        "properties": {
-          "successes": {
-            "type": "integer",
-            "title": "Successes"
-          },
-          "failures": {
-            "type": "integer",
-            "title": "Failures"
-          },
-          "tokenUsage": {
-            "$ref": "#/components/schemas/TokenUsage"
-          }
-        },
-        "type": "object",
-        "required": ["successes", "failures", "tokenUsage"],
-        "title": "EvaluateStats"
-      },
-      "EvaluateSummary": {
-        "properties": {
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Timestamp"
-          },
-          "results": {
-            "items": {
-              "$ref": "#/components/schemas/EvaluateResult"
-            },
-            "type": "array",
-            "title": "Results"
-          },
-          "stats": {
-            "$ref": "#/components/schemas/EvaluateStats"
-          }
-        },
-        "type": "object",
-        "required": ["timestamp", "results", "stats"],
-        "title": "EvaluateSummary"
-      },
-      "GradingResult": {
-        "properties": {
-          "pass": {
-            "type": "boolean",
-            "title": "Pass"
-          },
-          "score": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Score"
-          },
-          "componentResults": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/GradingResult"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Componentresults"
-          },
-          "assertion": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/Assertion"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "comment": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Comment"
-          }
-        },
-        "type": "object",
-        "required": ["pass", "score"],
-        "title": "GradingResult"
-      },
-      "HTTPValidationError": {
-        "properties": {
-          "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
-            "type": "array",
-            "title": "Detail"
-          }
-        },
-        "type": "object",
-        "title": "HTTPValidationError"
-      },
-      "HttpExceptionModel": {
-        "properties": {
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "status": {
-            "type": "integer",
-            "title": "Status"
-          }
-        },
-        "type": "object",
-        "required": ["message", "status"],
-        "title": "HttpExceptionModel"
-      },
-      "InputVariable": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 40,
-            "minLength": 1,
-            "pattern": "^[^\\s]+$",
-            "title": "Name"
-          }
-        },
-        "type": "object",
-        "required": ["name"],
-        "title": "InputVariable"
-      },
-      "Prompt": {
-        "properties": {
-          "prompt_type": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": ["single_shot"],
-                "const": "single_shot"
-              },
-              {
-                "type": "string",
-                "enum": ["chat"],
-                "const": "chat"
-              }
-            ],
-            "title": "Prompt Type",
-            "example": "single_shot"
-          },
-          "messages": {
-            "items": {
-              "$ref": "#/components/schemas/PromptMessage"
-            },
-            "type": "array",
-            "title": "Messages",
-            "example": [
-              {
-                "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
-                "role": "user"
-              }
-            ]
-          },
-          "ai_function_id": {
-            "type": "string",
-            "title": "Ai Function Id"
-          },
-          "_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": " Id"
-          },
-          "username": {
-            "type": "string",
-            "format": "email",
-            "title": "Username"
-          },
-          "creation_time": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Creation Time"
-          },
-          "last_eval": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/EvaluateSummary"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "type": "object",
-        "required": [
-          "prompt_type",
-          "messages",
-          "ai_function_id",
-          "username",
-          "creation_time"
-        ],
-        "title": "Prompt"
-      },
-      "PromptMessage": {
-        "properties": {
-          "role": {
-            "$ref": "#/components/schemas/RoleEnum"
-          },
-          "content": {
-            "type": "string",
-            "title": "Content"
-          }
-        },
-        "type": "object",
-        "required": ["role", "content"],
-        "title": "PromptMessage"
-      },
-      "PromptRouteInput": {
-        "properties": {
-          "prompt_type": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": ["single_shot"],
-                "const": "single_shot"
-              },
-              {
-                "type": "string",
-                "enum": ["chat"],
-                "const": "chat"
-              }
-            ],
-            "title": "Prompt Type",
-            "example": "single_shot"
-          },
-          "messages": {
-            "items": {
-              "$ref": "#/components/schemas/PromptMessage"
-            },
-            "type": "array",
-            "title": "Messages",
-            "example": [
-              {
-                "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
-                "role": "user"
-              }
-            ]
-          },
-          "ai_function_id": {
-            "type": "string",
-            "title": "Ai Function Id"
-          }
-        },
-        "type": "object",
-        "required": ["prompt_type", "messages", "ai_function_id"],
-        "title": "PromptRouteInput"
-      },
-      "ProviderResponse": {
-        "properties": {
-          "cached": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cached"
-          },
-          "cost": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cost"
-          },
-          "error": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Error"
-          },
-          "logProbs": {
-            "anyOf": [
-              {
-                "items": {
-                  "type": "number"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Logprobs"
-          },
-          "metadata": {
-            "anyOf": [
-              {
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metadata"
-          },
-          "output": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {},
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Output"
-          },
-          "tokenUsage": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/TokenUsage"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "type": "object",
-        "title": "ProviderResponse"
-      },
-      "RoleEnum": {
-        "type": "string",
-        "enum": ["system", "user", "assistant"],
-        "title": "RoleEnum"
-      },
-      "SuccessResponse": {
-        "properties": {
-          "message": {
-            "type": "string",
-            "title": "Message",
-            "default": "Success"
-          }
-        },
-        "type": "object",
-        "title": "SuccessResponse"
-      },
-      "TestCase-Input": {
-        "properties": {
-          "vars": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "title": "Vars"
-          },
-          "assert": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/Assertion"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Assert"
-          }
-        },
-        "type": "object",
-        "required": ["vars", "assert"],
-        "title": "TestCase"
-      },
-      "TestCase-Output": {
-        "properties": {
-          "vars": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object",
-            "title": "Vars"
-          },
-          "assert": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/Assertion"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Assert"
-          }
-        },
-        "type": "object",
-        "required": ["vars", "assert"],
-        "title": "TestCase"
-      },
-      "TokenUsage": {
-        "properties": {
-          "total": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Total",
-            "default": 0
-          },
-          "prompt": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Prompt",
-            "default": 0
-          },
-          "completion": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Completion",
-            "default": 0
-          },
-          "cached": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cached",
-            "default": 0
-          }
-        },
-        "type": "object",
-        "title": "TokenUsage"
-      },
-      "User": {
-        "properties": {
-          "username": {
-            "type": "string",
-            "format": "email",
-            "title": "Username"
-          },
-          "first_name": {
-            "type": "string",
-            "minLength": 1,
-            "title": "First Name"
-          },
-          "last_name": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Last Name"
-          },
-          "role": {
-            "type": "string",
-            "enum": ["developer", "prompt_engineer", "admin"],
-            "title": "Role"
-          },
-          "_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": " Id"
-          }
-        },
-        "type": "object",
-        "required": ["username", "first_name", "last_name", "role"],
-        "title": "User"
-      },
-      "UserRouteInput": {
-        "properties": {
-          "username": {
-            "type": "string",
-            "format": "email",
-            "title": "Username"
-          },
-          "first_name": {
-            "type": "string",
-            "minLength": 1,
-            "title": "First Name"
-          },
-          "last_name": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Last Name"
-          },
-          "role": {
-            "type": "string",
-            "enum": ["developer", "prompt_engineer", "admin"],
-            "title": "Role"
-          },
-          "hashed_password": {
-            "type": "string",
-            "title": "Hashed Password"
-          }
-        },
-        "type": "object",
-        "required": [
-          "username",
-          "first_name",
-          "last_name",
-          "role",
-          "hashed_password"
-        ],
-        "title": "UserRouteInput"
-      },
-      "UserWithAccessToken": {
-        "properties": {
-          "access_token": {
-            "type": "string",
-            "title": "Access Token"
-          },
-          "username": {
-            "type": "string",
-            "format": "email",
-            "title": "Username"
-          },
-          "first_name": {
-            "type": "string",
-            "minLength": 1,
-            "title": "First Name"
-          },
-          "last_name": {
-            "type": "string",
-            "minLength": 1,
-            "title": "Last Name"
-          },
-          "role": {
-            "type": "string",
-            "enum": ["developer", "prompt_engineer", "admin"],
-            "title": "Role"
-          },
-          "_id": {
-            "type": "string",
-            "title": " Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "access_token",
-          "username",
-          "first_name",
-          "last_name",
-          "role",
-          "_id"
-        ],
-        "title": "UserWithAccessToken"
-      },
-      "ValidationError": {
-        "properties": {
-          "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Location"
-          },
-          "msg": {
-            "type": "string",
-            "title": "Message"
-          },
-          "type": {
-            "type": "string",
-            "title": "Error Type"
-          }
-        },
-        "type": "object",
-        "required": ["loc", "msg", "type"],
-        "title": "ValidationError"
-      }
-    },
-    "securitySchemes": {
-      "OAuth2PasswordBearer": {
-        "type": "oauth2",
-        "flows": {
-          "password": {
-            "scopes": {},
-            "tokenUrl": "/auth/login"
-          }
-        }
-      }
-    }
-  }
 }

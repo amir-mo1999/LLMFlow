@@ -4,6 +4,7 @@ from typing import Annotated, List, Optional
 
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
+from .json_schema import JsonSchema
 from .promptfoo_models import Assertion, TestCase
 from .root_model import RootModel
 
@@ -26,6 +27,8 @@ class AIFunctionRouteInput(RootModel):
     input_variables: List[InputVariable] = Field(
         ..., example=[{"name": "text"}, {"name": "number_of_sentences"}]
     )
+
+    output_schema: JsonSchema = Field(..., example={"type": "string"})
 
     assertions: List[Assertion] = Field(
         ...,
