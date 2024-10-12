@@ -1740,47 +1740,6 @@
                             }
                         ],
                         "title": "Required"
-                    },
-                    "dependentRequired": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": {
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "type": "array"
-                                },
-                                "type": "object"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Dependentrequired"
-                    },
-                    "dependentSchemas": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": {
-                                    "$ref": "#/components/schemas/JsonSchema-Input"
-                                },
-                                "type": "object"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Dependentschemas"
-                    },
-                    "propertyNames": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/JsonSchema-Input"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
                     }
                 },
                 "type": "object",
@@ -2070,47 +2029,6 @@
                             }
                         ],
                         "title": "Required"
-                    },
-                    "dependentRequired": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": {
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "type": "array"
-                                },
-                                "type": "object"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Dependentrequired"
-                    },
-                    "dependentSchemas": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": {
-                                    "$ref": "#/components/schemas/JsonSchema-Output"
-                                },
-                                "type": "object"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Dependentschemas"
-                    },
-                    "propertyNames": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/JsonSchema-Output"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
                     }
                 },
                 "type": "object",

@@ -12,6 +12,7 @@ import {
   Assertion,
   AIFunctionRouteInput,
   AIFunction,
+  JsonSchemaInput,
 } from "@/api/apiSchemas"
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
@@ -31,7 +32,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
-  const [outputSchema, setOutputSchema] = useState<object>({})
+  const [outputSchema, setOutputSchema] = useState<JsonSchemaInput>({ type: "string" })
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
@@ -77,6 +78,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       name: name,
       description: description,
       input_variables: inputVariables,
+      output_schema: outputSchema,
       assert: assertions,
       test_cases: testCases,
     }

@@ -39,9 +39,6 @@ class JsonSchema(RootModel):
     maxProperties: Optional[int] = None
     minProperties: Optional[int] = None
     required: Optional[List[str]] = None
-    dependentRequired: Optional[Dict[str, List[str]]] = None
-    dependentSchemas: Optional[Dict[str, "JsonSchema"]] = None
-    propertyNames: Optional["JsonSchema"] = None
 
 
 JsonSchema.update_forward_refs()

@@ -142,7 +142,6 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "rouge-n",
   "starts-with",
 ]
-
 export type BodyLoginAuthLoginPost = {
   grant_type?: string | null
   username: string
@@ -239,13 +238,6 @@ export type JsonSchemaInput = {
   maxProperties?: number | null
   minProperties?: number | null
   required?: string[] | null
-  dependentRequired?: {
-    [key: string]: string[]
-  } | null
-  dependentSchemas?: {
-    [key: string]: JsonSchemaInput
-  } | null
-  propertyNames?: JsonSchemaInput | null
 }
 
 export type JsonSchemaOutput = {
@@ -276,13 +268,6 @@ export type JsonSchemaOutput = {
   maxProperties?: number | null
   minProperties?: number | null
   required?: string[] | null
-  dependentRequired?: {
-    [key: string]: string[]
-  } | null
-  dependentSchemas?: {
-    [key: string]: JsonSchemaOutput
-  } | null
-  propertyNames?: JsonSchemaOutput | null
 }
 
 export type Prompt = {
