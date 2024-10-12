@@ -3,12 +3,11 @@ import Typography from "@mui/material/Typography"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import { useEffect, useState } from "react"
-import SingleShotPromptForm from "./SingleShotPromptForm"
-import ChatPromptForm from "./ChatPromptForm"
 import { PromptRouteInput, PromptMessage, AIFunction } from "@/api/apiSchemas"
 import { usePostPrompt } from "@/api/apiComponents"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
+import TextField from "@mui/material/TextField"
 
 interface PromptFormProps {
   aiFunctions: AIFunction[]
@@ -16,9 +15,7 @@ interface PromptFormProps {
 
 const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number>(0)
-  const [type, setType] = useState<PromptRouteInput["prompt_type"]>("single_shot")
   const [messages, setMessages] = useState<PromptMessage[]>([{ role: "user", content: "" }])
-  const [message, setMessage] = useState<string>("")
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
   const inputVarsInMessage = (message: string) => {
@@ -37,22 +34,18 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
   const updateDisableSubmit = () => {
     let messagesJoined: string = ""
 
-    if (type === "single_shot") {
-      messagesJoined = message
-    } else if (type === "chat") {
-      if (messages.some((msg) => msg.content === "")) {
-        messagesJoined = ""
-      } else {
-        messagesJoined = ""
-        messages.forEach((msg) => (messagesJoined += msg.content))
-      }
+    if (messages.some((msg) => msg.content === "")) {
+      messagesJoined = ""
+    } else {
+      messagesJoined = ""
+      messages.forEach((msg) => (messagesJoined += msg.content))
     }
 
     if (inputVarsInMessage(messagesJoined)) setDisableSubmit(false)
     else setDisableSubmit(true)
   }
 
-  useEffect(updateDisableSubmit, [message, messages])
+  useEffect(updateDisableSubmit, [messages])
 
   const onSelectedAIFunctionChange = (e: SelectChangeEvent) => {
     setSelectedAIFunctionIndx(Number(e.target.value))
@@ -70,22 +63,27 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
     setDisableSubmit(true)
 
     const newPrompt: PromptRouteInput = {
-      prompt_type: type,
       messages: messages,
       ai_function_id: aiFunctions[selectedAIFunctionIndx]._id as string,
     }
 
-    if (type === "single_shot") {
-      newPrompt.messages = [{ role: "user", content: message }]
-    }
-
     postPrompt({ body: newPrompt })
   }
-
-  const onPromptTypeChange = (e: SelectChangeEvent) => {
-    setType(e.target.value as PromptRouteInput["prompt_type"])
+  const handleRoleChange = (index: number, newRole: "user" | "system" | "assistant") => {
+    const updatedMessages = [...messages]
+    updatedMessages[index].role = newRole
+    setMessages(updatedMessages)
   }
 
+  const handleContentChange = (index: number, newContent: string) => {
+    const updatedMessages = [...messages]
+    updatedMessages[index].content = newContent
+    setMessages(updatedMessages)
+  }
+
+  const addMessage = () => {
+    setMessages([...messages, { role: "user", content: "" }])
+  }
   return (
     <Box sx={{ width: "100%" }}>
       <Select value={selectedAIFunctionIndx.toString()} onChange={onSelectedAIFunctionChange}>
@@ -98,17 +96,47 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
         })}
       </Select>
       <Typography>Select Prompt Type</Typography>
-      <Select value={type} onChange={onPromptTypeChange}>
-        <MenuItem value={"single_shot"}>Single Shot Prompt</MenuItem>
-        <MenuItem value={"chat"}>Chat Prompt</MenuItem>
-      </Select>
-      {type === "single_shot" ? (
-        <SingleShotPromptForm message={message} setMessage={setMessage}></SingleShotPromptForm>
-      ) : type === "chat" ? (
-        <ChatPromptForm messages={messages} setMessages={setMessages}></ChatPromptForm>
-      ) : (
-        "Invalid Prompt Type"
-      )}
+      <Box sx={{ width: "100%" }}>
+        {messages.map((message, index) => (
+          <Box key={index} sx={{ marginBottom: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                marginBottom: 1,
+              }}
+            >
+              <Box sx={{ minWidth: 120 }}>
+                <Select
+                  value={message.role}
+                  onChange={(e) =>
+                    handleRoleChange(index, e.target.value as "user" | "system" | "assistant")
+                  }
+                  fullWidth
+                >
+                  <MenuItem value="user">User</MenuItem>
+                  <MenuItem value="system">System</MenuItem>
+                  <MenuItem value="assistant">Assistant</MenuItem>
+                </Select>
+              </Box>
+              <TextField
+                label="Content"
+                value={message.content}
+                onChange={(e) => handleContentChange(index, e.target.value)}
+                multiline
+                minRows={3}
+                fullWidth
+              />
+            </Box>
+          </Box>
+        ))}
+        <Box textAlign="center">
+          <Button variant="contained" color="primary" onClick={addMessage}>
+            Add Message
+          </Button>
+        </Box>
+      </Box>
       {aiFunctions[selectedAIFunctionIndx].input_variables.map((variable, indx) => (
         <Typography key={indx}>- {variable.name}</Typography>
       ))}

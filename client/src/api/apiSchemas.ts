@@ -299,13 +299,6 @@ export type PromptMessage = {
 }
 
 export type PromptRouteInput = {
-  /**
-   * @example single_shot
-   */
-  prompt_type: "single_shot" | "chat"
-  /**
-   * @example {"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}
-   */
   messages: PromptMessage[]
   ai_function_id: string
 }
