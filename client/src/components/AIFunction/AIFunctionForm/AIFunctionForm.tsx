@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
+import JsonSchemaEditor from "@/components/JsonSchemaEditor"
 
 import {
   TestCaseInput,
@@ -126,6 +127,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
+      <Divider sx={{ marginY: 2 }}></Divider>
+      <JsonSchemaEditor schema={outputSchema} setSchema={setOutputSchema}></JsonSchemaEditor>
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <AssertionsForm assertions={assertions} setAssertions={setAssertions} />

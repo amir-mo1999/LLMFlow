@@ -64,6 +64,13 @@ export const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "#503C80",
+        },
+      },
+    },
     MuiDialog: {
       styleOverrides: {
         paper: {
