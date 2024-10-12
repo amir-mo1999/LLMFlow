@@ -8,16 +8,19 @@ import Tooltip from "@mui/material/Tooltip"
 import IconButton from "@mui/material/IconButton"
 import AddIcon from "@mui/icons-material/Add"
 import SettingsIcon from "@mui/icons-material/Settings"
+import DeleteIcon from "@mui/icons-material/Delete"
 
 interface FieldRowProps {
   schema: JsonSchemaInput
   setSchema?: (schema: JsonSchemaInput) => void
   displayOnly?: boolean
-  canDelete?: boolean
   disableTitleEdit?: boolean
   disableTypeEdit?: boolean
+  showAddProperty?: boolean
+  showAdvanced?: boolean
+  showDelete?: boolean
+  onDelete?: () => void
   indent?: number
-  keys?: string[]
 }
 
 type StringSchema = Pick<JsonSchemaInput, "maxLength" | "minLength" | "pattern">
@@ -43,46 +46,76 @@ const FieldRow: React.FC<FieldRowProps> = ({
   schema,
   setSchema = () => {},
   displayOnly = false,
-  canDelete = true,
   disableTitleEdit = false,
   disableTypeEdit = false,
+  showAddProperty = false,
+  showAdvanced = false,
+  showDelete = false,
+  onDelete,
   indent = 0,
-  keys = [],
 }) => {
   const [type, setType] = useState<JsonSchemaInput["type"]>(schema.type)
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
-  const [stringSetting, setStringSettings] = useState<StringSchema>({
-    maxLength: schema.maxLength,
-    minLength: schema.minLength,
-    pattern: schema.pattern,
-  })
-  const [numberSettings, setNumberSettings] = useState<NumberSchema>({
-    multipleOf: schema.multipleOf,
-    maximum: schema.maximum,
-    exclusiveMaximum: schema.exclusiveMaximum,
-    minimum: schema.minimum,
-    exclusiveMinimum: schema.exclusiveMinimum,
-  })
-  const [arraySettings, setArraySettings] = useState<arraySchema>({
-    items: schema.items,
-    contains: schema.contains,
-    maxContains: schema.maxContains,
-    minContains: schema.minContains,
-    maxItems: schema.maxItems,
-    minItems: schema.minItems,
-    uniqueItems: schema.uniqueItems,
-  })
-  const [objectSettings, setObjectSettings] = useState<objectSchema>({
-    properties: schema.properties,
-    patternProperties: schema.patternProperties,
-    additionalProperties: schema.additionalProperties,
-    maxProperties: schema.maxProperties,
-    minProperties: schema.minProperties,
-    required: schema.required,
-  })
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
-  const onTypeChange = (e: SelectChangeEvent) => {
-    setType(e.target.value as JsonSchemaInput["type"])
+  const updateSchema = (updates: Partial<JsonSchemaInput>) => {
+    const newSchema = { ...schema, ...updates }
+    setSchema(newSchema)
+  }
+
+  const handleTypeChange = (event: SelectChangeEvent) => {
+    const newType = event.target.value as JsonSchemaInput["type"]
+    setType(newType)
+    updateSchema({ type: newType })
+  }
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = event.target.value
+    setTitle(newTitle)
+    updateSchema({ title: newTitle })
+  }
+
+  const handleAddProperty = () => {
+    if (type === "object") {
+      const newProperties = {
+        ...(schema.properties || {}),
+        [`newProperty${Object.keys(schema.properties || {}).length}`]: {
+          type: "string",
+          title: `newProperty${Object.keys(schema.properties || {}).length}`,
+        },
+      }
+      //@ts-ignore
+      updateSchema({ properties: newProperties })
+    }
+  }
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete()
+    }
+  }
+
+  const renderChildProperties = () => {
+    if (type === "object" && schema.properties) {
+      return Object.entries(schema.properties).map(([key, propSchema]) => (
+        <FieldRow
+          key={key}
+          schema={propSchema}
+          showDelete
+          showAddProperty
+          setSchema={(newPropSchema) => {
+            const newProperties = { ...schema.properties, [key]: newPropSchema }
+            updateSchema({ properties: newProperties })
+          }}
+          displayOnly={displayOnly}
+          indent={indent + 2}
+          onDelete={() => {
+            const { [key]: _, ...rest } = schema.properties || {}
+            updateSchema({ properties: rest })
+          }}
+        />
+      ))
+    }
+    return null
   }
 
   return (
@@ -91,13 +124,13 @@ const FieldRow: React.FC<FieldRowProps> = ({
         <TextField
           size="small"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleTitleChange}
           disabled={disableTitleEdit}
         >
           newProperty
         </TextField>
 
-        <Select value={type} onChange={onTypeChange} size="small" disabled={disableTypeEdit}>
+        <Select value={type} onChange={handleTypeChange} size="small" disabled={disableTypeEdit}>
           {["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
             <MenuItem key={indx} value={type}>
               {type}
@@ -105,18 +138,32 @@ const FieldRow: React.FC<FieldRowProps> = ({
           ))}
         </Select>
 
-        <Tooltip title="Add property" placement="top">
-          <IconButton color="primary">
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
+        {showAddProperty && type === "object" && !displayOnly && (
+          <Tooltip title="Add property" placement="top">
+            <IconButton color="primary" onClick={handleAddProperty}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        )}
 
-        <Tooltip title="Advanced Settings" placement="top">
-          <IconButton color="primary" size="small">
-            <SettingsIcon />
-          </IconButton>
-        </Tooltip>
+        {showAdvanced && !displayOnly && (
+          <Tooltip title="Advanced Settings" placement="top">
+            <IconButton color="primary" size="small">
+              <SettingsIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+
+        {showDelete && !displayOnly && (
+          <Tooltip title="Delete" placement="top">
+            <IconButton color="error" onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
+
+      {renderChildProperties()}
     </>
   )
 }
