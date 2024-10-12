@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
+
 import {
   TestCaseInput,
   InputVariable,
@@ -20,7 +21,6 @@ import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import { usePostAiFunction } from "@/api/apiComponents"
 import examples from "@/examples/aiFunctions.json"
-import JSONSchemaForm from "@/components/JSONSchemaForm"
 
 interface AIFunctionFormProps {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>
@@ -31,20 +31,13 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
-  const [outputSchema, setOutputSchema] = useState<Object>({})
+  const [outputSchema, setOutputSchema] = useState<object>({})
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
-  const open = Boolean(anchorEl)
-  const id = open ? "simple-popover" : undefined
-
   //@ts-ignore
   let parsedExamples: AIFunctionRouteInput[] = examples
-  const onClickCreateFromExample = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
 
   const onClickExample = (aiFunction: AIFunctionRouteInput) => {
     const f = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -68,17 +61,11 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     },
   })
 
-  const onGenerateAssertionFromOutputSchema = () => {
-    const newAssertion: Assertion = { type: "is-json" }
-    setAssertions([...assertions, newAssertion])
-  }
-
   const updateDisableSubmit = () => {
     if (name === "") setDisableSubmit(true)
     else if (description === "") setDisableSubmit(true)
     else if (inputVariables.some((inputVariable) => inputVariable.name === ""))
       setDisableSubmit(true)
-    else if (Object.keys(outputSchema).length === 0) setDisableSubmit(true)
     else setDisableSubmit(false)
   }
 
@@ -137,14 +124,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
-      <Divider sx={{ marginY: 2 }}></Divider>
-
-      <Typography variant="h5">Output Schema</Typography>
-      <JSONSchemaForm
-        JSONSchema={outputSchema}
-        setJSONSchema={setOutputSchema}
-        onGenerateAssertion={onGenerateAssertionFromOutputSchema}
-      ></JSONSchemaForm>
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <AssertionsForm assertions={assertions} setAssertions={setAssertions} />
