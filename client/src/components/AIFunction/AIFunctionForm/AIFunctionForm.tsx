@@ -50,9 +50,11 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
 
   const onClickExample = (aiFunction: AIFunctionRouteInput) => {
     const f = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+      console.log(aiFunction)
       setName(aiFunction.name)
       setDescription(aiFunction.description)
       setInputVariables(aiFunction.input_variables)
+      setOutputSchema(aiFunction.output_schema)
       setAssertions(aiFunction.assert)
       setTestCases(aiFunction.test_cases)
     }

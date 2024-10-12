@@ -64,11 +64,6 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
             borderRadius: 1,
           }}
         >
-          {/* Test Case Header */}
-          <Typography variant="h6" gutterBottom>
-            Test Case {index + 1}
-          </Typography>
-
           <IconButton
             onClick={(e) => {
               e.stopPropagation()
@@ -88,7 +83,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
 
           {/* Variables Section */}
           <Box sx={{ mb: 2 }} onClick={() => onClickVars(index)}>
-            <Typography variant="subtitle1">Variables</Typography>
+            <Typography variant="h6">Variables</Typography>
             <Box sx={{ mt: 1 }}>
               {Object.entries(testCase.vars).map(([varName, varContent], varIndex) => (
                 <Paper
@@ -110,7 +105,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
 
           {/* Assertions Section */}
           <Box>
-            <Typography variant="subtitle1">Assertions</Typography>
+            <Typography variant="h6">Assertions</Typography>
             <Box sx={{ mt: 1 }}>
               {testCase.assert && testCase.assert !== null ? (
                 displayOnly ? (

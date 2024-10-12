@@ -54,10 +54,14 @@ const FieldRow: React.FC<FieldRowProps> = ({
   onDelete,
   indent = 0,
 }) => {
+  console.log("local", schema)
   const [type, setType] = useState<JsonSchemaInput["type"]>(schema.type)
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
+  useEffect(() => {
+    setType(schema.type)
+  }, [schema])
   const updateSchema = (updates: Partial<JsonSchemaInput>) => {
     const newSchema = { ...schema, ...updates }
     setSchema(newSchema)
@@ -125,12 +129,17 @@ const FieldRow: React.FC<FieldRowProps> = ({
           size="small"
           value={title}
           onChange={handleTitleChange}
-          disabled={disableTitleEdit}
+          disabled={displayOnly || disableTitleEdit ? true : false}
         >
           newProperty
         </TextField>
 
-        <Select value={type} onChange={handleTypeChange} size="small" disabled={disableTypeEdit}>
+        <Select
+          value={type}
+          onChange={handleTypeChange}
+          size="small"
+          disabled={displayOnly || disableTypeEdit ? true : false}
+        >
           {["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
             <MenuItem key={indx} value={type}>
               {type}

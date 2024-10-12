@@ -55,7 +55,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   return (
     <Box sx={{ display: "flex", width: "100%", flexDirection: "column" }}>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 2, marginBottom: 1 }}>
-        <Typography variant="h5">Output Assertions</Typography>{" "}
+        <Typography variant="h5">Output Assertions</Typography>
         <Button onClick={handleOpenAddDialog} color="primary">
           <AddIcon />
         </Button>

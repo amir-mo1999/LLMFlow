@@ -10,6 +10,12 @@
         "name": "target_language"
       }
     ],
+    "output_schema": {
+      "type": "object",
+      "title": "root",
+      "properties": { "translatedText": { "type": "number", "title": "translatedText" } }
+    },
+
     "assert": [
       {
         "type": "is-json",

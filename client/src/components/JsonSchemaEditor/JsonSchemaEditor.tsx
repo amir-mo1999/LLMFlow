@@ -2,6 +2,9 @@
 
 import React from "react"
 import FieldRow from "./FieldRow"
+import Typography from "@mui/material/Typography"
+import Box from "@mui/material/Box"
+
 import { JsonSchemaInput } from "@/api/apiSchemas"
 
 interface JsonSchemaEditorProps {
@@ -16,13 +19,16 @@ const JsonSchemaEditor: React.FC<JsonSchemaEditorProps> = ({
   displayOnly = false,
 }) => {
   return (
-    <FieldRow
-      schema={schema}
-      setSchema={setSchema}
-      displayOnly={displayOnly}
-      showAddProperty
-      disableTitleEdit
-    ></FieldRow>
+    <Box display="flex" flexDirection="column" sx={{ gap: 2, marginBottom: 1 }}>
+      <Typography variant="h5">Output Schema</Typography>
+      <FieldRow
+        schema={schema}
+        setSchema={setSchema}
+        displayOnly={displayOnly}
+        showAddProperty
+        disableTitleEdit
+      ></FieldRow>
+    </Box>
   )
 }
 

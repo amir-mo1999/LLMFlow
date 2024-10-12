@@ -9,6 +9,7 @@ import AssertionsOverview from "./AssertionsOverview"
 import { AIFunction } from "@/api/apiSchemas"
 import Chip from "@mui/material/Chip"
 import TestCasesOverview from "./TestCasesOverview"
+import JsonSchemaEditor from "../JsonSchemaEditor"
 
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
@@ -31,7 +32,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   }
 
   return (
-    <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       {/* AI Function Name */}
       <Typography variant="h4" gutterBottom>
         {aiFunction.name}
@@ -40,32 +41,42 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       <Typography variant="body1" gutterBottom>
         {aiFunction.description}
       </Typography>
-      <Divider />
+      <Divider sx={{ marginY: 2 }}></Divider>
       {/* Input Variables */}
-      <Box>
-        <Typography variant="h6">Input Variables</Typography>
+      <Box marginBottom={1}>
+        <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+          Input Variables
+        </Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
           {aiFunction.input_variables.map((inputVar, indx) => (
             <Chip key={indx} label={inputVar.name} variant="outlined" size="medium"></Chip>
           ))}
         </Box>
       </Box>
-      <Divider />
+      <Divider sx={{ marginY: 2 }}></Divider>
+      <JsonSchemaEditor schema={aiFunction.output_schema} displayOnly></JsonSchemaEditor>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
       {/* Output Assertions */}
-      <Box>
-        <Typography variant="h6">Output Assertions</Typography>
+      <Box marginBottom={1}>
+        <Typography variant="h5" paddingBottom={1}>
+          Output Assertions
+        </Typography>
         {aiFunction.assert.length === 0 ? (
           <Typography variant="body2">No output assertions defined.</Typography>
         ) : (
           <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
         )}
       </Box>
-      <Divider />
-      <Box>
+      <Divider sx={{ marginY: 2 }}></Divider>
+      <Box marginBottom={1}>
+        <Typography variant="h5" paddingBottom={1}>
+          Test Cases
+        </Typography>
         <TestCasesOverview testCases={aiFunction.test_cases} displayOnly></TestCasesOverview>
       </Box>
 
-      <Divider></Divider>
+      <Divider sx={{ marginY: 2 }}></Divider>
       <Button variant="contained" color="error" onClick={onClickDelete}>
         Delete AI Function
       </Button>

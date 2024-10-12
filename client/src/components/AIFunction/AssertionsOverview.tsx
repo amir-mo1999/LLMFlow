@@ -32,7 +32,7 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
         display: "flex",
         width: "100%",
         maxHeight: 390,
-        pb: 1,
+        pb: 0.3,
         flexDirection: "row",
         flexWrap: "wrap",
         gap: 2,
