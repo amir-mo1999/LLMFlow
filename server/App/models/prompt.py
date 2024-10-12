@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import EmailStr, Field, ValidationInfo, field_validator, model_validator
+from pydantic import EmailStr, Field, ValidationInfo, field_validator
 
 from .promptfoo_models import EvaluateSummary, PromptMessage
 from .root_model import RootModel
@@ -20,23 +20,6 @@ class PromptRouteInput(RootModel):
         ],
     )
     ai_function_id: str
-
-    @model_validator(mode="after")
-    def check_messages(self):
-        prompt_type = self.prompt_type
-        messages = self.messages
-
-        if prompt_type == "single_shot":
-            if len(messages) == 0:
-                return self
-            elif len(messages) == 1 and messages[0].role == "user":
-                return self
-            else:
-                raise ValueError(
-                    """When promptType is 'single_shot',
-                    messages should contain exactly one message with the role 'user'."""
-                )
-        return self
 
 
 class Prompt(PromptRouteInput):

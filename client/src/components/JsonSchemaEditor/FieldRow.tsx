@@ -54,7 +54,6 @@ const FieldRow: React.FC<FieldRowProps> = ({
   onDelete,
   indent = 0,
 }) => {
-  console.log("local", schema)
   const [type, setType] = useState<JsonSchemaInput["type"]>(schema.type)
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)

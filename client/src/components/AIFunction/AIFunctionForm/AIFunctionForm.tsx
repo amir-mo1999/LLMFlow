@@ -41,16 +41,11 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
-  useEffect(() => {
-    console.log("Full Schema", outputSchema)
-  }, [outputSchema])
-
   //@ts-ignore
   let parsedExamples: AIFunctionRouteInput[] = examples
 
   const onClickExample = (aiFunction: AIFunctionRouteInput) => {
     const f = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-      console.log(aiFunction)
       setName(aiFunction.name)
       setDescription(aiFunction.description)
       setInputVariables(aiFunction.input_variables)
