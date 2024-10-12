@@ -33,13 +33,16 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
-  const [outputSchema, setOutputSchema] = useState<JsonSchemaInput>({ type: "string" })
+  const [outputSchema, setOutputSchema] = useState<JsonSchemaInput>({
+    type: "string",
+    title: "root",
+  })
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
   useEffect(() => {
-    console.log(outputSchema)
+    console.log("Full Schema", outputSchema)
   }, [outputSchema])
 
   //@ts-ignore

@@ -21,7 +21,7 @@ const JsonSchemaEditor: React.FC<JsonSchemaEditorProps> = ({
       setSchema={setSchema}
       displayOnly={displayOnly}
       canDelete={false}
-      fieldNameInit="root"
+      disableTitleEdit
     ></FieldRow>
   )
 }
