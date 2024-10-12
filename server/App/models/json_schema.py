@@ -1,6 +1,6 @@
-from typing import Any, Dict, List, Optional, Union, Literal
+from typing import Dict, List, Literal, Optional, Union
+
 from .root_model import RootModel
-from pydantic import ConfigDict
 
 Type = Literal["string", "number", "integer", "boolean", "object", "array", "null"]
 
