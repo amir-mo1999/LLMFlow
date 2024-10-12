@@ -6,10 +6,7 @@ Type = Literal["string", "number", "integer", "boolean", "object", "array", "nul
 
 
 class JsonSchema(RootModel):
-    # Validation keywords for any instance type
     type: Type
-    enum: Optional[List[Any]] = None
-    const: Optional[Any] = None
 
     # string + number + integer
     enum: Optional[List[str] | List[float] | List[int]] = None

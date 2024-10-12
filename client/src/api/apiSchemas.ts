@@ -214,7 +214,6 @@ export type InputVariable = {
 export type JsonSchemaInput = {
   type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
   ["enum"]?: string[] | number[] | number[] | null
-  ["const"]?: void | null
   maxLength?: number | null
   minLength?: number | null
   pattern?: string | null
@@ -252,7 +251,6 @@ export type JsonSchemaInput = {
 export type JsonSchemaOutput = {
   type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
   ["enum"]?: string[] | number[] | number[] | null
-  ["const"]?: void | null
   maxLength?: number | null
   minLength?: number | null
   pattern?: string | null

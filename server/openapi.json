@@ -1500,15 +1500,6 @@
                         ],
                         "title": "Enum"
                     },
-                    "const": {
-                        "anyOf": [
-                            {},
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Const"
-                    },
                     "maxLength": {
                         "anyOf": [
                             {
@@ -1838,15 +1829,6 @@
                             }
                         ],
                         "title": "Enum"
-                    },
-                    "const": {
-                        "anyOf": [
-                            {},
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Const"
                     },
                     "maxLength": {
                         "anyOf": [
