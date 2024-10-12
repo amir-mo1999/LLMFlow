@@ -15,6 +15,7 @@ import AssertionsForm from "./AIFunctionForm/AssertionsForm.tsx/AssertionsForm"
 import { Assertion } from "@/api/apiSchemas"
 import IconButton from "@mui/material/IconButton"
 import ClearIcon from "@mui/icons-material/Clear"
+import Divider from "@mui/material/Divider"
 
 interface TestCasesOverviewProps {
   testCases: TestCaseInput[]
@@ -96,8 +97,9 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
                     },
                   }}
                 >
-                  <Typography variant="subtitle2">{varName}</Typography>
-                  <Typography variant="body2">{varContent}</Typography>
+                  <Typography fontWeight={700}>{varName}</Typography>
+                  <Divider sx={{ marginBottom: 1 }} />
+                  <Typography>{varContent}</Typography>
                 </Paper>
               ))}
             </Box>

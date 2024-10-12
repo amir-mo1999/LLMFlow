@@ -15,13 +15,7 @@
       "title": "root",
       "properties": { "translatedText": { "type": "number", "title": "translatedText" } }
     },
-
-    "assert": [
-      {
-        "type": "is-json",
-        "weight": 2
-      }
-    ],
+    "assert": [],
     "test_cases": [
       {
         "assert": [

@@ -10,6 +10,7 @@ import ClearIcon from "@mui/icons-material/Clear"
 import IconButton from "@mui/material/IconButton"
 import Paper from "@mui/material/Paper"
 import theme from "@/theme"
+import Divider from "@mui/material/Divider"
 
 interface AssertionsOverviewProps {
   assertions: Assertion[]
@@ -61,7 +62,8 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
             }}
             elevation={2}
           >
-            <Typography>{assertion.type}</Typography>
+            <Typography fontWeight={700}>{assertion.type}</Typography>
+            <Divider sx={{ marginBottom: 1 }} />
             {!assertion.threshold ? (
               <></>
             ) : (
@@ -76,9 +78,7 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
               <></>
             ) : Array.isArray(assertion.value) ? (
               <>
-                <Typography>
-                  <strong>Values:</strong>
-                </Typography>
+                <Typography>Values</Typography>
                 <List disablePadding>
                   {assertion.value.map((val: string, indx: number) => {
                     return (
@@ -93,9 +93,8 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
               </>
             ) : (
               <>
-                <Typography>
-                  <strong>Value: </strong> {assertion.value as string}
-                </Typography>
+                <Typography>Value</Typography>
+                <Typography>{assertion.value as string}</Typography>
               </>
             )}
             <IconButton
