@@ -123,7 +123,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   }
 
   return (
-    <Box sx={{ width: "100%", p: 3 }}>
+    <Box sx={{ width: "100%" }}>
       <Typography variant="h5" gutterBottom>
         Prompt Form
       </Typography>
