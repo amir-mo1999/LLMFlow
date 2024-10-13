@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import AIFunction, Prompt, PromptRouteInput, SuccessResponse, Prompt
+from App.models import AIFunction, Prompt, PromptRouteInput, SuccessResponse
 
 PROMPT_ROUTER = APIRouter()
 

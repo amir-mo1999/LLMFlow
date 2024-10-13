@@ -8,19 +8,24 @@ import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import { Prompt } from "@/api/apiSchemas"
+import { useDeletePrompt } from "@/api/apiComponents"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
+  deletePrompt: (prompt: Prompt) => void
 }
 
-const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt }) => {
-  const [showAllMessages, setShowAllMessages] = useState(false)
+const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, deletePrompt }) => {
+  const { mutate: deletePromptAPI } = useDeletePrompt({
+    onSuccess: () => {
+      deletePrompt(prompt)
+    },
+    onError: (err) => {},
+  })
 
-  const toggleShowAllMessages = () => {
-    setShowAllMessages((prev) => !prev)
+  const onClickDelete = () => {
+    deletePromptAPI({ pathParams: { promptId: prompt._id as string } })
   }
-
-  const MAX_VISIBLE_MESSAGES = 2
 
   if (!prompt) {
     return (
@@ -29,11 +34,6 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt }) =
       </Box>
     )
   }
-
-  const messagesToDisplay = showAllMessages
-    ? prompt.messages
-    : prompt.messages.slice(0, MAX_VISIBLE_MESSAGES)
-
   return (
     <Box>
       {/* Prompt Name */}
@@ -51,7 +51,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt }) =
           <Typography>No messages defined for this Prompt.</Typography>
         ) : (
           <Paper>
-            {messagesToDisplay.map((message, index) => (
+            {prompt.messages.map((message, index) => (
               <Box key={index} sx={{ padding: 2 }}>
                 <Typography variant="subtitle1">
                   Role: {message.role.charAt(0).toUpperCase() + message.role.slice(1)}
@@ -61,17 +61,10 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt }) =
             ))}
           </Paper>
         )}
-        {prompt.messages.length > MAX_VISIBLE_MESSAGES && (
-          <Box textAlign="center" mt={1}>
-            <Button
-              onClick={toggleShowAllMessages}
-              startIcon={showAllMessages ? <ExpandLess /> : <ExpandMore />}
-            >
-              {showAllMessages ? "Show Less" : "Show More"}
-            </Button>
-          </Box>
-        )}
       </Box>
+      <Button variant="contained" color="error" onClick={onClickDelete}>
+        Delete Prompt
+      </Button>
     </Box>
   )
 }

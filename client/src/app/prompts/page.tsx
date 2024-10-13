@@ -31,9 +31,10 @@ export default function Home() {
     setPrompts([...prompts, prompt])
   }
 
-  const onDeletePrompt = (indx: number) => {
-    const updatedPrompts = prompts.filter((_, i) => i !== indx)
+  const onDeletePrompt = () => {
+    const updatedPrompts = prompts.filter((_, i) => i !== selectedPromptIndx)
     setPrompts(updatedPrompts)
+    setSelectedPromptIndx(undefined)
   }
 
   const { data: promptsAPI, isFetching, refetch } = useGetAllPrompts({})
@@ -63,7 +64,7 @@ export default function Home() {
       </SideBarContainer>
       <MainContentContainer>
         {selectedPromptIndx !== undefined && prompts ? (
-          <PromptSingleOverview prompt={prompts[selectedPromptIndx]}></PromptSingleOverview>
+          <PromptSingleOverview prompt={prompts[selectedPromptIndx]} deletePrompt={onDeletePrompt}></PromptSingleOverview>
         ) : showCreateForm ? (
           <PromptForm aiFunctions={aiFunctions} addPrompt={addPrompt}></PromptForm>
         ) : (
