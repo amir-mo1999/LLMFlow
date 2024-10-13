@@ -5,14 +5,14 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import AIFunction, Prompt, PromptRouteInput, SuccessResponse
+from App.models import AIFunction, Prompt, PromptRouteInput, SuccessResponse, Prompt
 
 PROMPT_ROUTER = APIRouter()
 
 
 @PROMPT_ROUTER.post(
     "/prompt",
-    response_model=SuccessResponse,
+    response_model=Prompt,
     responses={
         401: {"detail": "Not authenticated"},
         400: {"detail": "AI Function does not exist"},
@@ -61,7 +61,7 @@ async def post_prompt(
     result = await db.insert(prompt, "prompts", compare_fields=compare_fields)
 
     if result:
-        return SuccessResponse
+        return prompt
 
     raise DuplicateDocument
 

@@ -12,14 +12,15 @@ import {
 } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { SelectChangeEvent } from "@mui/material/Select"
-import { PromptRouteInput, PromptMessage, AIFunction } from "@/api/apiSchemas"
+import { PromptRouteInput, PromptMessage, AIFunction, Prompt } from "@/api/apiSchemas"
 import { usePostPrompt } from "@/api/apiComponents"
 
 interface PromptFormProps {
   aiFunctions: AIFunction[]
+  addPrompt: (prompt: Prompt) => void
 }
 
-const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
+const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number>(0)
   const [messages, setMessages] = useState<PromptMessage[]>([{ role: "user", content: "" }])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
@@ -41,7 +42,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
       ? messages.map((msg) => msg.content).join("")
       : ""
 
-      setDisableSubmit(!inputVarsInMessage(messagesJoined))
+    setDisableSubmit(!inputVarsInMessage(messagesJoined))
   }
 
   useEffect(updateDisableSubmit, [messages, selectedAIFunctionIndx])
@@ -51,7 +52,9 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions }) => {
   }
 
   const { mutate: postPrompt } = usePostPrompt({
-    onSuccess: () => {},
+    onSuccess: (response) => {
+      addPrompt(response as Prompt)
+    },
     onError: (err) => {},
   })
 

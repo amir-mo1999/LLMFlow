@@ -526,7 +526,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/SuccessResponse"
+                                    "$ref": "#/components/schemas/Prompt"
                                 }
                             }
                         }
@@ -2061,26 +2061,6 @@
             },
             "Prompt": {
                 "properties": {
-                    "prompt_type": {
-                        "anyOf": [
-                            {
-                                "type": "string",
-                                "enum": [
-                                    "single_shot"
-                                ],
-                                "const": "single_shot"
-                            },
-                            {
-                                "type": "string",
-                                "enum": [
-                                    "chat"
-                                ],
-                                "const": "chat"
-                            }
-                        ],
-                        "title": "Prompt Type",
-                        "example": "single_shot"
-                    },
                     "messages": {
                         "items": {
                             "$ref": "#/components/schemas/PromptMessage"
@@ -2132,7 +2112,6 @@
                 },
                 "type": "object",
                 "required": [
-                    "prompt_type",
                     "messages",
                     "ai_function_id",
                     "username",
@@ -2159,26 +2138,6 @@
             },
             "PromptRouteInput": {
                 "properties": {
-                    "prompt_type": {
-                        "anyOf": [
-                            {
-                                "type": "string",
-                                "enum": [
-                                    "single_shot"
-                                ],
-                                "const": "single_shot"
-                            },
-                            {
-                                "type": "string",
-                                "enum": [
-                                    "chat"
-                                ],
-                                "const": "chat"
-                            }
-                        ],
-                        "title": "Prompt Type",
-                        "example": "single_shot"
-                    },
                     "messages": {
                         "items": {
                             "$ref": "#/components/schemas/PromptMessage"
@@ -2199,7 +2158,6 @@
                 },
                 "type": "object",
                 "required": [
-                    "prompt_type",
                     "messages",
                     "ai_function_id"
                 ],

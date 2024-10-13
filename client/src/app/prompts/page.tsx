@@ -65,7 +65,7 @@ export default function Home() {
         {selectedPromptIndx !== undefined && prompts ? (
           <PromptSingleOverview prompt={prompts[selectedPromptIndx]}></PromptSingleOverview>
         ) : showCreateForm ? (
-          <PromptForm aiFunctions={aiFunctions}></PromptForm>
+          <PromptForm aiFunctions={aiFunctions} addPrompt={addPrompt}></PromptForm>
         ) : (
           <></>
         )}
