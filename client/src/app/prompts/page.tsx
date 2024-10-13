@@ -29,6 +29,7 @@ export default function Home() {
 
   const addPrompt = (prompt: Prompt) => {
     setPrompts([...prompts, prompt])
+    setShowCreateForm(false)
   }
 
   const onDeletePrompt = () => {
@@ -63,10 +64,13 @@ export default function Home() {
         ></PromptOverview>
       </SideBarContainer>
       <MainContentContainer>
-        {selectedPromptIndx !== undefined && prompts ? (
-          <PromptSingleOverview prompt={prompts[selectedPromptIndx]} deletePrompt={onDeletePrompt}></PromptSingleOverview>
-        ) : showCreateForm ? (
+        {showCreateForm ? (
           <PromptForm aiFunctions={aiFunctions} addPrompt={addPrompt}></PromptForm>
+        ) : selectedPromptIndx !== undefined && prompts ? (
+          <PromptSingleOverview
+            prompt={prompts[selectedPromptIndx]}
+            deletePrompt={onDeletePrompt}
+          ></PromptSingleOverview>
         ) : (
           <></>
         )}
