@@ -13,7 +13,7 @@
     "output_schema": {
       "type": "object",
       "title": "root",
-      "properties": { "translatedText": { "type": "number", "title": "translatedText" } }
+      "properties": { "translatedText": { "type": "string", "title": "translatedText" } }
     },
     "assert": [],
     "test_cases": [

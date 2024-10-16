@@ -9,7 +9,7 @@ import {
   SearchField,
 } from "@/components"
 import Button from "@mui/material/Button"
-import { useGetAllPrompts, useGetAiFunctions } from "@/api/apiComponents"
+import { useGetAllPrompts, useGetAiFunctions, useEvaluate } from "@/api/apiComponents"
 import { useState, useEffect } from "react"
 import { Prompt } from "@/api/apiSchemas"
 
@@ -37,6 +37,26 @@ export default function Home() {
     setPrompts(updatedPrompts)
     setSelectedPromptIndx(undefined)
   }
+
+  useEffect(() => {
+    for (let i = 0; i < prompts.length; i++) {
+      if (!prompts[i].last_eval) {
+        evaluate({ pathParams: { promptId: prompts[i]._id as string } })
+      }
+    }
+  }, [prompts])
+
+  const { mutate: evaluate } = useEvaluate({
+    onSuccess: (response, vars) => {
+      const newPrompts = prompts
+      const promptId = vars.pathParams.promptId
+      const promptIndx = newPrompts.findIndex((prompt) => prompt._id === promptId)
+      if (promptIndx !== undefined) {
+        newPrompts[promptIndx].last_eval = response
+        setPrompts([...newPrompts])
+      }
+    },
+  })
 
   const { data: promptsAPI, isFetching, refetch } = useGetAllPrompts({})
 
