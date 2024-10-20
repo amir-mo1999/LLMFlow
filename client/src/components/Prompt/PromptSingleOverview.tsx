@@ -73,7 +73,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
             {messagesToDisplay.map((message, index) => (
               <Box key={index} sx={{ mb: 2 }}>
                 <Typography variant="subtitle1">
-                  Role: {message.role.charAt(0).toUpperCase() + message.role.slice(1)}
+                  <strong>{message.role.charAt(0).toUpperCase() + message.role.slice(1)}</strong>
                 </Typography>
                 <Typography variant="body1">{message.content}</Typography>
               </Box>
