@@ -23,6 +23,11 @@ export default function Home() {
     setShowCreateForm(true)
   }
 
+  const onClickPrompt = (indx: number) => {
+    setShowCreateForm(false)
+    setSelectedPromptIndx(indx)
+  }
+
   useEffect(() => {
     if (showCreateForm) setSelectedPromptIndx(undefined)
   }, [showCreateForm])
@@ -79,6 +84,7 @@ export default function Home() {
         </Button>
         <PromptOverview
           prompts={prompts}
+          onClick={onClickPrompt}
           selectedPromptIndx={selectedPromptIndx}
           setSelectedPromptIndx={setSelectedPromptIndx}
         ></PromptOverview>
@@ -89,7 +95,7 @@ export default function Home() {
         ) : selectedPromptIndx !== undefined && prompts ? (
           <PromptSingleOverview
             prompt={prompts[selectedPromptIndx]}
-            deletePrompt={onDeletePrompt}
+            onDelete={onDeletePrompt}
           ></PromptSingleOverview>
         ) : (
           <></>

@@ -132,6 +132,7 @@ export const themeOptions: ThemeOptions = {
       styleOverrides: {
         root: {
           wordBreak: "break-word",
+          whiteSpace: "pre-wrap",
         },
       },
     },
