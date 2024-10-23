@@ -38,7 +38,7 @@ export default function Home() {
   }
 
   const onClickAIFunction = (indx: number) => {
-    const f = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const f = () => {
       setSelectedAIFunctionIndx(indx)
       setShowCreateForm(false)
     }
