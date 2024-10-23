@@ -45,7 +45,7 @@ async def post_prompt(
     # try parsing prompt, return validation error if fails
     try:
         prompt = Prompt.model_validate(
-            {**dict(prompt), "creation_time": now, "username": username},
+            {**dict(prompt), "creation_time": now, "username": username, "ai_function_name": ai_function.name},
             context=[var.name for var in ai_function.input_variables],
         )
     except ValueError as e:

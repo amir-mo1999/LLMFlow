@@ -40,8 +40,15 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({ sx, onClick, aiFuncti
         label="Variables"
         sx={{ marginRight: 2 }}
       />
-      <NumberChip number={numberOfAssertions} label="Assertions" sx={{ marginRight: 2 }} />
-      <NumberChip number={aiFunction.number_of_prompts} label="Prompts" />
+      <NumberChip
+        number={numberOfAssertions}
+        label={numberOfAssertions === 1 ? "Assertion" : "Assertions"}
+        sx={{ marginRight: 2 }}
+      />
+      <NumberChip
+        number={aiFunction.number_of_prompts}
+        label={aiFunction.number_of_prompts === 1 ? "Prompt" : "Prompts"}
+      />
     </Paper>
   )
 }

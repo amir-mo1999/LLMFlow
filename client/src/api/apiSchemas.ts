@@ -287,6 +287,7 @@ export type Prompt = {
    */
   creation_time: string
   last_eval?: EvaluateSummary | null
+  ai_function_name: string
 }
 
 export type PromptMessage = {

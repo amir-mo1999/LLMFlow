@@ -2108,6 +2108,10 @@
                                 "type": "null"
                             }
                         ]
+                    },
+                    "ai_function_name": {
+                        "type": "string",
+                        "title": "Ai Function Name"
                     }
                 },
                 "type": "object",
@@ -2115,7 +2119,8 @@
                     "messages",
                     "ai_function_id",
                     "username",
-                    "creation_time"
+                    "creation_time",
+                    "ai_function_name"
                 ],
                 "title": "Prompt"
             },

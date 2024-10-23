@@ -27,6 +27,7 @@ class Prompt(PromptRouteInput):
     username: EmailStr
     creation_time: datetime
     last_eval: EvaluateSummary | None = None
+    ai_function_name: str
 
     @field_validator("messages")
     @classmethod
