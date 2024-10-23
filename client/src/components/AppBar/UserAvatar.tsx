@@ -30,17 +30,6 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ initials }) => {
 
   const [notifyEl, setNotifyEl] = React.useState<HTMLButtonElement | null>(null)
 
-  const handleBadgeVisibility = () => {
-    setInvisible(!invisible)
-  }
-
-  const handleNotifyOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setNotifyEl(e.currentTarget)
-    if (!invisible) {
-      handleBadgeVisibility()
-    }
-  }
-
   const handleNotifyClose = () => {
     setNotifyEl(null)
   }
