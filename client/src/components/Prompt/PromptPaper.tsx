@@ -15,16 +15,20 @@ interface PromptPaperProps {
 
 const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt }) => {
   const numberOfMessages: number = prompt.messages.length
-  const meanScore = prompt.last_eval
-    ? prompt.last_eval.results.reduce((acc, result) => acc + (result.score as number), 0) /
+  let meanScore: number | undefined = undefined
+  let totalCost: number | undefined = undefined
+
+  if (prompt.last_eval) {
+    meanScore =
+      prompt.last_eval.results.reduce((acc, result) => acc + (result.score as number), 0) /
       prompt.last_eval.results.length
-    : undefined
+    totalCost = prompt.last_eval.results.reduce((acc, result) => acc + (result.cost as number), 0)
 
-  const totalCost = prompt.last_eval
-    ? prompt.last_eval.results.reduce((acc, result) => acc + (result.cost as number), 0)
-    : undefined
+    meanScore = Math.round(meanScore * 100) / 100
 
-  console.log(totalCost)
+    totalCost = Math.round(totalCost * 100000000) / 100000000
+  }
+
   return (
     <Paper onClick={onClick} elevation={2} sx={{ ...sx }}>
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
