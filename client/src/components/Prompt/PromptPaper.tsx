@@ -39,23 +39,19 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt }) => {
         label={numberOfMessages === 1 ? "Message" : "Messages"}
         sx={{ marginRight: 2 }}
       />
-      {meanScore === undefined ? (
-        <CircularProgress size={20} />
+      {prompt.last_eval && totalCost !== undefined && meanScore !== undefined ? (
+        <>
+          <NumberChip sx={{ marginRight: 2 }} labelFirst number={totalCost} label="Cost" unit="$" />
+          <NumberChip
+            labelFirst
+            number={meanScore as number}
+            label="Score"
+            color={meanScore >= 0.8 ? "success" : meanScore >= 0.4 ? "warning" : "error"}
+            variant="filled"
+          />
+        </>
       ) : (
-        <NumberChip
-          labelFirst
-          number={meanScore}
-          label="Score"
-          sx={{ marginRight: 2 }}
-          color={meanScore >= 0.8 ? "success" : meanScore >= 0.4 ? "warning" : "error"}
-          variant="filled"
-        />
-      )}
-
-      {totalCost === undefined ? (
         <CircularProgress size={20} />
-      ) : (
-        <NumberChip labelFirst number={totalCost} label="Cost" variant="filled" unit="$" />
       )}
     </Paper>
   )
