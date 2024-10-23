@@ -24,8 +24,11 @@ export default function Home() {
   }
 
   const onClickPrompt = (indx: number) => {
-    setShowCreateForm(false)
-    setSelectedPromptIndx(indx)
+    const f = () => {
+      setShowCreateForm(false)
+      setSelectedPromptIndx(indx)
+    }
+    return f
   }
 
   useEffect(() => {
@@ -82,12 +85,7 @@ export default function Home() {
         <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
           Create Prompt
         </Button>
-        <PromptOverview
-          prompts={prompts}
-          onClick={onClickPrompt}
-          selectedPromptIndx={selectedPromptIndx}
-          setSelectedPromptIndx={setSelectedPromptIndx}
-        ></PromptOverview>
+        <PromptOverview prompts={prompts} onClick={onClickPrompt}></PromptOverview>
       </SideBarContainer>
       <MainContentContainer>
         {showCreateForm ? (
