@@ -6,7 +6,7 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
 import JsonSchemaEditor from "@/components/JsonSchemaEditor"
-
+import { parseJsonSchema } from "@/utils"
 import {
   TestCaseInput,
   InputVariable,
@@ -79,12 +79,20 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
 
   const onClickSubmit = () => {
     setDisableSubmit(true)
+    // create assertion for output schema
+    const parsedJsonSchema = parseJsonSchema(outputSchema)
+    const outputSchemaAssertion: Assertion = {
+      type: "is-json",
+      value: parsedJsonSchema,
+      weight: 10,
+    }
+
     const aiFunction: AIFunctionRouteInput = {
       name: name,
       description: description,
       input_variables: inputVariables,
-      output_schema: outputSchema,
-      assert: assertions,
+      output_schema: parsedJsonSchema,
+      assert: [...assertions, outputSchemaAssertion],
       test_cases: testCases,
     }
 

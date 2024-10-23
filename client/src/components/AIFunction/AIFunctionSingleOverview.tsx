@@ -10,7 +10,7 @@ import { AIFunction } from "@/api/apiSchemas"
 import Chip from "@mui/material/Chip"
 import TestCasesOverview from "./TestCasesOverview"
 import JsonSchemaEditor from "../JsonSchemaEditor"
-
+import { addTitlesToSchema } from "@/utils"
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
   aiFunction: AIFunction
@@ -66,7 +66,10 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
         </Box>
       </Box>
       <Divider sx={{ marginY: 2 }}></Divider>
-      <JsonSchemaEditor schema={aiFunction.output_schema} displayOnly></JsonSchemaEditor>
+      <JsonSchemaEditor
+        schema={addTitlesToSchema(aiFunction.output_schema)}
+        displayOnly
+      ></JsonSchemaEditor>
       <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Output Assertions */}
