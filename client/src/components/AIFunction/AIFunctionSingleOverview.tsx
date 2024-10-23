@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
@@ -14,6 +14,15 @@ import JsonSchemaEditor from "../JsonSchemaEditor"
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
   aiFunction: AIFunction
+}
+
+const options: Intl.DateTimeFormatOptions = {
+  timeZone: "Europe/Berlin",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
 }
 
 const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
@@ -34,9 +43,12 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   return (
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       {/* AI Function Name */}
-      <Typography variant="h4" gutterBottom>
-        {aiFunction.name}
+      <Typography variant="h4">{aiFunction.name}</Typography>
+      {/* Creation Time */}
+      <Typography gutterBottom>
+        {new Date(aiFunction.creation_time).toLocaleString("de-DE", options)}
       </Typography>
+
       {/* Description */}
       <Typography variant="body1" gutterBottom>
         {aiFunction.description}

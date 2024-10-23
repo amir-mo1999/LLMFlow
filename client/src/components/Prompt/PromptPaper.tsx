@@ -19,6 +19,12 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt }) => {
     ? prompt.last_eval.results.reduce((acc, result) => acc + (result.score as number), 0) /
       prompt.last_eval.results.length
     : undefined
+
+  const totalCost = prompt.last_eval
+    ? prompt.last_eval.results.reduce((acc, result) => acc + (result.cost as number), 0)
+    : undefined
+
+  console.log(totalCost)
   return (
     <Paper onClick={onClick} elevation={2} sx={{ ...sx }}>
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
@@ -44,6 +50,12 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt }) => {
           color={meanScore >= 0.8 ? "success" : meanScore >= 0.4 ? "warning" : "error"}
           variant="filled"
         />
+      )}
+
+      {totalCost === undefined ? (
+        <CircularProgress size={20} />
+      ) : (
+        <NumberChip labelFirst number={totalCost} label="Cost" variant="filled" unit="$" />
       )}
     </Paper>
   )

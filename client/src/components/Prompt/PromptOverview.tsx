@@ -34,6 +34,7 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick }) => 
               width: "100%",
               height: 150,
             }}
+            key={indx}
             prompt={prompt}
             onClick={onClick ? onClick(indx) : undefined}
           ></PromptPaper>

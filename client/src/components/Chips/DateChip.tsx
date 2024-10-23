@@ -2,7 +2,6 @@
 
 import React from "react"
 import Chip from "@mui/material/Chip"
-import Typography from "@mui/material/Typography"
 import { SxProps, Theme } from "@mui/material/styles"
 
 interface DateChipProps {

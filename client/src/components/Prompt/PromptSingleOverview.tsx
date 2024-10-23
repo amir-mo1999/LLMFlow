@@ -16,6 +16,15 @@ interface PromptSingleOverviewProps {
   onDelete: () => void
 }
 
+const options: Intl.DateTimeFormatOptions = {
+  timeZone: "Europe/Berlin",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+}
+
 const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onDelete }) => {
   const [disableDelete, setDisableDelete] = useState(false)
   const { mutate: deletePromptAPI } = useDeletePrompt({
@@ -51,13 +60,13 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
       <Typography variant="h4">{"some name"}</Typography>
 
       {/* Creation Time */}
-      <Typography>Created At: {new Date(prompt.creation_time).toLocaleString()}</Typography>
+      <Typography>{new Date(prompt.creation_time).toLocaleString("de-DE", options)}</Typography>
 
       <Divider />
 
       {/* Prompt Messages */}
       <Box sx={{ mt: 2 }}>
-        <Typography variant="h6">Prompt Messages</Typography>
+        <Typography variant="h6">Messages</Typography>
         {prompt.messages.length === 0 ? (
           <Typography>No messages defined for this Prompt.</Typography>
         ) : (

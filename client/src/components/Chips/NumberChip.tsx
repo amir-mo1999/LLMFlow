@@ -11,6 +11,7 @@ interface NumberChipProps {
   labelFirst?: boolean
   variant?: "outlined" | "filled"
   color?: "primary" | "secondary" | "success" | "warning" | "error"
+  unit?: string
 }
 
 const NumberChip: React.FC<NumberChipProps> = ({
@@ -20,6 +21,7 @@ const NumberChip: React.FC<NumberChipProps> = ({
   labelFirst = false,
   variant = "outlined",
   color = "primary",
+  unit = "",
 }) => {
   return (
     <Chip
@@ -33,11 +35,12 @@ const NumberChip: React.FC<NumberChipProps> = ({
       label={
         labelFirst ? (
           <>
-            {label} <strong> {number}</strong>
+            {label} <strong>{number}</strong> {unit}
           </>
         ) : (
           <>
-            <strong> {number}</strong> {label}
+            <strong>{number}</strong>
+            {unit} {label}
           </>
         )
       }
