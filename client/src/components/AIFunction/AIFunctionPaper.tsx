@@ -1,10 +1,10 @@
 import React from "react"
 import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
+import Box from "@mui/material/Box"
 import { SxProps } from "@mui/material"
 import { AIFunction } from "@/api/apiSchemas"
-import { toZonedTime } from "date-fns-tz"
-import { format } from "date-fns"
+import { UserChip, NumberChip, DateChip } from "../Chips"
 
 interface AIFunctionPaperProps {
   sx?: SxProps
@@ -13,18 +13,12 @@ interface AIFunctionPaperProps {
 }
 
 const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({ sx, onClick, aiFunction }) => {
-  const timeZone = "Europe/Berlin"
-  const utcDate = new Date(aiFunction.creation_time)
-  const zonedDate = toZonedTime(utcDate, timeZone)
-
   // get total number of assertions
   let numberOfAssertions: number = 0
   numberOfAssertions += aiFunction.assert.length
   aiFunction.test_cases.forEach((testCase) => {
     if (testCase.assert !== null) numberOfAssertions += testCase.assert.length
   })
-
-  const formattedDate = format(zonedDate, "dd/MM/yyyy")
 
   return (
     <Paper
@@ -34,21 +28,20 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({ sx, onClick, aiFuncti
         ...sx,
       }}
     >
-      <Typography variant="h6" gutterBottom>
-        {aiFunction.name}
-      </Typography>
-      <Typography variant="caption" display="block">
-        {formattedDate}
-      </Typography>
-      <Typography variant="caption" display="block" gutterBottom>
-        <strong>Input Variables:</strong> {numberOfAssertions}
-      </Typography>
-      <Typography variant="caption" display="block" gutterBottom>
-        <strong>Assertions:</strong> {aiFunction.input_variables.length}
-      </Typography>
-      <Typography variant="caption" display="block" gutterBottom>
-        <strong>Prompts:</strong> {aiFunction.number_of_prompts}
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
+        <Typography variant="h6" sx={{ flex: 1 }}>
+          {aiFunction.name}
+        </Typography>
+        <DateChip isoString={aiFunction.creation_time} />
+      </Box>
+      <UserChip username={aiFunction.username} sx={{ marginRight: 10000, marginBottom: 2 }} />
+      <NumberChip
+        number={aiFunction.input_variables.length}
+        label="Variables"
+        sx={{ marginRight: 2 }}
+      />
+      <NumberChip number={numberOfAssertions} label="Assertions" sx={{ marginRight: 2 }} />
+      <NumberChip number={aiFunction.number_of_prompts} label="Prompts" />
     </Paper>
   )
 }
