@@ -12,12 +12,14 @@ import Paper from "@mui/material/Paper"
 import theme from "@/theme"
 import Divider from "@mui/material/Divider"
 import { NumberChip } from "../Chips"
+import Chip from "@mui/material/Chip"
 
 interface AssertionPaperProps {
   assertion: Assertion
   onClick?: () => void
   onDelete?: () => void
   displayOnly?: boolean
+  passed?: boolean
   sx?: SxProps
 }
 
@@ -26,6 +28,7 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
   onClick = () => {},
   onDelete = () => {},
   displayOnly = false,
+  passed,
   sx,
 }) => {
   return (
@@ -47,10 +50,35 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
       }}
       elevation={2}
     >
-      <Typography fontWeight={700} align="center">
-        {assertion.type}
-      </Typography>
-      <Divider sx={{ marginBottom: 1 }} />
+      <Box display="flex" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        <Typography fontWeight={700} align="center">
+          {assertion.type}
+        </Typography>
+        {/* Passed Indicator */}
+        {passed === undefined ? (
+          <></>
+        ) : passed ? (
+          <Chip size="small" label="Passed" variant="filled" color="success" />
+        ) : (
+          <Chip size="small" label="Failed" variant="filled" color="error" />
+        )}
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete()
+          }}
+          size="small"
+          sx={{
+            display: displayOnly ? "none" : "normal",
+            color: theme.palette.primary.main,
+          }}
+        >
+          <ClearIcon />
+        </IconButton>
+      </Box>
+      <Divider sx={{ mb: 1, mt: 0.5 }} />
+
+      {/* Threshold */}
       {!assertion.threshold ? (
         <></>
       ) : (
@@ -63,6 +91,8 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
           />
         </Box>
       )}
+
+      {/* Value */}
       {!assertion.value ? (
         <></>
       ) : Array.isArray(assertion.value) ? (
@@ -84,22 +114,6 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
           <Typography>{assertion.value as string}</Typography>
         </>
       )}
-      <IconButton
-        onClick={(e) => {
-          e.stopPropagation()
-          onDelete()
-        }}
-        size="small"
-        sx={{
-          display: displayOnly ? "none" : "normal",
-          position: "absolute",
-          top: 1,
-          right: 1,
-          color: theme.palette.primary.main,
-        }}
-      >
-        <ClearIcon />
-      </IconButton>
     </Paper>
   )
 }
