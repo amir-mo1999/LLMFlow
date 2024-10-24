@@ -120,7 +120,7 @@ export const themeOptions: ThemeOptions = {
     MuiChip: {
       styleOverrides: {
         root: {
-          fontSize: "0.8rem",
+          fontSize: "0.9rem",
         },
       },
     },

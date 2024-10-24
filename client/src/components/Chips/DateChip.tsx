@@ -19,7 +19,9 @@ const DateChip: React.FC<DateChipProps> = ({ isoString, sx }) => {
   }
   const formattedDate = date.toLocaleString("de-DE", options)
 
-  return <Chip label={formattedDate} sx={sx} color="primary" size="small" />
+  return (
+    <Chip label={formattedDate} sx={{ fontSize: "0.8rem", ...sx }} color="primary" size="small" />
+  )
 }
 
 export default DateChip

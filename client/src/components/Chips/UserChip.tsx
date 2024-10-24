@@ -15,7 +15,7 @@ const UserChip: React.FC<UserChipProps> = ({ username, sx }) => {
     <Chip
       icon={<PersonIcon />}
       label={username}
-      sx={{ ...sx, fontSize: "0.8rem" }}
+      sx={{ fontSize: "0.8rem", ...sx }}
       color="primary"
       variant="filled"
       size="small"
