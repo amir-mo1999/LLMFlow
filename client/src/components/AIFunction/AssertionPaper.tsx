@@ -50,10 +50,11 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
       }}
       elevation={2}
     >
-      <Box display="flex" sx={{ justifyContent: "space-between", alignItems: "center" }}>
-        <Typography fontWeight={700} align="center">
+      <Box display="flex" sx={{ alignItems: "center", flexDirection: "row" }}>
+        <Typography fontWeight={700} sx={{ mr: 2 }}>
           {assertion.type}
         </Typography>
+        <NumberChip number={assertion.weight as number} label="Weight" labelFirst />
         {/* Passed Indicator */}
         {passed === undefined ? (
           <></>
