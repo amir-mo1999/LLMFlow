@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import AssertionFormDialog from "./AssertionsFormDialog"
@@ -25,10 +25,13 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   }
 
   const handleOpenEditDialog = (index: number) => {
-    setCurrentIndex(index)
-    setCurrentAssertion(assertions[index])
-    setIsEditing(true)
-    setDialogOpen(true)
+    const f = () => {
+      setCurrentIndex(index)
+      setCurrentAssertion(assertions[index])
+      setIsEditing(true)
+      setDialogOpen(true)
+    }
+    return f
   }
 
   const handleCloseDialog = () => {
@@ -48,8 +51,11 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   }
 
   const handleDeleteAssertion = (index: number) => {
-    const updatedAssertions = assertions.filter((_, i) => i !== index)
-    setAssertions(updatedAssertions)
+    const f = () => {
+      const updatedAssertions = assertions.filter((_, i) => i !== index)
+      setAssertions(updatedAssertions)
+    }
+    return f
   }
 
   return (
