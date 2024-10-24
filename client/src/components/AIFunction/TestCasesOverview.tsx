@@ -3,7 +3,6 @@
 import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import AssertionsOverview from "./AssertionsOverview"
@@ -15,7 +14,7 @@ import AssertionsForm from "./AIFunctionForm/AssertionsForm.tsx/AssertionsForm"
 import { Assertion } from "@/api/apiSchemas"
 import IconButton from "@mui/material/IconButton"
 import ClearIcon from "@mui/icons-material/Clear"
-import Divider from "@mui/material/Divider"
+import InputVariablePaper from "./InputVariablePaper"
 
 interface TestCasesOverviewProps {
   testCases: TestCaseInput[]
@@ -87,20 +86,12 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
             <Typography variant="h6">Variables</Typography>
             <Box sx={{ mt: 1 }}>
               {Object.entries(testCase.vars).map(([varName, varContent], varIndex) => (
-                <Paper
+                <InputVariablePaper
                   key={varIndex}
-                  sx={{
-                    padding: 1,
-                    marginBottom: 1,
-                    "&:hover": {
-                      backgroundColor: displayOnly ? "white" : "",
-                    },
-                  }}
-                >
-                  <Typography fontWeight={700}>{varName}</Typography>
-                  <Divider sx={{ marginBottom: 1 }} />
-                  <Typography>{varContent}</Typography>
-                </Paper>
+                  displayOnly={displayOnly}
+                  varName={varName}
+                  content={varContent}
+                ></InputVariablePaper>
               ))}
             </Box>
           </Box>
