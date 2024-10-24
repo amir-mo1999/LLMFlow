@@ -3,8 +3,6 @@
 import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import Button from "@mui/material/Button"
-import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import AssertionsOverview from "./AssertionsOverview"
 import theme from "@/theme"
 import ScrollBox from "../ScrollBox"
@@ -35,23 +33,13 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
 }) => {
   const [showAllTestCases, setShowAllTestCases] = useState(false)
 
-  const toggleShowAllTestCases = () => {
-    setShowAllTestCases((prev) => !prev)
-  }
-
-  const MAX_VISIBLE_TEST_CASES = 2
-
   if (!testCases || testCases.length === 0) {
     return <></>
   }
 
-  const testCasesToDisplay = showAllTestCases
-    ? testCases
-    : testCases.slice(0, MAX_VISIBLE_TEST_CASES)
-
   return (
     <ScrollBox sx={{ ...sx }}>
-      {testCasesToDisplay.map((testCase, index) => (
+      {testCases.map((testCase, index) => (
         <Box
           key={index}
           sx={{
@@ -115,18 +103,6 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
           </Box>
         </Box>
       ))}
-
-      {/* Toggle Button for Showing More/Less Test Cases */}
-      {testCases.length > MAX_VISIBLE_TEST_CASES && (
-        <Box textAlign="center" mt={2}>
-          <Button
-            onClick={toggleShowAllTestCases}
-            startIcon={showAllTestCases ? <ExpandLess /> : <ExpandMore />}
-          >
-            {showAllTestCases ? "Show Less" : "Show More"}
-          </Button>
-        </Box>
-      )}
     </ScrollBox>
   )
 }
