@@ -5,7 +5,6 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import AssertionsOverview from "./AssertionsOverview"
 import theme from "@/theme"
-import ScrollBox from "../ScrollBox"
 import { TestCaseInput } from "@/api/apiSchemas"
 import { SxProps } from "@mui/material"
 import AssertionsForm from "./AIFunctionForm/AssertionsForm.tsx/AssertionsForm"
@@ -38,7 +37,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
   }
 
   return (
-    <ScrollBox sx={{ ...sx }}>
+    <Box sx={{ ...sx }}>
       {testCases.map((testCase, index) => (
         <Box
           key={index}
@@ -103,7 +102,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
           </Box>
         </Box>
       ))}
-    </ScrollBox>
+    </Box>
   )
 }
 

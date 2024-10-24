@@ -10,6 +10,7 @@ import Collapse from "@mui/material/Collapse"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import { Prompt } from "@/api/apiSchemas"
 import { useDeletePrompt } from "@/api/apiComponents"
+import EvalOverview from "./EvalOverview"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
@@ -57,7 +58,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
   return (
     <Box width="100%">
       {/* Prompt Name */}
-      <Typography variant="h4">{"some name"}</Typography>
+      <Typography variant="h4">{prompt.ai_function_name}</Typography>
 
       {/* Creation Time */}
       <Typography>{new Date(prompt.creation_time).toLocaleString("de-DE", options)}</Typography>
@@ -119,6 +120,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6">Evaluation Results</Typography>
         {/* Future implementation of Evaluation Results */}
+        {prompt.last_eval ? <EvalOverview evalResult={prompt.last_eval}></EvalOverview> : <></>}
       </Box>
 
       {/* Delete Prompt Button */}
