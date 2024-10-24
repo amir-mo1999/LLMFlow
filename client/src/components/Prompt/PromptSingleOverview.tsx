@@ -6,8 +6,6 @@ import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
-import Collapse from "@mui/material/Collapse"
-import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import { Prompt } from "@/api/apiSchemas"
 import { useDeletePrompt } from "@/api/apiComponents"
 import EvalOverview from "./EvalOverview"
@@ -39,22 +37,6 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
     deletePromptAPI({ pathParams: { promptId: prompt._id as string } })
   }
 
-  const [showAllMessages, setShowAllMessages] = useState(false)
-  const MAX_VISIBLE_MESSAGES = 2
-
-  const handleToggleMessages = () => {
-    setShowAllMessages((prev) => !prev)
-  }
-
-  const messagesToDisplay = showAllMessages
-    ? prompt.messages
-    : prompt.messages.slice(0, MAX_VISIBLE_MESSAGES)
-
-  const extraMessages = showAllMessages ? [] : prompt.messages.slice(MAX_VISIBLE_MESSAGES)
-  {
-    console.log(prompt.messages[0].content)
-  }
-
   return (
     <Box width="100%">
       {/* Prompt Name */}
@@ -67,7 +49,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
 
       {/* Prompt Messages */}
       <Box sx={{ mt: 2 }}>
-        <Typography variant="h6">Messages</Typography>
+        <Typography variant="h5">Messages</Typography>
         {prompt.messages.length === 0 ? (
           <Typography>No messages defined for this Prompt.</Typography>
         ) : (
@@ -80,7 +62,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
               },
             }}
           >
-            {messagesToDisplay.map((message, index) => (
+            {prompt.messages.map((message, index) => (
               <Box key={index} sx={{ mb: 2 }}>
                 <Typography variant="subtitle1">
                   <strong>{message.role.charAt(0).toUpperCase() + message.role.slice(1)}</strong>
@@ -88,37 +70,13 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
                 <Typography variant="body1">{message.content}</Typography>
               </Box>
             ))}
-
-            {extraMessages.length > 0 && (
-              <Collapse in={showAllMessages} timeout="auto" unmountOnExit>
-                {extraMessages.map((message, index) => (
-                  <Box key={index} sx={{ mb: 2 }}>
-                    <Typography variant="subtitle1">
-                      Role: {message.role.charAt(0).toUpperCase() + message.role.slice(1)}
-                    </Typography>
-                    <Typography variant="body1">{message.content}</Typography>
-                  </Box>
-                ))}
-              </Collapse>
-            )}
-
-            {prompt.messages.length > MAX_VISIBLE_MESSAGES && (
-              <Box textAlign="center">
-                <Button
-                  onClick={handleToggleMessages}
-                  startIcon={showAllMessages ? <ExpandLess /> : <ExpandMore />}
-                >
-                  {showAllMessages ? "Show Less" : "Show More"}
-                </Button>
-              </Box>
-            )}
           </Paper>
         )}
       </Box>
 
       {/* Evaluation Results Section */}
       <Box sx={{ mt: 4 }}>
-        <Typography variant="h6">Evaluation Results</Typography>
+        <Typography variant="h5">Evaluation Results</Typography>
         {/* Future implementation of Evaluation Results */}
         {prompt.last_eval ? <EvalOverview evalResult={prompt.last_eval}></EvalOverview> : <></>}
       </Box>
