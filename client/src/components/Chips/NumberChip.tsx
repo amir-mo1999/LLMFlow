@@ -26,8 +26,8 @@ const NumberChip: React.FC<NumberChipProps> = ({
   return (
     <Chip
       sx={{
-        ...sx,
         fontSize: "0.9rem",
+        ...sx,
       }}
       variant={variant}
       color={color}

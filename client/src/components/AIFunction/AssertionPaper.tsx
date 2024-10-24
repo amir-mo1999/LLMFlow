@@ -4,12 +4,14 @@ import { SxProps } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
+import Box from "@mui/material/Box"
 import ListItemText from "@mui/material/ListItemText"
 import ClearIcon from "@mui/icons-material/Clear"
 import IconButton from "@mui/material/IconButton"
 import Paper from "@mui/material/Paper"
 import theme from "@/theme"
 import Divider from "@mui/material/Divider"
+import { NumberChip } from "../Chips"
 
 interface AssertionPaperProps {
   assertion: Assertion
@@ -45,23 +47,26 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
       }}
       elevation={2}
     >
-      <Typography fontWeight={700}>{assertion.type}</Typography>
+      <Typography fontWeight={700} align="center">
+        {assertion.type}
+      </Typography>
       <Divider sx={{ marginBottom: 1 }} />
       {!assertion.threshold ? (
         <></>
       ) : (
-        <>
-          <Typography>
-            <strong>Threshold: </strong>
-            {assertion.threshold}
-          </Typography>
-        </>
+        <Box display="flex" sx={{ justifyContent: "center" }}>
+          <NumberChip
+            sx={{ fontSize: "1rem" }}
+            number={assertion.threshold}
+            label="Threshold"
+            labelFirst
+          />
+        </Box>
       )}
       {!assertion.value ? (
         <></>
       ) : Array.isArray(assertion.value) ? (
         <>
-          <Typography>Values</Typography>
           <List disablePadding>
             {assertion.value.map((val: string, indx: number) => {
               return (
@@ -76,7 +81,6 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
         </>
       ) : (
         <>
-          <Typography>Value</Typography>
           <Typography>{assertion.value as string}</Typography>
         </>
       )}
