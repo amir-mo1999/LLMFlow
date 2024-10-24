@@ -18,7 +18,6 @@ import {
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import Divider from "@mui/material/Divider"
-
 import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import { usePostAiFunction } from "@/api/apiComponents"
@@ -99,7 +98,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     postAiFunction({ body: aiFunction })
   }
 
-  //useEffect(() => setTestCases([]), [inputVariables])
   return (
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>

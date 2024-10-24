@@ -39,7 +39,7 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
   return (
     <Box sx={{ ...sx }}>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
-        <Typography variant="h5">Input Variables</Typography>
+        <Typography variant="h5">Variables</Typography>
 
         <Button onClick={handleAddVariable}>
           <AddIcon />

@@ -57,11 +57,18 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       {/* Input Variables */}
       <Box marginBottom={1}>
         <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-          Input Variables
+          Variables
         </Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
           {aiFunction.input_variables.map((inputVar, indx) => (
-            <Chip key={indx} label={inputVar.name} variant="outlined" size="medium"></Chip>
+            <Chip
+              key={indx}
+              label={inputVar.name}
+              sx={{ fontSize: "1rem" }}
+              color="primary"
+              variant="outlined"
+              size="medium"
+            ></Chip>
           ))}
         </Box>
       </Box>
@@ -70,19 +77,26 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
         schema={addTitlesToSchema(aiFunction.output_schema)}
         displayOnly
       ></JsonSchemaEditor>
-      <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Output Assertions */}
-      <Box marginBottom={1}>
-        <Typography variant="h5" paddingBottom={1}>
-          Output Assertions
-        </Typography>
-        {aiFunction.assert.length === 0 ? (
-          <Typography variant="body2">No output assertions defined.</Typography>
-        ) : (
-          <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
-        )}
-      </Box>
+      {aiFunction.assert.length === 1 ? (
+        <></>
+      ) : (
+        <>
+          <Divider sx={{ marginY: 2 }}></Divider>
+          <Box marginBottom={1}>
+            <Typography variant="h5" paddingBottom={1}>
+              Assertions
+            </Typography>
+            {aiFunction.assert.length === 0 ? (
+              <Typography variant="body2">No output assertions defined.</Typography>
+            ) : (
+              <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
+            )}
+          </Box>
+        </>
+      )}
+
       <Divider sx={{ marginY: 2 }}></Divider>
       {/* Test Cases */}
       <Box marginBottom={1}>
