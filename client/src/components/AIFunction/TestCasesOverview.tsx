@@ -101,7 +101,12 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
             <Box sx={{ mt: 1 }}>
               {testCase.assert && testCase.assert !== null ? (
                 displayOnly ? (
-                  <AssertionsOverview assertions={testCase.assert} displayOnly />
+                  <Box>
+                    <Typography variant="h6" marginBottom={1}>
+                      Assertions
+                    </Typography>
+                    <AssertionsOverview assertions={testCase.assert} displayOnly />
+                  </Box>
                 ) : (
                   <AssertionsForm
                     assertions={testCase.assert}
