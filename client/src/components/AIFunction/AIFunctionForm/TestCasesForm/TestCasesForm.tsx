@@ -55,10 +55,10 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
     setTestCases(updatedTestCases)
   }
 
-  const handleDeleteTestCase = (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation() // Prevent triggering the edit dialog
+  const handleDeleteTestCase = (index: number) => {
     const updatedTestCases = testCases.filter((_, i) => i !== index)
     setTestCases(updatedTestCases)
+    console.log("setting test cases")
   }
 
   // Handler to update assertions for a specific Test Case
