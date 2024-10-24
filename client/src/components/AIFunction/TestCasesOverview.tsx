@@ -115,6 +115,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
                   <AssertionsForm
                     assertions={testCase.assert}
                     setAssertions={(assertion) => setAssertions(index, assertion)}
+                    headerVariant="h6"
                   />
                 )
               ) : (

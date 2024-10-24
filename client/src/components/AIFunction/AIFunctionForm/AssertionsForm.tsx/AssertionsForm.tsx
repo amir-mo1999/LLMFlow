@@ -5,14 +5,19 @@ import AssertionFormDialog from "./AssertionsFormDialog"
 import { Assertion } from "@/api/apiSchemas"
 import AddIcon from "@mui/icons-material/Add"
 import AssertionsOverview from "../../AssertionsOverview"
-import Typography from "@mui/material/Typography"
+import Typography, { TypographyOwnProps } from "@mui/material/Typography"
 
 interface AssertionsFormProps {
   assertions: Assertion[]
   setAssertions: (assertions: Assertion[]) => void
+  headerVariant?: TypographyOwnProps["variant"]
 }
 
-const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertions }) => {
+const AssertionsForm: React.FC<AssertionsFormProps> = ({
+  assertions,
+  setAssertions,
+  headerVariant = "h5",
+}) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [currentIndex, setCurrentIndex] = useState<number | null>(null)
@@ -61,7 +66,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({ assertions, setAssertio
   return (
     <Box sx={{ display: "flex", width: "100%", flexDirection: "column" }}>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 2, marginBottom: 1 }}>
-        <Typography variant="h6">Assertions</Typography>
+        <Typography variant={headerVariant}>Assertions</Typography>
 
         <Button onClick={handleOpenAddDialog} color="primary">
           <AddIcon />
