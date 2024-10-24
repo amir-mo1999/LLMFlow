@@ -40,6 +40,7 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
         }
         return (
           <AssertionPaper
+            key={indx}
             assertion={assertion}
             onClick={onClick(indx)}
             onDelete={onDelete(indx)}

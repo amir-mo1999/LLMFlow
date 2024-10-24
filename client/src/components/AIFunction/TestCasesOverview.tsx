@@ -107,7 +107,6 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
 
           {/* Assertions Section */}
           <Box>
-            <Typography variant="h6">Assertions</Typography>
             <Box sx={{ mt: 1 }}>
               {testCase.assert && testCase.assert !== null ? (
                 displayOnly ? (
