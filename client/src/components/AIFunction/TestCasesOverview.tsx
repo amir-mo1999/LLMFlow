@@ -14,7 +14,7 @@ import AssertionsForm from "./AIFunctionForm/AssertionsForm.tsx/AssertionsForm"
 import { Assertion } from "@/api/apiSchemas"
 import IconButton from "@mui/material/IconButton"
 import ClearIcon from "@mui/icons-material/Clear"
-import InputVariablePaper from "./InputVariablePaper"
+import InputVariableOverview from "./InputVariableOverview"
 
 interface TestCasesOverviewProps {
   testCases: TestCaseInput[]
@@ -84,16 +84,10 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
           {/* Variables Section */}
           <Box sx={{ mb: 2 }} onClick={() => onClickVars(index)}>
             <Typography variant="h6">Variables</Typography>
-            <Box sx={{ mt: 1 }}>
-              {Object.entries(testCase.vars).map(([varName, varContent], varIndex) => (
-                <InputVariablePaper
-                  key={varIndex}
-                  displayOnly={displayOnly}
-                  varName={varName}
-                  content={varContent}
-                ></InputVariablePaper>
-              ))}
-            </Box>
+            <InputVariableOverview
+              vars={testCase.vars}
+              displayOnly={displayOnly}
+            ></InputVariableOverview>
           </Box>
 
           {/* Assertions Section */}

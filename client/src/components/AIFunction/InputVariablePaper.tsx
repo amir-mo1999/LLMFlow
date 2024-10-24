@@ -21,10 +21,14 @@ const InputVariablePaper: React.FC<InputVariablePaperProps> = ({
     <Paper
       sx={{
         ...sx,
-        padding: 1,
-        marginBottom: 1,
         minWidth: "20%",
-        maxWidth: "50%",
+        padding: 1,
+        maxHeight: 210,
+        height: "auto",
+        position: "relative",
+        overflow: "auto",
+        overflowX: "hidden",
+        maxWidth: "100%",
         "&:hover": {
           backgroundColor: displayOnly ? "white" : "",
         },
@@ -33,7 +37,8 @@ const InputVariablePaper: React.FC<InputVariablePaperProps> = ({
       <Typography fontWeight={700} align="center">
         {varName}
       </Typography>
-      <Typography>{content}</Typography>
+      <Divider />
+      <Typography mt={1}>{content}</Typography>
     </Paper>
   )
 }
