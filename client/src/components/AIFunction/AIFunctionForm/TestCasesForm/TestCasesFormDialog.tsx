@@ -71,17 +71,20 @@ const TestCasesFormDialog: React.FC<TestCasesFormDialogProps> = ({
   }
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>{isEditing ? "Edit Test Case" : "Add Test Case"}</DialogTitle>
       <DialogContent>
         <Box mt={2}>
           {inputVariables.map((variable, idx) => (
             <Box key={idx} mb={2}>
-              <Typography>{variable.name}</Typography>
+              <Typography variant="h6">{variable.name}</Typography>
               <TextField
                 value={vars[variable.name] || ""}
                 onChange={handleChange(variable.name)}
                 fullWidth
+                multiline
+                minRows={5}
+                maxRows={7}
               />
             </Box>
           ))}
