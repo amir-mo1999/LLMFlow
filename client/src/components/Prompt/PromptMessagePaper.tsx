@@ -2,6 +2,7 @@ import { PromptMessage } from "@/api/apiSchemas"
 import { SxProps } from "@mui/material"
 import Paper from "@mui/material/Paper"
 import Typography from "@mui/material/Typography"
+import Divider from "@mui/material/Divider"
 
 interface PromptMessagePaperProps {
   message: PromptMessage
@@ -27,11 +28,12 @@ const PromptMessagePaper: React.FC<PromptMessagePaperProps> = ({ message, sx, in
         },
       }}
     >
-      <Typography variant="subtitle1">
+      <Typography variant="subtitle1" align="center">
         <strong>
           {message.role.charAt(0).toUpperCase() + message.role.slice(1) + " #" + (indx + 1)}
         </strong>
       </Typography>
+      <Divider />
       <Typography variant="body1">{message.content}</Typography>
     </Paper>
   )
