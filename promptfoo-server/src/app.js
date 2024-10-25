@@ -11,7 +11,7 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/", async (req, res) => {
-  const result = await promptfoo.evaluate(req.body);
+  const result = await promptfoo.evaluate(req.body, { cache: false });
   res.send(result);
 });
 
