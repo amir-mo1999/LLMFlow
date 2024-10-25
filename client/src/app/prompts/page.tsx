@@ -107,6 +107,7 @@ export default function Home() {
           Create Prompt
         </Button>
         <PromptOverview
+        selectedPromptIndx={selectedPromptIndx}
           prompts={prompts}
           promptNumbers={promptNumbers}
           onClick={onClickPrompt}

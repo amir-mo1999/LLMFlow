@@ -14,9 +14,16 @@ interface PromptPaperProps {
   prompt: Prompt
   promptNumber: number
   onClick?: () => void
+  selected: boolean
 }
 
-const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, promptNumber }) => {
+const PromptPaper: React.FC<PromptPaperProps> = ({
+  sx,
+  onClick,
+  prompt,
+  promptNumber,
+  selected = false,
+}) => {
   const numberOfMessages: number = prompt.messages.length
 
   const renderFigures = () => {
@@ -63,7 +70,11 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, promptNu
   }
 
   return (
-    <Paper onClick={onClick} elevation={2} sx={{ ...sx }}>
+    <Paper
+      onClick={onClick}
+      elevation={2}
+      sx={{ backgroundColor: selected ? "#E8E3F2" : "white", ...sx }}
+    >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
         <Typography variant="h6" sx={{ flex: 1 }}>
           {prompt.ai_function_name} #{promptNumber}

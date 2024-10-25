@@ -7,9 +7,14 @@ import AIFunctionPaper from "./AIFunctionPaper"
 interface AIFunctionOverviewProps {
   onClick?: (indx: number) => () => void
   aiFunctions: AIFunction[]
+  selectedIndx?: number
 }
 
-const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ onClick, aiFunctions }) => {
+const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
+  onClick,
+  aiFunctions,
+  selectedIndx,
+}) => {
   if (!aiFunctions) return <></>
 
   return (
@@ -28,6 +33,7 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ onClick, aiFunc
         return (
           <AIFunctionPaper
             key={indx}
+            selected={indx === selectedIndx}
             aiFunction={aiFunction}
             onClick={onClick ? onClick(indx) : undefined}
             sx={{

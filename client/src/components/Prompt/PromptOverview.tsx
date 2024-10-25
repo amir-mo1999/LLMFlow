@@ -9,9 +9,10 @@ interface PromptOverviewProps {
   prompts: Prompt[]
   onClick: (indx: number) => () => void
   promptNumbers: number[]
+  selectedPromptIndx?: number
 }
 
-const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick, promptNumbers }) => {
+const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick, promptNumbers, selectedPromptIndx}) => {
   if (!prompts) return <></>
   return (
     <Box
@@ -36,6 +37,7 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick, promp
               maxHeight: 150,
             }}
             key={indx}
+            selected={indx === selectedPromptIndx}
             promptNumber={promptNumbers[indx]}
             prompt={prompt}
             onClick={onClick ? onClick(indx) : undefined}

@@ -64,6 +64,7 @@ export default function Home() {
           Create AI Function
         </Button>
         <AIFunctionOverview
+          selectedIndx={selectedAIFunctionIndx}
           aiFunctions={isFetching || !aiFunctions ? [] : aiFunctions}
           onClick={onClickAIFunction}
         ></AIFunctionOverview>

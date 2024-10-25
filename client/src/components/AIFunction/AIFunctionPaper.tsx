@@ -10,9 +10,15 @@ interface AIFunctionPaperProps {
   sx?: SxProps
   aiFunction: AIFunction
   onClick?: () => void
+  selected?: boolean
 }
 
-const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({ sx, onClick, aiFunction }) => {
+const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
+  sx,
+  onClick,
+  aiFunction,
+  selected = false,
+}) => {
   // get total number of assertions
   let numberOfAssertions: number = 0
   numberOfAssertions += aiFunction.assert.length
@@ -25,6 +31,7 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({ sx, onClick, aiFuncti
       onClick={onClick}
       elevation={2}
       sx={{
+        backgroundColor: selected ? "#E8E3F2" : "white",
         ...sx,
       }}
     >
