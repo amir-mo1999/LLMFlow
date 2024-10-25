@@ -9,6 +9,7 @@ import AssertionsForm from "./AIFunctionForm/AssertionsForm.tsx/AssertionsForm"
 import IconButton from "@mui/material/IconButton"
 import ClearIcon from "@mui/icons-material/Clear"
 import InputVariableOverview from "./InputVariableOverview"
+import Divider from "@mui/material/Divider"
 
 interface TestCaseCardProps {
   testCase: TestCaseInput
@@ -30,13 +31,14 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
   return (
     <Box
       sx={{
-        backgroundColor: "rgba(80, 60, 128, 0.03)", // Purple with 80% opacity
-        padding: 2,
         marginBottom: 2,
         position: "relative",
-        borderLeft: 7,
-        borderColor: theme.palette.primary.main,
         borderRadius: 1,
+        borderWidth: 1,
+        borderColor: theme.palette.primary.main,
+        paddingX: 2,
+        paddingTop: 1,
+        paddingBottom: 1.5,
         ...sx,
       }}
     >
@@ -56,7 +58,6 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
       >
         <ClearIcon />
       </IconButton>
-
       {/* Variables Section */}
       <Box sx={{ mb: 2 }} onClick={() => onClickVars()}>
         <Typography variant="h6">Variables</Typography>
@@ -65,7 +66,7 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
           displayOnly={displayOnly}
         ></InputVariableOverview>
       </Box>
-
+      <Divider />
       {/* Assertions Section */}
       <Box>
         <Box sx={{ mt: 1 }}>

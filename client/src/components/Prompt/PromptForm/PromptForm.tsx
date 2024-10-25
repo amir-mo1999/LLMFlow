@@ -10,7 +10,7 @@ import {
   Paper,
   IconButton,
 } from "@mui/material"
-import DeleteIcon from "@mui/icons-material/Delete"
+import ClearIcon from "@mui/icons-material/Clear"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { PromptRouteInput, PromptMessage, AIFunction, Prompt } from "@/api/apiSchemas"
 import { usePostPrompt } from "@/api/apiComponents"
@@ -190,7 +190,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
                   disabled={messages.length === 1}
                   color="error"
                 >
-                  <DeleteIcon />
+                  <ClearIcon />
                 </IconButton>
               </Box>
               <TextField

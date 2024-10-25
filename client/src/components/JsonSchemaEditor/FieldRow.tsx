@@ -8,7 +8,7 @@ import Tooltip from "@mui/material/Tooltip"
 import IconButton from "@mui/material/IconButton"
 import AddIcon from "@mui/icons-material/Add"
 import SettingsIcon from "@mui/icons-material/Settings"
-import DeleteIcon from "@mui/icons-material/Delete"
+import ClearIcon from "@mui/icons-material/Clear"
 
 interface FieldRowProps {
   schema: JsonSchemaInput
@@ -165,7 +165,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
         {showDelete && !displayOnly && (
           <Tooltip title="Delete" placement="top">
             <IconButton color="error" onClick={handleDelete}>
-              <DeleteIcon />
+              <ClearIcon />
             </IconButton>
           </Tooltip>
         )}
