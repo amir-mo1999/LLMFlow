@@ -127,7 +127,6 @@ const FieldRow: React.FC<FieldRowProps> = ({
     }
     return null
   }
-
   return (
     <>
       <Box display="flex" sx={{ marginLeft: indent }}>
@@ -158,17 +157,20 @@ const FieldRow: React.FC<FieldRowProps> = ({
             },
           }}
         >
-          {isRoot
-            ? ["array", "object"].map((type, indx) => (
-                <MenuItem key={indx} value={type}>
-                  {type}
-                </MenuItem>
-              ))
-            : ["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
-                <MenuItem key={indx} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
+          {["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
+            <MenuItem
+              key={indx}
+              value={type}
+              sx={{
+                display:
+                  isRoot && ["string", "number", "integer", "boolean"].includes(type)
+                    ? "none"
+                    : "normal",
+              }}
+            >
+              {type}
+            </MenuItem>
+          ))}
         </Select>
 
         {showAddProperty && type === "object" && !displayOnly && (

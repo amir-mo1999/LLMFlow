@@ -41,6 +41,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     type: "string",
     title: "root",
   })
+  const [useJsonSchema, setUseJsonSchema] = useState<boolean>(false)
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
@@ -56,6 +57,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       setOutputSchema(aiFunction.output_schema)
       setAssertions(aiFunction.assert)
       setTestCases(aiFunction.test_cases)
+
+      if (aiFunction.output_schema.type !== "string") {
+        setUseJsonSchema(true)
+      }
     }
 
     return f
@@ -104,20 +109,24 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
 
   const onClickSubmit = () => {
     setDisableSubmit(true)
-    // create assertion for output schema
-    const parsedJsonSchema = parseJsonSchema(outputSchema)
-    const outputSchemaAssertion: Assertion = {
-      type: "is-json",
-      value: parsedJsonSchema,
-      weight: 10,
+    let outputSchemaAssertion: Assertion | undefined = undefined
+    let parsedJsonSchema: JsonSchemaInput | undefined = undefined
+    if (useJsonSchema) {
+      // create assertion for output schema
+      parsedJsonSchema = parseJsonSchema(outputSchema)
+      outputSchemaAssertion = {
+        type: "is-json",
+        value: parsedJsonSchema,
+        weight: 10,
+      }
     }
 
     const aiFunction: AIFunctionRouteInput = {
       name: name,
       description: description,
       input_variables: inputVariables,
-      output_schema: parsedJsonSchema,
-      assert: [...assertions, outputSchemaAssertion],
+      output_schema: parsedJsonSchema ? parsedJsonSchema : { type: "string" },
+      assert: outputSchemaAssertion ? [...assertions, outputSchemaAssertion] : assertions,
       test_cases: testCases,
     }
 
@@ -131,7 +140,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       </Typography>
       <Select
         renderValue={() => "Select an Example"}
-        value={-1}
+        value={""}
         fullWidth
         MenuProps={{
           PaperProps: {
@@ -195,7 +204,31 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
 
       <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
       <Divider sx={{ marginY: 2 }}></Divider>
-      <JsonSchemaEditor schema={outputSchema} setSchema={setOutputSchema}></JsonSchemaEditor>
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Output Type
+      </Typography>
+      <Select
+        value={useJsonSchema ? "json" : "string"}
+        size="small"
+        sx={{ width: 100 }}
+        onChange={(e) => {
+          if (e.target.value === "string") setUseJsonSchema(false)
+          else setUseJsonSchema(true)
+        }}
+      >
+        <MenuItem value="string">string</MenuItem>
+        <MenuItem value="json">json</MenuItem>
+      </Select>
+      {useJsonSchema ? (
+        <>
+          <Typography variant="h6" sx={{ my: 1 }}>
+            JSON Schema
+          </Typography>
+          <JsonSchemaEditor schema={outputSchema} setSchema={setOutputSchema}></JsonSchemaEditor>
+        </>
+      ) : (
+        <></>
+      )}
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <AssertionsForm assertions={assertions} setAssertions={setAssertions} />

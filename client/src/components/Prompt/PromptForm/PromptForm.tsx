@@ -1,15 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"
-import {
-  Typography,
-  Select,
-  MenuItem,
-  Button,
-  Box,
-  TextField,
-  Chip,
-  Paper,
-  IconButton,
-} from "@mui/material"
+import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { PromptRouteInput, PromptMessage, AIFunction, Prompt } from "@/api/apiSchemas"
@@ -212,7 +202,15 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
                 fullWidth
                 inputRef={(el) => (textFieldRefs.current[index] = el)}
               />
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box
+                sx={{
+                  display:
+                    aiFunctions[selectedAIFunctionIndx].output_schema.type === "string"
+                      ? "none"
+                      : "flex",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Button variant="contained" onClick={() => insertOutputSchema(index)}>
                   Insert Output Schema
                 </Button>
