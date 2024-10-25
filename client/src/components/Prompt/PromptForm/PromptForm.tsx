@@ -185,19 +185,23 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
                   onChange={(e) =>
                     handleRoleChange(index, e.target.value as "user" | "system" | "assistant")
                   }
-                  sx={{ flexGrow: 1, mr: 2 }}
+                  sx={{ flexGrow: 1 }}
                 >
                   <MenuItem value="user">User</MenuItem>
                   <MenuItem value="system">System</MenuItem>
                   <MenuItem value="assistant">Assistant</MenuItem>
                 </Select>
-                <IconButton
-                  onClick={() => deleteMessage(index)}
-                  disabled={messages.length === 1}
-                  color="error"
-                >
-                  <ClearIcon />
-                </IconButton>
+                {messages.length === 1 ? (
+                  <></>
+                ) : (
+                  <Button
+                    onClick={() => deleteMessage(index)}
+                    disabled={messages.length === 1}
+                    color="primary"
+                  >
+                    <ClearIcon />
+                  </Button>
+                )}
               </Box>
               <TextField
                 label="Content"
@@ -209,7 +213,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
                 inputRef={(el) => (textFieldRefs.current[index] = el)}
               />
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Button variant="outlined" onClick={() => insertOutputSchema(index)}>
+                <Button variant="contained" onClick={() => insertOutputSchema(index)}>
                   Insert Output Schema
                 </Button>
               </Box>
