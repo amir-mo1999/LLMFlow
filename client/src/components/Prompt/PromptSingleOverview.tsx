@@ -3,12 +3,12 @@
 import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { Prompt } from "@/api/apiSchemas"
 import { useDeletePrompt } from "@/api/apiComponents"
 import EvalOverview from "./EvalOverview"
+import PromptMessagesOverview from "./PromptMessagesOverview"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
@@ -49,28 +49,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
 
       {/* Prompt Messages */}
       <Typography variant="h5">Messages</Typography>
-      {prompt.messages.length === 0 ? (
-        <Typography>No messages defined for this Prompt.</Typography>
-      ) : (
-        <Paper
-          sx={{
-            padding: 2,
-            mt: 1,
-            "&:hover": {
-              backgroundColor: "#ffffff",
-            },
-          }}
-        >
-          {prompt.messages.map((message, index) => (
-            <Box key={index}>
-              <Typography variant="subtitle1">
-                <strong>{message.role.charAt(0).toUpperCase() + message.role.slice(1)}</strong>
-              </Typography>
-              <Typography variant="body1">{message.content}</Typography>
-            </Box>
-          ))}
-        </Paper>
-      )}
+      <PromptMessagesOverview messages={prompt.messages}></PromptMessagesOverview>
 
       <Divider sx={{ marginY: 2 }}></Divider>
 
