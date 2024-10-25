@@ -72,10 +72,37 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
 
       {/* Json Schema */}
       <Divider sx={{ marginY: 2 }}></Divider>
-      <JsonSchemaEditor
-        schema={addTitlesToSchema(aiFunction.output_schema)}
-        displayOnly
-      ></JsonSchemaEditor>
+      <Box>
+        <Typography variant="h5" paddingBottom={1}>
+          Output Type
+        </Typography>
+        {aiFunction.output_schema.type === "string" ? (
+          <Chip
+            label="string"
+            sx={{ fontSize: "1rem" }}
+            color="primary"
+            variant="outlined"
+            size="medium"
+          />
+        ) : (
+          <>
+            <Chip
+              label="json"
+              sx={{ fontSize: "1rem", marginBottom: 1 }}
+              color="primary"
+              variant="outlined"
+              size="medium"
+            />
+            <Typography variant="h6" paddingBottom={1}>
+              JSON Schema
+            </Typography>
+            <JsonSchemaEditor
+              schema={addTitlesToSchema(aiFunction.output_schema)}
+              displayOnly
+            ></JsonSchemaEditor>
+          </>
+        )}
+      </Box>
 
       {/* Output Assertions */}
       {aiFunction.assert.length === 1 ? (
