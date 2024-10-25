@@ -10,10 +10,11 @@ import Box from "@mui/material/Box"
 interface PromptPaperProps {
   sx?: SxProps
   prompt: Prompt
+  promptNumber: number
   onClick?: () => void
 }
 
-const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt }) => {
+const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, promptNumber }) => {
   const numberOfMessages: number = prompt.messages.length
   let meanScore: number | undefined = undefined
   let totalCost: number | undefined = undefined
@@ -33,7 +34,7 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt }) => {
     <Paper onClick={onClick} elevation={2} sx={{ ...sx }}>
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
         <Typography variant="h6" sx={{ flex: 1 }}>
-          {prompt.ai_function_name}
+          {prompt.ai_function_name} #{promptNumber}
         </Typography>
         <DateChip isoString={prompt.creation_time} />
       </Box>

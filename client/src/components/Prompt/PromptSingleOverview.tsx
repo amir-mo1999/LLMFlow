@@ -12,6 +12,7 @@ import PromptMessagesOverview from "./PromptMessagesOverview"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
+  promptNumber: number
   onDelete: () => void
 }
 
@@ -24,7 +25,11 @@ const options: Intl.DateTimeFormatOptions = {
   minute: "2-digit",
 }
 
-const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onDelete }) => {
+const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
+  prompt,
+  promptNumber,
+  onDelete,
+}) => {
   const [disableDelete, setDisableDelete] = useState(false)
   const { mutate: deletePromptAPI } = useDeletePrompt({
     onSuccess: () => {
@@ -40,7 +45,9 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
   return (
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       {/* Prompt Name */}
-      <Typography variant="h4">{prompt.ai_function_name}</Typography>
+      <Typography variant="h4">
+        {prompt.ai_function_name} #{promptNumber}
+      </Typography>
 
       {/* Creation Time */}
       <Typography>{new Date(prompt.creation_time).toLocaleString("de-DE", options)}</Typography>

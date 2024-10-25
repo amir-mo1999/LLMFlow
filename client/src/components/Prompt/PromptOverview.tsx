@@ -8,11 +8,11 @@ import PromptPaper from "./PromptPaper"
 interface PromptOverviewProps {
   prompts: Prompt[]
   onClick: (indx: number) => () => void
+  promptNumbers: number[]
 }
 
-const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick }) => {
+const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick, promptNumbers }) => {
   if (!prompts) return <></>
-
   return (
     <Box
       sx={{
@@ -35,6 +35,7 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick }) => 
               height: 150,
             }}
             key={indx}
+            promptNumber={promptNumbers[indx]}
             prompt={prompt}
             onClick={onClick ? onClick(indx) : undefined}
           ></PromptPaper>

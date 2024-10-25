@@ -13,11 +13,30 @@ import { useGetAllPrompts, useGetAiFunctions, useEvaluate } from "@/api/apiCompo
 import { useState, useEffect } from "react"
 import { Prompt } from "@/api/apiSchemas"
 
+const getPromptNumbers = (prompts: Prompt[]) => {
+  const nameCountMap = new Map()
+  const numbers: number[] = []
+
+  prompts.forEach((prompt) => {
+    const name = prompt.ai_function_name
+    // Get the current count for the name, default to 0
+    const currentCount = nameCountMap.get(name) || 0
+    // Increment the count
+    const newCount = currentCount + 1
+    // Update the map
+    nameCountMap.set(name, newCount)
+    // Push the new count to the numbers array
+    numbers.push(newCount)
+  })
+
+  return numbers
+}
 export default function Home() {
   const [searchValue, setSearchValue] = useState("")
   const [selectedPromptIndx, setSelectedPromptIndx] = useState<number | undefined>()
   const [prompts, setPrompts] = useState<Prompt[]>([])
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [promptNumbers, setPromptNumbers] = useState<number[]>([])
 
   const onClickCreate = () => {
     setShowCreateForm(true)
@@ -52,6 +71,8 @@ export default function Home() {
         evaluate({ pathParams: { promptId: prompts[i]._id as string } })
       }
     }
+
+    setPromptNumbers(getPromptNumbers(prompts))
   }, [prompts])
 
   const { mutate: evaluate } = useEvaluate({
@@ -85,7 +106,11 @@ export default function Home() {
         <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
           Create Prompt
         </Button>
-        <PromptOverview prompts={prompts} onClick={onClickPrompt}></PromptOverview>
+        <PromptOverview
+          prompts={prompts}
+          promptNumbers={promptNumbers}
+          onClick={onClickPrompt}
+        ></PromptOverview>
       </SideBarContainer>
       <MainContentContainer>
         {showCreateForm ? (
@@ -93,6 +118,7 @@ export default function Home() {
         ) : selectedPromptIndx !== undefined && prompts ? (
           <PromptSingleOverview
             prompt={prompts[selectedPromptIndx]}
+            promptNumber={promptNumbers[selectedPromptIndx]}
             onDelete={onDeletePrompt}
           ></PromptSingleOverview>
         ) : (
