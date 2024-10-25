@@ -14,6 +14,8 @@ import ClearIcon from "@mui/icons-material/Clear"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { PromptRouteInput, PromptMessage, AIFunction, Prompt } from "@/api/apiSchemas"
 import { usePostPrompt } from "@/api/apiComponents"
+import Divider from "@mui/material/Divider"
+import AddIcon from "@mui/icons-material/Add"
 
 interface PromptFormProps {
   aiFunctions: AIFunction[]
@@ -123,50 +125,54 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       <Typography variant="h5" gutterBottom>
-        Prompt Form
+        Select AI Function
       </Typography>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          Select AI Function
-        </Typography>
-        <Select
-          value={selectedAIFunctionIndx.toString()}
-          onChange={onSelectedAIFunctionChange}
-          fullWidth
-        >
-          {aiFunctions.map((aiFunction, indx) => (
-            <MenuItem key={indx} value={indx}>
-              {aiFunction.name}
-            </MenuItem>
-          ))}
-        </Select>
+      <Select
+        value={selectedAIFunctionIndx.toString()}
+        onChange={onSelectedAIFunctionChange}
+        fullWidth
+      >
+        {aiFunctions.map((aiFunction, indx) => (
+          <MenuItem key={indx} value={indx}>
+            {aiFunction.name}
+          </MenuItem>
+        ))}
+      </Select>
+
+      <Divider sx={{ marginY: 2 }}></Divider>
+
+      <Typography variant="h5" gutterBottom>
+        Variables
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {aiFunctions[selectedAIFunctionIndx].input_variables.map((variable, indx) => (
+          <Chip
+            key={indx}
+            label={variable.name}
+            onClick={() => insertVariable(variable.name, messages.length - 1)}
+            color="primary"
+            variant="outlined"
+          />
+        ))}
       </Box>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          Input Variables
-        </Typography>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-          {aiFunctions[selectedAIFunctionIndx].input_variables.map((variable, indx) => (
-            <Chip
-              key={indx}
-              label={variable.name}
-              onClick={() => insertVariable(variable.name, messages.length - 1)}
-              color="primary"
-              variant="outlined"
-            />
-          ))}
-        </Box>
+      <Divider sx={{ marginY: 2 }}></Divider>
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
+        <Typography variant="h5">Prompt Messages</Typography>
+
+        <Button onClick={addMessage}>
+          <AddIcon />
+        </Button>
       </Box>
-      <Box sx={{ mb: 3 }}>
+
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {messages.map((message, index) => (
           <Paper
             key={index}
             elevation={3}
             sx={{
               p: 2,
-              mb: 2,
               "&:hover": {
                 backgroundColor: "white",
               },
@@ -211,14 +217,12 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
           </Paper>
         ))}
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-        <Button variant="contained" onClick={addMessage}>
-          Add Message
-        </Button>
-        <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
-          Submit Prompt
-        </Button>
-      </Box>
+
+      <Divider sx={{ marginY: 2 }}></Divider>
+
+      <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
+        Submit Prompt
+      </Button>
     </Box>
   )
 }
