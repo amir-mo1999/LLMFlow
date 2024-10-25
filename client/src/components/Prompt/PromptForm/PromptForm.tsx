@@ -119,7 +119,10 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
         <Typography variant="h5" gutterBottom>
           Selected AI Function
         </Typography>
-        <AIFunctionPaper aiFunction={aiFunctions[selectedAIFunctionIndx]}></AIFunctionPaper>
+        <AIFunctionPaper
+          sx={{ width: 500 }}
+          aiFunction={aiFunctions[selectedAIFunctionIndx]}
+        ></AIFunctionPaper>
         <Box mt={2}>
           <Button variant="contained" onClick={() => setOpenSelectDialog(true)}>
             Select AI Function
