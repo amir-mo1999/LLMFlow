@@ -12,7 +12,15 @@ const StringTypeForm: React.FC<StringTypeFormProps> = ({ value, setValue }) => {
   return (
     <>
       <Typography>Value</Typography>
-      <TextField value={value ? value : ""} onChange={(e) => setValue(e.target.value)} required />
+      <TextField
+        value={value ? value : ""}
+        onChange={(e) => setValue(e.target.value)}
+        required
+        fullWidth
+        multiline
+        minRows={2}
+        maxRows={4}
+      />
     </>
   )
 }

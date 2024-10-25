@@ -38,7 +38,6 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
   const checkDisableSubmit = () => {
-
     // for all where value is required
     if (
       [
@@ -63,7 +62,14 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
 
     // for all where value is array
     if (
-      ["contains-all", "contains-any", "icontains-all", "icontains-any", "contains-xml", "is-xml"].includes(type)
+      [
+        "contains-all",
+        "contains-any",
+        "icontains-all",
+        "icontains-any",
+        "contains-xml",
+        "is-xml",
+      ].includes(type)
     ) {
       if (Array.isArray(value)) {
         return !value.every((v) => v !== "")
@@ -71,12 +77,14 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
     }
 
     // for all where threshold is required
-    if (["cost", "latency", "levenshtein", "perplexity-score", "perplexity", "rogue-n"].includes(type)) {
+    if (
+      ["cost", "latency", "levenshtein", "perplexity-score", "perplexity", "rogue-n"].includes(type)
+    ) {
       if (threshold === null || threshold === undefined) return true
     }
 
     // for all where value is object
-    if (["contains-json", "is-json"].includes(type)){
+    if (["contains-json", "is-json"].includes(type)) {
       if (value && typeof type === "object") {
         return Object.keys(value).length === 0
       }
@@ -139,7 +147,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>{isEditing ? "Edit Assertion" : "Add Assertion"}</DialogTitle>
       <DialogContent>
         <Box mt={2}>

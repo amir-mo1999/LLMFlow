@@ -40,13 +40,7 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
       componentToRender = (
         <>
           <Typography>Values</Typography>{" "}
-          <ListTypesForm
-            required
-            open={open}
-            values={value}
-            label="value"
-            setValues={setValue}
-          ></ListTypesForm>
+          <ListTypesForm required open={open} values={value} setValues={setValue}></ListTypesForm>
         </>
       )
       break

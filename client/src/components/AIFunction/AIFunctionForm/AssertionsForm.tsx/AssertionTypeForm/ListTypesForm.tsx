@@ -7,7 +7,6 @@ import { Assertion } from "@/api/apiSchemas"
 
 interface ListTypesFormProps {
   required?: boolean
-  label?: string
   placeholder?: string
   open: boolean
   values: Assertion["value"]
@@ -19,7 +18,6 @@ const ListTypesForm: React.FC<ListTypesFormProps> = ({
   open,
   values,
   setValues,
-  label,
   placeholder,
 }) => {
   const [valuesList, setValuesList] = useState<string[]>([])
@@ -55,7 +53,6 @@ const ListTypesForm: React.FC<ListTypesFormProps> = ({
         <Box key={index} display="flex" alignItems="center" mb={2}>
           <TextField
             value={value}
-            label={label}
             onChange={handleValueChange(index)}
             placeholder={placeholder}
             fullWidth
