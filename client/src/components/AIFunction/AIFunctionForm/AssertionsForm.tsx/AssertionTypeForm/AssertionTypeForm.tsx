@@ -4,8 +4,6 @@ import StringTypeForm from "./StringTypesForm"
 import ListTypesForm from "./ListTypesForm"
 import ThresholdTypeForm from "./ThresholdTypeForm"
 import { Typography } from "@mui/material"
-import JSONSchemaForm from "@/components/JSONSchemaForm"
-import { useEffect } from "react"
 
 interface AssertionTypeFormProps {
   open: boolean
@@ -63,15 +61,6 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
             placeholder="root.child"
             setValues={setValue}
           ></ListTypesForm>
-        </>
-      )
-      break
-    case "contains-json":
-    case "is-json":
-      componentToRender = (
-        <>
-          <Typography>JSON Schema</Typography>
-          <JSONSchemaForm JSONSchema={value as object} setJSONSchema={setValue}></JSONSchemaForm>
         </>
       )
       break
