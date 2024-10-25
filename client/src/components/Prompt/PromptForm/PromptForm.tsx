@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
-import { SelectChangeEvent } from "@mui/material/Select"
 import { PromptRouteInput, PromptMessage, AIFunction, Prompt } from "@/api/apiSchemas"
 import { AIFunctionPaper } from "@/components/AIFunction"
 import { usePostPrompt } from "@/api/apiComponents"
+import SelectAIFunctionDialog from "../SelectAIFunctionDialog"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
-import theme from "@/theme"
 
 interface PromptFormProps {
   aiFunctions: AIFunction[]
@@ -18,6 +17,8 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number>(0)
   const [messages, setMessages] = useState<PromptMessage[]>([{ role: "user", content: "" }])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
+  const [openSelectDialog, setOpenSelectDialog] = useState<boolean>(false)
+
   const textFieldRefs = useRef<(HTMLTextAreaElement | null)[]>([])
 
   useEffect(() => {
@@ -40,10 +41,6 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   }
 
   useEffect(updateDisableSubmit, [messages, selectedAIFunctionIndx])
-
-  const onSelectedAIFunctionChange = (e: SelectChangeEvent) => {
-    setSelectedAIFunctionIndx(Number(e.target.value))
-  }
 
   const { mutate: postPrompt } = usePostPrompt({
     onSuccess: (response) => {
@@ -117,140 +114,121 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   }
 
   return (
-    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-      <Typography variant="h5" gutterBottom>
-        Select AI Function
-      </Typography>
-      <Select
-        value={selectedAIFunctionIndx.toString()}
-        renderValue={() => aiFunctions[selectedAIFunctionIndx].name}
-        onChange={onSelectedAIFunctionChange}
-        sx={{ width: 500 }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              maxWidth: 400,
-              borderRadius: 16,
-              background: theme.palette.background.default,
-            },
-          },
-        }}
-      >
-        {aiFunctions.map((aiFunction, indx) => (
-          <MenuItem
-            key={indx}
-            value={indx.toString()}
-            sx={{
-              paddingX: 1,
-              paddingY: 1,
-              background: "transparent",
-              "&:hover": {
-                background: "transparent",
-              },
-              "&.Mui-selected": { background: "transparent" },
-              "&.Mui-selected:hover": { background: "transparent" },
-            }}
-          >
-            <AIFunctionPaper aiFunction={aiFunction}></AIFunctionPaper>
-          </MenuItem>
-        ))}
-      </Select>
+    <>
+      <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+        <Typography variant="h5" gutterBottom>
+          Selected AI Function
+        </Typography>
+        <AIFunctionPaper aiFunction={aiFunctions[selectedAIFunctionIndx]}></AIFunctionPaper>
+        <Box mt={2}>
+          <Button variant="contained" onClick={() => setOpenSelectDialog(true)}>
+            Select AI Function
+          </Button>
+        </Box>
+        <Divider sx={{ marginY: 2 }}></Divider>
 
-      <Divider sx={{ marginY: 2 }}></Divider>
+        <Typography variant="h5" gutterBottom>
+          Variables
+        </Typography>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+          {aiFunctions[selectedAIFunctionIndx].input_variables.map((variable, indx) => (
+            <Chip
+              key={indx}
+              label={variable.name}
+              onClick={() => insertVariable(variable.name, messages.length - 1)}
+              color="primary"
+              variant="outlined"
+            />
+          ))}
+        </Box>
+        <Divider sx={{ marginY: 2 }}></Divider>
+        <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
+          <Typography variant="h5">Prompt Messages</Typography>
 
-      <Typography variant="h5" gutterBottom>
-        Variables
-      </Typography>
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-        {aiFunctions[selectedAIFunctionIndx].input_variables.map((variable, indx) => (
-          <Chip
-            key={indx}
-            label={variable.name}
-            onClick={() => insertVariable(variable.name, messages.length - 1)}
-            color="primary"
-            variant="outlined"
-          />
-        ))}
-      </Box>
-      <Divider sx={{ marginY: 2 }}></Divider>
-      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
-        <Typography variant="h5">Prompt Messages</Typography>
+          <Button onClick={addMessage}>
+            <AddIcon />
+          </Button>
+        </Box>
 
-        <Button onClick={addMessage}>
-          <AddIcon />
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {messages.map((message, index) => (
+            <Paper
+              key={index}
+              elevation={3}
+              sx={{
+                p: 2,
+                "&:hover": {
+                  backgroundColor: "white",
+                },
+              }}
+            >
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Box
+                  sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                >
+                  <Select
+                    value={message.role}
+                    onChange={(e) =>
+                      handleRoleChange(index, e.target.value as "user" | "system" | "assistant")
+                    }
+                    sx={{ flexGrow: 1 }}
+                  >
+                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="system">System</MenuItem>
+                    <MenuItem value="assistant">Assistant</MenuItem>
+                  </Select>
+                  {messages.length === 1 ? (
+                    <></>
+                  ) : (
+                    <Button
+                      onClick={() => deleteMessage(index)}
+                      disabled={messages.length === 1}
+                      color="primary"
+                    >
+                      <ClearIcon />
+                    </Button>
+                  )}
+                </Box>
+                <TextField
+                  label="Content"
+                  value={message.content}
+                  onChange={(e) => handleContentChange(index, e.target.value)}
+                  multiline
+                  minRows={3}
+                  fullWidth
+                  inputRef={(el) => (textFieldRefs.current[index] = el)}
+                />
+                <Box
+                  sx={{
+                    display:
+                      aiFunctions[selectedAIFunctionIndx].output_schema.type === "string"
+                        ? "none"
+                        : "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button variant="contained" onClick={() => insertOutputSchema(index)}>
+                    Insert Output Schema
+                  </Button>
+                </Box>
+              </Box>
+            </Paper>
+          ))}
+        </Box>
+
+        <Divider sx={{ marginY: 2 }}></Divider>
+
+        <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
+          Submit Prompt
         </Button>
       </Box>
-
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {messages.map((message, index) => (
-          <Paper
-            key={index}
-            elevation={3}
-            sx={{
-              p: 2,
-              "&:hover": {
-                backgroundColor: "white",
-              },
-            }}
-          >
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Select
-                  value={message.role}
-                  onChange={(e) =>
-                    handleRoleChange(index, e.target.value as "user" | "system" | "assistant")
-                  }
-                  sx={{ flexGrow: 1 }}
-                >
-                  <MenuItem value="user">User</MenuItem>
-                  <MenuItem value="system">System</MenuItem>
-                  <MenuItem value="assistant">Assistant</MenuItem>
-                </Select>
-                {messages.length === 1 ? (
-                  <></>
-                ) : (
-                  <Button
-                    onClick={() => deleteMessage(index)}
-                    disabled={messages.length === 1}
-                    color="primary"
-                  >
-                    <ClearIcon />
-                  </Button>
-                )}
-              </Box>
-              <TextField
-                label="Content"
-                value={message.content}
-                onChange={(e) => handleContentChange(index, e.target.value)}
-                multiline
-                minRows={3}
-                fullWidth
-                inputRef={(el) => (textFieldRefs.current[index] = el)}
-              />
-              <Box
-                sx={{
-                  display:
-                    aiFunctions[selectedAIFunctionIndx].output_schema.type === "string"
-                      ? "none"
-                      : "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Button variant="contained" onClick={() => insertOutputSchema(index)}>
-                  Insert Output Schema
-                </Button>
-              </Box>
-            </Box>
-          </Paper>
-        ))}
-      </Box>
-
-      <Divider sx={{ marginY: 2 }}></Divider>
-
-      <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
-        Submit Prompt
-      </Button>
-    </Box>
+      <SelectAIFunctionDialog
+        open={openSelectDialog}
+        setOpen={setOpenSelectDialog}
+        setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
+        aiFunctions={aiFunctions}
+      ></SelectAIFunctionDialog>
+    </>
   )
 }
 
