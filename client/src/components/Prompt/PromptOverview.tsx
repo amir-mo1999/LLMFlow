@@ -12,7 +12,12 @@ interface PromptOverviewProps {
   selectedPromptIndx?: number
 }
 
-const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick, promptNumbers, selectedPromptIndx}) => {
+const PromptOverview: React.FC<PromptOverviewProps> = ({
+  prompts,
+  onClick,
+  promptNumbers,
+  selectedPromptIndx,
+}) => {
   if (!prompts) return <></>
   return (
     <Box
@@ -24,6 +29,7 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick, promp
         flexDirection: "column",
         gap: 2,
         paddingY: 2,
+        marginBottom: 5,
       }}
     >
       {prompts.map((prompt, indx) => {

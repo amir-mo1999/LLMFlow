@@ -27,6 +27,7 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
         flexDirection: "column",
         gap: 2,
         paddingY: 2,
+        marginBottom: 5,
       }}
     >
       {aiFunctions.map((aiFunction, indx) => {
