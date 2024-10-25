@@ -129,12 +129,8 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
         MenuProps={{
           PaperProps: {
             style: {
-              maxWidth: 100,
+              maxWidth: 400,
               borderRadius: 16,
-              display: "flex",
-              gap: 2,
-              flexDirection: "column",
-              padding: 1,
               background: theme.palette.background.default,
             },
           },
@@ -145,8 +141,14 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
             key={indx}
             value={indx.toString()}
             sx={{
-              padding: 0,
-              borderRadius: 16,
+              paddingX: 1,
+              paddingY: 1,
+              background: "transparent",
+              "&:hover": {
+                background: "transparent",
+              },
+              "&.Mui-selected": { background: "transparent" },
+              "&.Mui-selected:hover": { background: "transparent" },
             }}
           >
             <AIFunctionPaper aiFunction={aiFunction}></AIFunctionPaper>
