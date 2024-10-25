@@ -34,7 +34,20 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({ sx, onClick, aiFuncti
         </Typography>
         <DateChip isoString={aiFunction.creation_time} />
       </Box>
-      <UserChip username={aiFunction.username} sx={{ marginRight: 10000, marginBottom: 2 }} />
+
+      <UserChip username={aiFunction.username} sx={{ marginRight: 10000, mb: 1 }} />
+      <Typography
+        sx={{
+          display: "-webkit-box",
+          overflow: "hidden",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: 1,
+          mb: 1,
+        }}
+      >
+        {aiFunction.description}
+      </Typography>
+
       <NumberChip
         number={aiFunction.input_variables.length}
         label="Variables"
