@@ -28,12 +28,12 @@ const PromptMessagePaper: React.FC<PromptMessagePaperProps> = ({ message, sx, in
         },
       }}
     >
-      <Typography variant="subtitle1" align="center">
+      <Typography fontWeight={700} align="center">
         <strong>
           {message.role.charAt(0).toUpperCase() + message.role.slice(1) + " #" + (indx + 1)}
         </strong>
       </Typography>
-      <Divider />
+      <Divider sx={{ mb: 1, mt: 0.5 }} />
       <Typography variant="body1">{message.content}</Typography>
     </Paper>
   )

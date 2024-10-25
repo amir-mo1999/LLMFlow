@@ -37,8 +37,8 @@ const InputVariablePaper: React.FC<InputVariablePaperProps> = ({
       <Typography fontWeight={700} align="center">
         {varName}
       </Typography>
-      <Divider />
-      <Typography mt={1}>{content}</Typography>
+      <Divider sx={{ mb: 1, mt: 0.5 }} />
+      <Typography>{content}</Typography>
     </Paper>
   )
 }
