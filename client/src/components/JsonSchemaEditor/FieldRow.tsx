@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton"
 import AddIcon from "@mui/icons-material/Add"
 import SettingsIcon from "@mui/icons-material/Settings"
 import ClearIcon from "@mui/icons-material/Clear"
+import theme from "@/theme"
 
 interface FieldRowProps {
   schema: JsonSchemaInput
@@ -133,6 +134,13 @@ const FieldRow: React.FC<FieldRowProps> = ({
           value={title}
           onChange={handleTitleChange}
           disabled={displayOnly || disableTitleEdit ? true : false}
+          sx={{
+            input: {
+              "&.Mui-disabled": {
+                WebkitTextFillColor: theme.palette.text.primary,
+              },
+            },
+          }}
         >
           newProperty
         </TextField>
@@ -142,6 +150,11 @@ const FieldRow: React.FC<FieldRowProps> = ({
           onChange={handleTypeChange}
           size="small"
           disabled={displayOnly || disableTypeEdit ? true : false}
+          sx={{
+            "& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input.Mui-disabled": {
+              WebkitTextFillColor: theme.palette.text.primary,
+            },
+          }}
         >
           {["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
             <MenuItem key={indx} value={type}>
