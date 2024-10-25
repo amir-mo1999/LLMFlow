@@ -31,10 +31,11 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({ onClick, aiFunc
             aiFunction={aiFunction}
             onClick={onClick ? onClick(indx) : undefined}
             sx={{
-              paddingX: "10px",
-              paddingTop: "10px",
               width: "100%",
-              height: 150,
+              paddingX: 2,
+              paddingTop: 1,
+              paddingBottom: 1.5,
+              maxHeight: 150,
             }}
           ></AIFunctionPaper>
         )

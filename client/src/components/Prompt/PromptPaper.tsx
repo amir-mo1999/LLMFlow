@@ -5,7 +5,9 @@ import { SxProps } from "@mui/material"
 import { Prompt } from "@/api/apiSchemas"
 import CircularProgress from "@mui/material/CircularProgress"
 import { UserChip, NumberChip, DateChip } from "../Chips"
+import { getMeanLatency, getMeanScore, getTotalCost } from "@/utils"
 import Box from "@mui/material/Box"
+import Stack from "@mui/material/Stack"
 
 interface PromptPaperProps {
   sx?: SxProps
@@ -16,18 +18,48 @@ interface PromptPaperProps {
 
 const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, promptNumber }) => {
   const numberOfMessages: number = prompt.messages.length
-  let meanScore: number | undefined = undefined
-  let totalCost: number | undefined = undefined
 
-  if (prompt.last_eval) {
-    meanScore =
-      prompt.last_eval.results.reduce((acc, result) => acc + (result.score as number), 0) /
-      prompt.last_eval.results.length
-    totalCost = prompt.last_eval.results.reduce((acc, result) => acc + (result.cost as number), 0)
+  const renderFigures = () => {
+    if (!prompt.last_eval) {
+      return (
+        <NumberChip
+          number={numberOfMessages}
+          label={numberOfMessages === 1 ? "Message" : "Messages"}
+          sx={{ mr: 1 }}
+        />
+      )
+    }
 
-    meanScore = Math.round(meanScore * 100) / 100
+    const meanScore = getMeanScore(prompt.last_eval)
+    const totalCost = getTotalCost(prompt.last_eval)
+    const meanLatency = getMeanLatency(prompt.last_eval)
 
-    totalCost = Math.round(totalCost * 100000000) / 100000000
+    return (
+      <>
+        <Stack direction="row" spacing={2} mb={1}>
+          <NumberChip
+            number={numberOfMessages}
+            label={numberOfMessages === 1 ? "Message" : "Messages"}
+          />
+          <NumberChip labelFirst number={totalCost} label="Cost" unit="$" />
+          <NumberChip
+            labelFirst
+            number={meanScore as number}
+            label="Score"
+            color={meanScore >= 0.8 ? "success" : meanScore >= 0.4 ? "warning" : "error"}
+            variant="filled"
+          />
+        </Stack>
+
+        <NumberChip
+          labelFirst
+          number={meanLatency as number}
+          label="Latency"
+          unit="ms"
+          sx={{ mb: 1 }}
+        />
+      </>
+    )
   }
 
   return (
@@ -39,25 +71,8 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, promptNu
         <DateChip isoString={prompt.creation_time} />
       </Box>
       <UserChip username={prompt.username} sx={{ marginRight: 10000, marginBottom: 2 }} />
-      <NumberChip
-        number={numberOfMessages}
-        label={numberOfMessages === 1 ? "Message" : "Messages"}
-        sx={{ marginRight: 2 }}
-      />
-      {prompt.last_eval && totalCost !== undefined && meanScore !== undefined ? (
-        <>
-          <NumberChip sx={{ marginRight: 2 }} labelFirst number={totalCost} label="Cost" unit="$" />
-          <NumberChip
-            labelFirst
-            number={meanScore as number}
-            label="Score"
-            color={meanScore >= 0.8 ? "success" : meanScore >= 0.4 ? "warning" : "error"}
-            variant="filled"
-          />
-        </>
-      ) : (
-        <CircularProgress size={20} />
-      )}
+
+      {renderFigures()}
     </Paper>
   )
 }

@@ -1,5 +1,5 @@
 import examples from "@/examples/aiFunctions.json"
-import { AIFunctionRouteInput, JsonSchemaInput } from "@/api/apiSchemas"
+import { AIFunctionRouteInput, EvaluateSummary, JsonSchemaInput } from "@/api/apiSchemas"
 
 export function splitArrayIntoChunks<T>(array: T[], chunkSize: number): T[][] {
   const result: Array<Array<any>> = []
@@ -80,7 +80,10 @@ export function parseJsonSchema(schema: JsonSchemaInput): JsonSchemaInput {
   return newSchema
 }
 
-export function addTitlesToSchema(schema: JsonSchemaInput, rootTitle: string = "root"): JsonSchemaInput {
+export function addTitlesToSchema(
+  schema: JsonSchemaInput,
+  rootTitle: string = "root"
+): JsonSchemaInput {
   // Base case: if schema is not an object, return it as is
   if (typeof schema !== "object" || schema === null) {
     return schema
@@ -119,4 +122,28 @@ export function addTitlesToSchema(schema: JsonSchemaInput, rootTitle: string = "
   }
 
   return newSchema
+}
+
+export function getMeanScore(evalSummary: EvaluateSummary) {
+  let meanScore =
+    evalSummary.results.reduce((acc, result) => acc + (result.score as number), 0) /
+    evalSummary.results.length
+
+  meanScore = Math.round(meanScore * 100) / 100
+  return meanScore
+}
+
+export function getTotalCost(evalSummary: EvaluateSummary) {
+  let totalCost = evalSummary.results.reduce((acc, result) => acc + (result.cost as number), 0)
+
+  totalCost = Math.round(totalCost * 100000000) / 100000000
+  return totalCost
+}
+
+export function getMeanLatency(evalSummary: EvaluateSummary) {
+  let meanLatency =
+    evalSummary.results.reduce((acc, result) => acc + (result.latencyMs as number), 0) /
+    evalSummary.results.length
+  meanLatency = Math.round(meanLatency)
+  return meanLatency
 }

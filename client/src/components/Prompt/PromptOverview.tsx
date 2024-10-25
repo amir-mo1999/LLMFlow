@@ -29,10 +29,11 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({ prompts, onClick, promp
         return (
           <PromptPaper
             sx={{
-              paddingX: "10px",
-              paddingTop: "10px",
               width: "100%",
-              height: 150,
+              paddingX: 2,
+              paddingTop: 1,
+              paddingBottom: 1.5,
+              maxHeight: 150,
             }}
             key={indx}
             promptNumber={promptNumbers[indx]}
