@@ -63,7 +63,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
             }}
           >
             {prompt.messages.map((message, index) => (
-              <Box key={index} sx={{ mb: 2 }}>
+              <Box key={index}>
                 <Typography variant="subtitle1">
                   <strong>{message.role.charAt(0).toUpperCase() + message.role.slice(1)}</strong>
                 </Typography>
@@ -75,9 +75,8 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
       </Box>
 
       {/* Evaluation Results Section */}
-      <Box sx={{ mt: 4 }}>
+      <Box mt={2}>
         <Typography variant="h5">Evaluation Results</Typography>
-        {/* Future implementation of Evaluation Results */}
         {prompt.last_eval ? <EvalOverview evalResult={prompt.last_eval}></EvalOverview> : <></>}
       </Box>
 

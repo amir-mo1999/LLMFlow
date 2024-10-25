@@ -123,7 +123,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
 
   return (
     <>
-      <Box display="flex" sx={{ marginLeft: indent, marginBottom: 1 }}>
+      <Box display="flex" sx={{ marginLeft: indent }}>
         <TextField
           size="small"
           value={title}

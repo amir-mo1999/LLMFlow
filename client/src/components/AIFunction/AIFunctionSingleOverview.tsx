@@ -50,12 +50,10 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       </Typography>
 
       {/* Description */}
-      <Typography variant="body1" gutterBottom>
-        {aiFunction.description}
-      </Typography>
+      <Typography variant="body1">{aiFunction.description}</Typography>
       <Divider sx={{ marginY: 2 }}></Divider>
       {/* Input Variables */}
-      <Box marginBottom={1}>
+      <Box marginBottom={0}>
         <Typography variant="h5" sx={{ paddingBottom: 1 }}>
           Variables
         </Typography>
@@ -72,6 +70,8 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
           ))}
         </Box>
       </Box>
+
+      {/* Json Schema */}
       <Divider sx={{ marginY: 2 }}></Divider>
       <JsonSchemaEditor
         schema={addTitlesToSchema(aiFunction.output_schema)}
@@ -84,27 +84,23 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       ) : (
         <>
           <Divider sx={{ marginY: 2 }}></Divider>
-          <Box marginBottom={1}>
-            <Typography variant="h5" paddingBottom={1}>
-              Assertions
-            </Typography>
-            {aiFunction.assert.length === 0 ? (
-              <Typography variant="body2">No output assertions defined.</Typography>
-            ) : (
-              <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
-            )}
-          </Box>
+          <Typography variant="h5" paddingBottom={1}>
+            Assertions
+          </Typography>
+          {aiFunction.assert.length === 0 ? (
+            <Typography variant="body2">No output assertions defined.</Typography>
+          ) : (
+            <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
+          )}
         </>
       )}
 
       <Divider sx={{ marginY: 2 }}></Divider>
       {/* Test Cases */}
-      <Box marginBottom={1}>
-        <Typography variant="h5" paddingBottom={1}>
-          Test Cases
-        </Typography>
-        <TestCasesOverview testCases={aiFunction.test_cases} displayOnly></TestCasesOverview>
-      </Box>
+      <Typography variant="h5" paddingBottom={1}>
+        Test Cases
+      </Typography>
+      <TestCasesOverview testCases={aiFunction.test_cases} displayOnly></TestCasesOverview>
 
       <Divider sx={{ marginY: 2 }}></Divider>
       <Button variant="contained" color="error" onClick={onClickDelete}>

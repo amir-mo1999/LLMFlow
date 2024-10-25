@@ -29,7 +29,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
   }
 
   return (
-    <Box sx={{ ...sx }}>
+    <Box sx={{ ...sx, display: "flex", flexDirection: "column", gap: 2 }}>
       {testCases.map((testCase, index) => (
         <TestCaseCard
           key={index}

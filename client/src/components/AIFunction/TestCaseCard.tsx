@@ -31,7 +31,6 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
   return (
     <Box
       sx={{
-        marginBottom: 2,
         position: "relative",
         borderRadius: 1,
         borderWidth: 1,
