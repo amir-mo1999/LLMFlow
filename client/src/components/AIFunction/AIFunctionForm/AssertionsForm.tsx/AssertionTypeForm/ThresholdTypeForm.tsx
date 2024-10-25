@@ -16,7 +16,12 @@ const ThresholdTypeForm: React.FC<ThresholdTypeFormProps> = ({ threshold, setThr
   return (
     <>
       <Typography>Threshold</Typography>
-      <TextField type="number" value={threshold ? threshold : ""} onChange={onThresholdChange} />
+      <TextField
+        type="number"
+        value={threshold ? threshold : ""}
+        onChange={onThresholdChange}
+        fullWidth
+      />
     </>
   )
 }

@@ -4,6 +4,8 @@ import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { Assertion } from "@/api/apiSchemas"
+import ClearIcon from "@mui/icons-material/Clear"
+import AddIcon from "@mui/icons-material/Add"
 
 interface ListTypesFormProps {
   required?: boolean
@@ -58,10 +60,14 @@ const ListTypesForm: React.FC<ListTypesFormProps> = ({
             fullWidth
             required={required}
           />
-          <Button onClick={handleDeleteValue(index)}>×</Button>
+          <Button onClick={handleDeleteValue(index)}>
+            <ClearIcon />
+          </Button>
         </Box>
       ))}
-      <Button onClick={handleAddValue}>+</Button>
+      <Button onClick={handleAddValue}>
+        <AddIcon />
+      </Button>
     </Box>
   )
 }

@@ -147,12 +147,12 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
       <DialogTitle>{isEditing ? "Edit Assertion" : "Add Assertion"}</DialogTitle>
       <DialogContent>
-        <Box mt={2}>
+        <Box>
           <Typography>Type</Typography>
-          <Select value={type} onChange={handleTypeChange}>
+          <Select value={type} onChange={handleTypeChange} sx={{ mb: 1 }}>
             {baseAssertionTypesArray.map((type, indx) => (
               <MenuItem key={indx} value={type}>
                 {type}
@@ -160,7 +160,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
             ))}
           </Select>
           <Typography>Weight</Typography>
-          <Select value={weight.toString()} onChange={handleWeightChange}>
+          <Select value={weight.toString()} onChange={handleWeightChange} sx={{ mb: 1 }}>
             {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
               <MenuItem key={i} value={i}>
                 {i}

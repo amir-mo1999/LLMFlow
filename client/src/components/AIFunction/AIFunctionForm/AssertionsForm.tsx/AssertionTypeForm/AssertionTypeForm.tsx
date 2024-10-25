@@ -70,7 +70,7 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
     case "levenshtein":
       componentToRender = (
         <>
-          <StringTypeForm value={value} setValue={setValue}></StringTypeForm>
+          <StringTypeForm value={value} setValue={setValue} sx={{mb:1}}></StringTypeForm>
           <ThresholdTypeForm threshold={threshold} setThreshold={setThreshold}></ThresholdTypeForm>
         </>
       )
