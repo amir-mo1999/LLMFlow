@@ -139,8 +139,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
         Create from Example
       </Typography>
       <Select
-        renderValue={() => "Select an Example"}
-        value={""}
+        renderValue={() => "Select an example"}
+        defaultValue={"Select an example"}
         fullWidth
         MenuProps={{
           PaperProps: {
@@ -150,6 +150,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
           },
         }}
       >
+        <MenuItem value="Select an example" sx={{ display: "none" }}>
+          Select an example
+        </MenuItem>
         {parsedExamples.map((example, indx) => {
           return (
             <MenuItem
