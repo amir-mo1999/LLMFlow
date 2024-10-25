@@ -1,5 +1,5 @@
 // TestCasesForm.tsx
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
@@ -61,7 +61,6 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
     const f = () => {
       const updatedTestCases = testCases.filter((_, i) => i !== index)
       setTestCases(updatedTestCases)
-      console.log("setting test cases")
     }
     return f
   }
@@ -75,6 +74,33 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
     }
     return f
   }
+
+  useEffect(() => {
+    const newTestCases = [...testCases]
+    newTestCases.forEach((testCase, testCaseIndx) => {
+      const newVars: TestCaseInput["vars"] = {}
+      // get the variable names and contents from the test case variables
+      const varNames = Object.keys(testCase.vars)
+      const varContents = Object.values(testCase.vars)
+
+      // get all input variable names
+      const inputVarNames: string[] = inputVariables.reduce((varNames, inputVar) => {
+        varNames.push(inputVar.name)
+        return varNames
+      }, [] as string[])
+
+      inputVarNames.forEach((varName, varIndx) => {
+        if (varNames.includes(varName)) {
+          newVars[varName] = varContents[varNames.indexOf(varName)]
+        } else {
+          newVars[varName] = "Click to change value"
+        }
+      })
+
+      testCase.vars = { ...newVars }
+    })
+    setTestCases(newTestCases)
+  }, [inputVariables])
 
   return (
     <Box>
