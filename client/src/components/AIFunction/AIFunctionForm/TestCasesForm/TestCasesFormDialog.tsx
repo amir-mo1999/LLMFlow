@@ -32,6 +32,7 @@ const TestCasesFormDialog: React.FC<TestCasesFormDialogProps> = ({
   index,
 }) => {
   const [vars, setVars] = useState<Record<string, string>>({})
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
   useEffect(() => {
     if (open) {
@@ -70,6 +71,15 @@ const TestCasesFormDialog: React.FC<TestCasesFormDialogProps> = ({
     handleClose()
   }
 
+  const checkDisableSubmit = () => {
+    const varContents = Object.values(vars)
+    return !varContents.every((v) => v !== "")
+  }
+
+  useEffect(() => {
+    setDisableSubmit(checkDisableSubmit())
+  }, [vars])
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>{isEditing ? "Edit Test Case" : "Add Test Case"}</DialogTitle>
@@ -92,7 +102,7 @@ const TestCasesFormDialog: React.FC<TestCasesFormDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>
-        <Button onClick={onSave} variant="contained">
+        <Button onClick={onSave} variant="contained" disabled={disableSubmit}>
           {isEditing ? "Save" : "Add"}
         </Button>
       </DialogActions>
