@@ -20,11 +20,14 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
   setInputVariables,
   sx,
 }) => {
+  const maxVarNameChars = 40
   const handleNameChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedVariables = [...inputVariables]
     const newName = event.target.value.replace(" ", "")
-    updatedVariables[index].name = newName
-    setInputVariables(updatedVariables)
+    if (newName.length <= maxVarNameChars) {
+      const updatedVariables = [...inputVariables]
+      updatedVariables[index].name = newName
+      setInputVariables(updatedVariables)
+    }
   }
 
   const handleAddVariable = () => {
