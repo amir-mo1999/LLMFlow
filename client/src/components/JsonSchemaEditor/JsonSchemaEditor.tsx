@@ -19,7 +19,7 @@ const JsonSchemaEditor: React.FC<JsonSchemaEditorProps> = ({
   displayOnly = false,
 }) => {
   return (
-    <Box display="flex" flexDirection="column" sx={{ gap: 2 }}>
+    <Box display="flex" flexDirection="column" sx={{ gap: 2, width: "100%" }}>
       <Typography variant="h5">Output Schema</Typography>
       <FieldRow
         schema={schema}

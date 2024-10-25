@@ -54,6 +54,8 @@ const FieldRow: React.FC<FieldRowProps> = ({
   onDelete,
   indent = 0,
 }) => {
+  const maxFieldTitleChars = 40
+
   const [type, setType] = useState<JsonSchemaInput["type"]>(schema.type)
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
@@ -73,9 +75,11 @@ const FieldRow: React.FC<FieldRowProps> = ({
   }
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = event.target.value
-    setTitle(newTitle)
-    updateSchema({ title: newTitle })
+    const newTitle = event.target.value.replace(" ", "")
+    if (newTitle.length <= maxFieldTitleChars) {
+      setTitle(newTitle)
+      updateSchema({ title: newTitle })
+    }
   }
 
   const handleAddProperty = () => {
