@@ -26,6 +26,14 @@ export const themeOptions: ThemeOptions = {
     },
   },
   components: {
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: "#000000", // Default helper text color
+          fontWeight: 100,
+        },
+      },
+    },
     MuiMenu: {
       styleOverrides: {
         paper: {

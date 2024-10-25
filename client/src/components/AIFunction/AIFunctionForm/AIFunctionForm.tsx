@@ -29,6 +29,9 @@ interface AIFunctionFormProps {
 }
 
 const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunction }) => {
+  const nameCharLimit = 40
+  const descriptionCharLimit = 1000
+
   const [name, setName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
@@ -54,6 +57,20 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     }
 
     return f
+  }
+
+  const onNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newName = e.target.value
+    if (newName.length <= nameCharLimit) {
+      setName(e.target.value)
+    }
+  }
+
+  const onDescriptionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newDescription = e.target.value
+    if (newDescription.length <= descriptionCharLimit) {
+      setDescription(e.target.value)
+    }
   }
 
   const { mutate: postAiFunction } = usePostAiFunction({
@@ -121,7 +138,12 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         Name
       </Typography>
-      <TextField sx={{ width: "100%" }} value={name} onChange={(e) => setName(e.target.value)} />
+      <TextField
+        sx={{ width: "100%" }}
+        value={name}
+        onChange={onNameChange}
+        helperText={`${name.length}/${nameCharLimit}`}
+      />
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
@@ -129,9 +151,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       </Typography>
       <TextField
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={onDescriptionChange}
         multiline
         minRows={5}
+        helperText={`${description.length}/${descriptionCharLimit}`}
         sx={{ width: "100%" }}
       />
       <Divider sx={{ marginY: 2 }}></Divider>
