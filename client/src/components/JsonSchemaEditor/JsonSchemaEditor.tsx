@@ -27,6 +27,7 @@ const JsonSchemaEditor: React.FC<JsonSchemaEditorProps> = ({
         displayOnly={displayOnly}
         showAddProperty
         disableTitleEdit
+        isRoot
       ></FieldRow>
     </Box>
   )

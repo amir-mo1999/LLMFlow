@@ -22,6 +22,7 @@ interface FieldRowProps {
   showDelete?: boolean
   onDelete?: () => void
   indent?: number
+  isRoot?: boolean
 }
 
 type StringSchema = Pick<JsonSchemaInput, "maxLength" | "minLength" | "pattern">
@@ -54,6 +55,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
   showDelete = false,
   onDelete,
   indent = 0,
+  isRoot = false,
 }) => {
   const maxFieldTitleChars = 40
 
@@ -156,11 +158,17 @@ const FieldRow: React.FC<FieldRowProps> = ({
             },
           }}
         >
-          {["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
-            <MenuItem key={indx} value={type}>
-              {type}
-            </MenuItem>
-          ))}
+          {isRoot
+            ? ["array", "object"].map((type, indx) => (
+                <MenuItem key={indx} value={type}>
+                  {type}
+                </MenuItem>
+              ))
+            : ["string", "number", "integer", "array", "object", "boolean"].map((type, indx) => (
+                <MenuItem key={indx} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
         </Select>
 
         {showAddProperty && type === "object" && !displayOnly && (
