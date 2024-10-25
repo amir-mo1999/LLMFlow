@@ -75,7 +75,9 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
       <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Evaluation Results Section */}
-      <Typography variant="h5">Evaluation Results</Typography>
+      <Typography variant="h5" paddingBottom={1}>
+        Evaluation Results
+      </Typography>
       {prompt.last_eval ? <EvalOverview evalResult={prompt.last_eval}></EvalOverview> : <></>}
 
       <Divider sx={{ marginY: 2 }}></Divider>
