@@ -42,8 +42,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   useEffect(updateDisableSubmit, [messages, selectedAIFunctionIndx])
 
   const onSelectedAIFunctionChange = (e: SelectChangeEvent) => {
-    console.log(e.target.value)
-    //setSelectedAIFunctionIndx(Number(e.target.value))
+    setSelectedAIFunctionIndx(Number(e.target.value))
   }
 
   const { mutate: postPrompt } = usePostPrompt({
@@ -132,32 +131,27 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
             style: {
               maxWidth: 100,
               borderRadius: 16,
+              display: "flex",
+              gap: 2,
+              flexDirection: "column",
+              padding: 1,
+              background: theme.palette.background.default,
             },
           },
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-            flexDirection: "column",
-            margin: 1,
-            background: theme.palette.background.default,
-          }}
-        >
-          {aiFunctions.map((aiFunction, indx) => (
-            <MenuItem
-              key={indx}
-              value={indx.toString()}
-              sx={{
-                padding: 0,
-                borderRadius: 16,
-              }}
-            >
-              <AIFunctionPaper aiFunction={aiFunction}></AIFunctionPaper>
-            </MenuItem>
-          ))}
-        </Box>
+        {aiFunctions.map((aiFunction, indx) => (
+          <MenuItem
+            key={indx}
+            value={indx.toString()}
+            sx={{
+              padding: 0,
+              borderRadius: 16,
+            }}
+          >
+            <AIFunctionPaper aiFunction={aiFunction}></AIFunctionPaper>
+          </MenuItem>
+        ))}
       </Select>
 
       <Divider sx={{ marginY: 2 }}></Divider>
