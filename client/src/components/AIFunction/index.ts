@@ -4,6 +4,7 @@ import AIFunctionSingleOverview from "./AIFunctionSingleOverview"
 import InputVariablePaper from "./InputVariablePaper"
 import AssertionPaper from "./AssertionPaper"
 import InputVariableOverview from "./InputVariableOverview"
+import AIFunctionPaper from "./AIFunctionPaper"
 
 export {
   AIFunctionForm,
@@ -12,4 +13,5 @@ export {
   InputVariablePaper,
   InputVariableOverview,
   AssertionPaper,
+  AIFunctionPaper,
 }

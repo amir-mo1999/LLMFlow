@@ -32,6 +32,11 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
       elevation={2}
       sx={{
         backgroundColor: selected ? "#E8E3F2" : "white",
+        width: "100%",
+        paddingX: 2,
+        paddingTop: 1,
+        paddingBottom: 1.5,
+        maxHeight: 150,
         ...sx,
       }}
     >

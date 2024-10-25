@@ -3,9 +3,11 @@ import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } fro
 import ClearIcon from "@mui/icons-material/Clear"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { PromptRouteInput, PromptMessage, AIFunction, Prompt } from "@/api/apiSchemas"
+import { AIFunctionPaper } from "@/components/AIFunction"
 import { usePostPrompt } from "@/api/apiComponents"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
+import theme from "@/theme"
 
 interface PromptFormProps {
   aiFunctions: AIFunction[]
@@ -40,7 +42,8 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   useEffect(updateDisableSubmit, [messages, selectedAIFunctionIndx])
 
   const onSelectedAIFunctionChange = (e: SelectChangeEvent) => {
-    setSelectedAIFunctionIndx(Number(e.target.value))
+    console.log(e.target.value)
+    //setSelectedAIFunctionIndx(Number(e.target.value))
   }
 
   const { mutate: postPrompt } = usePostPrompt({
@@ -121,14 +124,40 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
       </Typography>
       <Select
         value={selectedAIFunctionIndx.toString()}
+        renderValue={() => aiFunctions[selectedAIFunctionIndx].name}
         onChange={onSelectedAIFunctionChange}
-        fullWidth
+        sx={{ width: 500 }}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxWidth: 100,
+              borderRadius: 16,
+            },
+          },
+        }}
       >
-        {aiFunctions.map((aiFunction, indx) => (
-          <MenuItem key={indx} value={indx}>
-            {aiFunction.name}
-          </MenuItem>
-        ))}
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            flexDirection: "column",
+            margin: 1,
+            background: theme.palette.background.default,
+          }}
+        >
+          {aiFunctions.map((aiFunction, indx) => (
+            <MenuItem
+              key={indx}
+              value={indx.toString()}
+              sx={{
+                padding: 0,
+                borderRadius: 16,
+              }}
+            >
+              <AIFunctionPaper aiFunction={aiFunction}></AIFunctionPaper>
+            </MenuItem>
+          ))}
+        </Box>
       </Select>
 
       <Divider sx={{ marginY: 2 }}></Divider>

@@ -36,13 +36,6 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
             selected={indx === selectedIndx}
             aiFunction={aiFunction}
             onClick={onClick ? onClick(indx) : undefined}
-            sx={{
-              width: "100%",
-              paddingX: 2,
-              paddingTop: 1,
-              paddingBottom: 1.5,
-              maxHeight: 150,
-            }}
           ></AIFunctionPaper>
         )
       })}
