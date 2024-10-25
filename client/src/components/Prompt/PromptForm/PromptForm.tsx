@@ -120,7 +120,12 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
           Selected AI Function
         </Typography>
         <AIFunctionPaper
-          sx={{ width: 500 }}
+          sx={{
+            width: 500,
+            "&:hover": {
+              backgroundColor: "white",
+            },
+          }}
           aiFunction={aiFunctions[selectedAIFunctionIndx]}
         ></AIFunctionPaper>
         <Box mt={2}>
