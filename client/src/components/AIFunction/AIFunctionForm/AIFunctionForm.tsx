@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
@@ -31,8 +31,10 @@ interface AIFunctionFormProps {
 const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunction }) => {
   const nameCharLimit = 40
   const descriptionCharLimit = 1000
+  const nameRef = useRef<null | HTMLDivElement>(null)
 
   const [name, setName] = useState<string>("")
+  const [nameError, setNameError] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
   const [outputSchema, setOutputSchema] = useState<JsonSchemaInput>({
@@ -63,6 +65,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     const newName = e.target.value
     if (newName.length <= nameCharLimit) {
       setName(e.target.value)
+      setNameError(false)
     }
   }
 
@@ -80,6 +83,12 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
     },
     onError: (err) => {
       console.log("error status", err)
+      if (err.status === 409) {
+        setNameError(true)
+        if (nameRef.current) {
+          nameRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+      }
     },
   })
 
@@ -139,10 +148,12 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
         Name
       </Typography>
       <TextField
+        ref={nameRef}
         sx={{ width: "100%" }}
         value={name}
         onChange={onNameChange}
-        helperText={`${name.length}/${nameCharLimit}`}
+        helperText={`${name.length}/${nameCharLimit} ${nameError ? "AI Function with this name already exists" : ""}`}
+        error={nameError}
       />
       <Divider sx={{ marginY: 2 }}></Divider>
 
