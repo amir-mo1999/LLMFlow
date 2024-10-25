@@ -4,7 +4,6 @@ import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import TestCasesFormDialog from "./TestCasesFormDialog"
-import AssertionsForm from "../AssertionsForm.tsx/AssertionsForm"
 import { TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
 import TestCasesOverview from "../../TestCasesOverview"
 import AddIcon from "@mui/icons-material/Add"
@@ -33,10 +32,13 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
   }
 
   const handleOpenEditDialog = (index: number) => {
-    setIsEditing(true)
-    setCurrentTestCase(testCases[index])
-    setCurrentTestCaseIndex(index)
-    setDialogOpen(true)
+    const f = () => {
+      setIsEditing(true)
+      setCurrentTestCase(testCases[index])
+      setCurrentTestCaseIndex(index)
+      setDialogOpen(true)
+    }
+    return f
   }
 
   const handleCloseDialog = () => {
@@ -56,16 +58,22 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
   }
 
   const handleDeleteTestCase = (index: number) => {
-    const updatedTestCases = testCases.filter((_, i) => i !== index)
-    setTestCases(updatedTestCases)
-    console.log("setting test cases")
+    const f = () => {
+      const updatedTestCases = testCases.filter((_, i) => i !== index)
+      setTestCases(updatedTestCases)
+      console.log("setting test cases")
+    }
+    return f
   }
 
   // Handler to update assertions for a specific Test Case
-  const handleSetTestCaseAssertions = (index: number, newAssertions: Assertion[]) => {
-    const updatedTestCases = [...testCases]
-    updatedTestCases[index].assert = newAssertions
-    setTestCases(updatedTestCases)
+  const handleSetTestCaseAssertions = (index: number) => {
+    const f = (assertions: Assertion[]) => {
+      const updatedTestCases = [...testCases]
+      updatedTestCases[index].assert = assertions
+      setTestCases(updatedTestCases)
+    }
+    return f
   }
 
   return (
