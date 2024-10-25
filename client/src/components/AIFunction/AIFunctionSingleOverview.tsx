@@ -44,6 +44,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       {/* AI Function Name */}
       <Typography variant="h4">{aiFunction.name}</Typography>
+
       {/* Creation Time */}
       <Typography gutterBottom>
         {new Date(aiFunction.creation_time).toLocaleString("de-DE", options)}
@@ -53,22 +54,20 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       <Typography variant="body1">{aiFunction.description}</Typography>
       <Divider sx={{ marginY: 2 }}></Divider>
       {/* Input Variables */}
-      <Box marginBottom={0}>
-        <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-          Variables
-        </Typography>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-          {aiFunction.input_variables.map((inputVar, indx) => (
-            <Chip
-              key={indx}
-              label={inputVar.name}
-              sx={{ fontSize: "1rem" }}
-              color="primary"
-              variant="outlined"
-              size="medium"
-            ></Chip>
-          ))}
-        </Box>
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Variables
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {aiFunction.input_variables.map((inputVar, indx) => (
+          <Chip
+            key={indx}
+            label={inputVar.name}
+            sx={{ fontSize: "1rem" }}
+            color="primary"
+            variant="outlined"
+            size="medium"
+          ></Chip>
+        ))}
       </Box>
 
       {/* Json Schema */}

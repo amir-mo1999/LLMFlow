@@ -10,7 +10,7 @@ interface EvalOverviewProps {
 
 const EvalOverview: React.FC<EvalOverviewProps> = ({ evalResult }) => {
   return (
-    <Box>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {/* Loop over results */}
       {evalResult.results.map((result, indx) => {
         return <ResultCard key={indx} result={result}></ResultCard>

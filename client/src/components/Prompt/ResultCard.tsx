@@ -20,7 +20,6 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, sx }) => {
   return (
     <Box
       sx={{
-        marginBottom: 2,
         position: "relative",
         borderRadius: 1,
         borderWidth: 1,

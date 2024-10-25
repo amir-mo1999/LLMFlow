@@ -38,54 +38,52 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({ prompt, onD
   }
 
   return (
-    <Box width="100%">
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       {/* Prompt Name */}
       <Typography variant="h4">{prompt.ai_function_name}</Typography>
 
       {/* Creation Time */}
       <Typography>{new Date(prompt.creation_time).toLocaleString("de-DE", options)}</Typography>
 
-      <Divider />
+      <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Prompt Messages */}
-      <Box sx={{ mt: 2 }}>
-        <Typography variant="h5">Messages</Typography>
-        {prompt.messages.length === 0 ? (
-          <Typography>No messages defined for this Prompt.</Typography>
-        ) : (
-          <Paper
-            sx={{
-              padding: 2,
-              mt: 1,
-              "&:hover": {
-                backgroundColor: "#ffffff",
-              },
-            }}
-          >
-            {prompt.messages.map((message, index) => (
-              <Box key={index}>
-                <Typography variant="subtitle1">
-                  <strong>{message.role.charAt(0).toUpperCase() + message.role.slice(1)}</strong>
-                </Typography>
-                <Typography variant="body1">{message.content}</Typography>
-              </Box>
-            ))}
-          </Paper>
-        )}
-      </Box>
+      <Typography variant="h5">Messages</Typography>
+      {prompt.messages.length === 0 ? (
+        <Typography>No messages defined for this Prompt.</Typography>
+      ) : (
+        <Paper
+          sx={{
+            padding: 2,
+            mt: 1,
+            "&:hover": {
+              backgroundColor: "#ffffff",
+            },
+          }}
+        >
+          {prompt.messages.map((message, index) => (
+            <Box key={index}>
+              <Typography variant="subtitle1">
+                <strong>{message.role.charAt(0).toUpperCase() + message.role.slice(1)}</strong>
+              </Typography>
+              <Typography variant="body1">{message.content}</Typography>
+            </Box>
+          ))}
+        </Paper>
+      )}
+
+      <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Evaluation Results Section */}
-      <Box mt={2}>
-        <Typography variant="h5">Evaluation Results</Typography>
-        {prompt.last_eval ? <EvalOverview evalResult={prompt.last_eval}></EvalOverview> : <></>}
-      </Box>
+      <Typography variant="h5">Evaluation Results</Typography>
+      {prompt.last_eval ? <EvalOverview evalResult={prompt.last_eval}></EvalOverview> : <></>}
+
+      <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Delete Prompt Button */}
-      <Box sx={{ mt: 4 }}>
-        <Button variant="contained" color="error" onClick={handleDelete} disabled={disableDelete}>
-          Delete Prompt
-        </Button>
-      </Box>
+      <Button variant="contained" color="error" onClick={handleDelete} disabled={disableDelete}>
+        Delete Prompt
+      </Button>
     </Box>
   )
 }
