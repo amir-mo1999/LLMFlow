@@ -50,7 +50,12 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
       </Box>
       {inputVariables.map((inputVar, index) => (
         <Box key={index} display="flex" alignItems="center" pb={1}>
-          <TextField value={inputVar.name} onChange={handleNameChange(index)} fullWidth />
+          <TextField
+            value={inputVar.name}
+            onChange={handleNameChange(index)}
+            fullWidth
+            helperText={`${inputVar.name.length}/${maxVarNameChars}`}
+          />
           <Button onClick={handleDeleteVariable(index)}>
             <ClearIcon />
           </Button>
