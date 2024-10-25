@@ -129,7 +129,18 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         Create from Example
       </Typography>
-      <Select renderValue={(p) => "Select an Example"} value="0" fullWidth>
+      <Select
+        renderValue={() => "Select an Example"}
+        value={-1}
+        fullWidth
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxWidth: 200,
+            },
+          },
+        }}
+      >
         {parsedExamples.map((example, indx) => {
           return (
             <MenuItem
@@ -138,7 +149,19 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
               value={indx.toString()}
               sx={{ p: 2, userSelect: "none" }}
             >
-              {example.name}
+              <Box>
+                <Typography variant="h6">{example.name}</Typography>
+                <Typography
+                  sx={{
+                    display: "-webkit-box",
+                    overflow: "hidden",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 1,
+                  }}
+                >
+                  {example.description}
+                </Typography>
+              </Box>
             </MenuItem>
           )
         })}
