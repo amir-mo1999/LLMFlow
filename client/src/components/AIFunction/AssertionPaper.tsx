@@ -31,9 +31,13 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
   passed,
   sx,
 }) => {
+  if (assertion.type === "is-json") {
+    onClick = () => {}
+    displayOnly = true
+  }
   return (
     <Paper
-      onClick={onClick}
+      onClick={assertion.type === "is-json" ? () => {} : onClick}
       sx={{
         ...sx,
         minWidth: "20%",
@@ -110,7 +114,11 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
         </>
       ) : (
         <>
-          <Typography>{assertion.value as string}</Typography>
+          <Typography>
+            {typeof assertion.value === "string"
+              ? assertion.value
+              : JSON.stringify(assertion.value, null, 2)}
+          </Typography>
         </>
       )}
     </Paper>

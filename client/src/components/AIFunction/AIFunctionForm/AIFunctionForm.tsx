@@ -43,6 +43,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
   })
   const [useJsonSchema, setUseJsonSchema] = useState<boolean>(false)
   const [assertions, setAssertions] = useState<Assertion[]>([])
+  const [jsonAssertions, setJsonAssertions] = useState<Assertion[]>([])
   const [testCases, setTestCases] = useState<TestCaseInput[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
@@ -87,7 +88,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       addAIFunction(response)
     },
     onError: (err) => {
-      console.log("error status", err)
       if (err.status === 409) {
         setNameError(true)
         if (nameRef.current) {
@@ -107,26 +107,31 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
 
   useEffect(updateDisableSubmit, [name, description, inputVariables, outputSchema])
 
-  const onClickSubmit = () => {
-    setDisableSubmit(true)
-    let outputSchemaAssertion: Assertion | undefined = undefined
-    let parsedJsonSchema: JsonSchemaInput | undefined = undefined
+  useEffect(() => {
     if (useJsonSchema) {
-      // create assertion for output schema
-      parsedJsonSchema = parseJsonSchema(outputSchema)
-      outputSchemaAssertion = {
+      const parsedJsonSchema = parseJsonSchema(outputSchema)
+      const outputSchemaAssertion: Assertion = {
         type: "is-json",
         value: parsedJsonSchema,
         weight: 10,
       }
+      setJsonAssertions([outputSchemaAssertion])
+    } else {
+      setJsonAssertions([])
     }
+  }, [useJsonSchema, outputSchema])
+
+  const onClickSubmit = () => {
+    setDisableSubmit(true)
 
     const aiFunction: AIFunctionRouteInput = {
       name: name,
       description: description,
       input_variables: inputVariables,
-      output_schema: parsedJsonSchema ? parsedJsonSchema : { type: "string" },
-      assert: outputSchemaAssertion ? [...assertions, outputSchemaAssertion] : assertions,
+      output_schema: useJsonSchema
+        ? (jsonAssertions[0].value as JsonSchemaInput)
+        : { type: "string" },
+      assert: [...assertions, ...jsonAssertions],
       test_cases: testCases,
     }
 
@@ -234,7 +239,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
       )}
       <Divider sx={{ marginY: 2 }}></Divider>
 
-      <AssertionsForm assertions={assertions} setAssertions={setAssertions} />
+      <AssertionsForm
+        assertions={[...assertions, ...jsonAssertions]}
+        setAssertions={setAssertions}
+      />
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <TestCasesForm

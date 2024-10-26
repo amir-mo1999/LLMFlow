@@ -105,20 +105,14 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       </Box>
 
       {/* Output Assertions */}
-      {aiFunction.assert.length === 1 ? (
-        <></>
+      <Divider sx={{ marginY: 2 }}></Divider>
+      <Typography variant="h5" paddingBottom={1}>
+        Assertions
+      </Typography>
+      {aiFunction.assert.length === 0 ? (
+        <Typography variant="body2">No output assertions defined.</Typography>
       ) : (
-        <>
-          <Divider sx={{ marginY: 2 }}></Divider>
-          <Typography variant="h5" paddingBottom={1}>
-            Assertions
-          </Typography>
-          {aiFunction.assert.length === 0 ? (
-            <Typography variant="body2">No output assertions defined.</Typography>
-          ) : (
-            <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
-          )}
-        </>
+        <AssertionsOverview assertions={aiFunction.assert} displayOnly></AssertionsOverview>
       )}
 
       <Divider sx={{ marginY: 2 }}></Divider>

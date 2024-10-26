@@ -35,9 +35,6 @@ const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
       }}
     >
       {assertions.map((assertion, indx) => {
-        if (assertion.type === "is-json") {
-          return <React.Fragment key={indx}></React.Fragment>
-        }
         return (
           <AssertionPaper
             key={indx}
