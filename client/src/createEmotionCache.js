@@ -1,4 +1,3 @@
-// src/createEmotionCache.js
 import createCache from "@emotion/cache"
 
 export default function createEmotionCache() {
