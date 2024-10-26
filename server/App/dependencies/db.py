@@ -66,6 +66,13 @@ class DB:
 
         return True
 
+    async def increment_prompt_count(
+        self, ai_function_id: str, increment_value: int = 1
+    ):
+        await self.get_collection("ai-functions").update_one(
+            {"_id": ai_function_id}, {"$inc": {"number_of_prompts": increment_value}}
+        )
+
     async def delete(self, document_id, collection: Collection) -> bool:
         # get collection
         collection = self.get_collection(collection)

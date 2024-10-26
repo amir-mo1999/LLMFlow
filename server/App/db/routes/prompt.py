@@ -45,7 +45,12 @@ async def post_prompt(
     # try parsing prompt, return validation error if fails
     try:
         prompt = Prompt.model_validate(
-            {**dict(prompt), "creation_time": now, "username": username, "ai_function_name": ai_function.name},
+            {
+                **dict(prompt),
+                "creation_time": now,
+                "username": username,
+                "ai_function_name": ai_function.name,
+            },
             context=[var.name for var in ai_function.input_variables],
         )
     except ValueError as e:
@@ -61,6 +66,7 @@ async def post_prompt(
     result = await db.insert(prompt, "prompts", compare_fields=compare_fields)
 
     if result:
+        await db.increment_prompt_count(ai_function_id=ai_function.id)
         return prompt
 
     raise DuplicateDocument
@@ -147,12 +153,14 @@ async def delete_prompt(
     username: Annotated[str, Depends(username)],
 ):
     # try to get prompt
-    await get_prompt(prompt_id=prompt_id, db=db, username=username)
+    prompt = await get_prompt(prompt_id=prompt_id, db=db, username=username)
 
-    # if no error was raised it means the ai function was found and can now be deleted
     res = await db.delete(prompt_id, "prompts")
 
     if res:
+        await db.increment_prompt_count(
+            ai_function_id=prompt.ai_function_id, increment_value=-1
+        )
         return SuccessResponse
     else:
         raise DocumentNotFound
