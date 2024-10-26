@@ -53,6 +53,7 @@ export async function apiFetch<
 
     // add the authorization header by default
     if (!SESSION) {
+      console.log("getting session")
       SESSION = await getSession()
     }
 
