@@ -31,9 +31,6 @@ const GradingResultOverview: React.FC<GradingResultOverviewProps> = ({ gradingRe
 
         if (!assertion) return <></>
 
-        if (assertion.type === "is-json") {
-          return <React.Fragment key={indx}></React.Fragment>
-        }
         return (
           <AssertionPaper
             key={indx}
