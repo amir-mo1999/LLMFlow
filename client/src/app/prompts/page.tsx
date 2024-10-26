@@ -9,7 +9,7 @@ import {
   SearchField,
 } from "@/components"
 import Button from "@mui/material/Button"
-import { useGetAllPrompts, useGetAiFunctions, useEvaluate } from "@/api/apiComponents"
+import { useGetAllPrompts, useEvaluate } from "@/api/apiComponents"
 import { useState, useEffect } from "react"
 import { Prompt } from "@/api/apiSchemas"
 
@@ -87,17 +87,11 @@ export default function Home() {
     },
   })
 
-  const { data: promptsAPI, isFetching, refetch } = useGetAllPrompts({})
-
-  const { data: aiFunctions } = useGetAiFunctions({})
+  const { data: promptsAPI, isFetching } = useGetAllPrompts({})
 
   useEffect(() => {
     if (promptsAPI && !isFetching) setPrompts(promptsAPI)
   }, [promptsAPI, isFetching])
-
-  if (!aiFunctions) {
-    return <></>
-  }
 
   return (
     <PageContainer>
@@ -107,7 +101,7 @@ export default function Home() {
           Create Prompt
         </Button>
         <PromptOverview
-        selectedPromptIndx={selectedPromptIndx}
+          selectedPromptIndx={selectedPromptIndx}
           prompts={prompts}
           promptNumbers={promptNumbers}
           onClick={onClickPrompt}
@@ -115,7 +109,7 @@ export default function Home() {
       </SideBarContainer>
       <MainContentContainer>
         {showCreateForm ? (
-          <PromptForm aiFunctions={aiFunctions} addPrompt={addPrompt}></PromptForm>
+          <PromptForm addPrompt={addPrompt}></PromptForm>
         ) : selectedPromptIndx !== undefined && prompts ? (
           <PromptSingleOverview
             prompt={prompts[selectedPromptIndx]}

@@ -1,25 +1,31 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
-import { PromptRouteInput, PromptMessage, AIFunction, Prompt } from "@/api/apiSchemas"
+import { PromptRouteInput, PromptMessage, Prompt } from "@/api/apiSchemas"
 import { AIFunctionPaper } from "@/components/AIFunction"
 import { usePostPrompt } from "@/api/apiComponents"
 import SelectAIFunctionDialog from "../SelectAIFunctionDialog"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
+import { useGetAiFunctions } from "@/api/apiComponents"
 
 interface PromptFormProps {
-  aiFunctions: AIFunction[]
   addPrompt: (prompt: Prompt) => void
 }
 
-const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
+const PromptForm: React.FC<PromptFormProps> = ({ addPrompt }) => {
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number>(0)
   const [messages, setMessages] = useState<PromptMessage[]>([{ role: "user", content: "" }])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
   const [openSelectDialog, setOpenSelectDialog] = useState<boolean>(false)
 
   const textFieldRefs = useRef<(HTMLTextAreaElement | null)[]>([])
+
+  const { data: aiFunctions, refetch: refetchAIFunctions } = useGetAiFunctions({})
+
+  if (!aiFunctions) {
+    return <></>
+  }
 
   useEffect(() => {
     textFieldRefs.current = textFieldRefs.current.slice(0, messages.length)
@@ -45,6 +51,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ aiFunctions, addPrompt }) => {
   const { mutate: postPrompt } = usePostPrompt({
     onSuccess: (response) => {
       addPrompt(response as Prompt)
+      refetchAIFunctions()
     },
     onError: (err) => {},
   })
