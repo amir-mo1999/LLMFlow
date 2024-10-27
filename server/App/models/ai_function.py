@@ -97,16 +97,46 @@ class AIFunctionPatchInput(RootModel):
     name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
         None
     )
-
     description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = None
-
     input_variables: Optional[List[InputVariable]] = None
-
     output_schema: Optional[JsonSchema] = None
-
     assertions: Optional[List[Assertion]] = None
-
     test_cases: Optional[List[TestCase]] = None
+
+    @model_validator(mode="after")
+    def validate_vars_and_test_cases(self):
+        if self.input_variables is None and self.test_cases is None:
+            return self
+
+        if [self.input_variables, self.test_cases].count(None) == 1:
+            raise ValueError(
+                "Only setting input variables or test cases when patching is not allowed. They may only be patched together."
+            )
+
+        # get variable names of ai function
+        variable_names = [var.name for var in self.input_variables]
+        variable_names.sort()
+
+        # create a set from the input variable and cast it to a sorted list
+        aux = set(variable_names)
+        aux = list(aux)
+        aux.sort()
+
+        # these are not equal if there are duplicates
+        if variable_names != aux:
+            raise ValueError("duplicate input variables are not allowed")
+
+        variable_names.sort()
+        # assert that all test cases contain each input variable
+        for i, test in enumerate(self.test_cases):
+            keys = list(test.variables.keys())
+            keys.sort()
+            if variable_names != keys:
+                raise ValueError(
+                    f"Missmatch between Input Variables of AI Function: {variable_names} and variables of Test Case {i}: {keys}"
+                )
+
+        return self
 
 
 class AIFunction(AIFunctionRouteInput):

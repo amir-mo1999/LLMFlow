@@ -151,9 +151,9 @@ class DB:
     async def patch_ai_function(
         self, ai_function: AIFunction, ai_function_patch: AIFunctionPatchInput
     ) -> AIFunction:
-        ai_function = ai_function.copy(
-            update=ai_function_patch.model_dump(exclude_none=True, by_alias=True)
-        )
+        # update fields in ai function without validating
+        for key in ai_function_patch.model_dump(exclude_none=True):
+            ai_function.__setattr__(key, getattr(ai_function_patch, key))
 
         # delete eval for prompts if any of the fields output_schema, assert, test_cases change
         if any(
@@ -165,6 +165,13 @@ class DB:
         ):
             await self.prompts.update_many(
                 {"ai_function_id": ai_function.id}, {"$set": {"last_eval": None}}
+            )
+
+        # set revision_required to true if input variables change
+        if ai_function_patch.input_variables is not None:
+            await self.prompts.update_many(
+                {"ai_function_id": ai_function.id},
+                {"$set": {"revision_required": True}},
             )
 
         # update ai function
