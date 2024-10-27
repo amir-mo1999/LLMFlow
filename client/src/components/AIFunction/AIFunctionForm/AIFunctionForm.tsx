@@ -6,7 +6,7 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
 import JsonSchemaEditor from "@/components/JsonSchemaEditor"
-import { parseJsonSchema, addTitlesToSchema } from "@/utils"
+import { parseJsonSchema, addTitlesToSchema, getAIFunctionDiff } from "@/utils"
 import {
   TestCaseInput,
   InputVariable,
@@ -20,8 +20,9 @@ import MenuItem from "@mui/material/MenuItem"
 import Divider from "@mui/material/Divider"
 import AssertionsForm from "./AssertionsForm.tsx/AssertionsForm"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
-import { usePostAiFunction } from "@/api/apiComponents"
+import { usePostAiFunction, usePatchAiFunction } from "@/api/apiComponents"
 import examples from "@/examples/aiFunctions.json"
+import _ from "lodash"
 
 interface AIFunctionFormProps {
   addAIFunction: (aiFunction: AIFunction) => void
@@ -34,6 +35,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   aiFunction,
   setAIFunction = () => {},
 }) => {
+  const [initAIFunction, _] = useState<AIFunction>(
+    aiFunction ? JSON.parse(JSON.stringify(aiFunction)) : undefined
+  )
+
   const nameCharLimit = 40
   const descriptionCharLimit = 1000
   const nameRef = useRef<null | HTMLDivElement>(null)
@@ -42,11 +47,11 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   const [nameError, setNameError] = useState<boolean>(false)
   const [description, setDescription] = useState<string>(aiFunction ? aiFunction.description : "")
   const [inputVariables, setInputVariables] = useState<InputVariable[]>(
-    aiFunction ? aiFunction.input_variables : []
+    aiFunction ? [...aiFunction.input_variables] : []
   )
   const [outputSchema, setOutputSchema] = useState<JsonSchemaInput>(
     aiFunction
-      ? addTitlesToSchema(aiFunction.output_schema)
+      ? { ...addTitlesToSchema(aiFunction.output_schema) }
       : {
           type: "string",
           title: "root",
@@ -62,7 +67,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
 
   useEffect(() => {
     if (aiFunction) {
-      setAssertions(aiFunction.assert.filter((assertion) => assertion.type !== "is-json"))
+      setAssertions([...aiFunction.assert.filter((assertion) => assertion.type !== "is-json")])
 
       if (aiFunction.output_schema.type === "object") {
         setUseJsonSchema(true)
@@ -122,6 +127,20 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
     },
   })
 
+  const { mutate: patchAIFunction } = usePatchAiFunction({
+    onSuccess: (response) => {
+      setAIFunction(response)
+    },
+    onError: (err) => {
+      if (err.status === 409) {
+        setNameError(true)
+        if (nameRef.current) {
+          nameRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+      }
+    },
+  })
+
   const updateDisableSubmit = () => {
     if (name === "") setDisableSubmit(true)
     else if (description === "") setDisableSubmit(true)
@@ -149,7 +168,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   const onClickSubmit = () => {
     setDisableSubmit(true)
 
-    const aiFunction: AIFunctionRouteInput = {
+    const body: AIFunctionRouteInput = {
       name: name,
       description: description,
       input_variables: inputVariables,
@@ -160,7 +179,14 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       test_cases: testCases,
     }
 
-    postAiFunction({ body: aiFunction })
+    if (initAIFunction) {
+      patchAIFunction({
+        pathParams: { aiFunctionId: initAIFunction._id as string },
+        body: getAIFunctionDiff(initAIFunction, body),
+      })
+    } else {
+      postAiFunction({ body: body })
+    }
   }
 
   return (
@@ -282,7 +308,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
-        Create AI Function
+        Submit
       </Button>
     </Box>
   )

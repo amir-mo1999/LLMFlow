@@ -1,5 +1,10 @@
-import examples from "@/examples/aiFunctions.json"
-import { AIFunctionRouteInput, EvaluateSummary, JsonSchemaInput } from "@/api/apiSchemas"
+import {
+  AIFunction,
+  AIFunctionRouteInput,
+  EvaluateSummary,
+  JsonSchemaInput,
+} from "@/api/apiSchemas"
+import _ from "lodash"
 
 export function splitArrayIntoChunks<T>(array: T[], chunkSize: number): T[][] {
   const result: Array<Array<any>> = []
@@ -146,4 +151,27 @@ export function getMeanLatency(evalSummary: EvaluateSummary) {
     evalSummary.results.length
   meanLatency = Math.round(meanLatency)
   return meanLatency
+}
+
+/**
+/**
+ * Compares two objects and returns an object containing only the fields
+ * that have different values in objectB compared to objectA.
+ *
+ * @param objectA - The original object.
+ * @param objectB - The object to compare against.
+ * @returns An object with the fields from objectB that have different values.
+ */
+export function getAIFunctionDiff(aiFunction: AIFunction, routeInput: AIFunctionRouteInput) {
+  const newAIFunction: Partial<AIFunction> = {}
+
+  Object.keys(routeInput).forEach((key) => {
+    //@ts-ignore
+    if (!_.isEqual(routeInput[key], aiFunction[key])) {
+      //@ts-ignore
+      newAIFunction[key] = routeInput[key]
+    }
+  })
+
+  return newAIFunction
 }

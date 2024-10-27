@@ -68,8 +68,9 @@ export default function Layout({
   }
 
   const setAIFunction = (newAIFunction: AIFunction) => {
+    router.push("/ai-functions")
     const updateIndx = aiFunctions.findIndex((aiFunction) => aiFunction._id === newAIFunction._id)
-    const newAIFunctions = { ...aiFunctions }
+    const newAIFunctions = [...aiFunctions]
     newAIFunctions[updateIndx] = newAIFunction
     setAIFunctions(newAIFunctions)
   }
