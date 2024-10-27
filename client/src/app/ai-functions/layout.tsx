@@ -1,5 +1,5 @@
 "use client"
-"use client"
+
 import {
   AIFunctionOverview,
   MainContentContainer,
@@ -17,7 +17,6 @@ interface AIFunctionsContextProps {
   aiFunctions: AIFunction[]
   addAIFunction: (aiFunction: AIFunction) => void
   onDeleteAIFunction: () => void
-  selectedAIFunctionIndx: number | undefined
   setSelectedAIFunctionIndx: (indx: number | undefined) => void
 }
 
@@ -25,11 +24,10 @@ export const AIFunctionsContext = createContext<AIFunctionsContextProps>({
   aiFunctions: [],
   addAIFunction: () => {},
   onDeleteAIFunction: () => {},
-  selectedAIFunctionIndx: undefined,
   setSelectedAIFunctionIndx: () => {},
 })
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -91,7 +89,6 @@ export default function RootLayout({
         <AIFunctionsContext.Provider
           value={{
             aiFunctions: aiFunctions,
-            selectedAIFunctionIndx: selectedAIFunctionIndx,
             onDeleteAIFunction: onDeleteAIFunction,
             addAIFunction: addAIFunction,
             setSelectedAIFunctionIndx: setSelectedAIFunctionIndx,
