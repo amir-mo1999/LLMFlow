@@ -1,12 +1,13 @@
 import os
 from typing import Annotated
 
-import aiohttp
 from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound
-from App.models import EvaluateInput, EvaluateSummary
+from App.models import EvaluateSummary
+
+from .utils import eval_prompt
 
 EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 
@@ -35,35 +36,12 @@ async def evaluate(
     if ai_function is None:
         raise DocumentNotFound
 
-    # extract needed data
-    prompts = [prompt.messages]
-    defaultTest = {"assert": ai_function.assertions}
-    tests = ai_function.test_cases
-
-    # parse as EvaluateInpiut
     try:
-        evaluate_input = EvaluateInput(
-            prompts=prompts, defaultTest=defaultTest, tests=tests
-        )
+        summary = await eval_prompt(prompt, ai_function)
     except ValueError as e:
         raise HTTPException(422, str(e))
 
-    # send request to promptfoo-server
-    dump = evaluate_input.model_dump(by_alias=True)
-    async with aiohttp.ClientSession() as session:
-        res = await session.post(
-            PROMPTFOO_SERVER_URL,
-            json=dump,
-            headers={"Content-Type": "application/json"},
-        )
+    # post EvaluateSummary to prompt
+    await db.post_eval(summary, prompt.id)
 
-        # create EvaluateSummary
-        data = await res.json()
-        summary = EvaluateSummary(
-            timestamp=data["timestamp"], results=data["results"], stats=data["stats"]
-        )
-
-        # post EvaluateSummary to prompt
-        await db.post_eval(summary, prompt.id)
-
-        return summary
+    return summary
