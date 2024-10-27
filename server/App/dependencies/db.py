@@ -30,7 +30,7 @@ class DB:
         return self.db.get_collection(collection)
 
     async def get_all(self, collection: Collection, username: str) -> List[Any]:
-        docs = self.users.find({"username": username})
+        docs = self.get_collection(collection).find({"username": username})
         docs = await docs.to_list(self.length)
         return docs
 
