@@ -5,7 +5,13 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import AIFunction, Prompt, PromptRouteInput, SuccessResponse
+from App.models import (
+    AIFunction,
+    Prompt,
+    PromptMessage,
+    PromptRouteInput,
+    SuccessResponse,
+)
 
 PROMPT_ROUTER = APIRouter()
 
@@ -24,10 +30,7 @@ async def post_prompt(
     db: Annotated[DB, Depends(get_db)],
 ):
     # get ai function for prompt
-    ai_function_collection = db.get_collection("ai-functions")
-    ai_function = await ai_function_collection.find_one(
-        {"_id": prompt.ai_function_id, "username": username}
-    )
+    ai_function = await db.get_ai_function_by_id(prompt.ai_function_id)
 
     # check if ai function exists
     if ai_function is None:
@@ -164,3 +167,39 @@ async def delete_prompt(
         return SuccessResponse
     else:
         raise DocumentNotFound
+
+
+@PROMPT_ROUTER.patch(
+    "/prompt/{prompt_id}",
+    response_model=SuccessResponse,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def patch_prompt(
+    messages: List[PromptMessage],
+    prompt_id: str,
+    db: Annotated[DB, Depends(get_db)],
+    username: Annotated[str, Depends(username)],
+):
+    prompt = await get_prompt(prompt_id=prompt_id, db=db, username=username)
+    ai_function = await db.get_ai_function_by_id(
+        prompt.ai_function_id, username=username
+    )
+
+    # validate prompt with new messages
+    prompt = dict(prompt)
+    prompt["messages"] = messages
+    try:
+        prompt = Prompt.model_validate(
+            prompt,
+            context=[var.name for var in ai_function.input_variables],
+        )
+    except ValueError as e:
+        raise HTTPException(422, detail=str(e))
+
+    # update prompt
+    await db.update_prompt(prompt_id, messages)
+
+    return SuccessResponse

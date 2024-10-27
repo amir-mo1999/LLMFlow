@@ -3,7 +3,7 @@ from .ai_function import (
     AIFunctionRouteInput,
 )
 from .json_schema import JsonSchema
-from .prompt import Prompt, PromptRouteInput
+from .prompt import Prompt, PromptMessage, PromptRouteInput
 from .promptfoo_models import EvaluateInput, EvaluateSummary
 from .success_response import SuccessResponse
 from .token import DecodedToken, Token
@@ -23,4 +23,5 @@ __all__ = [
     EvaluateInput,
     JsonSchema,
     EvaluateSummary,
+    PromptMessage,
 ]

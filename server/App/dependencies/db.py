@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Literal, Union
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 
-from App.models import AIFunction, EvaluateSummary, Prompt, User
+from App.models import AIFunction, EvaluateSummary, Prompt, PromptMessage, User
 
 Collection = Literal["ai-functions", "prompts", "users"]
 Object = Union[AIFunction, Prompt, User]
@@ -65,6 +65,11 @@ class DB:
         await coll.insert_one({**document.model_dump(by_alias=True), **additional_data})
 
         return True
+
+    async def update_prompt(self, prompt_id: str, messages: List[PromptMessage]):
+        messages = [message.model_dump() for message in messages]
+        col = self.get_collection("prompts")
+        await col.update_one({"_id": prompt_id}, {"$set": {"messages": messages}})
 
     async def increment_prompt_count(
         self, ai_function_id: str, increment_value: int = 1
