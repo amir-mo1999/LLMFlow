@@ -67,8 +67,10 @@ class DB:
         return True
 
     async def update_prompt_messages(
-        self, prompt_id: str, messages: List[PromptMessage]
-    ):
+        self,
+        prompt_id: str,
+        messages: List[PromptMessage],
+    ) -> Prompt | None:
         messages = [message.model_dump() for message in messages]
         col = self.get_collection("prompts")
         await col.update_one(
