@@ -28,6 +28,7 @@ class Prompt(PromptRouteInput):
     creation_time: datetime
     last_eval: EvaluateSummary | None = None
     ai_function_name: str
+    revision_required: Optional[bool] = False
 
     @field_validator("messages")
     @classmethod

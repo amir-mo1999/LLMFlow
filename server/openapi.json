@@ -365,61 +365,6 @@
                         "OAuth2PasswordBearer": []
                     }
                 ]
-            },
-            "patch": {
-                "tags": [
-                    "db"
-                ],
-                "summary": "Patch Ai Function",
-                "operationId": "patch_ai_function",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AIFunctionRouteInputPartial"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/AIFunction"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/HttpExceptionModel"
-                                }
-                            }
-                        },
-                        "detail": "Not authenticated"
-                    },
-                    "422": {
-                        "description": "Validation Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/HTTPValidationError"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "OAuth2PasswordBearer": []
-                    }
-                ]
             }
         },
         "/db/ai-function/{ai_function_id}": {
@@ -544,6 +489,72 @@
                             }
                         },
                         "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Patch Ai Function",
+                "operationId": "patch_ai_function",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "ai_function_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Ai Function Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AIFunctionPatchInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AIFunction"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
                     },
                     "422": {
                         "description": "Validation Error",
@@ -1103,6 +1114,83 @@
                 ],
                 "title": "AIFunction"
             },
+            "AIFunctionPatchInput": {
+                "properties": {
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 40,
+                                "minLength": 1
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 1000,
+                        "minLength": 1,
+                        "title": "Description"
+                    },
+                    "input_variables": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/InputVariable"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Input Variables"
+                    },
+                    "output_schema": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonSchema-Input"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "assertions": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/Assertion"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Assertions"
+                    },
+                    "test_cases": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/TestCase-Input"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Cases"
+                    }
+                },
+                "type": "object",
+                "title": "AIFunctionPatchInput"
+            },
             "AIFunctionRouteInput": {
                 "properties": {
                     "name": {
@@ -1205,145 +1293,6 @@
                     "test_cases"
                 ],
                 "title": "AIFunctionRouteInput"
-            },
-            "AIFunctionRouteInputPartial": {
-                "properties": {
-                    "name": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Name",
-                        "example": "Summarize Texts",
-                        "nullable": true
-                    },
-                    "description": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Description",
-                        "example": "Summarizes english texts to a given number_of_sentences.",
-                        "nullable": true
-                    },
-                    "input_variables": {
-                        "anyOf": [
-                            {
-                                "items": {
-                                    "$ref": "#/components/schemas/InputVariable"
-                                },
-                                "type": "array"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Input Variables",
-                        "example": [
-                            {
-                                "name": "text"
-                            },
-                            {
-                                "name": "number_of_sentences"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "output_schema": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/JsonSchema-Input"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "example": {
-                            "type": "string"
-                        },
-                        "nullable": true
-                    },
-                    "assert": {
-                        "anyOf": [
-                            {
-                                "items": {
-                                    "$ref": "#/components/schemas/Assertion"
-                                },
-                                "type": "array"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Assert",
-                        "example": [
-                            {
-                                "type": "icontains",
-                                "value": "the",
-                                "weight": 1
-                            },
-                            {
-                                "type": "contains",
-                                "value": "thgewgewgewgewge",
-                                "weight": 1
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "test_cases": {
-                        "anyOf": [
-                            {
-                                "items": {
-                                    "$ref": "#/components/schemas/TestCase-Input"
-                                },
-                                "type": "array"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Test Cases",
-                        "example": [
-                            {
-                                "assert": [
-                                    {
-                                        "type": "icontains",
-                                        "value": "serendipity",
-                                        "weight": 5
-                                    }
-                                ],
-                                "vars": {
-                                    "number_of_sentences": "2",
-                                    "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed\u2014a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."
-                                }
-                            },
-                            {
-                                "assert": [
-                                    {
-                                        "type": "icontains",
-                                        "value": "minimalism",
-                                        "weight": 5
-                                    }
-                                ],
-                                "vars": {
-                                    "number_of_sentences": "2",
-                                    "text": "The art of minimalism is more than just decluttering your space\u2014it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it\u2019s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."
-                                }
-                            }
-                        ],
-                        "nullable": true
-                    }
-                },
-                "type": "object",
-                "title": "AIFunctionRouteInputPartial"
             },
             "Assertion": {
                 "properties": {
@@ -2387,6 +2336,18 @@
                     "ai_function_name": {
                         "type": "string",
                         "title": "Ai Function Name"
+                    },
+                    "revision_required": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Revision Required",
+                        "default": false
                     }
                 },
                 "type": "object",

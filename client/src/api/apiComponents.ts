@@ -292,51 +292,6 @@ export const usePostAiFunction = (
   })
 }
 
-export type PatchAiFunctionError = Fetcher.ErrorWrapper<
-  | {
-      status: 401
-      payload: Schemas.HttpExceptionModel
-    }
-  | {
-      status: 422
-      payload: Schemas.HTTPValidationError
-    }
->
-
-export type PatchAiFunctionVariables = {
-  body?: Schemas.AIFunctionRouteInputPartial
-} & ApiContext["fetcherOptions"]
-
-export const fetchPatchAiFunction = (variables: PatchAiFunctionVariables, signal?: AbortSignal) =>
-  apiFetch<
-    Schemas.AIFunction,
-    PatchAiFunctionError,
-    Schemas.AIFunctionRouteInputPartial,
-    {},
-    {},
-    {}
-  >({ url: "/db/ai-function", method: "patch", ...variables, signal })
-
-export const usePatchAiFunction = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      Schemas.AIFunction,
-      PatchAiFunctionError,
-      PatchAiFunctionVariables
-    >,
-    "mutationFn"
-  >
-) => {
-  const { fetcherOptions } = useApiContext()
-  return reactQuery.useMutation<Schemas.AIFunction, PatchAiFunctionError, PatchAiFunctionVariables>(
-    {
-      mutationFn: (variables: PatchAiFunctionVariables) =>
-        fetchPatchAiFunction({ ...fetcherOptions, ...variables }),
-      ...options,
-    }
-  )
-}
-
 export type GetAiFunctionPathParams = {
   aiFunctionId: string
 }
@@ -446,6 +401,61 @@ export const useDeleteAiFunction = (
       fetchDeleteAiFunction({ ...fetcherOptions, ...variables }),
     ...options,
   })
+}
+
+export type PatchAiFunctionPathParams = {
+  aiFunctionId: string
+}
+
+export type PatchAiFunctionError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type PatchAiFunctionVariables = {
+  body?: Schemas.AIFunctionPatchInput
+  pathParams: PatchAiFunctionPathParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchPatchAiFunction = (variables: PatchAiFunctionVariables, signal?: AbortSignal) =>
+  apiFetch<
+    Schemas.AIFunction,
+    PatchAiFunctionError,
+    Schemas.AIFunctionPatchInput,
+    {},
+    {},
+    PatchAiFunctionPathParams
+  >({
+    url: "/db/ai-function/{aiFunctionId}",
+    method: "patch",
+    ...variables,
+    signal,
+  })
+
+export const usePatchAiFunction = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.AIFunction,
+      PatchAiFunctionError,
+      PatchAiFunctionVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<Schemas.AIFunction, PatchAiFunctionError, PatchAiFunctionVariables>(
+    {
+      mutationFn: (variables: PatchAiFunctionVariables) =>
+        fetchPatchAiFunction({ ...fetcherOptions, ...variables }),
+      ...options,
+    }
+  )
 }
 
 export type PostPromptError = Fetcher.ErrorWrapper<
