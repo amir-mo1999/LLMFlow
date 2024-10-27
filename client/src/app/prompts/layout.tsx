@@ -98,6 +98,7 @@ export default function Layout({
     const newPrompts = [...prompts]
     const promptToUpdateIndx = prompts.findIndex((prompt) => prompt._id === promptID)
     newPrompts[promptToUpdateIndx].messages = messages
+    newPrompts[promptToUpdateIndx].last_eval = undefined
     setPrompts([...newPrompts])
     router.push("/prompts")
   }
