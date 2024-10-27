@@ -5,7 +5,12 @@ from fastapi import APIRouter, Depends
 
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import AIFunction, AIFunctionRouteInput, SuccessResponse
+from App.models import (
+    AIFunction,
+    AIFunctionPatchInput,
+    AIFunctionRouteInput,
+    SuccessResponse,
+)
 
 AI_FUNCTION_ROUTER = APIRouter()
 
@@ -18,6 +23,7 @@ class DuplicateDocumentExc(Exception):
 @AI_FUNCTION_ROUTER.post(
     "/ai-function",
     response_model=AIFunction,
+    response_model_exclude_none=True,
     responses={
         401: {"detail": "Not authenticated"},
         409: {"detail": "document already exists"},
@@ -110,3 +116,28 @@ async def delete_ai_function(
         return SuccessResponse
     else:
         raise DocumentNotFound
+
+
+@AI_FUNCTION_ROUTER.patch(
+    "/ai-function/{ai_function_id}",
+    response_model_exclude_none=True,
+    response_model=AIFunction,
+    responses={
+        401: {"detail": "Not authenticated"},
+    },
+)
+async def patch_ai_function(
+    ai_function_patch: AIFunctionPatchInput,
+    ai_function_id: str,
+    username: Annotated[str, Depends(username)],
+    db: Annotated[DB, Depends(get_db)],
+):
+    ai_function = await get_ai_function(
+        ai_function_id=ai_function_id, db=db, username=username
+    )
+
+    ai_function = await db.patch_ai_function(
+        ai_function, ai_function_patch=ai_function_patch
+    )
+
+    return ai_function

@@ -93,6 +93,22 @@ class AIFunctionRouteInput(RootModel):
         return self
 
 
+class AIFunctionPatchInput(RootModel):
+    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
+        None
+    )
+
+    description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = None
+
+    input_variables: Optional[List[InputVariable]] = None
+
+    output_schema: Optional[JsonSchema] = None
+
+    assertions: Optional[List[Assertion]] = None
+
+    test_cases: Optional[List[TestCase]] = None
+
+
 class AIFunction(AIFunctionRouteInput):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     number_of_prompts: NonNegativeInt

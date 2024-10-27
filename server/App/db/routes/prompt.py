@@ -18,6 +18,7 @@ PROMPT_ROUTER = APIRouter()
 @PROMPT_ROUTER.post(
     "/prompt",
     response_model=Prompt,
+    response_model_exclude_none=True,
     responses={
         401: {"detail": "Not authenticated"},
         400: {"detail": "AI Function does not exist"},
@@ -170,6 +171,7 @@ async def delete_prompt(
 @PROMPT_ROUTER.patch(
     "/prompt/{prompt_id}",
     response_model=Prompt,
+    response_model_exclude_none=True,
     responses={
         401: {"detail": "Not authenticated"},
         404: {"detail": "document not found"},

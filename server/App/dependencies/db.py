@@ -4,7 +4,14 @@ from typing import Any, Dict, List, Literal, Union
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 
-from App.models import AIFunction, EvaluateSummary, Prompt, PromptMessage, User
+from App.models import (
+    AIFunction,
+    AIFunctionPatchInput,
+    EvaluateSummary,
+    Prompt,
+    PromptMessage,
+    User,
+)
 
 Collection = Literal["ai-functions", "prompts", "users"]
 Object = Union[AIFunction, Prompt, User]
@@ -71,7 +78,7 @@ class DB:
         prompt_id: str,
         messages: List[PromptMessage],
     ) -> Prompt | None:
-        messages = [message.model_dump() for message in messages]
+        messages = [message.model_dump(by_alias=True) for message in messages]
         col = self.get_collection("prompts")
         await col.update_one(
             {"_id": prompt_id}, {"$set": {"messages": messages, "last_eval": None}}
@@ -137,6 +144,22 @@ class DB:
             return None
 
         return Prompt(**prompt)
+
+    async def patch_ai_function(
+        self, ai_function: AIFunction, ai_function_patch: AIFunctionPatchInput
+    ) -> AIFunction:
+        ai_function = ai_function.copy(
+            update=ai_function_patch.model_dump(exclude_none=True, by_alias=True)
+        )
+
+        col = self.get_collection("ai-functions")
+
+        await col.update_one(
+            {"_id": ai_function.id},
+            {"$set": ai_function_patch.model_dump(exclude_none=True, by_alias=True)},
+        )
+
+        return ai_function
 
     async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: str):
         prompt_coll = self.get_collection("prompts")

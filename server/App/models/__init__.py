@@ -1,7 +1,4 @@
-from .ai_function import (
-    AIFunction,
-    AIFunctionRouteInput,
-)
+from .ai_function import AIFunction, AIFunctionPatchInput, AIFunctionRouteInput
 from .json_schema import JsonSchema
 from .prompt import Prompt, PromptMessage, PromptRouteInput
 from .promptfoo_models import EvaluateInput, EvaluateSummary
@@ -17,6 +14,7 @@ __all__ = [
     Token,
     DecodedToken,
     AIFunctionRouteInput,
+    AIFunctionPatchInput,
     AIFunction,
     PromptRouteInput,
     Prompt,
