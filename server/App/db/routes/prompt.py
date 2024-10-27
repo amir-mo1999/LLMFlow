@@ -6,7 +6,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
-    AIFunction,
     Prompt,
     PromptMessage,
     PromptRouteInput,
@@ -30,7 +29,9 @@ async def post_prompt(
     db: Annotated[DB, Depends(get_db)],
 ):
     # get ai function for prompt
-    ai_function = await db.get_ai_function_by_id(prompt.ai_function_id)
+    ai_function = await db.get_ai_function_by_id(
+        prompt.ai_function_id, username=username
+    )
 
     # check if ai function exists
     if ai_function is None:
@@ -38,9 +39,6 @@ async def post_prompt(
             status_code=400,
             detail=f"AI Function {prompt.ai_function_id} does not exist",
         )
-
-    # parse ai function for type hints
-    ai_function = AIFunction(**ai_function)
 
     # get time stamp
     now = datetime.now()
@@ -200,6 +198,6 @@ async def patch_prompt(
         raise HTTPException(422, detail=str(e))
 
     # update prompt
-    await db.update_prompt(prompt_id, messages)
+    await db.update_prompt_messages(prompt_id, messages)
 
     return SuccessResponse
