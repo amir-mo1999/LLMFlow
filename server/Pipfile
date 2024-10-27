@@ -21,6 +21,7 @@ pre-commit = "*"
 aiohttp = "*"
 ipykernel = "*"
 fastapi-camelcase = "*"
+pydantic-partial = "*"
 
 [dev-packages]
 
