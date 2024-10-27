@@ -24,11 +24,10 @@ import { usePostAiFunction } from "@/api/apiComponents"
 import examples from "@/examples/aiFunctions.json"
 
 interface AIFunctionFormProps {
-  setShowForm: React.Dispatch<React.SetStateAction<boolean>>
   addAIFunction: (aiFunction: AIFunction) => void
 }
 
-const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunction }) => {
+const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ addAIFunction }) => {
   const nameCharLimit = 40
   const descriptionCharLimit = 1000
   const nameRef = useRef<null | HTMLDivElement>(null)
@@ -84,7 +83,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ setShowForm, addAIFunct
 
   const { mutate: postAiFunction } = usePostAiFunction({
     onSuccess: (response) => {
-      setShowForm(false)
       addAIFunction(response)
     },
     onError: (err) => {
