@@ -126,6 +126,7 @@ async def delete_ai_function(
     response_model=AIFunction,
     responses={
         401: {"detail": "Not authenticated"},
+        409: {"detail": "document already exists"},
     },
 )
 async def patch_ai_function(
@@ -142,4 +143,7 @@ async def patch_ai_function(
         ai_function, ai_function_patch=ai_function_patch
     )
 
-    return ai_function
+    if ai_function:
+        return ai_function
+    else:
+        raise DuplicateDocument

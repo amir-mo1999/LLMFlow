@@ -150,7 +150,15 @@ class DB:
 
     async def patch_ai_function(
         self, ai_function: AIFunction, ai_function_patch: AIFunctionPatchInput
-    ) -> AIFunction:
+    ) -> AIFunction | None:
+        # check if an ai function with the new name exists
+        if ai_function_patch.name:
+            query = await self.ai_functions.find_one(
+                {"_id": {"$ne": ai_function.id}, "name": ai_function_patch.name}
+            )
+            if query:
+                return None
+
         # update fields in ai function without validating
         for key in ai_function_patch.model_dump(exclude_none=True):
             ai_function.__setattr__(key, getattr(ai_function_patch, key))

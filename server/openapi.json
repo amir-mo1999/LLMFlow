@@ -556,6 +556,17 @@
                         },
                         "description": "Unauthorized"
                     },
+                    "409": {
+                        "detail": "document already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Conflict"
+                    },
                     "422": {
                         "description": "Validation Error",
                         "content": {

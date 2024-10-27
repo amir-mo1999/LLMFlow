@@ -413,6 +413,10 @@ export type PatchAiFunctionError = Fetcher.ErrorWrapper<
       payload: Schemas.HttpExceptionModel
     }
   | {
+      status: 409
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
       status: 422
       payload: Schemas.HTTPValidationError
     }
