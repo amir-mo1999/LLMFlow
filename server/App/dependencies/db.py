@@ -22,11 +22,15 @@ class DB:
         self.db = client["prompt-broker"]
         self.length = 100000000
 
+        self.prompts = self.get_collection("prompts")
+        self.ai_functions = self.get_collection("ai-functions")
+        self.users = self.get_collection("users")
+
     def get_collection(self, collection: Collection) -> AsyncIOMotorCollection:
         return self.db.get_collection(collection)
 
     async def get_all(self, collection: Collection, username: str) -> List[Any]:
-        docs = self.get_collection(collection).find({"username": username})
+        docs = self.users.find({"username": username})
         docs = await docs.to_list(self.length)
         return docs
 
@@ -79,15 +83,14 @@ class DB:
         messages: List[PromptMessage],
     ) -> Prompt | None:
         messages = [message.model_dump(by_alias=True) for message in messages]
-        col = self.get_collection("prompts")
-        await col.update_one(
+        await self.prompts.update_one(
             {"_id": prompt_id}, {"$set": {"messages": messages, "last_eval": None}}
         )
 
     async def increment_prompt_count(
         self, ai_function_id: str, increment_value: int = 1
     ):
-        await self.get_collection("ai-functions").update_one(
+        await self.ai_functions.update_one(
             {"_id": ai_function_id}, {"$inc": {"number_of_prompts": increment_value}}
         )
 
@@ -116,7 +119,7 @@ class DB:
         return ai_function_objects
 
     async def get_user(self, username: str) -> User | None:
-        user = await self.get_collection("users").find_one({"username": username})
+        user = await self.users.find_one({"username": username})
         if user is None:
             return None
 
@@ -152,9 +155,20 @@ class DB:
             update=ai_function_patch.model_dump(exclude_none=True, by_alias=True)
         )
 
-        col = self.get_collection("ai-functions")
+        # delete eval for prompts if any of the fields output_schema, assert, test_cases change
+        if any(
+            [
+                ai_function_patch.output_schema is not None,
+                ai_function_patch.assertions is not None,
+                ai_function_patch.test_cases is not None,
+            ]
+        ):
+            await self.prompts.update_many(
+                {"ai_function_id": ai_function.id}, {"$set": {"last_eval": None}}
+            )
 
-        await col.update_one(
+        # update ai function
+        await self.ai_functions.update_one(
             {"_id": ai_function.id},
             {"$set": ai_function_patch.model_dump(exclude_none=True, by_alias=True)},
         )
@@ -164,7 +178,7 @@ class DB:
     async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: str):
         prompt_coll = self.get_collection("prompts")
 
-        await prompt_coll.update_one(
+        await self.prompts.update_one(
             {"_id": prompt_id},
             {"$set": {"last_eval": eval_summary.model_dump(by_alias=True)}},
         )
