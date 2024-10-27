@@ -3,7 +3,7 @@ import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } fro
 import ClearIcon from "@mui/icons-material/Clear"
 import { PromptRouteInput, PromptMessage, Prompt, AIFunction } from "@/api/apiSchemas"
 import { AIFunctionPaper } from "@/components/AIFunction"
-import { usePostPrompt } from "@/api/apiComponents"
+import { usePostPrompt, usePatchPrompt } from "@/api/apiComponents"
 import SelectAIFunctionDialog from "../SelectAIFunctionDialog"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
@@ -12,11 +12,34 @@ interface PromptFormProps {
   addPrompt: (prompt: Prompt) => void
   aiFunctions: AIFunction[]
   refetchAIFunctions: () => void
+  edit?: boolean
+  prompt?: Prompt
+  promptNumber?: number
+  setPromptMessages?: (promptID: string, messages: PromptMessage[]) => void
 }
 
-const PromptForm: React.FC<PromptFormProps> = ({ addPrompt, aiFunctions, refetchAIFunctions }) => {
+const options: Intl.DateTimeFormatOptions = {
+  timeZone: "Europe/Berlin",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+}
+
+const PromptForm: React.FC<PromptFormProps> = ({
+  addPrompt,
+  aiFunctions,
+  refetchAIFunctions,
+  edit = false,
+  prompt,
+  promptNumber,
+  setPromptMessages = () => {},
+}) => {
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number>(0)
-  const [messages, setMessages] = useState<PromptMessage[]>([{ role: "user", content: "" }])
+  const [messages, setMessages] = useState<PromptMessage[]>(
+    prompt ? prompt.messages : [{ role: "user", content: "" }]
+  )
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
   const [openSelectDialog, setOpenSelectDialog] = useState<boolean>(false)
 
@@ -51,13 +74,28 @@ const PromptForm: React.FC<PromptFormProps> = ({ addPrompt, aiFunctions, refetch
     onError: (err) => {},
   })
 
+  const { mutate: patchPrompt } = usePatchPrompt({
+    onSuccess: (response, vars) => {
+      if (vars.body !== undefined && prompt) {
+        const messages: PromptMessage[] = vars.body
+        setPromptMessages(prompt._id as string, messages)
+      }
+    },
+    onError: (err) => {},
+  })
+
   const onClickSubmit = () => {
     setDisableSubmit(true)
-    const newPrompt: PromptRouteInput = {
-      messages: messages,
-      ai_function_id: aiFunctions[selectedAIFunctionIndx]._id as string,
+
+    if (edit) {
+      patchPrompt({ pathParams: { promptId: prompt?._id as string }, body: messages })
+    } else {
+      const newPrompt: PromptRouteInput = {
+        messages: messages,
+        ai_function_id: aiFunctions[selectedAIFunctionIndx]._id as string,
+      }
+      postPrompt({ body: newPrompt })
     }
-    postPrompt({ body: newPrompt })
   }
 
   const handleRoleChange = (index: number, newRole: "user" | "system" | "assistant") => {
@@ -122,6 +160,21 @@ const PromptForm: React.FC<PromptFormProps> = ({ addPrompt, aiFunctions, refetch
   return (
     <>
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+        {edit && prompt ? (
+          <Box>
+            <Typography variant="h4">
+              {prompt.ai_function_name} #{promptNumber}
+            </Typography>
+            {/* Creation Time */}
+            <Typography>
+              {new Date(prompt.creation_time).toLocaleString("de-DE", options)}
+            </Typography>
+            <Divider sx={{ marginY: 2 }}></Divider>
+          </Box>
+        ) : (
+          <></>
+        )}
+
         <Typography variant="h5" gutterBottom>
           Selected AI Function
         </Typography>
@@ -134,7 +187,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ addPrompt, aiFunctions, refetch
           }}
           aiFunction={aiFunctions[selectedAIFunctionIndx]}
         ></AIFunctionPaper>
-        <Box mt={2}>
+        <Box mt={2} sx={{ display: edit ? "none" : "normal" }}>
           <Button variant="contained" onClick={() => setOpenSelectDialog(true)}>
             Select AI Function
           </Button>

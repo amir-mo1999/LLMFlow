@@ -14,6 +14,7 @@ interface PromptSingleOverviewProps {
   prompt: Prompt
   promptNumber: number
   onDelete: () => void
+  onClickEdit: (promptID: string) => void
 }
 
 const options: Intl.DateTimeFormatOptions = {
@@ -29,6 +30,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
   prompt,
   promptNumber,
   onDelete,
+  onClickEdit,
 }) => {
   const [disableDelete, setDisableDelete] = useState(false)
   const { mutate: deletePromptAPI } = useDeletePrompt({
@@ -55,7 +57,12 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
       <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Prompt Messages */}
-      <Typography variant="h5">Messages</Typography>
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Typography variant="h5">Messages</Typography>
+        <Button size="small" variant="contained" onClick={() => onClickEdit(prompt._id as string)}>
+          Edit Messages
+        </Button>
+      </Box>
       <PromptMessagesOverview messages={prompt.messages}></PromptMessagesOverview>
 
       <Divider sx={{ marginY: 2 }}></Divider>

@@ -4,7 +4,7 @@ import { useContext } from "react"
 import { PromptsContext } from "../layout"
 
 export default function Page({ params }: { params: { promptID: string } }) {
-  const { prompts, promptNumbers, onDeletePrompt } = useContext(PromptsContext)
+  const { prompts, promptNumbers, onDeletePrompt, onClickEdit } = useContext(PromptsContext)
 
   const promptIndx = prompts.findIndex((prompt) => prompt._id === params.promptID)
   const prompt = prompts[promptIndx]
@@ -16,6 +16,7 @@ export default function Page({ params }: { params: { promptID: string } }) {
       onDelete={onDeletePrompt}
       prompt={prompt}
       promptNumber={promptNumber}
+      onClickEdit={onClickEdit}
     ></PromptSingleOverview>
   )
 }

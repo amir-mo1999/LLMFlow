@@ -9,7 +9,7 @@ import {
 import Button from "@mui/material/Button"
 import { useGetAllPrompts, useEvaluate, useGetAiFunctions } from "@/api/apiComponents"
 import { useState, useEffect, createContext } from "react"
-import { Prompt, AIFunction } from "@/api/apiSchemas"
+import { Prompt, AIFunction, PromptMessage } from "@/api/apiSchemas"
 import { useRouter } from "next/navigation"
 
 const getPromptNumbers = (prompts: Prompt[]) => {
@@ -39,6 +39,8 @@ interface PromptsContextProps {
   addPrompt: (prompt: Prompt) => void
   onDeletePrompt: () => void
   setSelectedPromptIndx: (indx: number | undefined) => void
+  onClickEdit: (promptID: string) => void
+  setPromptMessages: (promptID: string, messages: PromptMessage[]) => void
 }
 
 export const PromptsContext = createContext<PromptsContextProps>({
@@ -49,6 +51,8 @@ export const PromptsContext = createContext<PromptsContextProps>({
   addPrompt: () => {},
   onDeletePrompt: () => {},
   setSelectedPromptIndx: () => {},
+  onClickEdit: () => {},
+  setPromptMessages: () => {},
 })
 
 export default function Layout({
@@ -83,6 +87,18 @@ export default function Layout({
     const updatedPrompts = prompts.filter((_, i) => i !== selectedPromptIndx)
     setPrompts(updatedPrompts)
     setSelectedPromptIndx(undefined)
+    router.push("/prompts")
+  }
+
+  const onClickEdit = (promptID: string) => {
+    router.push(`/prompts/edit/${promptID}`)
+  }
+
+  const setPromptMessages = (promptID: string, messages: PromptMessage[]) => {
+    const newPrompts = [...prompts]
+    const promptToUpdateIndx = prompts.findIndex((prompt) => prompt._id === promptID)
+    newPrompts[promptToUpdateIndx].messages = messages
+    setPrompts([...newPrompts])
     router.push("/prompts")
   }
 
@@ -148,6 +164,8 @@ export default function Layout({
             setSelectedPromptIndx: setSelectedPromptIndx,
             addPrompt: addPrompt,
             onDeletePrompt: onDeletePrompt,
+            onClickEdit: onClickEdit,
+            setPromptMessages: setPromptMessages,
           }}
         >
           {children}
