@@ -73,7 +73,6 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       }
     }
   }, [])
-
   //@ts-ignore
   let parsedExamples: AIFunctionRouteInput[] = examples
 
@@ -157,7 +156,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       output_schema: useJsonSchema
         ? (jsonAssertions[0].value as JsonSchemaInput)
         : { type: "string" },
-      assert: [...assertions, ...jsonAssertions],
+      assert: [...jsonAssertions, ...assertions],
       test_cases: testCases,
     }
 
@@ -269,7 +268,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <AssertionsForm
-        assertions={[...assertions, ...jsonAssertions]}
+        assertions={assertions}
+        jsonAssertions={jsonAssertions}
         setAssertions={setAssertions}
       />
       <Divider sx={{ marginY: 2 }}></Divider>

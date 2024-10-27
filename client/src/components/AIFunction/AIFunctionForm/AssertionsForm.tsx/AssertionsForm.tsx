@@ -9,12 +9,14 @@ import Typography, { TypographyOwnProps } from "@mui/material/Typography"
 
 interface AssertionsFormProps {
   assertions: Assertion[]
+  jsonAssertions?: Assertion[]
   setAssertions: (assertions: Assertion[]) => void
   headerVariant?: TypographyOwnProps["variant"]
 }
 
 const AssertionsForm: React.FC<AssertionsFormProps> = ({
   assertions,
+  jsonAssertions = [],
   setAssertions,
   headerVariant = "h5",
 }) => {
@@ -73,7 +75,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({
         </Button>
       </Box>
       <AssertionsOverview
-        assertions={assertions}
+        assertions={[...jsonAssertions, ...assertions]}
         onClick={handleOpenEditDialog}
         onDelete={handleDeleteAssertion}
       ></AssertionsOverview>

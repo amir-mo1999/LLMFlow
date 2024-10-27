@@ -43,6 +43,7 @@ export default function Layout({
   const router = useRouter()
 
   const onClickCreate = () => {
+    setSelectedAIFunctionIndx(undefined)
     router.push("/ai-functions/create")
   }
 
