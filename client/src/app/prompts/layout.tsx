@@ -123,7 +123,12 @@ export default function Layout({
     <PageContainer>
       <SideBarContainer>
         <SearchField value={searchValue} setValue={setSearchValue} placeholder=""></SearchField>
-        <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
+        <Button
+          sx={{ marginTop: 2 }}
+          variant="contained"
+          onClick={onClickCreate}
+          disabled={aiFunctions.length === 0 ? true : false}
+        >
           Create Prompt
         </Button>
         <PromptOverview
