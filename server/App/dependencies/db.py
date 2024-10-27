@@ -66,10 +66,14 @@ class DB:
 
         return True
 
-    async def update_prompt(self, prompt_id: str, messages: List[PromptMessage]):
+    async def update_prompt_messages(
+        self, prompt_id: str, messages: List[PromptMessage]
+    ):
         messages = [message.model_dump() for message in messages]
         col = self.get_collection("prompts")
-        await col.update_one({"_id": prompt_id}, {"$set": {"messages": messages}})
+        await col.update_one(
+            {"_id": prompt_id}, {"$set": {"messages": messages, "last_eval": None}}
+        )
 
     async def increment_prompt_count(
         self, ai_function_id: str, increment_value: int = 1
