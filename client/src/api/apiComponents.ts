@@ -292,6 +292,51 @@ export const usePostAiFunction = (
   })
 }
 
+export type PatchAiFunctionError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type PatchAiFunctionVariables = {
+  body?: Schemas.AIFunctionRouteInputPartial
+} & ApiContext["fetcherOptions"]
+
+export const fetchPatchAiFunction = (variables: PatchAiFunctionVariables, signal?: AbortSignal) =>
+  apiFetch<
+    Schemas.AIFunction,
+    PatchAiFunctionError,
+    Schemas.AIFunctionRouteInputPartial,
+    {},
+    {},
+    {}
+  >({ url: "/db/ai-function", method: "patch", ...variables, signal })
+
+export const usePatchAiFunction = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.AIFunction,
+      PatchAiFunctionError,
+      PatchAiFunctionVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<Schemas.AIFunction, PatchAiFunctionError, PatchAiFunctionVariables>(
+    {
+      mutationFn: (variables: PatchAiFunctionVariables) =>
+        fetchPatchAiFunction({ ...fetcherOptions, ...variables }),
+      ...options,
+    }
+  )
+}
+
 export type GetAiFunctionPathParams = {
   aiFunctionId: string
 }
@@ -571,23 +616,18 @@ export type PatchPromptVariables = {
 } & ApiContext["fetcherOptions"]
 
 export const fetchPatchPrompt = (variables: PatchPromptVariables, signal?: AbortSignal) =>
-  apiFetch<
-    Schemas.SuccessResponse,
-    PatchPromptError,
-    PatchPromptRequestBody,
-    {},
-    {},
-    PatchPromptPathParams
-  >({ url: "/db/prompt/{promptId}", method: "patch", ...variables, signal })
+  apiFetch<Schemas.Prompt, PatchPromptError, PatchPromptRequestBody, {}, {}, PatchPromptPathParams>(
+    { url: "/db/prompt/{promptId}", method: "patch", ...variables, signal }
+  )
 
 export const usePatchPrompt = (
   options?: Omit<
-    reactQuery.UseMutationOptions<Schemas.SuccessResponse, PatchPromptError, PatchPromptVariables>,
+    reactQuery.UseMutationOptions<Schemas.Prompt, PatchPromptError, PatchPromptVariables>,
     "mutationFn"
   >
 ) => {
   const { fetcherOptions } = useApiContext()
-  return reactQuery.useMutation<Schemas.SuccessResponse, PatchPromptError, PatchPromptVariables>({
+  return reactQuery.useMutation<Schemas.Prompt, PatchPromptError, PatchPromptVariables>({
     mutationFn: (variables: PatchPromptVariables) =>
       fetchPatchPrompt({ ...fetcherOptions, ...variables }),
     ...options,

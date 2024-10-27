@@ -169,7 +169,7 @@ async def delete_prompt(
 
 @PROMPT_ROUTER.patch(
     "/prompt/{prompt_id}",
-    response_model=SuccessResponse,
+    response_model=Prompt,
     responses={
         401: {"detail": "Not authenticated"},
         404: {"detail": "document not found"},
@@ -200,4 +200,9 @@ async def patch_prompt(
     # update prompt
     await db.update_prompt_messages(prompt_id, messages)
 
-    return SuccessResponse
+    prompt = await db.get_prompt_by_id(prompt_id, username)
+
+    if prompt:
+        return prompt
+    else:
+        raise DocumentNotFound
