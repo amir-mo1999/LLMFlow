@@ -60,6 +60,7 @@ async def post_ai_function(
 @AI_FUNCTION_ROUTER.get(
     "/ai-function",
     response_model_by_alias=True,
+    response_model_exclude_none=True,
     response_model=List[AIFunction],
     responses={401: {"detail": "Not authenticated"}},
 )
@@ -74,6 +75,7 @@ async def get_ai_functions(
 @AI_FUNCTION_ROUTER.get(
     "/ai-function/{ai_function_id}",
     response_model=AIFunction,
+    response_model_exclude_none=True,
     response_model_by_alias=True,
     responses={
         401: {"detail": "Not authenticated"},

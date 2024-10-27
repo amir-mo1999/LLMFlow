@@ -11,9 +11,13 @@ import Chip from "@mui/material/Chip"
 import TestCasesOverview from "./TestCasesOverview"
 import JsonSchemaEditor from "../JsonSchemaEditor"
 import { addTitlesToSchema } from "@/utils"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
+
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
   aiFunction: AIFunction
+  onClickEdit?: (aiFunctionID: string) => void
 }
 
 const options: Intl.DateTimeFormatOptions = {
@@ -28,6 +32,7 @@ const options: Intl.DateTimeFormatOptions = {
 const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   onDeleteAIFunction,
   aiFunction,
+  onClickEdit = () => {},
 }) => {
   const { mutate: deleteAIFunction } = useDeleteAiFunction({})
 
@@ -120,12 +125,31 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       <Typography variant="h5" paddingBottom={1}>
         Test Cases
       </Typography>
-      <TestCasesOverview testCases={aiFunction.test_cases} displayOnly></TestCasesOverview>
+      {aiFunction.test_cases.length === 0 ? (
+        <Typography variant="body2">No test cases defined.</Typography>
+      ) : (
+        <TestCasesOverview testCases={aiFunction.test_cases} displayOnly></TestCasesOverview>
+      )}
 
       <Divider sx={{ marginY: 2 }}></Divider>
-      <Button variant="contained" color="error" onClick={onClickDelete}>
-        Delete AI Function
-      </Button>
+      <Box>
+        <Button
+          variant="contained"
+          sx={{ mr: 5 }}
+          onClick={() => onClickEdit(aiFunction._id as string)}
+          startIcon={<EditIcon sx={{ mb: 0.4 }} />}
+        >
+          Edit
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon sx={{ mb: 0.4 }} />}
+          onClick={onClickDelete}
+        >
+          Delete
+        </Button>
+      </Box>
     </Box>
   )
 }

@@ -18,6 +18,8 @@ interface AIFunctionsContextProps {
   addAIFunction: (aiFunction: AIFunction) => void
   onDeleteAIFunction: () => void
   setSelectedAIFunctionIndx: (indx: number | undefined) => void
+  setAIFunction: (aiFunction: AIFunction) => void
+  onClickEdit: (aiFunctionID: string) => void
 }
 
 export const AIFunctionsContext = createContext<AIFunctionsContextProps>({
@@ -25,6 +27,8 @@ export const AIFunctionsContext = createContext<AIFunctionsContextProps>({
   addAIFunction: () => {},
   onDeleteAIFunction: () => {},
   setSelectedAIFunctionIndx: () => {},
+  setAIFunction: () => {},
+  onClickEdit: () => {},
 })
 
 export default function Layout({
@@ -62,6 +66,17 @@ export default function Layout({
     return f
   }
 
+  const setAIFunction = (newAIFunction: AIFunction) => {
+    const updateIndx = aiFunctions.findIndex((aiFunction) => aiFunction._id === newAIFunction._id)
+    const newAIFunctions = { ...aiFunctions }
+    newAIFunctions[updateIndx] = newAIFunction
+    setAIFunctions(newAIFunctions)
+  }
+
+  const onClickEdit = (aiFunctionID: string) => {
+    router.push(`/ai-functions/edit/${aiFunctionID}`)
+  }
+
   const { data: aiFunctionsAPI, isFetching } = useGetAiFunctions({})
 
   useEffect(() => {
@@ -92,6 +107,8 @@ export default function Layout({
             onDeleteAIFunction: onDeleteAIFunction,
             addAIFunction: addAIFunction,
             setSelectedAIFunctionIndx: setSelectedAIFunctionIndx,
+            setAIFunction: setAIFunction,
+            onClickEdit: onClickEdit,
           }}
         >
           {children}

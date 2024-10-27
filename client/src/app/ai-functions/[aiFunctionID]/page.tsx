@@ -4,7 +4,7 @@ import { useContext } from "react"
 import { AIFunctionsContext } from "../layout"
 
 export default function Page({ params }: { params: { aiFunctionID: string } }) {
-  const { aiFunctions, onDeleteAIFunction } = useContext(AIFunctionsContext)
+  const { aiFunctions, onDeleteAIFunction, onClickEdit } = useContext(AIFunctionsContext)
 
   const aiFunction = aiFunctions.find((aiFunction) => aiFunction._id === params.aiFunctionID)
 
@@ -14,6 +14,7 @@ export default function Page({ params }: { params: { aiFunctionID: string } }) {
     <AIFunctionSingleOverview
       onDeleteAIFunction={onDeleteAIFunction}
       aiFunction={aiFunction}
+      onClickEdit={onClickEdit}
     ></AIFunctionSingleOverview>
   )
 }

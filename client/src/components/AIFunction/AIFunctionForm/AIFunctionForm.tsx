@@ -6,7 +6,7 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import InputVariableForm from "./InputVariableForm"
 import JsonSchemaEditor from "@/components/JsonSchemaEditor"
-import { parseJsonSchema } from "@/utils"
+import { parseJsonSchema, addTitlesToSchema } from "@/utils"
 import {
   TestCaseInput,
   InputVariable,
@@ -25,26 +25,54 @@ import examples from "@/examples/aiFunctions.json"
 
 interface AIFunctionFormProps {
   addAIFunction: (aiFunction: AIFunction) => void
+  aiFunction?: AIFunction
+  setAIFunction?: (newAIFunction: AIFunction) => void
 }
 
-const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ addAIFunction }) => {
+const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
+  addAIFunction,
+  aiFunction,
+  setAIFunction = () => {},
+}) => {
   const nameCharLimit = 40
   const descriptionCharLimit = 1000
   const nameRef = useRef<null | HTMLDivElement>(null)
 
-  const [name, setName] = useState<string>("")
+  const [name, setName] = useState<string>(aiFunction ? aiFunction.name : "")
   const [nameError, setNameError] = useState<boolean>(false)
-  const [description, setDescription] = useState<string>("")
-  const [inputVariables, setInputVariables] = useState<InputVariable[]>([])
-  const [outputSchema, setOutputSchema] = useState<JsonSchemaInput>({
-    type: "string",
-    title: "root",
-  })
+  const [description, setDescription] = useState<string>(aiFunction ? aiFunction.description : "")
+  const [inputVariables, setInputVariables] = useState<InputVariable[]>(
+    aiFunction ? aiFunction.input_variables : []
+  )
+  const [outputSchema, setOutputSchema] = useState<JsonSchemaInput>(
+    aiFunction
+      ? addTitlesToSchema(aiFunction.output_schema)
+      : {
+          type: "string",
+          title: "root",
+        }
+  )
   const [useJsonSchema, setUseJsonSchema] = useState<boolean>(false)
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [jsonAssertions, setJsonAssertions] = useState<Assertion[]>([])
-  const [testCases, setTestCases] = useState<TestCaseInput[]>([])
+  const [testCases, setTestCases] = useState<TestCaseInput[]>(
+    aiFunction ? aiFunction.test_cases : []
+  )
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (aiFunction) {
+      setAssertions(aiFunction.assert.filter((assertion) => assertion.type !== "is-json"))
+
+      if (aiFunction.output_schema.type === "object") {
+        setUseJsonSchema(true)
+        const jsonAssertionIndx = aiFunction.assert.findIndex(
+          (assertion) => assertion.type === "is-json"
+        )
+        setJsonAssertions([aiFunction.assert[jsonAssertionIndx]])
+      }
+    }
+  }, [])
 
   //@ts-ignore
   let parsedExamples: AIFunctionRouteInput[] = examples
@@ -138,50 +166,53 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({ addAIFunction }) => {
 
   return (
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        Create from Example
-      </Typography>
-      <Select
-        renderValue={() => "Select an example"}
-        defaultValue={"Select an example"}
-        fullWidth
-        MenuProps={{
-          PaperProps: {
-            style: {
-              maxWidth: 200,
+      <Box display={aiFunction ? "none" : "normal"}>
+        <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+          Create from Example
+        </Typography>
+        <Select
+          renderValue={() => "Select an example"}
+          defaultValue={"Select an example"}
+          fullWidth
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxWidth: 200,
+              },
             },
-          },
-        }}
-      >
-        <MenuItem value="Select an example" sx={{ display: "none" }}>
-          Select an example
-        </MenuItem>
-        {parsedExamples.map((example, indx) => {
-          return (
-            <MenuItem
-              onClick={onClickExample(parsedExamples[indx])}
-              key={indx + 1}
-              value={indx.toString()}
-              sx={{ p: 2, userSelect: "none" }}
-            >
-              <Box>
-                <Typography variant="h6">{example.name}</Typography>
-                <Typography
-                  sx={{
-                    display: "-webkit-box",
-                    overflow: "hidden",
-                    WebkitBoxOrient: "vertical",
-                    WebkitLineClamp: 1,
-                  }}
-                >
-                  {example.description}
-                </Typography>
-              </Box>
-            </MenuItem>
-          )
-        })}
-      </Select>
-      <Divider sx={{ marginY: 2 }}></Divider>
+          }}
+        >
+          <MenuItem value="Select an example" sx={{ display: "none" }}>
+            Select an example
+          </MenuItem>
+          {parsedExamples.map((example, indx) => {
+            return (
+              <MenuItem
+                onClick={onClickExample(parsedExamples[indx])}
+                key={indx + 1}
+                value={indx.toString()}
+                sx={{ p: 2, userSelect: "none" }}
+              >
+                <Box>
+                  <Typography variant="h6">{example.name}</Typography>
+                  <Typography
+                    sx={{
+                      display: "-webkit-box",
+                      overflow: "hidden",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 1,
+                    }}
+                  >
+                    {example.description}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            )
+          })}
+        </Select>
+        <Divider sx={{ marginY: 2 }}></Divider>
+      </Box>
+
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         Name
       </Typography>
