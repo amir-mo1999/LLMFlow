@@ -9,6 +9,7 @@ import { Prompt } from "@/api/apiSchemas"
 import { useDeletePrompt } from "@/api/apiComponents"
 import EvalOverview from "./EvalOverview"
 import PromptMessagesOverview from "./PromptMessagesOverview"
+import theme from "@/theme"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
@@ -62,6 +63,22 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
         <Button size="small" variant="contained" onClick={() => onClickEdit(prompt._id as string)}>
           Edit Messages
         </Button>
+      </Box>
+
+      <Box
+        sx={{
+          borderColor: theme.palette.warning.main,
+          borderWidth: 1,
+          padding: 1,
+          mt: 1,
+          borderRadius: 3,
+          display: prompt.revision_required ? "normal" : "none",
+        }}
+      >
+        <Typography color={theme.palette.warning.main}>
+          The Input Variables for this AI Function have been modified. Please review and update the
+          prompt messages to ensure they align with the recent changes.
+        </Typography>
       </Box>
       <PromptMessagesOverview messages={prompt.messages}></PromptMessagesOverview>
 
