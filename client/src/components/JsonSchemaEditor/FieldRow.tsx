@@ -61,7 +61,9 @@ const FieldRow: React.FC<FieldRowProps> = ({
 }) => {
   const maxFieldTitleChars = 40
 
-  const [type, setType] = useState<JsonSchemaInput["type"]>(schema.type)
+  const [type, setType] = useState<JsonSchemaInput["type"]>(
+    isRoot ? (["object", "array"].includes(schema.type) ? schema.type : "object") : schema.type
+  )
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
   const [settings, setSettings] = useState(schemaSettings)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
@@ -200,7 +202,11 @@ const FieldRow: React.FC<FieldRowProps> = ({
           </Tooltip>
         )}
 
-        <Tooltip title="tooltip" placement="top">
+        <Tooltip
+          title="tooltip"
+          placement="top"
+          sx={{ display: type === "string" ? "normal" : "none" }}
+        >
           <IconButton onClick={() => setOpenDialog(true)}>
             <Badge
               variant="dot"
