@@ -84,7 +84,14 @@ class DB:
     ) -> Prompt | None:
         messages = [message.model_dump(by_alias=True) for message in messages]
         await self.prompts.update_one(
-            {"_id": prompt_id}, {"$set": {"messages": messages, "last_eval": None}}
+            {"_id": prompt_id},
+            {
+                "$set": {
+                    "messages": messages,
+                    "last_eval": None,
+                    "revision_required": False,
+                }
+            },
         )
 
     async def increment_prompt_count(
