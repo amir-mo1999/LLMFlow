@@ -183,9 +183,11 @@ async def patch_prompt(
     db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
+    prompt = await get_prompt(prompt_id, db, username)
+
     # patch prompt
     try:
-        prompt = await db.update_prompt_messages(prompt_id, username, messages)
+        prompt = await db.update_prompt_messages(prompt, username, messages)
     except ValueError as e:
         raise HTTPException(422, detail=str(e))
 
