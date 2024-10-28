@@ -86,6 +86,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
   const handleTypeChange = (event: SelectChangeEvent) => {
     const newType = event.target.value as JsonSchemaInput["type"]
     setType(newType)
+    setSettings({})
     updateSchema({ type: newType })
   }
 

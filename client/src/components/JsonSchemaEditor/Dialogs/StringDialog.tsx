@@ -39,6 +39,12 @@ const StringDialog: React.FC<StringDialogProps> = ({
   const [showPatternError, setShowPatternError] = useState(false)
 
   useEffect(() => {
+    setMinLength(stringSettings.minLength || undefined)
+    setMaxLength(stringSettings.maxLength || undefined)
+    setPattern(stringSettings.pattern || undefined)
+  }, [stringSettings])
+
+  useEffect(() => {
     const newSettings: StringSchema = {}
 
     if (minLength !== undefined) newSettings.minLength = minLength
