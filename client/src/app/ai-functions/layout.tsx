@@ -20,6 +20,7 @@ interface AIFunctionsContextProps {
   setSelectedAIFunctionIndx: (indx: number | undefined) => void
   setAIFunction: (aiFunction: AIFunction) => void
   onClickEdit: (aiFunctionID: string) => void
+  onClickAddPrompt: (aiFunctionID: string)=> void
 }
 
 export const AIFunctionsContext = createContext<AIFunctionsContextProps>({
@@ -29,6 +30,7 @@ export const AIFunctionsContext = createContext<AIFunctionsContextProps>({
   setSelectedAIFunctionIndx: () => {},
   setAIFunction: () => {},
   onClickEdit: () => {},
+  onClickAddPrompt: ()=>{}
 })
 
 export default function Layout({
@@ -75,6 +77,10 @@ export default function Layout({
     setAIFunctions(newAIFunctions)
   }
 
+  const onClickAddPrompt = (aiFunctionID: string) => {
+    router.push("/prompts/create/")
+  }
+
   const onClickEdit = (aiFunctionID: string) => {
     router.push(`/ai-functions/edit/${aiFunctionID}`)
   }
@@ -111,6 +117,7 @@ export default function Layout({
             setSelectedAIFunctionIndx: setSelectedAIFunctionIndx,
             setAIFunction: setAIFunction,
             onClickEdit: onClickEdit,
+            onClickAddPrompt: onClickAddPrompt
           }}
         >
           {children}

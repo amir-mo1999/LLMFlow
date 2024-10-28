@@ -13,11 +13,13 @@ import JsonSchemaEditor from "../JsonSchemaEditor"
 import { addTitlesToSchema } from "@/utils"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
+import AddIcon from "@mui/icons-material/Add"
 
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
   aiFunction: AIFunction
   onClickEdit?: (aiFunctionID: string) => void
+  onClickAddPrompt?: (aiFunctionID: string) => void
 }
 
 const options: Intl.DateTimeFormatOptions = {
@@ -33,6 +35,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
   onDeleteAIFunction,
   aiFunction,
   onClickEdit = () => {},
+  onClickAddPrompt,
 }) => {
   const { mutate: deleteAIFunction } = useDeleteAiFunction({})
 
@@ -140,6 +143,14 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
           startIcon={<EditIcon sx={{ mb: 0.4 }} />}
         >
           Edit
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ mr: 5, display: onClickAddPrompt ? "normal" : "none" }}
+          onClick={() => onClickAddPrompt?.(aiFunction._id as string)}
+          startIcon={<AddIcon sx={{ mb: 0.4 }} />}
+        >
+          Add Prompt
         </Button>
         <Button
           variant="contained"
