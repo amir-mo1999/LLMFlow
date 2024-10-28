@@ -5,6 +5,7 @@ import {
   JsonSchemaInput,
 } from "@/api/apiSchemas"
 import _ from "lodash"
+import { BaseAssertionTypes } from "@/api/apiSchemas"
 
 export function splitArrayIntoChunks<T>(array: T[], chunkSize: number): T[][] {
   const result: Array<Array<any>> = []
@@ -175,3 +176,27 @@ export function getAIFunctionDiff(aiFunction: AIFunction, routeInput: AIFunction
 
   return newAIFunction
 }
+
+export const baseAssertionTypesArray: BaseAssertionTypes[] = [
+  "contains",
+  "contains-all",
+  "contains-any",
+  "contains-sql",
+  "contains-xml",
+  "cost",
+  "equals",
+  "icontains",
+  "icontains-all",
+  "icontains-any",
+  "is-sql",
+  "is-xml",
+  "javascript",
+  "latency",
+  "levenshtein",
+  "perplexity-score",
+  "perplexity",
+  "python",
+  "regex",
+  "rouge-n",
+  "starts-with",
+]

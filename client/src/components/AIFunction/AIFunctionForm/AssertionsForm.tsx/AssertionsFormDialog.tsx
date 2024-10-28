@@ -9,8 +9,9 @@ import Select from "@mui/material/Select"
 import Typography from "@mui/material/Typography"
 import MenuItem from "@mui/material/MenuItem"
 import { SelectChangeEvent } from "@mui/material/Select"
-import { Assertion, BaseAssertionTypes, baseAssertionTypesArray } from "@/api/apiSchemas"
+import { Assertion, BaseAssertionTypes } from "@/api/apiSchemas"
 import AssertionTypeForm from "./AssertionTypeForm/AssertionTypeForm"
+import { baseAssertionTypesArray } from "@/utils"
 
 interface AssertionFormDialogProps {
   open: boolean
