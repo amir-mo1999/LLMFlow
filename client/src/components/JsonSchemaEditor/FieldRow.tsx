@@ -7,34 +7,21 @@ import TextField from "@mui/material/TextField"
 import Tooltip from "@mui/material/Tooltip"
 import IconButton from "@mui/material/IconButton"
 import AddIcon from "@mui/icons-material/Add"
-import SettingsIcon from "@mui/icons-material/Settings"
 import ClearIcon from "@mui/icons-material/Clear"
 import theme from "@/theme"
+import { StringDialog } from "./Dialogs"
+import SettingsIcon from "@mui/icons-material/Settings"
 
-interface FieldRowProps {
-  schema: JsonSchemaInput
-  setSchema?: (schema: JsonSchemaInput) => void
-  displayOnly?: boolean
-  disableTitleEdit?: boolean
-  disableTypeEdit?: boolean
-  showAddProperty?: boolean
-  showAdvanced?: boolean
-  showDelete?: boolean
-  onDelete?: () => void
-  indent?: number
-  isRoot?: boolean
-}
-
-type StringSchema = Pick<JsonSchemaInput, "maxLength" | "minLength" | "pattern">
-type NumberSchema = Pick<
+export type StringSchema = Pick<JsonSchemaInput, "maxLength" | "minLength" | "pattern">
+export type NumberSchema = Pick<
   JsonSchemaInput,
   "multipleOf" | "maximum" | "exclusiveMaximum" | "minimum" | "exclusiveMinimum"
 >
-type arraySchema = Pick<
+export type ArraySchema = Pick<
   JsonSchemaInput,
   "items" | "contains" | "maxContains" | "minContains" | "maxItems" | "minItems" | "uniqueItems"
 >
-type objectSchema = Pick<
+export type ObjectSchema = Pick<
   JsonSchemaInput,
   | "properties"
   | "patternProperties"
@@ -44,14 +31,28 @@ type objectSchema = Pick<
   | "required"
 >
 
+interface FieldRowProps {
+  schema: JsonSchemaInput
+  schemaSettings?: StringSchema | NumberSchema | ArraySchema | ObjectSchema
+  setSchema?: (schema: JsonSchemaInput) => void
+  displayOnly?: boolean
+  disableTitleEdit?: boolean
+  disableTypeEdit?: boolean
+  showAddProperty?: boolean
+  showDelete?: boolean
+  onDelete?: () => void
+  indent?: number
+  isRoot?: boolean
+}
+
 const FieldRow: React.FC<FieldRowProps> = ({
   schema,
+  schemaSettings = {},
   setSchema = () => {},
   displayOnly = false,
   disableTitleEdit = false,
   disableTypeEdit = false,
   showAddProperty = false,
-  showAdvanced = false,
   showDelete = false,
   onDelete,
   indent = 0,
@@ -61,15 +62,24 @@ const FieldRow: React.FC<FieldRowProps> = ({
 
   const [type, setType] = useState<JsonSchemaInput["type"]>(schema.type)
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
+  const [settings, setSettings] = useState(schemaSettings)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
 
   useEffect(() => {
     setType(schema.type)
   }, [schema])
+
   const updateSchema = (updates: Partial<JsonSchemaInput>) => {
     const newSchema = { ...schema, ...updates }
     setSchema(newSchema)
+    console.log(newSchema)
   }
+
+  useEffect(() => {
+    const newSchema: JsonSchemaInput = { type: type, title: title, ...settings }
+    setSchema(newSchema)
+  }, [settings])
 
   const handleTypeChange = (event: SelectChangeEvent) => {
     const newType = event.target.value as JsonSchemaInput["type"]
@@ -102,6 +112,16 @@ const FieldRow: React.FC<FieldRowProps> = ({
     if (onDelete) {
       onDelete()
     }
+  }
+
+  const onSubmitSettings = (settings: StringSchema | NumberSchema | ArraySchema | ObjectSchema) => {
+    console.log(settings)
+    setOpenDialog(false)
+    setSettings(settings)
+  }
+
+  const onCloseDialog = () => {
+    setOpenDialog(false)
   }
 
   const renderChildProperties = () => {
@@ -181,13 +201,11 @@ const FieldRow: React.FC<FieldRowProps> = ({
           </Tooltip>
         )}
 
-        {showAdvanced && !displayOnly && (
-          <Tooltip title="Advanced Settings" placement="top">
-            <IconButton color="primary" size="small">
-              <SettingsIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+        <Tooltip title="Advanced Settings" placement="top">
+          <IconButton color="primary" size="small" onClick={() => setOpenDialog(true)}>
+            <SettingsIcon />
+          </IconButton>
+        </Tooltip>
 
         {showDelete && !displayOnly && (
           <Tooltip title="Delete" placement="top">
@@ -197,6 +215,13 @@ const FieldRow: React.FC<FieldRowProps> = ({
           </Tooltip>
         )}
       </Box>
+
+      <StringDialog
+        stringSettings={settings as StringSchema}
+        open={type === "string" && openDialog ? true : false}
+        onSubmit={onSubmitSettings}
+        onClose={onCloseDialog}
+      ></StringDialog>
 
       {renderChildProperties()}
     </>
