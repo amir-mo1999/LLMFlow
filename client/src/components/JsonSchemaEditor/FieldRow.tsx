@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem"
 import TextField from "@mui/material/TextField"
 import Tooltip from "@mui/material/Tooltip"
 import IconButton from "@mui/material/IconButton"
+import Badge from "@mui/material/Badge"
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
 import theme from "@/theme"
@@ -199,9 +200,16 @@ const FieldRow: React.FC<FieldRowProps> = ({
           </Tooltip>
         )}
 
-        <Tooltip title="Advanced Settings" placement="top">
-          <IconButton color="primary" size="small" onClick={() => setOpenDialog(true)}>
-            <SettingsIcon />
+        <Tooltip title="tooltip" placement="top">
+          <IconButton onClick={() => setOpenDialog(true)}>
+            <Badge
+              variant="dot"
+              sx={{}}
+              color="primary"
+              invisible={Object.keys(settings).length === 0 ? true : false}
+            >
+              <SettingsIcon />
+            </Badge>
           </IconButton>
         </Tooltip>
 
