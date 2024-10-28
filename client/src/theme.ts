@@ -1,6 +1,6 @@
 import { createTheme, ThemeOptions } from "@mui/material/styles"
 
-export const themeOptions: ThemeOptions = {
+export const lightThemeOptions: ThemeOptions = {
   palette: {
     action: {
       disabledBackground: "#B7AECC",
@@ -143,6 +143,6 @@ export const themeOptions: ThemeOptions = {
   },
 }
 
-const theme = createTheme(themeOptions)
+const lightTheme = createTheme(lightThemeOptions)
 
-export default theme
+export default lightTheme
