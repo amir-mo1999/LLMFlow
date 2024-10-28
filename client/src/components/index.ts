@@ -5,6 +5,8 @@ import SearchField from "./SearchField"
 import { PromptSingleOverview, PromptForm, PromptOverview } from "./Prompt"
 import ScrollBox from "./ScrollBox"
 import JsonSchemaEditor from "./JsonSchemaEditor"
+import NumberInput from "./NumberInput"
+import RegexInput from "./RegexInput"
 
 export {
   AIFunctionForm,
@@ -20,4 +22,6 @@ export {
   PromptForm,
   PromptOverview,
   JsonSchemaEditor,
+  NumberInput,
+  RegexInput,
 }
