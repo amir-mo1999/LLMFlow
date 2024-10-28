@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper"
 import { SxProps } from "@mui/material"
 import { Prompt } from "@/api/apiSchemas"
 import LinearProgress from "@mui/material/LinearProgress"
-import { UserChip, NumberChip, DateChip } from "../Chips"
+import { UserChip, NumberChip, DateChip, TextChip } from "../Chips"
 import { getMeanLatency, getMeanScore, getTotalCost } from "@/utils"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
@@ -51,14 +51,9 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
             variant="filled"
           />
         </Stack>
-
-        <NumberChip
-          labelFirst
-          number={meanLatency as number}
-          label="Latency"
-          unit="ms"
-          sx={{ mb: 1 }}
-        />
+        <Stack direction="row" spacing={2} mb={1}>
+          <NumberChip labelFirst number={meanLatency as number} label="Latency" unit="ms" />
+        </Stack>
       </>
     )
   }
@@ -75,7 +70,10 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
         </Typography>
         <DateChip isoString={prompt.creation_time} />
       </Box>
-      <UserChip username={prompt.username} sx={{ marginRight: 10000, marginBottom: 2 }} />
+      <Stack direction="row" mb={2} spacing={2}>
+        <UserChip username={prompt.username} />
+        <TextChip label="revision required" color="warning" variant="filled" />
+      </Stack>
 
       {renderFigures()}
     </Paper>
