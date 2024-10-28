@@ -28,7 +28,7 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
 
   const renderFigures = () => {
     if (!prompt.last_eval) {
-      return <LinearProgress />
+      return <LinearProgress sx={{ display: prompt.revision_required ? "none" : "normal" }} />
     }
 
     const meanScore = getMeanScore(prompt.last_eval)

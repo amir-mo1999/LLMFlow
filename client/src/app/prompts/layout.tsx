@@ -99,13 +99,14 @@ export default function Layout({
     const promptToUpdateIndx = prompts.findIndex((prompt) => prompt._id === promptID)
     newPrompts[promptToUpdateIndx].messages = messages
     newPrompts[promptToUpdateIndx].last_eval = undefined
+    newPrompts[promptToUpdateIndx].revision_required = false
     setPrompts([...newPrompts])
     router.push("/prompts")
   }
 
   useEffect(() => {
     for (let i = 0; i < prompts.length; i++) {
-      if (!prompts[i].last_eval) {
+      if (!prompts[i].last_eval && !prompts[i].revision_required) {
         evaluate({ pathParams: { promptId: prompts[i]._id as string } })
       }
     }
