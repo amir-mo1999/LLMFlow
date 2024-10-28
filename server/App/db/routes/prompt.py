@@ -183,26 +183,11 @@ async def patch_prompt(
     db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
-    prompt = await get_prompt(prompt_id=prompt_id, db=db, username=username)
-    ai_function = await db.get_ai_function_by_id(
-        prompt.ai_function_id, username=username
-    )
-
-    # validate prompt with new messages
-    prompt = dict(prompt)
-    prompt["messages"] = messages
+    # patch prompt
     try:
-        prompt = Prompt.model_validate(
-            prompt,
-            context=[var.name for var in ai_function.input_variables],
-        )
+        prompt = await db.update_prompt_messages(prompt_id, username, messages)
     except ValueError as e:
         raise HTTPException(422, detail=str(e))
-
-    # update prompt
-    await db.update_prompt_messages(prompt_id, messages)
-
-    prompt = await db.get_prompt_by_id(prompt_id, username)
 
     if prompt:
         return prompt

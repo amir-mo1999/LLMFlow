@@ -80,9 +80,28 @@ class DB:
     async def update_prompt_messages(
         self,
         prompt_id: str,
+        username: str,
         messages: List[PromptMessage],
     ) -> Prompt | None:
+        prompt = await self.get_prompt_by_id(prompt_id=prompt_id, username=username)
+        if prompt is None:
+            return None
+
+        ai_function = await self.get_ai_function_by_id(
+            ai_function_id=prompt.ai_function_id, username=username
+        )
+
+        # validate prompt with new messages
+        prompt = dict(prompt)
+        prompt["messages"] = messages
+        prompt = Prompt.model_validate(
+            prompt,
+            context=[var.name for var in ai_function.input_variables],
+        )
+
+        # update prompt
         messages = [message.model_dump(by_alias=True) for message in messages]
+
         await self.prompts.update_one(
             {"_id": prompt_id},
             {
@@ -93,6 +112,10 @@ class DB:
                 }
             },
         )
+
+        # return prompt
+        prompt = await self.get_prompt_by_id(prompt_id=prompt_id, username=username)
+        return prompt
 
     async def increment_prompt_count(
         self, ai_function_id: str, increment_value: int = 1
