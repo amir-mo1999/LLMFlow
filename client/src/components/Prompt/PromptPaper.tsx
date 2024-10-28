@@ -72,7 +72,12 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
       </Box>
       <Stack direction="row" mb={2} spacing={2}>
         <UserChip username={prompt.username} />
-        <TextChip label="revision required" color="warning" variant="filled" />
+        <TextChip
+          sx={{ display: prompt.revision_required ? "normal" : "none" }}
+          label="revision required"
+          color="warning"
+          variant="filled"
+        />
       </Stack>
 
       {renderFigures()}
