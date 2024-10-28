@@ -28,9 +28,13 @@ const StringDialog: React.FC<StringDialogProps> = ({
   displayOnly = false,
 }) => {
   const [settings, setSettings] = useState<StringSchema>({})
-  const [minLength, setMinLength] = useState<number>()
-  const [maxLength, setMaxLength] = useState<number>()
-  const [pattern, setPattern] = useState<string>()
+  const [minLength, setMinLength] = useState<number | undefined>(
+    stringSettings.minLength || undefined
+  )
+  const [maxLength, setMaxLength] = useState<number | undefined>(
+    stringSettings.maxLength || undefined
+  )
+  const [pattern, setPattern] = useState<string | undefined>(stringSettings.pattern || undefined)
   const [patternError, setPatternError] = useState(false)
   const [showPatternError, setShowPatternError] = useState(false)
 
@@ -40,7 +44,6 @@ const StringDialog: React.FC<StringDialogProps> = ({
     if (minLength !== undefined) newSettings.minLength = minLength
     if (maxLength !== undefined) newSettings.maxLength = maxLength
     if (pattern !== undefined && pattern !== "") newSettings.pattern = pattern
-    console.log("setting settings")
     setSettings(newSettings)
   }, [minLength, maxLength, pattern])
 
@@ -88,7 +91,6 @@ const StringDialog: React.FC<StringDialogProps> = ({
             if (patternError) {
               setShowPatternError(true)
             } else {
-              console.log(settings)
               onSubmit(settings)
             }
           }}

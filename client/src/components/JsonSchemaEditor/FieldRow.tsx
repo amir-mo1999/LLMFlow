@@ -73,7 +73,6 @@ const FieldRow: React.FC<FieldRowProps> = ({
   const updateSchema = (updates: Partial<JsonSchemaInput>) => {
     const newSchema = { ...schema, ...updates }
     setSchema(newSchema)
-    console.log(newSchema)
   }
 
   useEffect(() => {
@@ -115,7 +114,6 @@ const FieldRow: React.FC<FieldRowProps> = ({
   }
 
   const onSubmitSettings = (settings: StringSchema | NumberSchema | ArraySchema | ObjectSchema) => {
-    console.log(settings)
     setOpenDialog(false)
     setSettings(settings)
   }

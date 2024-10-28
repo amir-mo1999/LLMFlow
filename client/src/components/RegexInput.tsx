@@ -48,7 +48,6 @@ const RegexInput: React.FC<RegexInputProps> = ({
       setError(false)
     } catch (e) {
       setIsValid(false)
-      console.log("invalid regex")
       setError(true)
     }
   }
