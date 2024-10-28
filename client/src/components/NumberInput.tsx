@@ -14,6 +14,7 @@ interface NumberInputProps {
   size?: "small" | "medium"
   positive?: boolean
   sx?: SxProps<Theme>
+  disabled?: boolean
 }
 
 const NumberInput: React.FC<NumberInputProps> = ({
@@ -25,6 +26,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   variant = "outlined",
   size = "medium",
   positive = false,
+  disabled = false,
   sx,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +97,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
         inputMode: "decimal",
         pattern: integer ? "[0-9]*" : "[0-9]*[.,]?[0-9]*",
       }}
+      disabled={disabled}
       sx={sx}
     />
   )

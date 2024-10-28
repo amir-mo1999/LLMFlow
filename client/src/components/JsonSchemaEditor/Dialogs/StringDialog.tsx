@@ -3,7 +3,6 @@
 import { StringSchema, NumberSchema, ArraySchema, ObjectSchema } from "../FieldRow"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
 import DialogContent from "@mui/material/DialogContent"
 import DialogActions from "@mui/material/DialogActions"
 import Box from "@mui/material/Box"
@@ -13,7 +12,6 @@ import Typography from "@mui/material/Typography"
 import { useState, useEffect } from "react"
 import NumberInput from "@/components/NumberInput"
 import RegexInput from "@/components/RegexInput"
-import { max } from "lodash"
 
 interface StringDialogProps {
   stringSettings: StringSchema
@@ -56,11 +54,19 @@ const StringDialog: React.FC<StringDialogProps> = ({
           <Stack direction="column" gap={1}>
             <Box>
               <Typography>Min Length</Typography>
-              <NumberInput number={minLength} setNumber={setMinLength}></NumberInput>
+              <NumberInput
+                number={minLength}
+                setNumber={setMinLength}
+                disabled={displayOnly ? true : false}
+              ></NumberInput>
             </Box>
             <Box>
               <Typography>Max Length</Typography>
-              <NumberInput number={maxLength} setNumber={setMaxLength}></NumberInput>
+              <NumberInput
+                number={maxLength}
+                setNumber={setMaxLength}
+                disabled={displayOnly ? true : false}
+              ></NumberInput>
             </Box>
             <Box>
               <Typography>Pattern</Typography>
@@ -69,6 +75,7 @@ const StringDialog: React.FC<StringDialogProps> = ({
                 setPattern={setPattern}
                 setError={setPatternError}
                 showError={showPatternError}
+                disabled={displayOnly ? true : false}
               ></RegexInput>
             </Box>
           </Stack>

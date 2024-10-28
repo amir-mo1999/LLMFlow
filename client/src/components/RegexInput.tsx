@@ -10,6 +10,7 @@ interface RegexInputProps {
   showError?: boolean
   variant?: TextFieldProps["variant"]
   size?: TextFieldProps["size"]
+  disabled?: boolean
   sx?: TextFieldProps["sx"]
 }
 
@@ -20,6 +21,7 @@ const RegexInput: React.FC<RegexInputProps> = ({
   showError = false,
   variant = "outlined",
   size = "medium",
+  disabled = false,
   sx,
 }) => {
   const [inputValue, setInputValue] = useState<string>(pattern || "")
@@ -61,6 +63,7 @@ const RegexInput: React.FC<RegexInputProps> = ({
       onChange={handleChange}
       error={!isValid && showError}
       helperText={!isValid && showError ? "Invalid regex pattern" : ""}
+      disabled={disabled}
       fullWidth
     />
   )
