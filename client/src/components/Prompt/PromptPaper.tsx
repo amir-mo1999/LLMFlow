@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
 import { SxProps } from "@mui/material"
 import { Prompt } from "@/api/apiSchemas"
-import CircularProgress from "@mui/material/CircularProgress"
+import LinearProgress from "@mui/material/LinearProgress"
 import { UserChip, NumberChip, DateChip } from "../Chips"
 import { getMeanLatency, getMeanScore, getTotalCost } from "@/utils"
 import Box from "@mui/material/Box"
@@ -28,13 +28,7 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
 
   const renderFigures = () => {
     if (!prompt.last_eval) {
-      return (
-        <NumberChip
-          number={numberOfMessages}
-          label={numberOfMessages === 1 ? "Message" : "Messages"}
-          sx={{ mr: 1 }}
-        />
-      )
+      return <LinearProgress />
     }
 
     const meanScore = getMeanScore(prompt.last_eval)
