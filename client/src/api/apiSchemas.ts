@@ -273,8 +273,11 @@ export type Project = {
    * @example This is a project
    */
   description: string
+  /**
+   * @example {}
+   */
   ai_function_mapping: {
-    [key: string]: ProjectAIFunction
+    [key: string]: string
   }
   _id?: string | null
   /**
@@ -285,32 +288,6 @@ export type Project = {
    * @format date-time
    */
   creation_time: string
-}
-
-export type ProjectAIFunction = {
-  prompt_id: string
-  /**
-   * @default 0
-   */
-  n_called?: number
-  /**
-   * @default 0
-   */
-  n_valid_results?: number
-  /**
-   * @default 0
-   */
-  n_invalid_results?: number
-  /**
-   * @default 0
-   */
-  total_cost?: number
-  strict_assertions: Assertion[]
-}
-
-export type ProjectAIFunctionRouteInput = {
-  prompt_id: string
-  strict_assertions: Assertion[]
 }
 
 export type ProjectRouteInput = {
@@ -326,8 +303,11 @@ export type ProjectRouteInput = {
    * @example This is a project
    */
   description: string
+  /**
+   * @example {}
+   */
   ai_function_mapping: {
-    [key: string]: ProjectAIFunctionRouteInput
+    [key: string]: string
   }
 }
 

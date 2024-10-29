@@ -785,6 +785,107 @@ export const usePostProject = (
   })
 }
 
+export type GetProjectPathParams = {
+  projectId: string
+}
+
+export type GetProjectError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 404
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type GetProjectVariables = {
+  pathParams: GetProjectPathParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchGetProject = (variables: GetProjectVariables, signal?: AbortSignal) =>
+  apiFetch<Schemas.Project, GetProjectError, undefined, {}, {}, GetProjectPathParams>({
+    url: "/project/{projectId}",
+    method: "get",
+    ...variables,
+    signal,
+  })
+
+export const useGetProject = <TData = Schemas.Project>(
+  variables: GetProjectVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.Project, GetProjectError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
+  return reactQuery.useQuery<Schemas.Project, GetProjectError, TData>({
+    queryKey: queryKeyFn({
+      path: "/project/{projectId}",
+      operationId: "getProject",
+      variables,
+    }),
+    queryFn: ({ signal }) => fetchGetProject({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  })
+}
+
+export type DeleteProjectPathParams = {
+  projectId: string
+}
+
+export type DeleteProjectError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 404
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type DeleteProjectVariables = {
+  pathParams: DeleteProjectPathParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchDeleteProject = (variables: DeleteProjectVariables, signal?: AbortSignal) =>
+  apiFetch<Schemas.SuccessResponse, DeleteProjectError, undefined, {}, {}, DeleteProjectPathParams>(
+    { url: "/project/{projectId}", method: "delete", ...variables, signal }
+  )
+
+export const useDeleteProject = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.SuccessResponse,
+      DeleteProjectError,
+      DeleteProjectVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<
+    Schemas.SuccessResponse,
+    DeleteProjectError,
+    DeleteProjectVariables
+  >({
+    mutationFn: (variables: DeleteProjectVariables) =>
+      fetchDeleteProject({ ...fetcherOptions, ...variables }),
+    ...options,
+  })
+}
+
 export type QueryOperation =
   | {
       path: "/auth/refresh-token"
@@ -820,4 +921,9 @@ export type QueryOperation =
       path: "/prompts"
       operationId: "getAllPrompts"
       variables: GetAllPromptsVariables
+    }
+  | {
+      path: "/project/{projectId}"
+      operationId: "getProject"
+      variables: GetProjectVariables
     }

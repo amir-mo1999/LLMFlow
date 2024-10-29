@@ -1057,6 +1057,142 @@
                     }
                 ]
             }
+        },
+        "/project/{project_id}": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get Project",
+                "operationId": "get_project",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Project Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Delete Project",
+                "operationId": "delete_project",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Project Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -2380,10 +2516,11 @@
                     },
                     "ai_function_mapping": {
                         "additionalProperties": {
-                            "$ref": "#/components/schemas/ProjectAIFunction"
+                            "type": "string"
                         },
                         "type": "object",
-                        "title": "Ai Function Mapping"
+                        "title": "Ai Function Mapping",
+                        "example": {}
                     },
                     "_id": {
                         "anyOf": [
@@ -2417,68 +2554,6 @@
                 ],
                 "title": "Project"
             },
-            "ProjectAIFunction": {
-                "properties": {
-                    "prompt_id": {
-                        "type": "string",
-                        "title": "Prompt Id"
-                    },
-                    "n_called": {
-                        "type": "integer",
-                        "title": "N Called",
-                        "default": 0
-                    },
-                    "n_valid_results": {
-                        "type": "integer",
-                        "title": "N Valid Results",
-                        "default": 0
-                    },
-                    "n_invalid_results": {
-                        "type": "integer",
-                        "title": "N Invalid Results",
-                        "default": 0
-                    },
-                    "total_cost": {
-                        "type": "integer",
-                        "title": "Total Cost",
-                        "default": 0
-                    },
-                    "strict_assertions": {
-                        "items": {
-                            "$ref": "#/components/schemas/Assertion"
-                        },
-                        "type": "array",
-                        "title": "Strict Assertions"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "prompt_id",
-                    "strict_assertions"
-                ],
-                "title": "ProjectAIFunction"
-            },
-            "ProjectAIFunctionRouteInput": {
-                "properties": {
-                    "prompt_id": {
-                        "type": "string",
-                        "title": "Prompt Id"
-                    },
-                    "strict_assertions": {
-                        "items": {
-                            "$ref": "#/components/schemas/Assertion"
-                        },
-                        "type": "array",
-                        "title": "Strict Assertions"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "prompt_id",
-                    "strict_assertions"
-                ],
-                "title": "ProjectAIFunctionRouteInput"
-            },
             "ProjectRouteInput": {
                 "properties": {
                     "name": {
@@ -2497,10 +2572,11 @@
                     },
                     "ai_function_mapping": {
                         "additionalProperties": {
-                            "$ref": "#/components/schemas/ProjectAIFunctionRouteInput"
+                            "type": "string"
                         },
                         "type": "object",
-                        "title": "Ai Function Mapping"
+                        "title": "Ai Function Mapping",
+                        "example": {}
                     }
                 },
                 "type": "object",
