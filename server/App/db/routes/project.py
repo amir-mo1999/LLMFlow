@@ -4,12 +4,8 @@ from typing import Annotated, Dict
 from fastapi import APIRouter, Depends
 
 from App.dependencies import DB, get_db, username
-from App.http_exceptions import DuplicateDocument
-from App.models import (
-    Project,
-    ProjectAIFunction,
-    ProjectRouteInput,
-)
+from App.http_exceptions import DocumentNotFound, DuplicateDocument
+from App.models import Project, ProjectAIFunction, ProjectRouteInput, SuccessResponse
 
 PROJECT_ROUTER = APIRouter()
 
@@ -34,7 +30,6 @@ async def post_project(
     db: Annotated[DB, Depends(get_db)],
 ):
     now = datetime.now()
-
 
     # construct ai function mapping
     ai_function_mapping: Dict[str, ProjectAIFunction] = {}
@@ -61,3 +56,49 @@ async def post_project(
         return project
 
     raise DuplicateDocument
+
+
+@PROJECT_ROUTER.get(
+    "/project/{project_id}",
+    response_model=Project,
+    response_model_exclude_none=True,
+    response_model_by_alias=True,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def get_project(
+    project_id: str,
+    db: Annotated[DB, Depends(get_db)],
+    username: Annotated[str, Depends(username)],
+):
+    project = await db.get_project_by_id(project_id)
+
+    if project is None:
+        raise DocumentNotFound
+
+    return project
+
+
+@PROJECT_ROUTER.delete(
+    "/project/{project_id}",
+    response_model=SuccessResponse,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def delete_project(
+    project_id: str,
+    db: Annotated[DB, Depends(get_db)],
+    username: Annotated[str, Depends(username)],
+):
+    await get_project(project_id=project_id, db=db, username=username)
+
+    res = await db.delete(project_id, "projects")
+
+    if res:
+        return SuccessResponse
+    else:
+        raise DocumentNotFound

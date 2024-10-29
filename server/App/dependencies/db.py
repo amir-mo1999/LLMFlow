@@ -8,6 +8,7 @@ from App.models import (
     AIFunction,
     AIFunctionPatchInput,
     EvaluateSummary,
+    Project,
     Prompt,
     PromptMessage,
     User,
@@ -30,7 +31,9 @@ class DB:
     def get_collection(self, collection: Collection) -> AsyncIOMotorCollection:
         return self.db.get_collection(collection)
 
-    async def get_all_docs_by_username(self, collection: Collection, username: str) -> List[Any]:
+    async def get_all_docs_by_username(
+        self, collection: Collection, username: str
+    ) -> List[Any]:
         docs = self.get_collection(collection).find({"username": username})
         docs = await docs.to_list(self.length)
         return docs
@@ -158,6 +161,14 @@ class DB:
             return None
 
         return AIFunction(**ai_function)
+
+    async def get_project_by_id(self, project_id: str) -> Project:
+        project = await self.get_by_id("projects", project_id)
+
+        if project is None:
+            return None
+
+        return Project(**project)
 
     async def get_prompt_by_id(self, prompt_id: str) -> Prompt | None:
         prompt = await self.get_by_id("prompts", prompt_id)

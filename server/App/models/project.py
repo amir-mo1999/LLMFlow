@@ -30,7 +30,10 @@ class ProjectRouteInput(RootModel):
     description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = (
         Field(..., example="This is a project")
     )
-    ai_function_mapping: Dict[str, ProjectAIFunctionRouteInput]
+    ai_function_mapping: Dict[str, ProjectAIFunctionRouteInput] = Field(
+        ...,
+        example={"ai_function_id": {"prompt_id": "string", "strict_assertions": []}},
+    )
 
 
 class Project(ProjectRouteInput):
