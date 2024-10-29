@@ -30,9 +30,7 @@ async def post_prompt(
     db: Annotated[DB, Depends(get_db)],
 ):
     # get ai function for prompt
-    ai_function = await db.get_ai_function_by_id(
-        prompt.ai_function_id, username=username
-    )
+    ai_function = await db.get_ai_function_by_id(prompt.ai_function_id)
 
     # check if ai function exists
     if ai_function is None:
@@ -111,7 +109,7 @@ async def get_prompts(
     username: Annotated[str, Depends(username)],
 ):
     # check if ai function exists
-    ai_function = await db.get_ai_function_by_id(ai_function_id, username)
+    ai_function = await db.get_ai_function_by_id(ai_function_id)
 
     if ai_function is None:
         raise DocumentNotFound

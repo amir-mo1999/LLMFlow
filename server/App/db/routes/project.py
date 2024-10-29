@@ -35,15 +35,18 @@ async def post_project(
 ):
     now = datetime.now()
 
+
     # construct ai function mapping
     ai_function_mapping: Dict[str, ProjectAIFunction] = {}
     for ai_function_id, proj_ai_function in project_input.ai_function_mapping.items():
+        # check that ai function exists
+        db.get_ai_function_by_id(ai_function_id)
+
         ai_function_mapping[ai_function_id] = ProjectAIFunction(
             prompt_id=proj_ai_function.prompt_id,
             strict_assertions=proj_ai_function.strict_assertions,
         )
 
-    # create the ai function object
     project = Project(
         name=project_input.name,
         description=project_input.description,
@@ -52,7 +55,6 @@ async def post_project(
         username=username,
     )
 
-    # try posting it
     result = await db.insert(project, "projects", ["username", "name"])
 
     if result:

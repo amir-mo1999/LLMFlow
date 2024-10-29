@@ -30,17 +30,13 @@ class DB:
     def get_collection(self, collection: Collection) -> AsyncIOMotorCollection:
         return self.db.get_collection(collection)
 
-    async def get_all(self, collection: Collection, username: str) -> List[Any]:
+    async def get_all_docs_by_username(self, collection: Collection, username: str) -> List[Any]:
         docs = self.get_collection(collection).find({"username": username})
         docs = await docs.to_list(self.length)
         return docs
 
-    async def get_by_id_and_username(
-        self, collection: Collection, object_id: str, username: str
-    ):
-        doc = await self.get_collection(collection).find_one(
-            {"_id": object_id, "username": username}
-        )
+    async def get_by_id(self, collection: Collection, object_id: str):
+        doc = await self.get_collection(collection).find_one({"_id": object_id})
         return doc
 
     async def insert(
@@ -81,11 +77,10 @@ class DB:
     async def update_prompt_messages(
         self,
         prompt: Prompt,
-        username: str,
         messages: List[PromptMessage],
     ) -> Prompt | None:
         ai_function = await self.get_ai_function_by_id(
-            ai_function_id=prompt.ai_function_id, username=username
+            ai_function_id=prompt.ai_function_id
         )
 
         # validate prompt with new messages
@@ -111,7 +106,7 @@ class DB:
         )
 
         # return prompt
-        prompt_new = await self.get_prompt_by_id(prompt_id=prompt.id, username=username)
+        prompt_new = await self.get_prompt_by_id(prompt_id=prompt.id)
         return prompt_new
 
     async def increment_prompt_count(
@@ -136,7 +131,7 @@ class DB:
         return True
 
     async def get_all_ai_functions(self, username: str) -> Dict[str, AIFunction]:
-        ai_functions = await self.get_all("ai-functions", username)
+        ai_functions = await self.get_all_docs_by_username("ai-functions", username)
         ai_function_objects = {}
 
         for ai_function in ai_functions:
@@ -156,19 +151,16 @@ class DB:
     async def get_ai_function_by_id(
         self,
         ai_function_id: str,
-        username: str,
     ) -> AIFunction | None:
-        ai_function = await self.get_by_id_and_username(
-            "ai-functions", ai_function_id, username
-        )
+        ai_function = await self.get_by_id("ai-functions", ai_function_id)
 
         if ai_function is None:
             return None
 
         return AIFunction(**ai_function)
 
-    async def get_prompt_by_id(self, prompt_id: str, username: str) -> Prompt | None:
-        prompt = await self.get_by_id_and_username("prompts", prompt_id, username)
+    async def get_prompt_by_id(self, prompt_id: str) -> Prompt | None:
+        prompt = await self.get_by_id("prompts", prompt_id)
 
         if prompt is None:
             return None

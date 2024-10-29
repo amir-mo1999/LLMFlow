@@ -87,7 +87,7 @@ async def get_ai_function(
     db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
-    ai_function = await db.get_ai_function_by_id(ai_function_id, username)
+    ai_function = await db.get_ai_function_by_id(ai_function_id)
 
     if ai_function is None:
         raise DocumentNotFound
