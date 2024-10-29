@@ -1,15 +1,14 @@
 from datetime import datetime
-from typing import Annotated, List, Dict
+from typing import Annotated, Dict
 
 from fastapi import APIRouter, Depends
 
 from App.dependencies import DB, get_db, username
-from App.http_exceptions import DocumentNotFound, DuplicateDocument
+from App.http_exceptions import DuplicateDocument
 from App.models import (
     Project,
-    ProjectRouteInput,
     ProjectAIFunction,
-    SuccessResponse,
+    ProjectRouteInput,
 )
 
 PROJECT_ROUTER = APIRouter()
