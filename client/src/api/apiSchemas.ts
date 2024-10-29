@@ -130,7 +130,6 @@ export type BaseAssertionTypes =
   | "rouge-n"
   | "starts-with"
 
-
 export type BodyLoginAuthLoginPost = {
   grant_type?: string | null
   username: string
@@ -259,6 +258,77 @@ export type JsonSchemaOutput = {
   maxProperties?: number | null
   minProperties?: number | null
   required?: string[] | null
+}
+
+export type Project = {
+  /**
+   * @maxLength 40
+   * @minLength 1
+   * @example My Project
+   */
+  name: string
+  /**
+   * @maxLength 1000
+   * @minLength 1
+   * @example This is a project
+   */
+  description: string
+  ai_function_mapping: {
+    [key: string]: ProjectAIFunction
+  }
+  _id?: string | null
+  /**
+   * @format email
+   */
+  username: string
+  /**
+   * @format date-time
+   */
+  creation_time: string
+}
+
+export type ProjectAIFunction = {
+  prompt_id: string
+  /**
+   * @default 0
+   */
+  n_called?: number
+  /**
+   * @default 0
+   */
+  n_valid_results?: number
+  /**
+   * @default 0
+   */
+  n_invalid_results?: number
+  /**
+   * @default 0
+   */
+  total_cost?: number
+  strict_assertions: Assertion[]
+}
+
+export type ProjectAIFunctionRouteInput = {
+  prompt_id: string
+  strict_assertions: Assertion[]
+}
+
+export type ProjectRouteInput = {
+  /**
+   * @maxLength 40
+   * @minLength 1
+   * @example My Project
+   */
+  name: string
+  /**
+   * @maxLength 1000
+   * @minLength 1
+   * @example This is a project
+   */
+  description: string
+  ai_function_mapping: {
+    [key: string]: ProjectAIFunctionRouteInput
+  }
 }
 
 export type Prompt = {

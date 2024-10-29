@@ -144,7 +144,7 @@ export type PostUserVariables = {
 
 export const fetchPostUser = (variables: PostUserVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.SuccessResponse, PostUserError, Schemas.UserRouteInput, {}, {}, {}>({
-    url: "/db/user",
+    url: "/user",
     method: "post",
     ...variables,
     signal,
@@ -188,7 +188,7 @@ export type GetUserVariables = {
 
 export const fetchGetUser = (variables: GetUserVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.User, GetUserError, undefined, {}, {}, GetUserPathParams>({
-    url: "/db/user/{username}",
+    url: "/user/{username}",
     method: "get",
     ...variables,
     signal,
@@ -204,7 +204,7 @@ export const useGetUser = <TData = Schemas.User>(
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
   return reactQuery.useQuery<Schemas.User, GetUserError, TData>({
     queryKey: queryKeyFn({
-      path: "/db/user/{username}",
+      path: "/user/{username}",
       operationId: "getUser",
       variables,
     }),
@@ -225,7 +225,7 @@ export type GetAiFunctionsVariables = ApiContext["fetcherOptions"]
 
 export const fetchGetAiFunctions = (variables: GetAiFunctionsVariables, signal?: AbortSignal) =>
   apiFetch<GetAiFunctionsResponse, GetAiFunctionsError, undefined, {}, {}, {}>({
-    url: "/db/ai-function",
+    url: "/ai-function",
     method: "get",
     ...variables,
     signal,
@@ -241,7 +241,7 @@ export const useGetAiFunctions = <TData = GetAiFunctionsResponse>(
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
   return reactQuery.useQuery<GetAiFunctionsResponse, GetAiFunctionsError, TData>({
     queryKey: queryKeyFn({
-      path: "/db/ai-function",
+      path: "/ai-function",
       operationId: "getAiFunctions",
       variables,
     }),
@@ -272,7 +272,7 @@ export type PostAiFunctionVariables = {
 
 export const fetchPostAiFunction = (variables: PostAiFunctionVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.AIFunction, PostAiFunctionError, Schemas.AIFunctionRouteInput, {}, {}, {}>({
-    url: "/db/ai-function",
+    url: "/ai-function",
     method: "post",
     ...variables,
     signal,
@@ -317,7 +317,7 @@ export type GetAiFunctionVariables = {
 
 export const fetchGetAiFunction = (variables: GetAiFunctionVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.AIFunction, GetAiFunctionError, undefined, {}, {}, GetAiFunctionPathParams>({
-    url: "/db/ai-function/{aiFunctionId}",
+    url: "/ai-function/{aiFunctionId}",
     method: "get",
     ...variables,
     signal,
@@ -333,7 +333,7 @@ export const useGetAiFunction = <TData = Schemas.AIFunction>(
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
   return reactQuery.useQuery<Schemas.AIFunction, GetAiFunctionError, TData>({
     queryKey: queryKeyFn({
-      path: "/db/ai-function/{aiFunctionId}",
+      path: "/ai-function/{aiFunctionId}",
       operationId: "getAiFunction",
       variables,
     }),
@@ -375,7 +375,7 @@ export const fetchDeleteAiFunction = (variables: DeleteAiFunctionVariables, sign
     {},
     DeleteAiFunctionPathParams
   >({
-    url: "/db/ai-function/{aiFunctionId}",
+    url: "/ai-function/{aiFunctionId}",
     method: "delete",
     ...variables,
     signal,
@@ -436,7 +436,7 @@ export const fetchPatchAiFunction = (variables: PatchAiFunctionVariables, signal
     {},
     PatchAiFunctionPathParams
   >({
-    url: "/db/ai-function/{aiFunctionId}",
+    url: "/ai-function/{aiFunctionId}",
     method: "patch",
     ...variables,
     signal,
@@ -483,7 +483,7 @@ export type PostPromptVariables = {
 
 export const fetchPostPrompt = (variables: PostPromptVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.Prompt, PostPromptError, Schemas.PromptRouteInput, {}, {}, {}>({
-    url: "/db/prompt",
+    url: "/prompt",
     method: "post",
     ...variables,
     signal,
@@ -528,7 +528,7 @@ export type GetPromptVariables = {
 
 export const fetchGetPrompt = (variables: GetPromptVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.Prompt, GetPromptError, undefined, {}, {}, GetPromptPathParams>({
-    url: "/db/prompt/{promptId}",
+    url: "/prompt/{promptId}",
     method: "get",
     ...variables,
     signal,
@@ -544,7 +544,7 @@ export const useGetPrompt = <TData = Schemas.Prompt>(
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
   return reactQuery.useQuery<Schemas.Prompt, GetPromptError, TData>({
     queryKey: queryKeyFn({
-      path: "/db/prompt/{promptId}",
+      path: "/prompt/{promptId}",
       operationId: "getPrompt",
       variables,
     }),
@@ -579,7 +579,7 @@ export type DeletePromptVariables = {
 
 export const fetchDeletePrompt = (variables: DeletePromptVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.SuccessResponse, DeletePromptError, undefined, {}, {}, DeletePromptPathParams>({
-    url: "/db/prompt/{promptId}",
+    url: "/prompt/{promptId}",
     method: "delete",
     ...variables,
     signal,
@@ -631,7 +631,7 @@ export type PatchPromptVariables = {
 
 export const fetchPatchPrompt = (variables: PatchPromptVariables, signal?: AbortSignal) =>
   apiFetch<Schemas.Prompt, PatchPromptError, PatchPromptRequestBody, {}, {}, PatchPromptPathParams>(
-    { url: "/db/prompt/{promptId}", method: "patch", ...variables, signal }
+    { url: "/prompt/{promptId}", method: "patch", ...variables, signal }
   )
 
 export const usePatchPrompt = (
@@ -675,7 +675,7 @@ export type GetPromptsVariables = {
 
 export const fetchGetPrompts = (variables: GetPromptsVariables, signal?: AbortSignal) =>
   apiFetch<GetPromptsResponse, GetPromptsError, undefined, {}, {}, GetPromptsPathParams>({
-    url: "/db/prompts/{aiFunctionId}",
+    url: "/prompts/{aiFunctionId}",
     method: "get",
     ...variables,
     signal,
@@ -691,7 +691,7 @@ export const useGetPrompts = <TData = GetPromptsResponse>(
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
   return reactQuery.useQuery<GetPromptsResponse, GetPromptsError, TData>({
     queryKey: queryKeyFn({
-      path: "/db/prompts/{aiFunctionId}",
+      path: "/prompts/{aiFunctionId}",
       operationId: "getPrompts",
       variables,
     }),
@@ -718,7 +718,7 @@ export type GetAllPromptsVariables = ApiContext["fetcherOptions"]
 
 export const fetchGetAllPrompts = (variables: GetAllPromptsVariables, signal?: AbortSignal) =>
   apiFetch<GetAllPromptsResponse, GetAllPromptsError, undefined, {}, {}, {}>({
-    url: "/db/prompts",
+    url: "/prompts",
     method: "get",
     ...variables,
     signal,
@@ -734,13 +734,54 @@ export const useGetAllPrompts = <TData = GetAllPromptsResponse>(
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
   return reactQuery.useQuery<GetAllPromptsResponse, GetAllPromptsError, TData>({
     queryKey: queryKeyFn({
-      path: "/db/prompts",
+      path: "/prompts",
       operationId: "getAllPrompts",
       variables,
     }),
     queryFn: ({ signal }) => fetchGetAllPrompts({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
+  })
+}
+
+export type PostProjectError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 409
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type PostProjectVariables = {
+  body: Schemas.ProjectRouteInput
+} & ApiContext["fetcherOptions"]
+
+export const fetchPostProject = (variables: PostProjectVariables, signal?: AbortSignal) =>
+  apiFetch<Schemas.Project, PostProjectError, Schemas.ProjectRouteInput, {}, {}, {}>({
+    url: "/project",
+    method: "post",
+    ...variables,
+    signal,
+  })
+
+export const usePostProject = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<Schemas.Project, PostProjectError, PostProjectVariables>,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<Schemas.Project, PostProjectError, PostProjectVariables>({
+    mutationFn: (variables: PostProjectVariables) =>
+      fetchPostProject({ ...fetcherOptions, ...variables }),
+    ...options,
   })
 }
 
@@ -751,32 +792,32 @@ export type QueryOperation =
       variables: RefreshTokenVariables
     }
   | {
-      path: "/db/user/{username}"
+      path: "/user/{username}"
       operationId: "getUser"
       variables: GetUserVariables
     }
   | {
-      path: "/db/ai-function"
+      path: "/ai-function"
       operationId: "getAiFunctions"
       variables: GetAiFunctionsVariables
     }
   | {
-      path: "/db/ai-function/{aiFunctionId}"
+      path: "/ai-function/{aiFunctionId}"
       operationId: "getAiFunction"
       variables: GetAiFunctionVariables
     }
   | {
-      path: "/db/prompt/{promptId}"
+      path: "/prompt/{promptId}"
       operationId: "getPrompt"
       variables: GetPromptVariables
     }
   | {
-      path: "/db/prompts/{aiFunctionId}"
+      path: "/prompts/{aiFunctionId}"
       operationId: "getPrompts"
       variables: GetPromptsVariables
     }
   | {
-      path: "/db/prompts"
+      path: "/prompts"
       operationId: "getAllPrompts"
       variables: GetAllPromptsVariables
     }

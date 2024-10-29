@@ -153,7 +153,7 @@
                 }
             }
         },
-        "/db/user": {
+        "/user": {
             "post": {
                 "tags": [
                     "db"
@@ -205,7 +205,7 @@
                 }
             }
         },
-        "/db/user/{username}": {
+        "/user/{username}": {
             "get": {
                 "tags": [
                     "db"
@@ -260,7 +260,7 @@
                 }
             }
         },
-        "/db/ai-function": {
+        "/ai-function": {
             "get": {
                 "tags": [
                     "db"
@@ -277,7 +277,7 @@
                                         "$ref": "#/components/schemas/AIFunction"
                                     },
                                     "type": "array",
-                                    "title": "Response Get Ai Functions Db Ai Function Get"
+                                    "title": "Response Get Ai Functions Ai Function Get"
                                 }
                             }
                         }
@@ -367,7 +367,7 @@
                 ]
             }
         },
-        "/db/ai-function/{ai_function_id}": {
+        "/ai-function/{ai_function_id}": {
             "get": {
                 "tags": [
                     "db"
@@ -580,7 +580,7 @@
                 }
             }
         },
-        "/db/prompt": {
+        "/prompt": {
             "post": {
                 "tags": [
                     "db"
@@ -648,7 +648,7 @@
                 ]
             }
         },
-        "/db/prompt/{prompt_id}": {
+        "/prompt/{prompt_id}": {
             "get": {
                 "tags": [
                     "db"
@@ -865,7 +865,7 @@
                 }
             }
         },
-        "/db/prompts/{ai_function_id}": {
+        "/prompts/{ai_function_id}": {
             "get": {
                 "tags": [
                     "db"
@@ -898,7 +898,7 @@
                                     "items": {
                                         "$ref": "#/components/schemas/Prompt"
                                     },
-                                    "title": "Response Get Prompts Db Prompts  Ai Function Id  Get"
+                                    "title": "Response Get Prompts Prompts  Ai Function Id  Get"
                                 }
                             }
                         }
@@ -938,7 +938,7 @@
                 }
             }
         },
-        "/db/prompts": {
+        "/prompts": {
             "get": {
                 "tags": [
                     "db"
@@ -955,7 +955,7 @@
                                         "$ref": "#/components/schemas/Prompt"
                                     },
                                     "type": "array",
-                                    "title": "Response Get All Prompts Db Prompts Get"
+                                    "title": "Response Get All Prompts Prompts Get"
                                 }
                             }
                         }
@@ -981,6 +981,74 @@
                             }
                         },
                         "detail": "document not found"
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            }
+        },
+        "/project": {
+            "post": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Post Project",
+                "operationId": "post_project",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProjectRouteInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Not authenticated"
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "document already exists"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -2293,6 +2361,155 @@
                     "type"
                 ],
                 "title": "JsonSchema"
+            },
+            "Project": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Name",
+                        "example": "My Project"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 1000,
+                        "minLength": 1,
+                        "title": "Description",
+                        "example": "This is a project"
+                    },
+                    "ai_function_mapping": {
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/ProjectAIFunction"
+                        },
+                        "type": "object",
+                        "title": "Ai Function Mapping"
+                    },
+                    "_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": " Id"
+                    },
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "description",
+                    "ai_function_mapping",
+                    "username",
+                    "creation_time"
+                ],
+                "title": "Project"
+            },
+            "ProjectAIFunction": {
+                "properties": {
+                    "prompt_id": {
+                        "type": "string",
+                        "title": "Prompt Id"
+                    },
+                    "n_called": {
+                        "type": "integer",
+                        "title": "N Called",
+                        "default": 0
+                    },
+                    "n_valid_results": {
+                        "type": "integer",
+                        "title": "N Valid Results",
+                        "default": 0
+                    },
+                    "n_invalid_results": {
+                        "type": "integer",
+                        "title": "N Invalid Results",
+                        "default": 0
+                    },
+                    "total_cost": {
+                        "type": "integer",
+                        "title": "Total Cost",
+                        "default": 0
+                    },
+                    "strict_assertions": {
+                        "items": {
+                            "$ref": "#/components/schemas/Assertion"
+                        },
+                        "type": "array",
+                        "title": "Strict Assertions"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt_id",
+                    "strict_assertions"
+                ],
+                "title": "ProjectAIFunction"
+            },
+            "ProjectAIFunctionRouteInput": {
+                "properties": {
+                    "prompt_id": {
+                        "type": "string",
+                        "title": "Prompt Id"
+                    },
+                    "strict_assertions": {
+                        "items": {
+                            "$ref": "#/components/schemas/Assertion"
+                        },
+                        "type": "array",
+                        "title": "Strict Assertions"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt_id",
+                    "strict_assertions"
+                ],
+                "title": "ProjectAIFunctionRouteInput"
+            },
+            "ProjectRouteInput": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Name",
+                        "example": "My Project"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 1000,
+                        "minLength": 1,
+                        "title": "Description",
+                        "example": "This is a project"
+                    },
+                    "ai_function_mapping": {
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/ProjectAIFunctionRouteInput"
+                        },
+                        "type": "object",
+                        "title": "Ai Function Mapping"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "description",
+                    "ai_function_mapping"
+                ],
+                "title": "ProjectRouteInput"
             },
             "Prompt": {
                 "properties": {
