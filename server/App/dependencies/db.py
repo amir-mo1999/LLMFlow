@@ -13,7 +13,7 @@ from App.models import (
     User,
 )
 
-Collection = Literal["ai-functions", "prompts", "users"]
+Collection = Literal["ai-functions", "prompts", "users", "projects"]
 Object = Union[AIFunction, Prompt, User]
 
 
@@ -25,6 +25,7 @@ class DB:
         self.prompts = self.get_collection("prompts")
         self.ai_functions = self.get_collection("ai-functions")
         self.users = self.get_collection("users")
+        self.projects = self.get_collection("projects")
 
     def get_collection(self, collection: Collection) -> AsyncIOMotorCollection:
         return self.db.get_collection(collection)
