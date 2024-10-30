@@ -1,0 +1,17 @@
+{
+  "venvPath": "./server/",
+  "venv": ".venv",
+  "typeCheckingMode": "strict",
+  "reportMissingImports": true,
+  "reportUnusedVariable": true,
+  "reportUnboundVariable": true,
+  "reportMissingTypeStubs": false,
+  "useLibraryCodeForTypes": false,
+  "reportUnknownMemberType": false,
+  "reportUnknownVariableType": false,
+  "reportUnknownParameterType": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownLambdaType": false,
+  "reportUnknownFunctionType": false,
+  "pythonVersion": "3.12"
+}

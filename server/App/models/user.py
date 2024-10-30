@@ -15,7 +15,8 @@ class UserRouteInput(RootModel):
 
 
 class User(UserRouteInput):
-    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+
 
 class UserWithAccessToken(RootModel):
     access_token: str

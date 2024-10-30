@@ -23,7 +23,7 @@ class PromptRouteInput(RootModel):
 
 
 class Prompt(PromptRouteInput):
-    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     username: EmailStr
     creation_time: datetime
     last_eval: EvaluateSummary | None = None

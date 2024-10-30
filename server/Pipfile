@@ -22,6 +22,7 @@ aiohttp = "*"
 ipykernel = "*"
 fastapi-camelcase = "*"
 pydantic-partial = "*"
+pyright = "*"
 
 [dev-packages]
 

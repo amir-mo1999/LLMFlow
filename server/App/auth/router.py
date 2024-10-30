@@ -13,7 +13,7 @@ from .utils import create_jwt_token, timedelta, verify_password
 AUTH_ROUTER = APIRouter(prefix="/auth")
 
 # some global variables
-ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
+ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or "60"))
 
 
 @AUTH_ROUTER.post(

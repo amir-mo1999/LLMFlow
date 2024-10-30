@@ -1,7 +1,7 @@
 import os
 import uuid
 from datetime import datetime, timedelta
-from typing import Union
+from typing import Union, Dict, Any
 
 import pytz
 from jose import jwt
@@ -47,7 +47,9 @@ def get_password_hash(password: str) -> str:
     return PWD_CONTEXT.hash(password)
 
 
-def create_jwt_token(data: dict, expires_delta: Union[timedelta, None] = None) -> Token:
+def create_jwt_token(
+    data: Dict[str, Any], expires_delta: Union[timedelta, None] = None
+) -> Token:
     """Creates a jwt access token.
 
     Args:
