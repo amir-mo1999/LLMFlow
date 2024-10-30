@@ -7,6 +7,8 @@ from App.dependencies import DB, get_db, username
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import Project, ProjectRouteInput, SuccessResponse
 
+from .prompt import get_prompt
+
 PROJECT_ROUTER = APIRouter()
 
 
@@ -22,6 +24,7 @@ class DuplicateDocumentExc(Exception):
     responses={
         401: {"detail": "Not authenticated"},
         409: {"detail": "document already exists"},
+        404: {"detail": "document not found"},
     },
 )
 async def post_project(
@@ -30,6 +33,10 @@ async def post_project(
     db: Annotated[DB, Depends(get_db)],
 ):
     now = datetime.now()
+
+    # verify that prompts exist
+    for prompt_id in project_input.prompt_ids:
+        await get_prompt(prompt_id, db, username)
 
     project = Project(
         **project_input.model_dump(by_alias=True),

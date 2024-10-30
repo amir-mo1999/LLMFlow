@@ -86,7 +86,7 @@ async def get_prompt(
     db: Annotated[DB, Depends(get_db)],
     username: Annotated[str, Depends(username)],
 ):
-    prompt = await db.get_prompt_by_id(prompt_id, username)
+    prompt = await db.get_prompt_by_id(prompt_id)
 
     if prompt is None:
         raise DocumentNotFound

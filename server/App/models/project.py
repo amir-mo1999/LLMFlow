@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Annotated, Dict, Optional
+from typing import Annotated, List, Optional
 
 from pydantic import EmailStr, Field, StringConstraints
 
@@ -15,9 +15,9 @@ class ProjectRouteInput(RootModel):
     description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = (
         Field(..., example="This is a project")
     )
-    ai_function_mapping: Dict[str, str] = Field(
+    prompt_ids: List[str] = Field(
         ...,
-        example={},
+        example=[],
     )
 
 
