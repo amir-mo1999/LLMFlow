@@ -13,8 +13,9 @@ const MainContentContainer: React.FC<MainContentContainerProps> = ({ children })
       sx={{
         display: "flex",
         flexDirection: "column",
-        paddingRight: 2,
-        width: "60%",
+        paddingRight: 10,
+        marginRight: 4,
+        width: "70%",
         height: "100%",
         overflow: "auto",
         alignItems: "center",
