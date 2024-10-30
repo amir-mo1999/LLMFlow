@@ -215,6 +215,11 @@ class DB:
             )
             if query:
                 return None
+            else:
+                await self.prompts.update_many(
+                    {"ai_function_id": ai_function.id},
+                    {"$set": {"ai_function_name": ai_function_patch.name}},
+                )
 
         # update fields in ai function without validating
         for key in ai_function_patch.model_dump(exclude_none=True):
