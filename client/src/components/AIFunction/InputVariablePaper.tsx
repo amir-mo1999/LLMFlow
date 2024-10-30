@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper"
 import Divider from "@mui/material/Divider"
 
 interface InputVariablePaperProps {
-  varName: string
+  varName?: string
   content: string
   displayOnly?: boolean
   sx?: SxProps
@@ -20,7 +20,6 @@ const InputVariablePaper: React.FC<InputVariablePaperProps> = ({
   return (
     <Paper
       sx={{
-        ...sx,
         minWidth: "20%",
         padding: 1,
         maxHeight: 210,
@@ -29,15 +28,23 @@ const InputVariablePaper: React.FC<InputVariablePaperProps> = ({
         overflow: "auto",
         overflowX: "hidden",
         maxWidth: "100%",
+        ...sx,
         "&:hover": {
           backgroundColor: displayOnly ? "white" : "",
         },
       }}
     >
-      <Typography fontWeight={700} align="center">
-        {varName}
-      </Typography>
-      <Divider sx={{ mb: 1, mt: 0.5 }} />
+      {varName ? (
+        <>
+          <Typography fontWeight={700} align="center">
+            {varName}
+          </Typography>
+          <Divider sx={{ mb: 1, mt: 0.5 }} />
+        </>
+      ) : (
+        <></>
+      )}
+
       <Typography>{content}</Typography>
     </Paper>
   )
