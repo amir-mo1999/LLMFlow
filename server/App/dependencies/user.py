@@ -18,5 +18,5 @@ async def username(
 async def user(
     username: Annotated[str, Depends(username)],
     db: Annotated[DB, Depends(get_db)],
-) -> User:
+) -> User | None:
     return await db.get_user(username)

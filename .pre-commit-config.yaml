@@ -13,9 +13,7 @@ repos:
       - id: check-yaml
       - id: check-json
       - id: detect-private-key
-
-repos:
   - repo: https://github.com/RobertCraigie/pyright-python
     rev: v1.1.386
     hooks:
-    - id: pyright
+      - id: pyright

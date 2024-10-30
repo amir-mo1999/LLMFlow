@@ -42,4 +42,4 @@ class JsonSchema(RootModel):
     required: Optional[List[str]] = None
 
 
-JsonSchema.update_forward_refs()
+JsonSchema.model_rebuild()

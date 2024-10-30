@@ -1,5 +1,5 @@
 import uuid
-from typing import Annotated, Literal, Optional
+from typing import Annotated, Literal
 
 from pydantic import EmailStr, Field, StringConstraints
 

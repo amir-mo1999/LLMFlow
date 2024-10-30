@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from pydantic import EmailStr, Field, ValidationInfo, field_validator
 
-from .promptfoo_models import EvaluateSummary, PromptMessage
+from .promptfoo_models import EvaluateSummary, PromptMessage, RoleEnum
 from .root_model import RootModel
 
 
@@ -12,11 +12,13 @@ from .root_model import RootModel
 class PromptRouteInput(RootModel):
     messages: List[PromptMessage] = Field(
         ...,
-        example=[
-            PromptMessage(
-                role="user",
-                content="Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
-            )
+        examples=[
+            [
+                PromptMessage(
+                    role=RoleEnum.user,
+                    content="Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
+                )
+            ]
         ],
     )
     ai_function_id: str

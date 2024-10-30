@@ -1,7 +1,7 @@
 import os
 import uuid
 from datetime import datetime, timedelta
-from typing import Union, Dict, Any
+from typing import Any, Dict, Union
 
 import pytz
 from jose import jwt
@@ -13,7 +13,7 @@ from ..models import Token
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # set secret key
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY") or ""
 
 # define jwt algorithm
 ALGORITHM = "HS256"

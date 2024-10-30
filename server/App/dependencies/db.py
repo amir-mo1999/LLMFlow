@@ -1,8 +1,12 @@
 import os
-from typing import Any, Dict, List, Literal, Union
+from typing import Any, AsyncGenerator, Dict, List, Literal, Union
 
 from fastapi import Depends
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
+from motor.motor_asyncio import (
+    AsyncIOMotorClient,
+    AsyncIOMotorCollection,
+    AsyncIOMotorCursor,
+)
 
 from App.models import (
     AIFunction,
@@ -15,31 +19,51 @@ from App.models import (
 )
 
 Collection = Literal["ai-functions", "prompts", "users", "projects"]
-Object = Union[AIFunction, Prompt, User]
+Object = Union[AIFunction, Prompt, User, Project]
+Document = Dict[str, Any]
+
+
+async def cursor_to_list(cursor: AsyncIOMotorCursor[Document]) -> List[Document]:
+    docs: List[Document] = []
+    async for doc in cursor:
+        docs.append(doc)
+    return docs
 
 
 class DB:
-    def __init__(self, client: AsyncIOMotorClient):
+    def __init__(self, client: AsyncIOMotorClient[Document]):
         self.db = client["prompt-broker"]
         self.length = 100000000
 
-        self.prompts = self.get_collection("prompts")
-        self.ai_functions = self.get_collection("ai-functions")
-        self.users = self.get_collection("users")
-        self.projects = self.get_collection("projects")
+        self.prompts: AsyncIOMotorCollection[Document] = self.db.get_collection(
+            "prompts"
+        )
+        self.ai_functions: AsyncIOMotorCollection[Document] = self.db.get_collection(
+            "ai-functions"
+        )
+        self.users: AsyncIOMotorCollection[Document] = self.db.get_collection("users")
+        self.projects: AsyncIOMotorCollection[Document] = self.db.get_collection(
+            "projects"
+        )
 
-    def get_collection(self, collection: Collection) -> AsyncIOMotorCollection:
-        return self.db.get_collection(collection)
+        self.collection_mapping: Dict[Collection, AsyncIOMotorCollection[Document]] = {
+            "prompts": self.prompts,
+            "ai-functions": self.ai_functions,
+            "users": self.users,
+            "projects": self.projects,
+        }
 
     async def get_all_docs_by_username(
         self, collection: Collection, username: str
-    ) -> List[Any]:
-        docs = self.get_collection(collection).find({"username": username})
-        docs = await docs.to_list(self.length)
+    ) -> List[Document]:
+        docs_cursor: AsyncIOMotorCursor[Document] = self.collection_mapping[
+            collection
+        ].find({"username": username})
+        docs: List[Document] = await cursor_to_list(docs_cursor)
         return docs
 
     async def get_by_id(self, collection: Collection, object_id: str):
-        doc = await self.get_collection(collection).find_one({"_id": object_id})
+        doc = await self.collection_mapping[collection].find_one({"_id": object_id})
         return doc
 
     async def insert(
@@ -49,7 +73,7 @@ class DB:
         compare_fields: List[str] = [],
         additional_data: Dict[Any, Any] = {},
     ) -> bool:
-        coll = self.get_collection(collection)
+        coll = self.collection_mapping[collection]
 
         # always exclude the id field
         if "_id" in compare_fields:
@@ -58,7 +82,7 @@ class DB:
             compare_fields.remove("id")
 
         # get values of to be inserted items
-        query = {}
+        query: Dict[str, Any] = {}
         doc_dump = document.model_dump()
         doc_dump_by_alias = document.model_dump(by_alias=True)
         for field in compare_fields:
@@ -86,6 +110,9 @@ class DB:
             ai_function_id=prompt.ai_function_id
         )
 
+        if ai_function is None:
+            return None
+
         # validate prompt with new messages
         prompt_new = dict(prompt)
         prompt_new["messages"] = messages
@@ -95,13 +122,13 @@ class DB:
         )
 
         # update prompt
-        messages = [message.model_dump(by_alias=True) for message in messages]
+        new_messages = [message.model_dump(by_alias=True) for message in messages]
 
         await self.prompts.update_one(
             {"_id": prompt.id},
             {
                 "$set": {
-                    "messages": messages,
+                    "messages": new_messages,
                     "last_eval": None,
                     "revision_required": False,
                 }
@@ -119,23 +146,23 @@ class DB:
             {"_id": ai_function_id}, {"$inc": {"number_of_prompts": increment_value}}
         )
 
-    async def delete(self, document_id, collection: Collection) -> bool:
+    async def delete(self, document_id: str, collection: Collection) -> bool:
         # get collection
-        collection = self.get_collection(collection)
+        coll = self.collection_mapping[collection]
 
         # delete document
-        await collection.delete_one({"_id": document_id})
+        await coll.delete_one({"_id": document_id})
 
         # if the document was an ai function, also delete all prompts for that ai function
-        if collection.name == "ai-functions":
-            collection = self.get_collection("prompts")
-            await collection.delete_many({"ai_function_id": document_id})
+        if coll.name == "ai-functions":
+            coll = self.collection_mapping["prompts"]
+            await coll.delete_many({"ai_function_id": document_id})
 
         return True
 
     async def get_all_ai_functions(self, username: str) -> Dict[str, AIFunction]:
         ai_functions = await self.get_all_docs_by_username("ai-functions", username)
-        ai_function_objects = {}
+        ai_function_objects: Dict[str, AIFunction] = {}
 
         for ai_function in ai_functions:
             ai_function = AIFunction(**ai_function)
@@ -162,7 +189,7 @@ class DB:
 
         return AIFunction(**ai_function)
 
-    async def get_project_by_id(self, project_id: str) -> Project:
+    async def get_project_by_id(self, project_id: str) -> Project | None:
         project = await self.get_by_id("projects", project_id)
 
         if project is None:
@@ -221,8 +248,6 @@ class DB:
         return ai_function
 
     async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: str):
-        prompt_coll = self.get_collection("prompts")
-
         await self.prompts.update_one(
             {"_id": prompt_id},
             {"$set": {"last_eval": eval_summary.model_dump(by_alias=True)}},
@@ -233,9 +258,9 @@ class DB:
 
         prompts_cursor = prompt_coll.find({"ai_function_id": ai_function_id})
 
-        prompt_dumps = await prompts_cursor.to_list(self.length)
+        prompt_dumps: List[Document] = await cursor_to_list(prompts_cursor)
 
-        prompts = []
+        prompts: List[Prompt] = []
         for prompt_dump in prompt_dumps:
             prompts.append(Prompt(**prompt_dump))
 
@@ -245,24 +270,24 @@ class DB:
         prompt_coll = self.db.get_collection("prompts")
         prompts_cursor = prompt_coll.find({"username": username})
 
-        prompt_dumps = await prompts_cursor.to_list(self.length)
+        prompt_dumps: List[Document] = await cursor_to_list(prompts_cursor)
 
-        prompts = []
+        prompts: List[Prompt] = []
         for prompt_dump in prompt_dumps:
             prompts.append(Prompt(**prompt_dump))
 
         return prompts
 
 
-async def get_client():
+async def get_client() -> AsyncGenerator[AsyncIOMotorClient[Document], None]:
     uri = os.environ.get("MONGO_CON_STRING")
-    client = AsyncIOMotorClient(uri)
+    client: AsyncIOMotorClient[Document] = AsyncIOMotorClient(uri)
     try:
         yield client
     finally:
         client.close()
 
 
-async def get_db(client: AsyncIOMotorClient = Depends(get_client)):
+async def get_db(client: AsyncIOMotorClient[Document] = Depends(get_client)):
     db = DB(client)
     return db

@@ -185,7 +185,7 @@ async def patch_prompt(
 
     # patch prompt
     try:
-        prompt = await db.update_prompt_messages(prompt, username, messages)
+        prompt = await db.update_prompt_messages(prompt, messages)
     except ValueError as e:
         raise HTTPException(422, detail=str(e))
 

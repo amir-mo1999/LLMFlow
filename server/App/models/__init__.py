@@ -1,4 +1,9 @@
-from .ai_function import AIFunction, AIFunctionPatchInput, AIFunctionRouteInput
+from .ai_function import (
+    AIFunction,
+    AIFunctionPatchInput,
+    AIFunctionRouteInput,
+    Assertion,
+)
 from .json_schema import JsonSchema
 from .project import Project, ProjectRouteInput
 from .prompt import Prompt, PromptMessage, PromptRouteInput
@@ -8,21 +13,22 @@ from .token import DecodedToken, Token
 from .user import User, UserRouteInput, UserWithAccessToken
 
 __all__ = [
-    User,
-    UserRouteInput,
-    SuccessResponse,
-    UserWithAccessToken,
-    Token,
-    DecodedToken,
-    AIFunctionRouteInput,
-    AIFunctionPatchInput,
-    AIFunction,
-    PromptRouteInput,
-    Prompt,
-    EvaluateInput,
-    JsonSchema,
-    EvaluateSummary,
-    PromptMessage,
-    Project,
-    ProjectRouteInput,
+    "User",
+    "UserRouteInput",
+    "SuccessResponse",
+    "UserWithAccessToken",
+    "Token",
+    "DecodedToken",
+    "AIFunctionRouteInput",
+    "AIFunctionPatchInput",
+    "AIFunction",
+    "PromptRouteInput",
+    "Prompt",
+    "EvaluateInput",
+    "JsonSchema",
+    "EvaluateSummary",
+    "PromptMessage",
+    "Project",
+    "ProjectRouteInput",
+    "Assertion"
 ]

@@ -1,18 +1,19 @@
 import os
+from typing import Dict, List, Literal
 
 import aiohttp
 from fastapi import APIRouter
 
-from App.models import AIFunction, EvaluateInput, EvaluateSummary, Prompt
+from App.models import AIFunction, Assertion, EvaluateInput, EvaluateSummary, Prompt
 
 EVAL_ROUTER = APIRouter(prefix="/evaluate", tags=["Evaluate"])
 
-PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
+PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL") or ""
 
 async def eval_prompt(prompt: Prompt, ai_function: AIFunction) -> EvaluateSummary:
     # extract needed data
     prompts = [prompt.messages]
-    defaultTest = {"assert": ai_function.assertions}
+    defaultTest: Dict[Literal["assert"], List[Assertion]] = {"assert": ai_function.assertions}
     tests = ai_function.test_cases
 
     # parse as EvaluateInpiut for validation

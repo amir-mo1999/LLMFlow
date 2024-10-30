@@ -17,45 +17,55 @@ class InputVariable(RootModel):
 
 class AIFunctionRouteInput(RootModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
-        ..., example="Summarize Texts"
+        ..., examples=["Summarize Texts"]
     )
 
     description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = (
-        Field(..., example="Summarizes english texts to a given number_of_sentences.")
+        Field(
+            ..., examples=["Summarizes english texts to a given number_of_sentences."]
+        )
     )
 
     input_variables: List[InputVariable] = Field(
-        ..., example=[{"name": "text"}, {"name": "number_of_sentences"}]
+        ..., examples=[[{"name": "text"}, {"name": "number_of_sentences"}]]
     )
 
-    output_schema: JsonSchema = Field(..., example={"type": "string"})
+    output_schema: JsonSchema = Field(..., examples=[{"type": "string"}])
 
     assertions: List[Assertion] = Field(
         ...,
-        example=[
-            {"type": "icontains", "value": "the", "weight": 1},
-            {"type": "contains", "value": "thgewgewgewgewge", "weight": 1},
+        examples=[
+            [
+                {"type": "icontains", "value": "the", "weight": 1},
+                {"type": "contains", "value": "thgewgewgewgewge", "weight": 1},
+            ]
         ],
         alias="assert",
     )
 
     test_cases: List[TestCase] = Field(
         ...,
-        example=[
-            {
-                "vars": {
-                    "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise.",
-                    "number_of_sentences": "2",
+        examples=[
+            [
+                {
+                    "vars": {
+                        "text": "The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise.",
+                        "number_of_sentences": "2",
+                    },
+                    "assert": [
+                        {"type": "icontains", "value": "serendipity", "weight": 5}
+                    ],
                 },
-                "assert": [{"type": "icontains", "value": "serendipity", "weight": 5}],
-            },
-            {
-                "vars": {
-                    "text": "The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy.",
-                    "number_of_sentences": "2",
+                {
+                    "vars": {
+                        "text": "The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy.",
+                        "number_of_sentences": "2",
+                    },
+                    "assert": [
+                        {"type": "icontains", "value": "minimalism", "weight": 5}
+                    ],
                 },
-                "assert": [{"type": "icontains", "value": "minimalism", "weight": 5}],
-            },
+            ]
         ],
     )
 
@@ -97,7 +107,9 @@ class AIFunctionPatchInput(RootModel):
     name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
         None
     )
-    description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = None
+    description: Optional[
+        Annotated[str, StringConstraints(min_length=1, max_length=1000)]
+    ] = None
     input_variables: Optional[List[InputVariable]] = None
     output_schema: Optional[JsonSchema] = None
     assertions: Optional[List[Assertion]] = None
@@ -108,7 +120,7 @@ class AIFunctionPatchInput(RootModel):
         if self.input_variables is None and self.test_cases is None:
             return self
 
-        if [self.input_variables, self.test_cases].count(None) == 1:
+        if self.input_variables is None or self.test_cases is None:
             raise ValueError(
                 "Only setting input variables or test cases when patching is not allowed. They may only be patched together."
             )

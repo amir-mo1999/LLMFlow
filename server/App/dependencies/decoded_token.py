@@ -11,7 +11,7 @@ from App.models import DecodedToken
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # set secret key
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY") or ""
 
 # define jwt algorithm
 ALGORITHM = "HS256"
@@ -29,13 +29,13 @@ def decode_token(access_token: str) -> DecodedToken:
     decoded_token = DecodedToken(
         access_token=access_token,
         token_type="Bearer",
-        **jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
+        **jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM]),
     )
     return decoded_token
 
 
 async def decoded_token(
-    access_token: Annotated[str, Depends(oauth2_scheme)]
+    access_token: Annotated[str, Depends(oauth2_scheme)],
 ) -> DecodedToken:
     try:
         decoded_token = decode_token(access_token)
