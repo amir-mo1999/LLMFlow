@@ -1,11 +1,6 @@
-import { errorToJSON } from "next/dist/server/render"
 import { ApiContext } from "./apiContext"
-import { getSession } from "next-auth/react"
-import { Session } from "next-auth"
 
-let SESSION: Session | null = null
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || "" // TODO: add your baseUrl
+const baseUrl = "/api/proxy"
 
 export type ErrorWrapper<TError> = TError | { status: "unknown"; payload: string }
 
@@ -51,13 +46,6 @@ export async function apiFetch<
       delete requestHeaders["Content-Type"]
     }
 
-    // add the authorization header by default
-    if (!SESSION) {
-      SESSION = await getSession()
-    }
-
-    requestHeaders["Authorization"] = `Bearer ${SESSION?.user.access_token}`
-
     const response = await window.fetch(`${baseUrl}${resolveUrl(url, queryParams, pathParams)}`, {
       signal,
       method: method.toUpperCase(),
@@ -67,11 +55,7 @@ export async function apiFetch<
     if (!response.ok) {
       let error: ErrorWrapper<TError>
       try {
-        const payload = await response.json()
-        const status = await response.status
-
-        //@ts-ignore
-        error = { status: status, payload: payload }
+        error = await response.json()
       } catch (e) {
         error = {
           status: "unknown" as const,
@@ -81,27 +65,20 @@ export async function apiFetch<
 
       throw error
     }
+
     if (response.headers.get("content-type")?.includes("json")) {
       return await response.json()
     } else {
       // if it is not a json response, assume it is a blob and cast it to TData
-
       return (await response.blob()) as unknown as TData
     }
   } catch (e) {
-    let error: ErrorWrapper<TError>
-    if (typeof e === "object") {
-      //@ts-ignore
-      error = e
-      throw error
-    } else {
-      let errorObject: Error = {
-        name: "unknown" as const,
-        message: e instanceof Error ? `Network error (${e.message})` : "Network error",
-        stack: e as string,
-      }
-      throw errorObject
+    let errorObject: Error = {
+      name: "unknown" as const,
+      message: e instanceof Error ? `Network error (${e.message})` : "Network error",
+      stack: e as string,
     }
+    throw errorObject
   }
 }
 

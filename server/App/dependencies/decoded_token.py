@@ -26,10 +26,9 @@ def decode_token(access_token: str) -> DecodedToken:
     Returns:
         DecodedToken: the decoded jwt token.
     """
+    decoded = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
     decoded_token = DecodedToken(
-        access_token=access_token,
-        token_type="Bearer",
-        **jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM]),
+        **decoded,
     )
     return decoded_token
 

@@ -3,13 +3,14 @@ from typing import Annotated, List
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from App.dependencies import DB, get_db, username
+from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
     Prompt,
     PromptMessage,
     PromptRouteInput,
     SuccessResponse,
+    User,
 )
 
 PROMPT_ROUTER = APIRouter()
@@ -26,7 +27,7 @@ PROMPT_ROUTER = APIRouter()
 )
 async def post_prompt(
     prompt: PromptRouteInput,
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
     db: Annotated[DB, Depends(get_db)],
 ):
     # get ai function for prompt
@@ -48,7 +49,7 @@ async def post_prompt(
             {
                 **dict(prompt),
                 "creation_time": now,
-                "username": username,
+                "username": user.email,
                 "ai_function_name": ai_function.name,
             },
             context=[var.name for var in ai_function.input_variables],
@@ -84,7 +85,7 @@ async def post_prompt(
 async def get_prompt(
     prompt_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
     prompt = await db.get_prompt_by_id(prompt_id)
 
@@ -106,7 +107,7 @@ async def get_prompt(
 async def get_prompts(
     ai_function_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
     # check if ai function exists
     ai_function = await db.get_ai_function_by_id(ai_function_id)
@@ -131,10 +132,10 @@ async def get_prompts(
 )
 async def get_all_prompts(
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
     # get all prompts
-    prompts = await db.get_all_prompts(username)
+    prompts = await db.get_all_prompts(user.email)
 
     return prompts
 
@@ -150,10 +151,10 @@ async def get_all_prompts(
 async def delete_prompt(
     prompt_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
     # try to get prompt
-    prompt = await get_prompt(prompt_id=prompt_id, db=db, username=username)
+    prompt = await get_prompt(prompt_id=prompt_id, db=db, user=user)
 
     res = await db.delete(prompt_id, "prompts")
 
@@ -179,9 +180,9 @@ async def patch_prompt(
     messages: List[PromptMessage],
     prompt_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
-    prompt = await get_prompt(prompt_id, db, username)
+    prompt = await get_prompt(prompt_id, db, user)
 
     # patch prompt
     try:

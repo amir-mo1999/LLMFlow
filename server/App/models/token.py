@@ -1,4 +1,5 @@
 from .root_model import RootModel
+from .user import User
 
 
 class Token(RootModel):
@@ -8,10 +9,9 @@ class Token(RootModel):
     token_type: str
 
 
-class DecodedToken(Token):
+class DecodedToken(RootModel):
     """Decoded token model."""
 
-    exp: int
-    iat: int
-    jti: str
-    sub: str
+    user: User
+    exp: int | float
+    iat: int | float

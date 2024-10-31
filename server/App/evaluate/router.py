@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from App.dependencies import DB, get_db, username
+from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound
 from App.models import EvaluateSummary
 
@@ -22,7 +22,7 @@ PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 async def evaluate(
     prompt_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[str, Depends(user)],
 ):
     # get prompt
     prompt = await db.get_prompt_by_id(prompt_id)

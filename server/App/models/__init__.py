@@ -10,13 +10,13 @@ from .prompt import Prompt, PromptMessage, PromptRouteInput
 from .promptfoo_models import EvaluateInput, EvaluateSummary
 from .success_response import SuccessResponse
 from .token import DecodedToken, Token
-from .user import User, UserRouteInput, UserWithAccessToken
+from .user import User, UserRootInput, UserWithAccessToken
 
 __all__ = [
     "User",
-    "UserRouteInput",
-    "SuccessResponse",
+    "UserRootInput",
     "UserWithAccessToken",
+    "SuccessResponse",
     "Token",
     "DecodedToken",
     "AIFunctionRouteInput",
@@ -30,5 +30,5 @@ __all__ = [
     "PromptMessage",
     "Project",
     "ProjectRouteInput",
-    "Assertion"
+    "Assertion",
 ]

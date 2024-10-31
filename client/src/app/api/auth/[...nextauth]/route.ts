@@ -1,30 +1,47 @@
 import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
 import jwt from "jsonwebtoken"
-import { DecodedToken } from "next-auth"
-import { UserWithAccessToken } from "@/api/apiSchemas"
-import { v4 as uuidv4 } from "uuid"
+import { JWT } from "next-auth/jwt"
+import axios from "axios"
 
-const apiUrl = process.env.NEXT_PUBLIC_BASE_API_URL_CLIENT || ""
+/**
+ * Takes a token, and returns a new token with updated
+ * `accessToken` and `accessTokenExpires`. If an error occurs,
+ * returns the old token and an error property
+ */
 
-async function refreshAccessToken(access_token: string) {
+async function refreshAccessToken(token: JWT) {
   try {
-    const response = await fetch(apiUrl + "/auth/refresh-token", {
+    const url =
+      "https://oauth2.googleapis.com/token?" +
+      new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID as string,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET as string,
+        grant_type: "refresh_token",
+        refresh_token: token.refreshToken as string,
+      })
+    const response = await fetch(url, {
       headers: {
-        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      method: "GET",
+      method: "POST",
     })
 
-    const userWithToken: UserWithAccessToken = await response.json()
+    const refreshedTokens = await response.json()
 
     if (!response.ok) {
-      throw userWithToken
+      throw refreshedTokens
     }
 
-    return userWithToken.access_token
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+    }
   } catch (error) {
     return {
+      ...token,
       error: "RefreshAccessTokenError",
     }
   }
@@ -33,95 +50,47 @@ async function refreshAccessToken(access_token: string) {
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
-    CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
-      credentials: {
-        username: {
-          label: "E-Mail",
-          type: "text",
-          placeholder: "user@example.com",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
-
-        if (credentials === undefined) {
-          return null
-        }
-        if (credentials.username === undefined || credentials.password === undefined) {
-          return null
-        }
-
-        // create formdata with username and password
-        const formData = new FormData()
-        formData.append("username", credentials.username)
-        formData.append("password", credentials.password)
-
-        // send login request
-        try {
-          const response = await fetch(apiUrl + "/auth/login", {
-            method: "POST",
-            body: formData,
-          })
-
-          if (response.ok) {
-            const result = await response.json()
-            return result
-          } else {
-            return null
-          }
-        } catch (error) {
-          return null
-        }
-      },
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      // after login add user data to token
-      if (user) {
+    async jwt({ token, account, user }) {
+      // Initial sign in
+      if (account && user) {
+        token.refreshToken = account.refresh_token
+        token.accessTokenExpires = account.expires_at
         token.user = user
+        token.accessToken = jwt.sign({ user }, process.env.NEXTAUTH_SECRET as string, {
+          algorithm: "HS256",
+          expiresIn: "30d",
+        })
+        try {
+          await axios.post(`${process.env.BACKEND_URL}/user`, {
+            name: user.name,
+            email: user.email,
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
-      return { ...token, ...user }
+
+      // Return previous token if the access token has not expired yet
+      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
+        return token
+      }
+
+      // Access token has expired, try to update it
+      return refreshAccessToken(token)
     },
     async session({ session, token }) {
-      // decode the token coming from the backend
-      const decodedToken: DecodedToken = jwt.verify(
-        token.access_token as string,
-        process.env.NEXTAUTH_SECRET as string
-      ) as DecodedToken
-
-      const exp = decodedToken.exp
-      const now = Math.floor(Date.now() / 1000)
-      const hoursTillExpiration = (exp - now) / 60 / 60
-
-      // if token expires in less than 3 hours refresh it
-      if (hoursTillExpiration <= 3) {
-        // fetch new token and update data
-        const newToken = await refreshAccessToken(token.access_token as string)
-        token.access_token = newToken
-      }
-
-      // create session object and return it
-      session = { ...session, user: token.user, decodedToken: decodedToken }
+      // Do not expose the access token to the client
+      session.user = token.user
       return session
     },
-    // redirect user to base route after login
-    async redirect(params: { url: string; baseUrl: string }) {
-      return (process.env.NEXTAUTH_URL as string) + "/ai-functions"
-    },
   },
+
   session: {
     strategy: "jwt",
     maxAge: 60 * 60 * 24,

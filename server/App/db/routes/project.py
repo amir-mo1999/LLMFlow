@@ -3,9 +3,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from App.dependencies import DB, get_db, username
+from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import Project, ProjectRouteInput, SuccessResponse
+from App.models import Project, ProjectRouteInput, SuccessResponse, User
 
 from .prompt import get_prompt
 
@@ -29,19 +29,19 @@ class DuplicateDocumentExc(Exception):
 )
 async def post_project(
     project_input: ProjectRouteInput,
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
     db: Annotated[DB, Depends(get_db)],
 ):
     now = datetime.now()
 
     # verify that prompts exist
     for prompt_id in project_input.prompt_ids:
-        await get_prompt(prompt_id, db, username)
+        await get_prompt(prompt_id, db, user)
 
     project = Project(
         **project_input.model_dump(by_alias=True),
         creation_time=now,
-        username=username,
+        username=user.email,
     )
 
     result = await db.insert(project, "projects", ["username", "name"])
@@ -65,7 +65,7 @@ async def post_project(
 async def get_project(
     project_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
     project = await db.get_project_by_id(project_id)
 
@@ -86,9 +86,9 @@ async def get_project(
 async def delete_project(
     project_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
-    await get_project(project_id=project_id, db=db, username=username)
+    await get_project(project_id=project_id, db=db, user=user)
 
     res = await db.delete(project_id, "projects")
 

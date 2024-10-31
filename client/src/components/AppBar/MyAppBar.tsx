@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
@@ -8,21 +8,30 @@ import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import UserAvatar from "./UserAvatar"
 import { useSession } from "next-auth/react"
-
 interface AppBarProps {}
+
+function getInitials(fullName: string): string {
+  if (!fullName) return ""
+
+  // Split the name by whitespace characters (handles multiple spaces, tabs, etc.)
+  const nameParts = fullName.trim().split(/\s+/)
+
+  // Extract the first character of each part and convert to uppercase
+  const initials = nameParts.map((part) => part.charAt(0).toUpperCase())
+
+  // Join the initials without any separator
+  return initials.join("")
+}
 
 const MyAppBar: React.FC<AppBarProps> = () => {
   const { data: session } = useSession()
 
   let initials: string
-  if (session?.user === undefined) {
-    initials = "AA"
+  if (session?.user?.name) {
+    initials = getInitials(session.user.name)
   } else {
-    initials = (
-      session?.user.first_name.slice(0, 1) + session?.user.last_name.slice(0, 1)
-    ).toUpperCase()
+    initials = "AA"
   }
-
   return (
     <AppBar position="static">
       <Toolbar sx={{ gap: 15 }}>

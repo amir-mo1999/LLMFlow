@@ -1,13 +1,12 @@
 import os
-import uuid
 from datetime import datetime, timedelta
-from typing import Any, Dict, Union
+from typing import Any, Union
 
 import pytz
 from jose import jwt
 from passlib.context import CryptContext
 
-from ..models import Token
+from ..models import User
 
 # create encryption object to hash passwords
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -47,9 +46,7 @@ def get_password_hash(password: str) -> str:
     return PWD_CONTEXT.hash(password)
 
 
-def create_jwt_token(
-    data: Dict[str, Any], expires_delta: Union[timedelta, None] = None
-) -> Token:
+def create_jwt_token(user: User, expires_delta: Union[timedelta, None] = None) -> str:
     """Creates a jwt access token.
 
     Args:
@@ -60,22 +57,17 @@ def create_jwt_token(
         Token: A dictionary containing the access token and token type
     """
     # copy to be encoded data
-    to_encode = data.copy()
+    to_encode: dict[str, Union[dict[str, Any], float]] = {"user": user.model_dump()}
 
-    # add iat to encoded data (issued at time)
-    to_encode.update({"iat": datetime.now(TZ)})
+    to_encode["iat"] = datetime.now(TZ).timestamp()
 
     # add expiration time to to the encoded data
     if expires_delta:
         expire = datetime.now(TZ) + expires_delta
     else:
         expire = datetime.now(TZ) + timedelta(minutes=60)
-    to_encode.update({"exp": expire})
-
-    # add jti to encoded data
-    to_encode.update({"jti": str(uuid.uuid4())})
+    to_encode["exp"] = expire.timestamp()
 
     # create jwt token and return it in dictionary representation
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    token = Token(access_token=encoded_jwt, token_type="Bearer")
-    return token
+    return encoded_jwt

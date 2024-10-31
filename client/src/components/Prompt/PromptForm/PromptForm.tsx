@@ -101,6 +101,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
           messages: messages,
           ai_function_id: aiFunctions[selectedAIFunctionIndx]._id as string,
         }
+        console.log(newPrompt)
         postPrompt({ body: newPrompt })
       }
     }

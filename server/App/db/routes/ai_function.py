@@ -3,13 +3,14 @@ from typing import Annotated, List
 
 from fastapi import APIRouter, Depends
 
-from App.dependencies import DB, get_db, username
+from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
     AIFunction,
     AIFunctionPatchInput,
     AIFunctionRouteInput,
     SuccessResponse,
+    User,
 )
 
 AI_FUNCTION_ROUTER = APIRouter()
@@ -31,7 +32,7 @@ class DuplicateDocumentExc(Exception):
 )
 async def post_ai_function(
     ai_function_input: AIFunctionRouteInput,
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
     db: Annotated[DB, Depends(get_db)],
 ):
     # get time stamp
@@ -45,7 +46,7 @@ async def post_ai_function(
         **ai_function_input.model_dump(by_alias=True),
         number_of_prompts=number_of_prompts,
         creation_time=now,
-        username=username,
+        username=user.email,
     )
 
     # try posting it
@@ -66,9 +67,9 @@ async def post_ai_function(
 )
 async def get_ai_functions(
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
-    ai_functions = await db.get_all_ai_functions(username=username)
+    ai_functions = await db.get_all_ai_functions(username=user.email)
     return ai_functions.values()
 
 
@@ -85,7 +86,7 @@ async def get_ai_functions(
 async def get_ai_function(
     ai_function_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
     ai_function = await db.get_ai_function_by_id(ai_function_id)
 
@@ -106,10 +107,10 @@ async def get_ai_function(
 async def delete_ai_function(
     ai_function_id: str,
     db: Annotated[DB, Depends(get_db)],
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
 ):
     # try to get ai function
-    await get_ai_function(ai_function_id=ai_function_id, db=db, username=username)
+    await get_ai_function(ai_function_id=ai_function_id, db=db, user=user)
 
     # if no error was raised it means the ai function was found and can now be deleted
     res = await db.delete(ai_function_id, "ai-functions")
@@ -132,11 +133,11 @@ async def delete_ai_function(
 async def patch_ai_function(
     ai_function_patch: AIFunctionPatchInput,
     ai_function_id: str,
-    username: Annotated[str, Depends(username)],
+    user: Annotated[User, Depends(user)],
     db: Annotated[DB, Depends(get_db)],
 ):
     ai_function = await get_ai_function(
-        ai_function_id=ai_function_id, db=db, username=username
+        ai_function_id=ai_function_id, db=db, user=user
     )
 
     ai_function = await db.patch_ai_function(
