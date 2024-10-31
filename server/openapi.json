@@ -2656,6 +2656,10 @@
                         ],
                         "title": "Revision Required",
                         "default": false
+                    },
+                    "index": {
+                        "type": "integer",
+                        "title": "Index"
                     }
                 },
                 "type": "object",
@@ -2664,7 +2668,8 @@
                     "ai_function_id",
                     "username",
                     "creation_time",
-                    "ai_function_name"
+                    "ai_function_name",
+                    "index"
                 ],
                 "title": "Prompt"
             },

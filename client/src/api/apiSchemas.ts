@@ -9,52 +9,52 @@ export type AIFunction = {
    * @minLength 1
    * @example Summarize Texts
    */
-  name: string;
+  name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example Summarizes english texts to a given number_of_sentences.
    */
-  description: string;
+  description: string
   /**
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
-  input_variables: InputVariable[];
+  input_variables: InputVariable[]
   /**
    * @example {"type":"string"}
    */
-  output_schema: JsonSchemaOutput;
+  output_schema: JsonSchemaOutput
   /**
    * @example [{"type":"icontains","value":"the","weight":1},{"type":"contains","value":"thgewgewgewgewge","weight":1}]
    */
-  assert: Assertion[];
+  assert: Assertion[]
   /**
    * @example [{"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}},{"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}]
    */
-  test_cases: TestCaseOutput[];
-  _id?: string;
+  test_cases: TestCaseOutput[]
+  _id?: string
   /**
    * @minimum 0
    */
-  number_of_prompts: number;
+  number_of_prompts: number
   /**
    * @format email
    */
-  username: string;
+  username: string
   /**
    * @format date-time
    */
-  creation_time: string;
-};
+  creation_time: string
+}
 
 export type AIFunctionPatchInput = {
-  name?: string | null;
-  description?: string | null;
-  input_variables?: InputVariable[] | null;
-  output_schema?: JsonSchemaInput | null;
-  assertions?: Assertion[] | null;
-  test_cases?: TestCaseInput[] | null;
-};
+  name?: string | null
+  description?: string | null
+  input_variables?: InputVariable[] | null
+  output_schema?: JsonSchemaInput | null
+  assertions?: Assertion[] | null
+  test_cases?: TestCaseInput[] | null
+}
 
 export type AIFunctionRouteInput = {
   /**
@@ -62,38 +62,38 @@ export type AIFunctionRouteInput = {
    * @minLength 1
    * @example Summarize Texts
    */
-  name: string;
+  name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example Summarizes english texts to a given number_of_sentences.
    */
-  description: string;
+  description: string
   /**
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
-  input_variables: InputVariable[];
+  input_variables: InputVariable[]
   /**
    * @example {"type":"string"}
    */
-  output_schema: JsonSchemaInput;
+  output_schema: JsonSchemaInput
   /**
    * @example [{"type":"icontains","value":"the","weight":1},{"type":"contains","value":"thgewgewgewgewge","weight":1}]
    */
-  assert: Assertion[];
+  assert: Assertion[]
   /**
    * @example [{"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}},{"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}]
    */
-  test_cases: TestCaseInput[];
-};
+  test_cases: TestCaseInput[]
+}
 
 export type Assertion = {
-  type: BaseAssertionTypes;
-  value?: string | string[] | Record<string, any> | null;
-  threshold?: number | null;
-  weight?: number | null;
-  metric?: string | null;
-};
+  type: BaseAssertionTypes
+  value?: string | string[] | Record<string, any> | null
+  threshold?: number | null
+  weight?: number | null
+  metric?: string | null
+}
 
 export type BaseAssertionTypes =
   | "contains"
@@ -118,66 +118,66 @@ export type BaseAssertionTypes =
   | "python"
   | "regex"
   | "rouge-n"
-  | "starts-with";
+  | "starts-with"
 
 export type BodyLoginAuthLoginPost = {
-  grant_type?: string | null;
-  username: string;
-  password: string;
+  grant_type?: string | null
+  username: string
+  password: string
   /**
    * @default
    */
-  scope?: string;
-  client_id?: string | null;
-  client_secret?: string | null;
-};
+  scope?: string
+  client_id?: string | null
+  client_secret?: string | null
+}
 
 export type EvaluateResult = {
-  response?: ProviderResponse | null;
+  response?: ProviderResponse | null
   vars?: {
-    [key: string]: string;
-  } | null;
-  score: number | null;
-  latencyMs: number;
-  gradingResult?: GradingResult | null;
+    [key: string]: string
+  } | null
+  score: number | null
+  latencyMs: number
+  gradingResult?: GradingResult | null
   namedScores: {
-    [key: string]: number;
-  };
-  cost?: number | null;
-  metadata?: Record<string, any> | null;
-};
+    [key: string]: number
+  }
+  cost?: number | null
+  metadata?: Record<string, any> | null
+}
 
 export type EvaluateStats = {
-  successes: number;
-  failures: number;
-  tokenUsage: TokenUsage;
-};
+  successes: number
+  failures: number
+  tokenUsage: TokenUsage
+}
 
 export type EvaluateSummary = {
   /**
    * @format date-time
    */
-  timestamp: string;
-  results: EvaluateResult[];
-  stats: EvaluateStats;
-};
+  timestamp: string
+  results: EvaluateResult[]
+  stats: EvaluateStats
+}
 
 export type GradingResult = {
-  pass: boolean;
-  score: number | null;
-  componentResults?: GradingResult[] | null;
-  assertion?: Assertion | null;
-  comment?: string | null;
-};
+  pass: boolean
+  score: number | null
+  componentResults?: GradingResult[] | null
+  assertion?: Assertion | null
+  comment?: string | null
+}
 
 export type HTTPValidationError = {
-  detail?: ValidationError[];
-};
+  detail?: ValidationError[]
+}
 
 export type HttpExceptionModel = {
-  message: string;
-  status: number;
-};
+  message: string
+  status: number
+}
 
 export type InputVariable = {
   /**
@@ -185,84 +185,70 @@ export type InputVariable = {
    * @minLength 1
    * @pattern ^[^\s]+$
    */
-  name: string;
-};
+  name: string
+}
 
 export type JsonSchemaInput = {
-  type:
-    | "string"
-    | "number"
-    | "integer"
-    | "boolean"
-    | "object"
-    | "array"
-    | "null";
-  title?: string | null;
-  ["enum"]?: string[] | number[] | number[] | null;
-  maxLength?: number | null;
-  minLength?: number | null;
-  pattern?: string | null;
-  multipleOf?: number | null;
-  maximum?: number | null;
-  exclusiveMaximum?: number | null;
-  minimum?: number | null;
-  exclusiveMinimum?: number | null;
-  items?: JsonSchemaInput | null;
-  contains?: JsonSchemaInput | null;
-  maxContains?: number | null;
-  minContains?: number | null;
-  maxItems?: number | null;
-  minItems?: number | null;
-  uniqueItems?: boolean | null;
+  type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
+  title?: string | null
+  ["enum"]?: string[] | number[] | number[] | null
+  maxLength?: number | null
+  minLength?: number | null
+  pattern?: string | null
+  multipleOf?: number | null
+  maximum?: number | null
+  exclusiveMaximum?: number | null
+  minimum?: number | null
+  exclusiveMinimum?: number | null
+  items?: JsonSchemaInput | null
+  contains?: JsonSchemaInput | null
+  maxContains?: number | null
+  minContains?: number | null
+  maxItems?: number | null
+  minItems?: number | null
+  uniqueItems?: boolean | null
   properties?: {
-    [key: string]: JsonSchemaInput;
-  } | null;
+    [key: string]: JsonSchemaInput
+  } | null
   patternProperties?: {
-    [key: string]: JsonSchemaInput;
-  } | null;
-  additionalProperties?: boolean | JsonSchemaInput | null;
-  maxProperties?: number | null;
-  minProperties?: number | null;
-  required?: string[] | null;
-};
+    [key: string]: JsonSchemaInput
+  } | null
+  additionalProperties?: boolean | JsonSchemaInput | null
+  maxProperties?: number | null
+  minProperties?: number | null
+  required?: string[] | null
+}
 
 export type JsonSchemaOutput = {
-  type:
-    | "string"
-    | "number"
-    | "integer"
-    | "boolean"
-    | "object"
-    | "array"
-    | "null";
-  title?: string | null;
-  ["enum"]?: string[] | number[] | number[] | null;
-  maxLength?: number | null;
-  minLength?: number | null;
-  pattern?: string | null;
-  multipleOf?: number | null;
-  maximum?: number | null;
-  exclusiveMaximum?: number | null;
-  minimum?: number | null;
-  exclusiveMinimum?: number | null;
-  items?: JsonSchemaOutput | null;
-  contains?: JsonSchemaOutput | null;
-  maxContains?: number | null;
-  minContains?: number | null;
-  maxItems?: number | null;
-  minItems?: number | null;
-  uniqueItems?: boolean | null;
+  type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
+  title?: string | null
+  ["enum"]?: string[] | number[] | number[] | null
+  maxLength?: number | null
+  minLength?: number | null
+  pattern?: string | null
+  multipleOf?: number | null
+  maximum?: number | null
+  exclusiveMaximum?: number | null
+  minimum?: number | null
+  exclusiveMinimum?: number | null
+  items?: JsonSchemaOutput | null
+  contains?: JsonSchemaOutput | null
+  maxContains?: number | null
+  minContains?: number | null
+  maxItems?: number | null
+  minItems?: number | null
+  uniqueItems?: boolean | null
   properties?: {
-    [key: string]: JsonSchemaOutput;
-  } | null;
+    [key: string]: JsonSchemaOutput
+  } | null
   patternProperties?: {
-    [key: string]: JsonSchemaOutput;
-  } | null;
-  additionalProperties?: boolean | JsonSchemaOutput | null;
-  maxProperties?: number | null;
-  minProperties?: number | null;
-  required?: string[] | null;
-};
+    [key: string]: JsonSchemaOutput
+  } | null
+  additionalProperties?: boolean | JsonSchemaOutput | null
+  maxProperties?: number | null
+  minProperties?: number | null
+  required?: string[] | null
+}
 
 export type Project = {
   /**
@@ -270,27 +256,27 @@ export type Project = {
    * @minLength 1
    * @example My Project
    */
-  name: string;
+  name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example This is a project
    */
-  description: string;
+  description: string
   /**
    * @example []
    */
-  prompt_ids: string[];
-  _id?: string;
+  prompt_ids: string[]
+  _id?: string
   /**
    * @format email
    */
-  username: string;
+  username: string
   /**
    * @format date-time
    */
-  creation_time: string;
-};
+  creation_time: string
+}
 
 export type ProjectRouteInput = {
   /**
@@ -298,136 +284,137 @@ export type ProjectRouteInput = {
    * @minLength 1
    * @example My Project
    */
-  name: string;
+  name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example This is a project
    */
-  description: string;
+  description: string
   /**
    * @example []
    */
-  prompt_ids: string[];
-};
+  prompt_ids: string[]
+}
 
 export type Prompt = {
   /**
    * @example [{"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}]
    */
-  messages: PromptMessage[];
-  ai_function_id: string;
-  _id?: string;
+  messages: PromptMessage[]
+  ai_function_id: string
+  _id?: string
   /**
    * @format email
    */
-  username: string;
+  username: string
   /**
    * @format date-time
    */
-  creation_time: string;
-  last_eval?: EvaluateSummary | null;
-  ai_function_name: string;
+  creation_time: string
+  last_eval?: EvaluateSummary | null
+  ai_function_name: string
   /**
    * @default false
    */
-  revision_required?: boolean | null;
-};
+  revision_required?: boolean | null
+  index: number
+}
 
 export type PromptMessage = {
-  role: RoleEnum;
-  content: string;
-};
+  role: RoleEnum
+  content: string
+}
 
 export type PromptRouteInput = {
   /**
    * @example [{"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}]
    */
-  messages: PromptMessage[];
-  ai_function_id: string;
-};
+  messages: PromptMessage[]
+  ai_function_id: string
+}
 
 export type ProviderResponse = {
-  cached?: number | null;
-  cost?: number | null;
-  error?: string | null;
-  logProbs?: number[] | null;
-  metadata?: Record<string, any> | null;
-  output?: string | void | null;
-  tokenUsage?: TokenUsage | null;
-};
+  cached?: number | null
+  cost?: number | null
+  error?: string | null
+  logProbs?: number[] | null
+  metadata?: Record<string, any> | null
+  output?: string | void | null
+  tokenUsage?: TokenUsage | null
+}
 
-export type RoleEnum = "system" | "user" | "assistant";
+export type RoleEnum = "system" | "user" | "assistant"
 
 export type SuccessResponse = {
   /**
    * @default Success
    */
-  message?: string;
-};
+  message?: string
+}
 
 export type TestCaseInput = {
   vars: {
-    [key: string]: string;
-  };
-  assert: Assertion[] | null;
-};
+    [key: string]: string
+  }
+  assert: Assertion[] | null
+}
 
 export type TestCaseOutput = {
   vars: {
-    [key: string]: string;
-  };
-  assert: Assertion[] | null;
-};
+    [key: string]: string
+  }
+  assert: Assertion[] | null
+}
 
 export type TokenUsage = {
   /**
    * @default 0
    */
-  total?: number | null;
+  total?: number | null
   /**
    * @default 0
    */
-  prompt?: number | null;
+  prompt?: number | null
   /**
    * @default 0
    */
-  completion?: number | null;
+  completion?: number | null
   /**
    * @default 0
    */
-  cached?: number | null;
-};
+  cached?: number | null
+}
 
 export type User = {
-  name: string;
+  name: string
   /**
    * @format email
    */
-  email: string;
-  _id?: string;
-};
+  email: string
+  _id?: string
+}
 
 export type UserRootInput = {
-  name: string;
+  name: string
   /**
    * @format email
    */
-  email: string;
-};
+  email: string
+}
 
 export type UserWithAccessToken = {
-  name: string;
+  name: string
   /**
    * @format email
    */
-  email: string;
-  _id?: string;
-  access_token: string;
-};
+  email: string
+  _id?: string
+  access_token: string
+}
 
 export type ValidationError = {
-  loc: (string | number)[];
-  msg: string;
-  type: string;
-};
+  loc: (string | number)[]
+  msg: string
+  type: string
+}

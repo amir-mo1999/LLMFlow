@@ -12,7 +12,6 @@ import Stack from "@mui/material/Stack"
 interface PromptPaperProps {
   sx?: SxProps
   prompt: Prompt
-  promptNumber: number
   onClick?: () => void
   selected: boolean
 }
@@ -21,7 +20,6 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
   sx,
   onClick,
   prompt,
-  promptNumber,
   selected = false,
 }) => {
   const numberOfMessages: number = prompt.messages.length
@@ -66,7 +64,7 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
         <Typography variant="h6" sx={{ flex: 1 }}>
-          {prompt.ai_function_name} #{promptNumber}
+          {prompt.ai_function_name} #{prompt.index}
         </Typography>
         <DateChip isoString={prompt.creation_time} />
       </Box>

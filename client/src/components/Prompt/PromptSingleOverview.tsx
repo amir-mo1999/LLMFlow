@@ -13,7 +13,6 @@ import theme from "@/theme"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
-  promptNumber: number
   onDelete: () => void
   onClickEdit: (promptID: string) => void
 }
@@ -29,7 +28,6 @@ const options: Intl.DateTimeFormatOptions = {
 
 const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
   prompt,
-  promptNumber,
   onDelete,
   onClickEdit,
 }) => {
@@ -49,7 +47,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
       {/* Prompt Name */}
       <Typography variant="h4">
-        {prompt.ai_function_name} #{promptNumber}
+        {prompt.ai_function_name} #{prompt.index}
       </Typography>
 
       {/* Creation Time */}

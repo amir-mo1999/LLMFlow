@@ -8,14 +8,12 @@ import PromptPaper from "./PromptPaper"
 interface PromptOverviewProps {
   prompts: Prompt[]
   onClick: (indx: number) => () => void
-  promptNumbers: number[]
   selectedPromptIndx?: number
 }
 
 const PromptOverview: React.FC<PromptOverviewProps> = ({
   prompts,
   onClick,
-  promptNumbers,
   selectedPromptIndx,
 }) => {
   if (!prompts) return <></>
@@ -44,7 +42,6 @@ const PromptOverview: React.FC<PromptOverviewProps> = ({
             }}
             key={indx}
             selected={indx === selectedPromptIndx}
-            promptNumber={promptNumbers[indx]}
             prompt={prompt}
             onClick={onClick ? onClick(indx) : undefined}
           ></PromptPaper>

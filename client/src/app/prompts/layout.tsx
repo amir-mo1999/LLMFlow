@@ -12,30 +12,11 @@ import { useState, useEffect, createContext } from "react"
 import { Prompt, AIFunction, PromptMessage } from "@/api/apiSchemas"
 import { useRouter } from "next/navigation"
 
-const getPromptNumbers = (prompts: Prompt[]) => {
-  const nameCountMap = new Map()
-  const numbers: number[] = []
-
-  prompts.forEach((prompt) => {
-    const name = prompt.ai_function_name
-    // Get the current count for the name, default to 0
-    const currentCount = nameCountMap.get(name) || 0
-    // Increment the count
-    const newCount = currentCount + 1
-    // Update the map
-    nameCountMap.set(name, newCount)
-    // Push the new count to the numbers array
-    numbers.push(newCount)
-  })
-
-  return numbers
-}
 
 interface PromptsContextProps {
   prompts: Prompt[]
   aiFunctions: AIFunction[]
   refetchAIFunctions: () => void
-  promptNumbers: number[]
   addPrompt: (prompt: Prompt) => void
   onDeletePrompt: () => void
   setSelectedPromptIndx: (indx: number | undefined) => void
@@ -45,7 +26,6 @@ interface PromptsContextProps {
 
 export const PromptsContext = createContext<PromptsContextProps>({
   prompts: [],
-  promptNumbers: [],
   aiFunctions: [],
   refetchAIFunctions: () => {},
   addPrompt: () => {},
@@ -63,7 +43,6 @@ export default function Layout({
   const [searchValue, setSearchValue] = useState("")
   const [selectedPromptIndx, setSelectedPromptIndx] = useState<number | undefined>()
   const [prompts, setPrompts] = useState<Prompt[]>([])
-  const [promptNumbers, setPromptNumbers] = useState<number[]>([])
 
   const router = useRouter()
   const onClickCreate = () => {
@@ -111,7 +90,6 @@ export default function Layout({
       }
     }
 
-    setPromptNumbers(getPromptNumbers(prompts))
   }, [prompts])
 
   const { mutate: evaluate } = useEvaluate({
@@ -152,7 +130,6 @@ export default function Layout({
         <PromptOverview
           selectedPromptIndx={selectedPromptIndx}
           prompts={prompts}
-          promptNumbers={promptNumbers}
           onClick={onClickPrompt}
         ></PromptOverview>
       </SideBarContainer>
@@ -162,7 +139,6 @@ export default function Layout({
             prompts: prompts,
             aiFunctions: aiFunctions,
             refetchAIFunctions: refetchAIFunctions,
-            promptNumbers: promptNumbers,
             setSelectedPromptIndx: setSelectedPromptIndx,
             addPrompt: addPrompt,
             onDeletePrompt: onDeletePrompt,

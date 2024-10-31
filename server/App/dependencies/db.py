@@ -1,5 +1,5 @@
 import os
-from typing import Any, AsyncGenerator, Dict, List, Literal, Union
+from typing import Any, AsyncGenerator, Dict, List, Literal, Mapping, Union
 
 from fastapi import Depends
 from motor.motor_asyncio import (
@@ -52,6 +52,23 @@ class DB:
             "users": self.users,
             "projects": self.projects,
         }
+
+    async def count_documents(self, collection: Collection, filter: Mapping[str, Any]):
+        col = self.collection_mapping.get(collection)
+        assert col
+        return await col.count_documents(filter=filter)
+
+    async def get_prompt_max_index(self, ai_function_id: str):
+        max_index = 1
+        prompt = await self.prompts.find_one(
+            {"ai_function_id": ai_function_id}, sort=[("index", -1)]
+        )
+        if prompt:
+            new_index = prompt.get("index")
+            assert new_index
+            max_index = new_index + 1
+
+        return max_index
 
     async def get_all_docs_by_username(
         self, collection: Collection, username: str

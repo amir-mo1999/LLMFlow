@@ -31,6 +31,7 @@ class Prompt(PromptRouteInput):
     last_eval: EvaluateSummary | None = None
     ai_function_name: str
     revision_required: Optional[bool] = False
+    index: int
 
     @field_validator("messages")
     @classmethod

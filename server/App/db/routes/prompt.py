@@ -43,6 +43,8 @@ async def post_prompt(
     # get time stamp
     now = datetime.now()
 
+    index = await db.get_prompt_max_index(ai_function_id=ai_function.id)
+
     # try parsing prompt, return validation error if fails
     try:
         prompt = Prompt.model_validate(
@@ -51,6 +53,7 @@ async def post_prompt(
                 "creation_time": now,
                 "username": user.email,
                 "ai_function_name": ai_function.name,
+                "index": index,
             },
             context=[var.name for var in ai_function.input_variables],
         )

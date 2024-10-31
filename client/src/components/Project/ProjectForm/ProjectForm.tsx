@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react"
 import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
 import { PromptRouteInput, PromptMessage, Prompt, AIFunction } from "@/api/apiSchemas"
+import { ProjectRouteInput, Project } from "@/api/apiSchemas"
 import { AIFunctionPaper } from "@/components/AIFunction"
 import { usePostPrompt, usePatchPrompt } from "@/api/apiComponents"
 import SelectAIFunctionDialog from "../SelectAIFunctionDialog"
@@ -9,12 +10,10 @@ import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
 
 interface PromptFormProps {
-  addPrompt: (prompt: Prompt) => void
+  addProject: (project: Project) => void
+  editProject?: Project
   aiFunctions: AIFunction[]
-  selectedAIFunctionIndx?: number
-  refetchAIFunctions: () => void
-  edit?: boolean
-  prompt?: Prompt
+  prompts: Prompt[]
   setPromptMessages?: (promptID: string, messages: PromptMessage[]) => void
 }
 
