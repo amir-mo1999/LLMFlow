@@ -171,38 +171,38 @@ export const useGetUser = <TData = Schemas.User>(
   })
 }
 
-export type GetProjectsError = Fetcher.ErrorWrapper<{
+export type GetAiFunctionsError = Fetcher.ErrorWrapper<{
   status: 401
   payload: Schemas.HttpExceptionModel
 }>
 
-export type GetProjectsResponse = Schemas.Project[]
+export type GetAiFunctionsResponse = Schemas.AIFunction[]
 
-export type GetProjectsVariables = ApiContext["fetcherOptions"]
+export type GetAiFunctionsVariables = ApiContext["fetcherOptions"]
 
-export const fetchGetProjects = (variables: GetProjectsVariables, signal?: AbortSignal) =>
-  apiFetch<GetProjectsResponse, GetProjectsError, undefined, {}, {}, {}>({
+export const fetchGetAiFunctions = (variables: GetAiFunctionsVariables, signal?: AbortSignal) =>
+  apiFetch<GetAiFunctionsResponse, GetAiFunctionsError, undefined, {}, {}, {}>({
     url: "/ai-function",
     method: "get",
     ...variables,
     signal,
   })
 
-export const useGetProjects = <TData = GetProjectsResponse>(
-  variables: GetProjectsVariables,
+export const useGetAiFunctions = <TData = GetAiFunctionsResponse>(
+  variables: GetAiFunctionsVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<GetProjectsResponse, GetProjectsError, TData>,
+    reactQuery.UseQueryOptions<GetAiFunctionsResponse, GetAiFunctionsError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
-  return reactQuery.useQuery<GetProjectsResponse, GetProjectsError, TData>({
+  return reactQuery.useQuery<GetAiFunctionsResponse, GetAiFunctionsError, TData>({
     queryKey: queryKeyFn({
       path: "/ai-function",
-      operationId: "getProjects",
+      operationId: "getAiFunctions",
       variables,
     }),
-    queryFn: ({ signal }) => fetchGetProjects({ ...fetcherOptions, ...variables }, signal),
+    queryFn: ({ signal }) => fetchGetAiFunctions({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   })
@@ -701,6 +701,43 @@ export const useGetAllPrompts = <TData = GetAllPromptsResponse>(
   })
 }
 
+export type GetProjectsError = Fetcher.ErrorWrapper<{
+  status: 401
+  payload: Schemas.HttpExceptionModel
+}>
+
+export type GetProjectsResponse = Schemas.Project[]
+
+export type GetProjectsVariables = ApiContext["fetcherOptions"]
+
+export const fetchGetProjects = (variables: GetProjectsVariables, signal?: AbortSignal) =>
+  apiFetch<GetProjectsResponse, GetProjectsError, undefined, {}, {}, {}>({
+    url: "/project",
+    method: "get",
+    ...variables,
+    signal,
+  })
+
+export const useGetProjects = <TData = GetProjectsResponse>(
+  variables: GetProjectsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<GetProjectsResponse, GetProjectsError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
+  return reactQuery.useQuery<GetProjectsResponse, GetProjectsError, TData>({
+    queryKey: queryKeyFn({
+      path: "/project",
+      operationId: "getProjects",
+      variables,
+    }),
+    queryFn: ({ signal }) => fetchGetProjects({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  })
+}
+
 export type PostProjectError = Fetcher.ErrorWrapper<
   | {
       status: 401
@@ -855,8 +892,8 @@ export type QueryOperation =
     }
   | {
       path: "/ai-function"
-      operationId: "getProjects"
-      variables: GetProjectsVariables
+      operationId: "getAiFunctions"
+      variables: GetAiFunctionsVariables
     }
   | {
       path: "/ai-function/{aiFunctionId}"
@@ -877,6 +914,11 @@ export type QueryOperation =
       path: "/prompts"
       operationId: "getAllPrompts"
       variables: GetAllPromptsVariables
+    }
+  | {
+      path: "/project"
+      operationId: "getProjects"
+      variables: GetProjectsVariables
     }
   | {
       path: "/project/{projectId}"

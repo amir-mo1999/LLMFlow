@@ -227,8 +227,8 @@
                 "tags": [
                     "db"
                 ],
-                "summary": "Get Projects",
-                "operationId": "get_projects",
+                "summary": "Get Ai Functions",
+                "operationId": "get_ai_functions",
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -236,10 +236,10 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "$ref": "#/components/schemas/Project"
+                                        "$ref": "#/components/schemas/AIFunction"
                                     },
                                     "type": "array",
-                                    "title": "Response Get Projects Ai Function Get"
+                                    "title": "Response Get Ai Functions Ai Function Get"
                                 }
                             }
                         }
@@ -953,6 +953,45 @@
             }
         },
         "/project": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get Projects",
+                "operationId": "get_projects",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get Projects Project Get"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Not authenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "db"

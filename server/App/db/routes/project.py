@@ -53,7 +53,7 @@ async def post_project(
 
 
 @PROJECT_ROUTER.get(
-    "/ai-function",
+    "/project",
     response_model_by_alias=True,
     response_model_exclude_none=True,
     response_model=List[Project],
