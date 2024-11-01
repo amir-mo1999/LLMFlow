@@ -16,12 +16,7 @@ interface PromptPaperProps {
   selected: boolean
 }
 
-const PromptPaper: React.FC<PromptPaperProps> = ({
-  sx,
-  onClick,
-  prompt,
-  selected = false,
-}) => {
+const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, selected = false }) => {
   const numberOfMessages: number = prompt.messages.length
 
   const renderFigures = () => {
@@ -55,12 +50,19 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
       </>
     )
   }
-
   return (
     <Paper
       onClick={onClick}
       elevation={2}
-      sx={{ backgroundColor: selected ? "#E8E3F2" : "white", ...sx }}
+      sx={{
+        backgroundColor: selected ? "#E8E3F2" : "white",
+        width: "100%",
+        paddingX: 2,
+        paddingTop: 1,
+        paddingBottom: 1.5,
+        maxHeight: 150,
+        ...sx,
+      }}
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
         <Typography variant="h6" sx={{ flex: 1 }}>
