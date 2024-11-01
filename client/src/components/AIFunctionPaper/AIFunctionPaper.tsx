@@ -40,7 +40,7 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
         paddingBottom: 1.5,
         maxHeight: 150,
         "&:hover": {
-          backgroundColor: disableHover ? "white" : "inherit",
+          backgroundColor: disableHover ? "white" : "#E8E3F2",
         },
         ...sx,
       }}

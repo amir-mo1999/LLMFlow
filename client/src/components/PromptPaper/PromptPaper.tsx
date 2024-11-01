@@ -13,7 +13,7 @@ interface PromptPaperProps {
   sx?: SxProps
   prompt: Prompt
   onClick?: () => void
-  selected: boolean
+  selected?: boolean
 }
 
 const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, selected = false }) => {

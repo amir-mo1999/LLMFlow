@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from "react"
-import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } from "@mui/material"
+import { Typography, Button, Box, TextField } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
-import { PromptRouteInput, PromptMessage, Prompt, AIFunction } from "@/api/apiSchemas"
-import { ProjectRouteInput, Project } from "@/api/apiSchemas"
+import { Prompt, AIFunction } from "@/api/apiSchemas"
+import { Project } from "@/api/apiSchemas"
 import AIFunctionPaper from "../AIFunctionPaper/AIFunctionPaper"
-import { usePatchPrompt } from "@/api/apiComponents"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
 import SelectDialog from "@/components/SelectDialog/SelectDialog"
+import PromptPaper from "../PromptPaper/PromptPaper"
 
 interface ProjectFormProps {
   onSubmitProject?: (project: Project) => void
@@ -45,8 +45,11 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
   const [openSelectAIFunction, setOpenSelectAIFunction] = useState(false)
   const [openSelectPrompt, setOpenSelectPrompt] = useState(false)
+  const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState(0)
 
   const [selectedAIFunctionIndices, setSelectedAIFunctionIndices] = useState<number[]>([])
+
+  const [promptsMapping, setPromptsMapping] = useState<Record<number, Prompt>>({})
 
   useEffect(() => {
     setImplementedAIFunctions(aiFunctions.filter((aiFunction) => aiFunction.implemented))
@@ -59,6 +62,15 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       newIndices.push(indx)
       setSelectedAIFunctionIndices(newIndices)
     }
+  }
+
+  const onClickPrompt = (aiFunctionIndx: number) => {
+    const f = (promptIndx: number) => {
+      const newMapping = { ...promptsMapping }
+      newMapping[aiFunctionIndx] = prompts[promptIndx]
+      setPromptsMapping(newMapping)
+    }
+    return f
   }
 
   const updateDisableSubmit = () => {}
@@ -82,6 +94,23 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     if (newDescription.length <= descriptionCharLimit) {
       setDescription(e.target.value)
     }
+  }
+
+  const onClickSelectPrompt = (aiFunctionIndx: number) => {
+    const f = () => {
+      setSelectedAIFunctionIndx(aiFunctionIndx)
+      setOpenSelectPrompt(true)
+    }
+    return f
+  }
+
+  const onClickRemoveAIFunction = (aiFunctionIndx: number) => {
+    const f = () => {
+      const newIndices = selectedAIFunctionIndices.filter((indx) => indx !== aiFunctionIndx)
+      setSelectedAIFunctionIndices(newIndices)
+      delete promptsMapping[aiFunctionIndx]
+    }
+    return f
   }
 
   return (
@@ -131,22 +160,32 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         </Box>
 
         {selectedAIFunctionIndices.map((indx) => (
-          <Box key={indx} sx={{ display: "flex" }}>
+          <Box key={indx} sx={{ display: "flex", justifyContent: "space-between" }}>
             <AIFunctionPaper
               aiFunction={aiFunctions[indx]}
-              sx={{ width: "50%" }}
+              sx={{ width: "45%" }}
               disableHover
             ></AIFunctionPaper>
-            <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ marginLeft: 20 }}
-                onClick={() => setOpenSelectPrompt(true)}
-              >
-                Select Prompt
-              </Button>
-              <Button sx={{ marginLeft: 2 }} size="large">
+            {indx in promptsMapping ? (
+              <PromptPaper
+                prompt={promptsMapping[indx]}
+                sx={{ width: "45%" }}
+                onClick={onClickSelectPrompt(indx)}
+              ></PromptPaper>
+            ) : (
+              <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ marginRight: 40 }}
+                  onClick={onClickSelectPrompt(indx)}
+                >
+                  Select Prompt
+                </Button>
+              </Box>
+            )}
+            <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+              <Button size="large" onClick={onClickRemoveAIFunction(indx)}>
                 <ClearIcon fontSize="large" />
               </Button>
             </Box>
@@ -163,6 +202,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
       <SelectDialog
         open={openSelectPrompt}
+        onClick={onClickPrompt(selectedAIFunctionIndx)}
         prompts={prompts}
         setOpen={setOpenSelectPrompt}
       ></SelectDialog>
