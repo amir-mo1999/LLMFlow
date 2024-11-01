@@ -14,9 +14,16 @@ interface PromptPaperProps {
   prompt: Prompt
   onClick?: () => void
   selected?: boolean
+  disableHover?: boolean
 }
 
-const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, selected = false }) => {
+const PromptPaper: React.FC<PromptPaperProps> = ({
+  sx,
+  onClick,
+  prompt,
+  selected = false,
+  disableHover = false,
+}) => {
   const numberOfMessages: number = prompt.messages.length
 
   const renderFigures = () => {
@@ -71,6 +78,9 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, selected
         paddingTop: 1,
         paddingBottom: 1.5,
         maxHeight: 150,
+        "&:hover": {
+          backgroundColor: disableHover ? "white" : "#E8E3F2",
+        },
         ...sx,
       }}
     >
