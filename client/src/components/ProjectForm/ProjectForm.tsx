@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Typography, Button, Box, TextField } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
-import { Prompt, AIFunction } from "@/api/apiSchemas"
+import { Prompt, AIFunction, ProjectRouteInput } from "@/api/apiSchemas"
 import { Project } from "@/api/apiSchemas"
 import AIFunctionPaper from "../AIFunctionPaper/AIFunctionPaper"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
 import SelectDialog from "@/components/SelectDialog/SelectDialog"
 import PromptPaper from "../PromptPaper/PromptPaper"
+import { usePostProject } from "@/api/apiComponents"
 
 interface ProjectFormProps {
   onSubmitProject?: (project: Project) => void
@@ -51,6 +52,28 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
   const [promptsMapping, setPromptsMapping] = useState<Record<number, Prompt>>({})
 
+  const { mutate: postProject } = usePostProject({
+    onSuccess: (project: Project) => {
+      onSubmitProject?.(project)
+    },
+  })
+
+  const onClickSubmit = () => {
+    setDisableSubmit(true)
+
+    // construct project
+    const newProject: ProjectRouteInput = {
+      name: name,
+      description: description,
+      prompt_ids: Object.values(promptsMapping).reduce((acc: string[], prompt: Prompt) => {
+        acc.push(prompt._id as string)
+        return acc
+      }, [] as string[]),
+    }
+
+    postProject({ body: newProject })
+  }
+
   useEffect(() => {
     setImplementedAIFunctions(aiFunctions.filter((aiFunction) => aiFunction.implemented))
     setSelectedAIFunctionIndices([])
@@ -73,13 +96,16 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     return f
   }
 
-  const updateDisableSubmit = () => {}
-
-  useEffect(updateDisableSubmit, [name, description, promptIDs])
-
-  const onClickSubmit = () => {
-    setDisableSubmit(true)
+  const updateDisableSubmit = () => {
+    if (name === "") setDisableSubmit(true)
+    else if (description === "") setDisableSubmit(true)
+    else if (selectedAIFunctionIndices.length === 0) setDisableSubmit(true)
+    else if (selectedAIFunctionIndices.some((indx) => !(indx in promptsMapping)))
+      setDisableSubmit(true)
+    else setDisableSubmit(false)
   }
+
+  useEffect(updateDisableSubmit, [name, description, selectedAIFunctionIndices, promptsMapping])
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newName = e.target.value
@@ -115,7 +141,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
   return (
     <>
-      <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+      <Box sx={{ width: "100%", display: "flex", flexDirection: "column", marginBottom: 40 }}>
         {editProject && (
           <Box>
             <Typography variant="h4">{editProject.name}</Typography>
@@ -158,39 +184,52 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
             <AddIcon />
           </Button>
         </Box>
-
-        {selectedAIFunctionIndices.map((indx) => (
-          <Box key={indx} sx={{ display: "flex", justifyContent: "space-between" }}>
-            <AIFunctionPaper
-              aiFunction={aiFunctions[indx]}
-              sx={{ width: "45%" }}
-              disableHover
-            ></AIFunctionPaper>
-            {indx in promptsMapping ? (
-              <PromptPaper
-                prompt={promptsMapping[indx]}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          {selectedAIFunctionIndices.map((indx) => (
+            <Box key={indx} sx={{ display: "flex", justifyContent: "space-between" }}>
+              <AIFunctionPaper
+                aiFunction={aiFunctions[indx]}
                 sx={{ width: "45%" }}
-                onClick={onClickSelectPrompt(indx)}
-              ></PromptPaper>
-            ) : (
-              <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ marginRight: 40 }}
+                disableHover
+              ></AIFunctionPaper>
+              {indx in promptsMapping ? (
+                <PromptPaper
+                  prompt={promptsMapping[indx]}
+                  sx={{ width: "45%" }}
                   onClick={onClickSelectPrompt(indx)}
-                >
-                  Select Prompt
+                ></PromptPaper>
+              ) : (
+                <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={{ marginRight: 40 }}
+                    onClick={onClickSelectPrompt(indx)}
+                  >
+                    Select Prompt
+                  </Button>
+                </Box>
+              )}
+              <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+                <Button size="large" onClick={onClickRemoveAIFunction(indx)}>
+                  <ClearIcon fontSize="large" />
                 </Button>
               </Box>
-            )}
-            <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
-              <Button size="large" onClick={onClickRemoveAIFunction(indx)}>
-                <ClearIcon fontSize="large" />
-              </Button>
             </Box>
-          </Box>
-        ))}
+          ))}
+        </Box>
+
+        <Divider sx={{ marginY: 2 }}></Divider>
+        <Box>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={disableSubmit}
+            onClick={onClickSubmit}
+          >
+            Submit
+          </Button>
+        </Box>
       </Box>
 
       <SelectDialog
@@ -203,7 +242,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       <SelectDialog
         open={openSelectPrompt}
         onClick={onClickPrompt(selectedAIFunctionIndx)}
-        prompts={prompts}
+        prompts={prompts.filter(
+          (prompt) => prompt.ai_function_id === aiFunctions[selectedAIFunctionIndx]._id
+        )}
         setOpen={setOpenSelectPrompt}
       ></SelectDialog>
     </>

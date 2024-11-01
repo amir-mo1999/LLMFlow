@@ -67,6 +67,11 @@ export default function Layout({
     return f
   }
 
+  const onSubmitProject = (project: Project) => {
+    setProjects([...projects, project])
+    router.push("/projects")
+  }
+
   const setProject = (newProject: Project) => {
     router.push("/projects")
     const updateIndx = projects.findIndex((project) => project._id === newProject._id)
@@ -93,7 +98,7 @@ export default function Layout({
             projects: projects,
             aiFunctions: aiFunctions,
             prompts: prompts,
-            onSubmitProject: (project: Project) => {},
+            onSubmitProject: onSubmitProject,
             onPatchProject: (project: Partial<Project>) => {},
             onDeleteProject: () => {},
             onClickEdit: (projectID: string) => {},
