@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  AIFunctionOverview,
-  MainContentContainer,
-  SideBarContainer,
-  PageContainer,
-  SearchField,
-} from "@/components"
+import { MainContentContainer, SideBarContainer, PageContainer, SearchField } from "@/components"
 import Button from "@mui/material/Button"
 import { useGetAiFunctions, useGetAllPrompts } from "@/api/apiComponents"
 import { useState, useEffect, createContext } from "react"

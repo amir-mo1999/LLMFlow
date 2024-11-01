@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import ScrollBox from "../ScrollBox"
+import ScrollBox from "./ScrollBox"
 
 interface MainContentContainerProps {
   children?: React.ReactNode

@@ -10,8 +10,8 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 
 import { useState, useEffect } from "react"
-import NumberInput from "@/components/NumberInput"
-import RegexInput from "@/components/RegexInput"
+import NumberInput from "@/components/NumberInput/NumberInput"
+import RegexInput from "@/components/RegexInput/RegexInput"
 
 interface StringDialogProps {
   stringSettings: StringSchema

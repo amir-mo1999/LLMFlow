@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  AIFunctionOverview,
+  ItemOverview,
   MainContentContainer,
   SideBarContainer,
   PageContainer,
@@ -102,11 +102,12 @@ export default function Layout({
         <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
           Create AI Function
         </Button>
-        <AIFunctionOverview
+        <ItemOverview
+          itemType="AIFunction"
           selectedIndx={selectedAIFunctionIndx}
-          aiFunctions={isFetching || !aiFunctions ? [] : aiFunctions}
+          items={isFetching || !aiFunctions ? [] : aiFunctions}
           onClick={onClickAIFunction}
-        ></AIFunctionOverview>
+        ></ItemOverview>
       </SideBarContainer>
       <MainContentContainer>
         <AIFunctionsContext.Provider
