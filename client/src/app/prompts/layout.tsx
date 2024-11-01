@@ -1,6 +1,6 @@
 "use client"
 import {
-  PromptOverview,
+  ItemOverview,
   MainContentContainer,
   SideBarContainer,
   PageContainer,
@@ -11,7 +11,6 @@ import { useGetAllPrompts, useEvaluate, useGetAiFunctions } from "@/api/apiCompo
 import { useState, useEffect, createContext } from "react"
 import { Prompt, AIFunction, PromptMessage } from "@/api/apiSchemas"
 import { useRouter } from "next/navigation"
-
 
 interface PromptsContextProps {
   prompts: Prompt[]
@@ -89,7 +88,6 @@ export default function Layout({
         evaluate({ pathParams: { promptId: prompts[i]._id as string } })
       }
     }
-
   }, [prompts])
 
   const { mutate: evaluate } = useEvaluate({
@@ -127,11 +125,12 @@ export default function Layout({
         >
           Create Prompt
         </Button>
-        <PromptOverview
-          selectedPromptIndx={selectedPromptIndx}
-          prompts={prompts}
+        <ItemOverview
+          itemType="Prompt"
+          selectedIndx={selectedPromptIndx}
+          items={prompts}
           onClick={onClickPrompt}
-        ></PromptOverview>
+        ></ItemOverview>
       </SideBarContainer>
       <MainContentContainer>
         <PromptsContext.Provider
