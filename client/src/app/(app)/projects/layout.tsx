@@ -53,11 +53,6 @@ export default function Layout({
     router.push("/projects/create")
   }
 
-  const addAIFunction = (aiFunction: AIFunction) => {
-    setAIFunctions([...aiFunctions, aiFunction])
-    router.push("/ai-functions")
-  }
-
   const onDeleteProject = () => {
     router.push("/ai-functions")
     const updatedProjects = projects.filter((_, i) => i !== selectedProjectIndx)
@@ -116,7 +111,7 @@ export default function Layout({
             prompts: prompts,
             onSubmitProject: onSubmitProject,
             setProject: setProject,
-            onDeleteProject: () => {},
+            onDeleteProject: onDeleteProject,
             onClickEdit: onClickEdit,
             setSelectedProjectIndx: (indx: number | undefined) => {},
           }}

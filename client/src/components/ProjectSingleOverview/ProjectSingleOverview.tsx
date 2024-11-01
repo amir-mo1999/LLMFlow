@@ -5,19 +5,11 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { AIFunction, Project, Prompt } from "@/api/apiSchemas"
-import Chip from "@mui/material/Chip"
-import { addTitlesToSchema } from "@/utils"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 import { useDeleteProject } from "@/api/apiComponents"
-import {
-  JsonSchemaEditor,
-  AssertionsOverview,
-  TestCasesOverview,
-  AIFunctionPaper,
-  PromptPaper,
-} from "@/components"
+import { AIFunctionPaper, PromptPaper } from "@/components"
 
 interface ProjectSingleOverviewProps {
   onDeleteProject: () => void
