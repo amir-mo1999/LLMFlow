@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 
 from pydantic import EmailStr, Field, StringConstraints
 
@@ -19,6 +19,16 @@ class ProjectRouteInput(RootModel):
         ...,
         examples=[[]],
     )
+
+
+class ProjectPatchInput(RootModel):
+    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
+        None
+    )
+    description: Optional[
+        Annotated[str, StringConstraints(min_length=1, max_length=1000)]
+    ] = None
+    prompt_ids: Optional[List[str]] = None
 
 
 class Project(ProjectRouteInput):

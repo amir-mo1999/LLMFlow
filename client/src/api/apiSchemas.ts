@@ -279,6 +279,12 @@ export type Project = {
   creation_time: string
 }
 
+export type ProjectPatchInput = {
+  name?: string | null
+  description?: string | null
+  prompt_ids?: string[] | null
+}
+
 export type ProjectRouteInput = {
   /**
    * @maxLength 40

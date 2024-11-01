@@ -5,7 +5,13 @@ from fastapi import APIRouter, Depends
 
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import Project, ProjectRouteInput, SuccessResponse, User
+from App.models import (
+    Project,
+    ProjectPatchInput,
+    ProjectRouteInput,
+    SuccessResponse,
+    User,
+)
 
 from .prompt import get_prompt
 
@@ -111,3 +117,29 @@ async def delete_project(
         return SuccessResponse
     else:
         raise DocumentNotFound
+
+
+@PROJECT_ROUTER.patch(
+    "/project/{project_id}",
+    response_model_exclude_none=True,
+    response_model=Project,
+    responses={
+        401: {"detail": "Not authenticated"},
+        409: {"detail": "document already exists"},
+    },
+)
+async def patch_project(
+    project_patch: ProjectPatchInput,
+    project_id: str,
+    user: Annotated[User, Depends(user)],
+    db: Annotated[DB, Depends(get_db)],
+):
+    # verify that project exist
+    project = await get_project(project_id=project_id, db=db, user=user)
+
+    project = await db.patch_project(project, project_patch=project_patch)
+
+    if project:
+        return project
+    else:
+        raise DuplicateDocument

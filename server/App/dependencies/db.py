@@ -13,6 +13,7 @@ from App.models import (
     AIFunctionPatchInput,
     EvaluateSummary,
     Project,
+    ProjectPatchInput,
     Prompt,
     PromptMessage,
     User,
@@ -208,7 +209,6 @@ class DB:
 
         return project_objects
 
-
     async def get_user(self, username: str) -> User | None:
         user = await self.users.find_one({"username": username})
         if user is None:
@@ -291,6 +291,29 @@ class DB:
         )
 
         return ai_function
+
+    async def patch_project(
+        self, project: Project, project_patch: ProjectPatchInput
+    ) -> Project | None:
+        # check project with name exists
+        if project.name:
+            query = await self.projects.find_one(
+                {"_id": {"$ne": project.id}, "name": project.name}
+            )
+            if query:
+                return None
+
+        # update fields in project without validating
+        for key in project_patch.model_dump(exclude_none=True):
+            project.__setattr__(key, getattr(project_patch, key))
+
+        # update project
+        await self.projects.update_one(
+            {"_id": project.id},
+            {"$set": project_patch.model_dump(exclude_none=True, by_alias=True)},
+        )
+
+        return project
 
     async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: str):
         await self.prompts.update_one(

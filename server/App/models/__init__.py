@@ -5,7 +5,7 @@ from .ai_function import (
     Assertion,
 )
 from .json_schema import JsonSchema
-from .project import Project, ProjectRouteInput
+from .project import Project, ProjectPatchInput, ProjectRouteInput
 from .prompt import Prompt, PromptMessage, PromptRouteInput
 from .promptfoo_models import EvaluateInput, EvaluateSummary
 from .success_response import SuccessResponse
@@ -30,5 +30,6 @@ __all__ = [
     "PromptMessage",
     "Project",
     "ProjectRouteInput",
+    "ProjectPatchInput",
     "Assertion",
 ]

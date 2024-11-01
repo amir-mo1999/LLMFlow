@@ -884,6 +884,54 @@ export const useDeleteProject = (
   })
 }
 
+export type PatchProjectPathParams = {
+  projectId: string
+}
+
+export type PatchProjectError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 409
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type PatchProjectVariables = {
+  body?: Schemas.ProjectPatchInput
+  pathParams: PatchProjectPathParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchPatchProject = (variables: PatchProjectVariables, signal?: AbortSignal) =>
+  apiFetch<
+    Schemas.Project,
+    PatchProjectError,
+    Schemas.ProjectPatchInput,
+    {},
+    {},
+    PatchProjectPathParams
+  >({ url: "/project/{projectId}", method: "patch", ...variables, signal })
+
+export const usePatchProject = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<Schemas.Project, PatchProjectError, PatchProjectVariables>,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<Schemas.Project, PatchProjectError, PatchProjectVariables>({
+    mutationFn: (variables: PatchProjectVariables) =>
+      fetchPatchProject({ ...fetcherOptions, ...variables }),
+    ...options,
+  })
+}
+
 export type QueryOperation =
   | {
       path: "/user/{username}"
