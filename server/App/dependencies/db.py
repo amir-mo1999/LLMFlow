@@ -157,11 +157,22 @@ class DB:
         return prompt_new
 
     async def increment_prompt_count(
-        self, ai_function_id: str, increment_value: int = 1
+        self, ai_function_id: str, decrement: bool = False
     ):
-        await self.ai_functions.update_one(
-            {"_id": ai_function_id}, {"$inc": {"number_of_prompts": increment_value}}
-        )
+        """Increment or decrement the prompt count of an AI function. If number of prompts becomes 0, set implemented to False."""
+        increment_value = 1 if not decrement else -1
+        update_query = {"$inc": {"number_of_prompts": increment_value}}
+
+        ai_function = await self.get_ai_function_by_id(ai_function_id=ai_function_id)
+        if ai_function is None:
+            return
+
+        if ai_function.number_of_prompts == 1 and decrement:
+            update_query["$set"] = {"implemented": False}
+        else:
+            update_query["$set"] = {"implemented": True}
+
+        await self.ai_functions.update_one({"_id": ai_function_id}, update_query)
 
     async def delete(self, document_id: str, collection: Collection) -> bool:
         # get collection
@@ -256,6 +267,7 @@ class DB:
 
         # set revision_required to true if input variables change
         if ai_function_patch.input_variables is not None:
+            ai_function.implemented = False
             await self.prompts.update_many(
                 {"ai_function_id": ai_function.id},
                 {"$set": {"revision_required": True}},

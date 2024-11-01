@@ -154,5 +154,6 @@ class AIFunctionPatchInput(RootModel):
 class AIFunction(AIFunctionRouteInput):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     number_of_prompts: NonNegativeInt
+    implemented: bool
     username: EmailStr
     creation_time: datetime

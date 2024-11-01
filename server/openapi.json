@@ -1282,6 +1282,10 @@
                         "minimum": 0.0,
                         "title": "Number Of Prompts"
                     },
+                    "implemented": {
+                        "type": "boolean",
+                        "title": "Implemented"
+                    },
                     "username": {
                         "type": "string",
                         "format": "email",
@@ -1302,6 +1306,7 @@
                     "assert",
                     "test_cases",
                     "number_of_prompts",
+                    "implemented",
                     "username",
                     "creation_time"
                 ],

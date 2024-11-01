@@ -44,6 +44,7 @@ async def post_ai_function(
     # create the ai function object
     ai_function = AIFunction(
         **ai_function_input.model_dump(by_alias=True),
+        implemented=False,
         number_of_prompts=number_of_prompts,
         creation_time=now,
         username=user.email,

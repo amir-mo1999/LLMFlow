@@ -37,6 +37,7 @@ export type AIFunction = {
    * @minimum 0
    */
   number_of_prompts: number
+  implemented: boolean
   /**
    * @format email
    */

@@ -163,7 +163,7 @@ async def delete_prompt(
 
     if res:
         await db.increment_prompt_count(
-            ai_function_id=prompt.ai_function_id, increment_value=-1
+            ai_function_id=prompt.ai_function_id, decrement=True
         )
         return SuccessResponse
     else:
