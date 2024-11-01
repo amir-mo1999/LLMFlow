@@ -11,6 +11,7 @@ interface AIFunctionPaperProps {
   aiFunction: AIFunction
   onClick?: () => void
   selected?: boolean
+  disableHover?: boolean
 }
 
 const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
@@ -18,6 +19,7 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
   onClick,
   aiFunction,
   selected = false,
+  disableHover = false,
 }) => {
   // get total number of assertions
   let numberOfAssertions: number = 0
@@ -37,6 +39,9 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
         paddingTop: 1,
         paddingBottom: 1.5,
         maxHeight: 150,
+        "&:hover": {
+          backgroundColor: disableHover ? "white" : "inherit",
+        },
         ...sx,
       }}
     >

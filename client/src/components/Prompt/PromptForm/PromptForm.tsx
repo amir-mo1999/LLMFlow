@@ -4,7 +4,7 @@ import ClearIcon from "@mui/icons-material/Clear"
 import { PromptRouteInput, PromptMessage, Prompt, AIFunction } from "@/api/apiSchemas"
 import { AIFunctionPaper } from "@/components/AIFunction"
 import { usePostPrompt, usePatchPrompt } from "@/api/apiComponents"
-import SelectAIFunctionDialog from "../SelectAIFunctionDialog"
+import SelectDialog from "../SelectDialog"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
 
@@ -162,6 +162,10 @@ const PromptForm: React.FC<PromptFormProps> = ({
     }
   }
 
+  const onClickAIFunction = (indx: number) => {
+    setSelectedAIFunctionIndx(indx)
+  }
+
   if (aiFunctions.length === 0) {
     return <></>
   }
@@ -312,12 +316,12 @@ const PromptForm: React.FC<PromptFormProps> = ({
           </>
         )}
       </Box>
-      <SelectAIFunctionDialog
+      <SelectDialog
         open={openSelectDialog}
         setOpen={setOpenSelectDialog}
-        setSelectedAIFunctionIndx={setSelectedAIFunctionIndx}
         aiFunctions={aiFunctions}
-      ></SelectAIFunctionDialog>
+        onClick={onClickAIFunction}
+      ></SelectDialog>
     </>
   )
 }

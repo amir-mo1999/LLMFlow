@@ -7,6 +7,7 @@ import ScrollBox from "./ScrollBox"
 import JsonSchemaEditor from "./JsonSchemaEditor"
 import NumberInput from "./NumberInput"
 import RegexInput from "./RegexInput"
+import { ProjectForm } from "./Project"
 
 export {
   AIFunctionForm,
@@ -24,4 +25,5 @@ export {
   JsonSchemaEditor,
   NumberInput,
   RegexInput,
+  ProjectForm,
 }

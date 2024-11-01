@@ -15,7 +15,7 @@ const AIFunctionOverview: React.FC<AIFunctionOverviewProps> = ({
   aiFunctions,
   selectedIndx,
 }) => {
-  if (!aiFunctions) return <></>
+  if (!aiFunctions || aiFunctions.length === 0) return <></>
 
   return (
     <Box
