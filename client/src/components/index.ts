@@ -25,6 +25,7 @@ import SelectDialog from "./SelectDialog/SelectDialog"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import TestCasesOverview from "./TestCasesOverview/TestCasesOverview"
 import ProjectPaper from "./ProjectPaper/ProjectPaper"
+import ProjectSingleOverview from "./ProjectSingleOverview/ProjectSingleOverview"
 
 export {
   AIFunctionForm,
@@ -59,4 +60,5 @@ export {
   TestCasesForm,
   TestCasesOverview,
   ProjectPaper,
+  ProjectSingleOverview,
 }

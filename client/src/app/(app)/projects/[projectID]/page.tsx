@@ -1,22 +1,20 @@
 "use client"
-import { AIFunctionSingleOverview } from "@/components"
+import { ProjectSingleOverview } from "@/components"
 import { useContext } from "react"
-import { AIFunctionsContext } from "../layout"
+import { ProjectContext } from "../layout"
 
-export default function Page({ params }: { params: { aiFunctionID: string } }) {
-  const { aiFunctions, onDeleteAIFunction, onClickEdit, onClickAddPrompt } =
-    useContext(AIFunctionsContext)
+export default function Page({ params }: { params: { projectID: string } }) {
+  const { projects, onDeleteProject, onClickEdit } = useContext(ProjectContext)
 
-  const aiFunction = aiFunctions.find((aiFunction) => aiFunction._id === params.aiFunctionID)
+  const project = projects.find((project) => project._id === params.projectID)
 
-  if (aiFunction === undefined) return <></>
+  if (project === undefined) return <></>
 
   return (
-    <AIFunctionSingleOverview
-      onDeleteAIFunction={onDeleteAIFunction}
-      aiFunction={aiFunction}
+    <ProjectSingleOverview
+      onDeleteProject={onDeleteProject}
+      project={project}
       onClickEdit={onClickEdit}
-      onClickAddPrompt={onClickAddPrompt}
-    ></AIFunctionSingleOverview>
+    ></ProjectSingleOverview>
   )
 }
