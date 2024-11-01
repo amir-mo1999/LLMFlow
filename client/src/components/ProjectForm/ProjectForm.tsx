@@ -39,14 +39,19 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   const [name, setName] = useState<string>(editProject?.name || "")
   const nameRef = useRef<null | HTMLDivElement>(null)
   const [nameError, setNameError] = useState<boolean>(false)
-
   const [description, setDescription] = useState<string>(editProject?.description || "")
+  const [implementedAIFunctions, setImplementedAIFunctions] = useState<AIFunction[]>([])
   const [promptIDs, setPromptIDs] = useState<string[]>(editProject?.prompt_ids || [])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
   const [openSelectAIFunction, setOpenSelectAIFunction] = useState(false)
   const [openSelectPrompt, setOpenSelectPrompt] = useState(false)
 
   const [selectedAIFunctionIndices, setSelectedAIFunctionIndices] = useState<number[]>([])
+
+  useEffect(() => {
+    setImplementedAIFunctions(aiFunctions.filter((aiFunction) => aiFunction.implemented))
+    setSelectedAIFunctionIndices([])
+  }, [aiFunctions])
 
   const onClickAIFunction = (indx: number) => {
     if (!selectedAIFunctionIndices.includes(indx)) {
@@ -151,7 +156,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
       <SelectDialog
         open={openSelectAIFunction}
-        aiFunctions={aiFunctions}
+        aiFunctions={implementedAIFunctions}
         setOpen={setOpenSelectAIFunction}
         onClick={onClickAIFunction}
       ></SelectDialog>

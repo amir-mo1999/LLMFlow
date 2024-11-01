@@ -2,10 +2,10 @@
 
 import { MainContentContainer, SideBarContainer, PageContainer, SearchField } from "@/components"
 import Button from "@mui/material/Button"
-import { useGetAiFunctions, useGetAllPrompts } from "@/api/apiComponents"
-import { useState, useEffect, createContext } from "react"
+import { useState, createContext, useContext } from "react"
 import { AIFunction, Prompt, Project } from "@/api/apiSchemas"
 import { useRouter } from "next/navigation"
+import { AppContext } from "../layout"
 
 interface ProjectContextProps {
   projects: Project[]
@@ -34,10 +34,10 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { aiFunctions, setAIFunctions, prompts, setPrompts, projects, setProjects } =
+    useContext(AppContext)
+
   const [searchValue, setSearchValue] = useState("")
-  const [projects, setProjects] = useState<Project[]>([])
-  const [aiFunctions, setAIFunctions] = useState<AIFunction[]>([])
-  const [prompts, setPrompts] = useState<Prompt[]>([])
   const [selectedProjectIndx, setSelectedProjectIndx] = useState<number | undefined>()
 
   const router = useRouter()
@@ -74,14 +74,6 @@ export default function Layout({
     newProjects[updateIndx] = newProject
     setProjects(newProjects)
   }
-
-  const { data: aiFunctionsAPI, isFetching: isFetchingAIFunctions } = useGetAiFunctions({})
-  const { data: promptsAPI, isFetching: isFetchingPrompts } = useGetAllPrompts({})
-
-  useEffect(() => {
-    if (aiFunctionsAPI && !isFetchingAIFunctions) setAIFunctions(aiFunctionsAPI)
-    if (promptsAPI && !isFetchingPrompts) setPrompts(promptsAPI)
-  }, [aiFunctionsAPI, isFetchingAIFunctions, promptsAPI, isFetchingPrompts])
 
   return (
     <PageContainer>

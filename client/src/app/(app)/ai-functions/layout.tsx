@@ -8,10 +8,10 @@ import {
   SearchField,
 } from "@/components"
 import Button from "@mui/material/Button"
-import { useGetAiFunctions } from "@/api/apiComponents"
-import { useState, useEffect, createContext } from "react"
+import { useState, createContext, useContext } from "react"
 import { AIFunction } from "@/api/apiSchemas"
 import { useRouter } from "next/navigation"
+import { AppContext } from "../layout"
 
 interface AIFunctionsContextProps {
   aiFunctions: AIFunction[]
@@ -38,9 +38,10 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { aiFunctions, setAIFunctions } = useContext(AppContext)
+
   const [searchValue, setSearchValue] = useState("")
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number | undefined>()
-  const [aiFunctions, setAIFunctions] = useState<AIFunction[]>([])
 
   const router = useRouter()
 
@@ -85,12 +86,6 @@ export default function Layout({
     router.push(`/ai-functions/edit/${aiFunctionID}`)
   }
 
-  const { data: aiFunctionsAPI, isFetching } = useGetAiFunctions({})
-
-  useEffect(() => {
-    if (aiFunctionsAPI && !isFetching) setAIFunctions(aiFunctionsAPI)
-  }, [aiFunctionsAPI, isFetching])
-
   return (
     <PageContainer>
       <SideBarContainer>
@@ -105,7 +100,7 @@ export default function Layout({
         <ItemOverview
           itemType="AIFunction"
           selectedIndx={selectedAIFunctionIndx}
-          items={isFetching || !aiFunctions ? [] : aiFunctions}
+          items={aiFunctions}
           onClick={onClickAIFunction}
         ></ItemOverview>
       </SideBarContainer>

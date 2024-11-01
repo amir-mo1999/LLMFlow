@@ -7,10 +7,11 @@ import {
   SearchField,
 } from "@/components"
 import Button from "@mui/material/Button"
-import { useGetAllPrompts, useEvaluate, useGetAiFunctions } from "@/api/apiComponents"
-import { useState, useEffect, createContext } from "react"
+import { useEvaluate } from "@/api/apiComponents"
+import { useState, useEffect, createContext, useContext } from "react"
 import { Prompt, AIFunction, PromptMessage } from "@/api/apiSchemas"
 import { useRouter } from "next/navigation"
+import { AppContext } from "../layout"
 
 interface PromptsContextProps {
   prompts: Prompt[]
@@ -39,9 +40,13 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { aiFunctions, prompts, setPrompts, refetchAIFunctions, refetchPrompts } =
+    useContext(AppContext)
+  useEffect(() => {
+    console.log(prompts)
+  }, [prompts])
   const [searchValue, setSearchValue] = useState("")
   const [selectedPromptIndx, setSelectedPromptIndx] = useState<number | undefined>()
-  const [prompts, setPrompts] = useState<Prompt[]>([])
 
   const router = useRouter()
   const onClickCreate = () => {
@@ -57,6 +62,7 @@ export default function Layout({
   }
 
   const addPrompt = (prompt: Prompt) => {
+    console.log("adding prompt", prompt)
     setPrompts([...prompts, prompt])
     router.push("/prompts")
   }
@@ -98,16 +104,10 @@ export default function Layout({
       if (promptIndx !== undefined) {
         newPrompts[promptIndx].last_eval = response
         setPrompts([...newPrompts])
+        refetchPrompts()
       }
     },
   })
-  const { data: aiFunctions, refetch: refetchAIFunctions } = useGetAiFunctions({})
-
-  const { data: promptsAPI, isFetching } = useGetAllPrompts({})
-
-  useEffect(() => {
-    if (promptsAPI && !isFetching) setPrompts(promptsAPI)
-  }, [promptsAPI, isFetching])
 
   if (!aiFunctions) {
     return <></>
