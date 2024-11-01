@@ -198,6 +198,17 @@ class DB:
 
         return ai_function_objects
 
+    async def get_all_projects(self, username: str) -> Dict[str, Project]:
+        projects = await self.get_all_docs_by_username("projects", username)
+        project_objects: Dict[str, Project] = {}
+
+        for project in projects:
+            project = Project(**project)
+            project_objects[project.id] = project
+
+        return project_objects
+
+
     async def get_user(self, username: str) -> User | None:
         user = await self.users.find_one({"username": username})
         if user is None:

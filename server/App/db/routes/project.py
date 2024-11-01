@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import APIRouter, Depends
 
@@ -50,6 +50,21 @@ async def post_project(
         return project
 
     raise DuplicateDocument
+
+
+@PROJECT_ROUTER.get(
+    "/ai-function",
+    response_model_by_alias=True,
+    response_model_exclude_none=True,
+    response_model=List[Project],
+    responses={401: {"detail": "Not authenticated"}},
+)
+async def get_projects(
+    db: Annotated[DB, Depends(get_db)],
+    user: Annotated[User, Depends(user)],
+):
+    projects = await db.get_all_projects(username=user.email)
+    return projects.values()
 
 
 @PROJECT_ROUTER.get(

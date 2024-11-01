@@ -227,8 +227,8 @@
                 "tags": [
                     "db"
                 ],
-                "summary": "Get Ai Functions",
-                "operationId": "get_ai_functions",
+                "summary": "Get Projects",
+                "operationId": "get_projects",
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -236,10 +236,10 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "$ref": "#/components/schemas/AIFunction"
+                                        "$ref": "#/components/schemas/Project"
                                     },
                                     "type": "array",
-                                    "title": "Response Get Ai Functions Ai Function Get"
+                                    "title": "Response Get Projects Ai Function Get"
                                 }
                             }
                         }
