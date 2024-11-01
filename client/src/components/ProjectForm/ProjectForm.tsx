@@ -1,18 +1,19 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Typography, Button, Box, TextField } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
-import { Prompt, AIFunction, ProjectRouteInput } from "@/api/apiSchemas"
+import { Prompt, AIFunction, ProjectRouteInput, ProjectPatchInput } from "@/api/apiSchemas"
 import { Project } from "@/api/apiSchemas"
 import AIFunctionPaper from "../AIFunctionPaper/AIFunctionPaper"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
 import SelectDialog from "@/components/SelectDialog/SelectDialog"
 import PromptPaper from "../PromptPaper/PromptPaper"
-import { usePostProject } from "@/api/apiComponents"
+import { usePostProject, usePatchProject } from "@/api/apiComponents"
+import { getProjectDiff } from "@/utils"
 
 interface ProjectFormProps {
   onSubmitProject?: (project: Project) => void
-  onPatchProject?: (project: Partial<Project>) => void
+  setProject?: (project: Project) => void
   editProject?: Project
   aiFunctions: AIFunction[]
   prompts: Prompt[]
@@ -32,7 +33,7 @@ const descriptionCharLimit = 1000
 
 const ProjectForm: React.FC<ProjectFormProps> = ({
   onSubmitProject,
-  onPatchProject,
+  setProject,
   editProject,
   aiFunctions,
   prompts,
@@ -89,11 +90,16 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     },
   })
 
+  const { mutate: patchProject } = usePatchProject({
+    onSuccess: (project: Project) => {
+      setProject?.(project)
+    },
+  })
+
   const onClickSubmit = () => {
     setDisableSubmit(true)
-
     // construct project
-    const newProject: ProjectRouteInput = {
+    const body: ProjectRouteInput = {
       name: name,
       description: description,
       prompt_ids: Object.values(promptsMapping).reduce((acc: string[], prompt: Prompt) => {
@@ -102,7 +108,14 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       }, [] as string[]),
     }
 
-    postProject({ body: newProject })
+    if (editProject) {
+      patchProject({
+        body: getProjectDiff(editProject, body),
+        pathParams: { projectId: editProject._id as string },
+      })
+    } else {
+      postProject({ body: body })
+    }
   }
 
   const onClickAIFunction = (indx: number) => {
@@ -167,7 +180,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
   return (
     <>
-      <Box sx={{ width: "100%", display: "flex", flexDirection: "column", marginBottom: 40 }}>
+      <Box sx={{ width: "100%", display: "flex", flexDirection: "column", marginBottom: 20 }}>
         {editProject && (
           <Box>
             <Typography variant="h4">{editProject.name}</Typography>

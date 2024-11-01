@@ -3,6 +3,10 @@ import {
   AIFunctionRouteInput,
   EvaluateSummary,
   JsonSchemaInput,
+  ProjectPatchInput,
+  Project,
+  AIFunctionPatchInput,
+  ProjectRouteInput,
 } from "@/api/apiSchemas"
 import _ from "lodash"
 import { BaseAssertionTypes } from "@/api/apiSchemas"
@@ -164,7 +168,7 @@ export function getMeanLatency(evalSummary: EvaluateSummary) {
  * @returns An object with the fields from objectB that have different values.
  */
 export function getAIFunctionDiff(aiFunction: AIFunction, routeInput: AIFunctionRouteInput) {
-  const newAIFunction: Partial<AIFunction> = {}
+  const newAIFunction: AIFunctionPatchInput = {}
 
   Object.keys(routeInput).forEach((key) => {
     //@ts-ignore
@@ -175,6 +179,20 @@ export function getAIFunctionDiff(aiFunction: AIFunction, routeInput: AIFunction
   })
 
   return newAIFunction
+}
+
+export function getProjectDiff(project: Project, routeInput: ProjectRouteInput) {
+  const newProject: ProjectPatchInput = {}
+
+  Object.keys(routeInput).forEach((key) => {
+    //@ts-ignore
+    if (!_.isEqual(routeInput[key], project[key])) {
+      //@ts-ignore
+      newProject[key] = routeInput[key]
+    }
+  })
+
+  return newProject
 }
 
 export const baseAssertionTypesArray: BaseAssertionTypes[] = [

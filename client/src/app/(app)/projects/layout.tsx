@@ -18,7 +18,7 @@ interface ProjectContextProps {
   aiFunctions: AIFunction[]
   prompts: Prompt[]
   onSubmitProject: (project: Project) => void
-  onPatchProject: (project: Partial<Project>) => void
+  setProject: (project: Project) => void
   onDeleteProject: () => void
   onClickEdit: (projectID: string) => void
   setSelectedProjectIndx: (indx: number | undefined) => void
@@ -29,7 +29,7 @@ export const ProjectContext = createContext<ProjectContextProps>({
   aiFunctions: [],
   prompts: [],
   onSubmitProject: (project: Project) => {},
-  onPatchProject: (project: Partial<Project>) => {},
+  setProject: (project: Project) => {},
   onDeleteProject: () => {},
   onClickEdit: (projectID: string) => {},
   setSelectedProjectIndx: (indx: number | undefined) => {},
@@ -114,7 +114,7 @@ export default function Layout({
             aiFunctions: aiFunctions,
             prompts: prompts,
             onSubmitProject: onSubmitProject,
-            onPatchProject: (project: Partial<Project>) => {},
+            setProject: setProject,
             onDeleteProject: () => {},
             onClickEdit: onClickEdit,
             setSelectedProjectIndx: (indx: number | undefined) => {},
