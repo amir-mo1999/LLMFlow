@@ -115,7 +115,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       addAIFunction(response)
     },
     onError: (err) => {
-      if (err.status === 409) {
+      //@ts-ignore
+      if (err.stack.status === 409) {
         setNameError(true)
         if (nameRef.current) {
           nameRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
@@ -129,7 +130,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       setAIFunction(response)
     },
     onError: (err) => {
-      if (err.status === 409) {
+      //@ts-ignore
+      if (err.stack.status === 409) {
         setNameError(true)
         if (nameRef.current) {
           nameRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
