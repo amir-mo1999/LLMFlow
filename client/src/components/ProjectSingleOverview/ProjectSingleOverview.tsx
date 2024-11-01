@@ -89,8 +89,11 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
           )
         })}
       </Box>
-
+      {/* API Docs */}
       <Divider sx={{ marginY: 2 }}></Divider>
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        API Documentation
+      </Typography>
 
       <Divider sx={{ marginY: 2 }}></Divider>
       <Box>

@@ -1,20 +1,21 @@
 "use client"
 import { useContext } from "react"
-import { AIFunctionsContext } from "../../layout"
-import { AIFunctionForm } from "@/components"
+import { ProjectContext } from "../../layout"
+import { ProjectForm } from "@/components"
 
-export default function Page({ params }: { params: { aiFunctionID: string } }) {
-  const { aiFunctions, setAIFunction } = useContext(AIFunctionsContext)
+export default function Page({ params }: { params: { projectID: string } }) {
+  const { projects, aiFunctions, prompts, onPatchProject } = useContext(ProjectContext)
 
-  const aiFunction = aiFunctions.find((aiFunction) => aiFunction._id === params.aiFunctionID)
+  const project = projects.find((project) => project._id === params.projectID)
 
-  if (aiFunction === undefined) return <></>
+  if (project === undefined) return <></>
 
   return (
-    <AIFunctionForm
-      aiFunction={aiFunction}
-      setAIFunction={setAIFunction}
-      addAIFunction={() => {}}
-    ></AIFunctionForm>
+    <ProjectForm
+      editProject={project}
+      onPatchProject={onPatchProject}
+      aiFunctions={aiFunctions}
+      prompts={prompts}
+    ></ProjectForm>
   )
 }

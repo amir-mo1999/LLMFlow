@@ -47,10 +47,41 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   const [openSelectAIFunction, setOpenSelectAIFunction] = useState(false)
   const [openSelectPrompt, setOpenSelectPrompt] = useState(false)
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState(0)
-
   const [selectedAIFunctionIndices, setSelectedAIFunctionIndices] = useState<number[]>([])
-
   const [promptsMapping, setPromptsMapping] = useState<Record<number, Prompt>>({})
+  const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([])
+
+  useEffect(() => {
+    const newImplementedAIFunctions = aiFunctions.filter((aiFunction) => aiFunction.implemented)
+    setImplementedAIFunctions(newImplementedAIFunctions)
+    setSelectedAIFunctionIndices([])
+
+    if (editProject) {
+      // set selectedAIFunctionIndices and PromptsMapping with edit project
+      const newPromptsMapping = editProject.prompt_ids.reduce(
+        (acc, promptID) => {
+          const prompt = prompts.find((p) => p._id === promptID)
+          if (prompt) {
+            const aiFunctionID = prompt.ai_function_id as string
+            const aiFunctionIndx = newImplementedAIFunctions.findIndex(
+              (a) => a._id === aiFunctionID
+            )
+            acc[aiFunctionIndx] = prompt
+          }
+          return acc
+        },
+        {} as Record<number, Prompt>
+      )
+      setSelectedAIFunctionIndices(Object.keys(newPromptsMapping).map((key) => +key))
+      setPromptsMapping(newPromptsMapping)
+    }
+  }, [])
+
+  useEffect(() => {
+    setFilteredPrompts(
+      prompts.filter((prompt) => prompt.ai_function_id === aiFunctions[selectedAIFunctionIndx]._id)
+    )
+  }, [selectedAIFunctionIndx])
 
   const { mutate: postProject } = usePostProject({
     onSuccess: (project: Project) => {
@@ -74,11 +105,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     postProject({ body: newProject })
   }
 
-  useEffect(() => {
-    setImplementedAIFunctions(aiFunctions.filter((aiFunction) => aiFunction.implemented))
-    setSelectedAIFunctionIndices([])
-  }, [aiFunctions])
-
   const onClickAIFunction = (indx: number) => {
     if (!selectedAIFunctionIndices.includes(indx)) {
       const newIndices = [...selectedAIFunctionIndices]
@@ -90,7 +116,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   const onClickPrompt = (aiFunctionIndx: number) => {
     const f = (promptIndx: number) => {
       const newMapping = { ...promptsMapping }
-      newMapping[aiFunctionIndx] = prompts[promptIndx]
+      newMapping[aiFunctionIndx] = filteredPrompts[promptIndx]
       setPromptsMapping(newMapping)
     }
     return f
@@ -242,9 +268,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       <SelectDialog
         open={openSelectPrompt}
         onClick={onClickPrompt(selectedAIFunctionIndx)}
-        prompts={prompts.filter(
-          (prompt) => prompt.ai_function_id === aiFunctions[selectedAIFunctionIndx]._id
-        )}
+        prompts={filteredPrompts}
         setOpen={setOpenSelectPrompt}
       ></SelectDialog>
     </>

@@ -74,10 +74,13 @@ export default function Layout({
   }
 
   const onSubmitProject = (project: Project) => {
-    setProjects([...projects, project])
     router.push("/projects")
+    setProjects([...projects, project])
   }
 
+  const onClickEdit = (projectID: string) => {
+    router.push(`/projects/edit/${projectID}`)
+  }
   const setProject = (newProject: Project) => {
     router.push("/projects")
     const updateIndx = projects.findIndex((project) => project._id === newProject._id)
@@ -113,7 +116,7 @@ export default function Layout({
             onSubmitProject: onSubmitProject,
             onPatchProject: (project: Partial<Project>) => {},
             onDeleteProject: () => {},
-            onClickEdit: (projectID: string) => {},
+            onClickEdit: onClickEdit,
             setSelectedProjectIndx: (indx: number | undefined) => {},
           }}
         >

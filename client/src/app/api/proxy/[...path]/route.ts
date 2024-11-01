@@ -17,7 +17,6 @@ export const handleRequest: HandlerFunction = async (request, { path }) => {
 
   // If no token is found, return a 401 Unauthorized response
   if (!token) {
-    console.log("no token")
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
@@ -48,7 +47,6 @@ export const handleRequest: HandlerFunction = async (request, { path }) => {
   // If the method is not GET or HEAD, include the request body
   if (isJson && hasBody) {
     try {
-      console.log(request)
       const requestBody = await request.json()
       fetchOptions.body = JSON.stringify(requestBody)
     } catch (error) {

@@ -42,9 +42,7 @@ export default function Layout({
 }>) {
   const { aiFunctions, prompts, setPrompts, refetchAIFunctions, refetchPrompts } =
     useContext(AppContext)
-  useEffect(() => {
-    console.log(prompts)
-  }, [prompts])
+
   const [searchValue, setSearchValue] = useState("")
   const [selectedPromptIndx, setSelectedPromptIndx] = useState<number | undefined>()
 
@@ -62,7 +60,6 @@ export default function Layout({
   }
 
   const addPrompt = (prompt: Prompt) => {
-    console.log("adding prompt", prompt)
     setPrompts([...prompts, prompt])
     router.push("/prompts")
   }
