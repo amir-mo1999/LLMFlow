@@ -38,7 +38,7 @@ const MyAppBar: React.FC<AppBarProps> = () => {
         {/* Left Section: App Icon and App Name */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h6" component="div">
-            MyApp
+            LLM Flow
           </Typography>
         </Box>
 
