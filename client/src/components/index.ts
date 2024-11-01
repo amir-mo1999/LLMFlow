@@ -5,7 +5,7 @@ import MyAppBar from "./AppBar"
 import AssertionPaper from "./AssertionPaper/AssertionPaper"
 import AssertionsForm from "./AssertionsForm/AssertionsForm"
 import AssertionsOverview from "./AssertionsOverview/AssertionsOverview"
-import { NumberChip, TextChip, DateChip, UserChip } from "./Chips"
+import { NumberChip, TextChip, DateChip, UserChip, ItemTypeChip } from "./Chips"
 import { MainContentContainer, SideBarContainer, PageContainer } from "./containers"
 import EvalOverview from "./EvalOverview/EvalOverview"
 import InputVariableForm from "./InputVariableForm/InputVariableForm"
@@ -39,6 +39,7 @@ export {
   TextChip,
   DateChip,
   UserChip,
+  ItemTypeChip,
   MainContentContainer,
   SideBarContainer,
   PageContainer,

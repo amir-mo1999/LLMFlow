@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
 import { SxProps } from "@mui/material"
 import { Project } from "@/api/apiSchemas"
-import { UserChip, NumberChip, DateChip } from "@/components"
+import { UserChip, NumberChip, DateChip, ItemTypeChip } from "@/components"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
 
@@ -42,9 +42,11 @@ const ProjectPaper: React.FC<ProjectPaperProps> = ({ sx, onClick, project, selec
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-        <Typography variant="h6" sx={{ flex: 1 }}>
-          {project.name}
-        </Typography>
+        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1 }}>
+          <ItemTypeChip itemType="Project" />
+          <Typography variant="h6">{project.name}</Typography>
+        </Box>
+
         <DateChip isoString={project.creation_time} />
       </Box>
       <UserChip username={project.username} sx={{ marginRight: 10000, mb: 1 }} />

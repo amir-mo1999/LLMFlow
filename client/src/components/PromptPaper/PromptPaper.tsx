@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper"
 import { SxProps } from "@mui/material"
 import { Prompt } from "@/api/apiSchemas"
 import LinearProgress from "@mui/material/LinearProgress"
-import { UserChip, NumberChip, DateChip, TextChip } from "@/components"
+import { UserChip, NumberChip, DateChip, TextChip, ItemTypeChip } from "@/components"
 import { getMeanLatency, getMeanScore, getTotalCost } from "@/utils"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
@@ -75,9 +75,13 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, selected
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-        <Typography variant="h6" sx={{ flex: 1 }}>
-          {prompt.ai_function_name} #{prompt.index}
-        </Typography>
+        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1 }}>
+          <ItemTypeChip itemType="Prompt" />
+          <Typography variant="h6">
+            {prompt.ai_function_name} #{prompt.index}
+          </Typography>
+        </Box>
+
         <DateChip isoString={prompt.creation_time} />
       </Box>
       <Stack direction="row" mb={2} spacing={2}>
