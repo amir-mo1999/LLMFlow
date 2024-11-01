@@ -88,11 +88,29 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     onSuccess: (project: Project) => {
       onSubmitProject?.(project)
     },
+    onError: (err) => {
+      //@ts-ignore
+      if (err.stack.status === 409) {
+        setNameError(true)
+        if (nameRef.current) {
+          nameRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+      }
+    },
   })
 
   const { mutate: patchProject } = usePatchProject({
     onSuccess: (project: Project) => {
       setProject?.(project)
+    },
+    onError: (err) => {
+      //@ts-ignore
+      if (err.stack.status === 409) {
+        setNameError(true)
+        if (nameRef.current) {
+          nameRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+      }
     },
   })
 

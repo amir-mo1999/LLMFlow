@@ -295,10 +295,10 @@ class DB:
     async def patch_project(
         self, project: Project, project_patch: ProjectPatchInput
     ) -> Project | None:
-        # check project with name exists
+        # check if project with new name exists
         if project.name:
             query = await self.projects.find_one(
-                {"_id": {"$ne": project.id}, "name": project.name}
+                {"_id": {"$ne": project.id}, "name": project_patch.name}
             )
             if query:
                 return None

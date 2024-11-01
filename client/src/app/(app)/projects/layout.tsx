@@ -87,6 +87,7 @@ export default function Layout({
     const newProjects = [...projects]
     newProjects[updateIndx] = newProject
     setProjects(newProjects)
+    setSelectedProjectIndx(undefined)
   }
 
   return (
