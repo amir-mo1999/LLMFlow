@@ -24,7 +24,7 @@ import SearchField from "./SearchField/SearchField"
 import SelectDialog from "./SelectDialog/SelectDialog"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import TestCasesOverview from "./TestCasesOverview/TestCasesOverview"
-import ProjectPaper from "./ProjectPaper/PromptPaper"
+import ProjectPaper from "./ProjectPaper/ProjectPaper"
 
 export {
   AIFunctionForm,

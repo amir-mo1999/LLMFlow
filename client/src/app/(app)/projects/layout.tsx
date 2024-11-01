@@ -1,6 +1,12 @@
 "use client"
 
-import { MainContentContainer, SideBarContainer, PageContainer, SearchField } from "@/components"
+import {
+  MainContentContainer,
+  SideBarContainer,
+  PageContainer,
+  SearchField,
+  ItemOverview,
+} from "@/components"
 import Button from "@mui/material/Button"
 import { useState, createContext, useContext } from "react"
 import { AIFunction, Prompt, Project } from "@/api/apiSchemas"
@@ -91,6 +97,12 @@ export default function Layout({
         <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
           Create Project
         </Button>
+        <ItemOverview
+          itemType="Project"
+          selectedIndx={selectedProjectIndx}
+          items={projects}
+          onClick={onClickProjects}
+        ></ItemOverview>
       </SideBarContainer>
       <MainContentContainer>
         <ProjectContext.Provider

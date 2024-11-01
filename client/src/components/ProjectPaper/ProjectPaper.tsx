@@ -47,20 +47,18 @@ const ProjectPaper: React.FC<ProjectPaperProps> = ({ sx, onClick, project, selec
         </Typography>
         <DateChip isoString={project.creation_time} />
       </Box>
-      <Stack direction="row" mb={2} spacing={2}>
-        <UserChip username={project.username} />
-        <Typography
-          sx={{
-            display: "-webkit-box",
-            overflow: "hidden",
-            WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 1,
-            mb: 1,
-          }}
-        >
-          {project.description}
-        </Typography>
-      </Stack>
+      <UserChip username={project.username} sx={{ marginRight: 10000, mb: 1 }} />
+      <Typography
+        sx={{
+          display: "-webkit-box",
+          overflow: "hidden",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: 1,
+          mb: 1,
+        }}
+      >
+        {project.description}
+      </Typography>
 
       {renderFigures()}
     </Paper>
