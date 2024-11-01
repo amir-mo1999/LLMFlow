@@ -8,6 +8,7 @@ import { UserChip, NumberChip, DateChip, TextChip, ItemTypeChip } from "@/compon
 import { getMeanLatency, getMeanScore, getTotalCost } from "@/utils"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
+import Tooltip from "@mui/material/Tooltip"
 
 interface PromptPaperProps {
   sx?: SxProps
@@ -85,11 +86,18 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1 }}>
-          <ItemTypeChip itemType="Prompt" />
-          <Typography variant="h6">
-            {prompt.ai_function_name} #{prompt.index}
-          </Typography>
+        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1, maxWidth: "80%" }}>
+          <ItemTypeChip itemType="Project" />
+          <Tooltip title={`${prompt.ai_function_name} #${prompt.index}`} placement="top">
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{ whiteSpace: "noWrap", textOverflow: "ellipsis" }}
+              maxHeight={50}
+            >
+              {prompt.ai_function_name} #{prompt.index}
+            </Typography>
+          </Tooltip>
         </Box>
 
         <DateChip isoString={prompt.creation_time} />

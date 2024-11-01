@@ -6,6 +6,7 @@ import { Project } from "@/api/apiSchemas"
 import { UserChip, NumberChip, DateChip, ItemTypeChip } from "@/components"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
+import Tooltip from "@mui/material/Tooltip"
 
 interface ProjectPaperProps {
   sx?: SxProps
@@ -42,9 +43,18 @@ const ProjectPaper: React.FC<ProjectPaperProps> = ({ sx, onClick, project, selec
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1 }}>
+        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1, maxWidth: "80%" }}>
           <ItemTypeChip itemType="Project" />
-          <Typography variant="h6">{project.name}</Typography>
+          <Tooltip title={project.name} placement="top">
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{ whiteSpace: "noWrap", textOverflow: "ellipsis" }}
+              maxHeight={50}
+            >
+              {project.name}
+            </Typography>
+          </Tooltip>
         </Box>
 
         <DateChip isoString={project.creation_time} />

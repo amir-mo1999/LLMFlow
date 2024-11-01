@@ -5,6 +5,7 @@ import Box from "@mui/material/Box"
 import { SxProps } from "@mui/material"
 import { AIFunction } from "@/api/apiSchemas"
 import { UserChip, NumberChip, DateChip, TextChip, ItemTypeChip } from "../Chips"
+import Tooltip from "@mui/material/Tooltip"
 
 interface AIFunctionPaperProps {
   sx?: SxProps
@@ -46,9 +47,18 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1 }}>
-          <ItemTypeChip itemType="AI Function" />
-          <Typography variant="h6">{aiFunction.name}</Typography>
+        <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1, maxWidth: "80%" }}>
+          <ItemTypeChip itemType="Project" />
+          <Tooltip title={aiFunction.name} placement="top">
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{ whiteSpace: "noWrap", textOverflow: "ellipsis" }}
+              maxHeight={50}
+            >
+              {aiFunction.name}
+            </Typography>
+          </Tooltip>
         </Box>
 
         <DateChip isoString={aiFunction.creation_time} />
