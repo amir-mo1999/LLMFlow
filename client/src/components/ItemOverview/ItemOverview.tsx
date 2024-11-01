@@ -2,7 +2,7 @@
 import React from "react"
 import Box from "@mui/material/Box"
 import { AIFunction, Prompt, Project } from "@/api/apiSchemas"
-import { PromptPaper, AIFunctionPaper } from "@/components"
+import { PromptPaper, AIFunctionPaper, ProjectPaper } from "@/components"
 
 type Item = "Prompt" | "AIFunction" | "Project"
 
@@ -36,7 +36,20 @@ const ItemOverview: React.FC<ItemOverviewProps> = ({ itemType, onClick, items, s
       )
       break
     case "Project":
-      componentToRender = <></>
+      componentToRender = (
+        <>
+          {items.map((project, indx) => {
+            return (
+              <ProjectPaper
+                key={indx}
+                selected={indx === selectedIndx}
+                project={project as Project}
+                onClick={onClick ? onClick(indx) : undefined}
+              ></ProjectPaper>
+            )
+          })}
+        </>
+      )
       break
     case "Prompt":
       componentToRender = (
