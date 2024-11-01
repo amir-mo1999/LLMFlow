@@ -29,25 +29,35 @@ const PromptPaper: React.FC<PromptPaperProps> = ({ sx, onClick, prompt, selected
     const meanLatency = getMeanLatency(prompt.last_eval)
 
     return (
-      <>
-        <Stack direction="row" spacing={2} mb={1}>
-          <NumberChip
-            number={numberOfMessages}
-            label={numberOfMessages === 1 ? "Message" : "Messages"}
-          />
-          <NumberChip labelFirst number={totalCost} label="Cost" unit="$" />
-          <NumberChip
-            labelFirst
-            number={meanScore as number}
-            label="Score"
-            color={meanScore >= 0.8 ? "success" : meanScore >= 0.4 ? "warning" : "error"}
-            variant="filled"
-          />
-        </Stack>
-        <Stack direction="row" spacing={2} mb={1}>
-          <NumberChip labelFirst number={meanLatency as number} label="Latency" unit="ms" />
-        </Stack>
-      </>
+      <Stack
+        direction="row"
+        columnGap={2}
+        mb={1}
+        rowGap={1}
+        flexWrap="wrap"
+        justifyContent="flex-start"
+        alignItems="start"
+      >
+        <NumberChip
+          number={numberOfMessages}
+          label={numberOfMessages === 1 ? "Message" : "Messages"}
+        />
+        <NumberChip labelFirst number={totalCost} label="Cost" unit="$" />
+        <NumberChip
+          labelFirst
+          number={meanScore as number}
+          label="Score"
+          color={meanScore >= 0.8 ? "success" : meanScore >= 0.4 ? "warning" : "error"}
+          variant="filled"
+        />
+        <NumberChip
+          labelFirst
+          number={meanLatency as number}
+          label="Latency"
+          unit="ms"
+          sx={{ marginLeft: 0 }}
+        />
+      </Stack>
     )
   }
   return (
