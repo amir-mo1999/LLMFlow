@@ -10,6 +10,7 @@ import { useDeletePrompt } from "@/api/apiComponents"
 import EvalOverview from "../EvalOverview/EvalOverview"
 import theme from "@/theme"
 import { PromptMessagesOverview } from "@/components"
+import EditIcon from "@mui/icons-material/Edit"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
@@ -58,8 +59,8 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
       {/* Prompt Messages */}
       <Box sx={{ display: "flex", gap: 2 }}>
         <Typography variant="h5">Messages</Typography>
-        <Button size="small" variant="contained" onClick={() => onClickEdit(prompt._id as string)}>
-          Edit Messages
+        <Button size="small" onClick={() => onClickEdit(prompt._id as string)}>
+          <EditIcon />
         </Button>
       </Box>
 

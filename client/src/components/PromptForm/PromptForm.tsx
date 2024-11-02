@@ -171,7 +171,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
   return (
     <>
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-        {edit && prompt ? (
+        {edit && prompt && (
           <Box>
             <Typography variant="h4">
               {prompt.ai_function_name} #{prompt.index}
@@ -180,14 +180,12 @@ const PromptForm: React.FC<PromptFormProps> = ({
             <Typography>
               {new Date(prompt.creation_time).toLocaleString("de-DE", options)}
             </Typography>
-            <Divider sx={{ marginY: 2 }}></Divider>
           </Box>
-        ) : (
-          <></>
         )}
 
-        {selectedAIFunctionIndx !== undefined ? (
-          <>
+        {selectedAIFunctionIndx !== undefined && (
+          <Box sx={{ display: edit ? "none" : "normal" }}>
+            <Divider sx={{ marginY: 2 }}></Divider>
             <Typography variant="h5" gutterBottom>
               Selected AI Function
             </Typography>
@@ -200,9 +198,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
               }}
               aiFunction={aiFunctions[selectedAIFunctionIndx]}
             ></AIFunctionPaper>
-          </>
-        ) : (
-          <></>
+          </Box>
         )}
 
         <Box mt={2} sx={{ display: edit ? "none" : "normal" }}>
