@@ -54,6 +54,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
           title: "root",
         }
   )
+
   const [useJsonSchema, setUseJsonSchema] = useState<boolean>(false)
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [jsonAssertions, setJsonAssertions] = useState<Assertion[]>([])

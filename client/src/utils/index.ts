@@ -218,3 +218,14 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "rouge-n",
   "starts-with",
 ]
+
+export function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
+  const result = {} as Pick<T, K>
+  keys.forEach((key) => {
+    //@ts-ignore
+    if (key in obj) {
+      result[key] = obj[key]
+    }
+  })
+  return result
+}
