@@ -1,0 +1,67 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation for Project: My Project",
+    "version": "1.0.0",
+    "description": "API documentation for project 'My Project' with ID '467c8eaa-ae38-4074-a0bd-e85f2594e281'."
+  },
+  "paths": {
+    "/467c8eaa-ae38-4074-a0bd-e85f2594e281/My-Project/Summarize-Texts": {
+      "post": {
+        "summary": "Execute AI function 'Summarize Texts'",
+        "description": "Executes the AI function 'Summarize Texts' in project 'My Project'.",
+        "operationId": "My Project_Summarize Texts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "number_of_sentences": {
+                    "type": "string"
+                  }
+                },
+                "required": ["text", "number_of_sentences"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful execution",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}

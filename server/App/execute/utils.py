@@ -1,6 +1,26 @@
+import re
 from typing import Any, Dict, List, Tuple
 
 from App.models import InputVariable
+
+
+def format_name(name: str) -> str:
+    """
+    Formats a name to be URL-friendly by replacing whitespaces with hyphens
+    and removing any characters that would require URL encoding.
+
+    Parameters:
+    - name (str): The original name string to format.
+
+    Returns:
+    - str: The formatted, URL-friendly name.
+    """
+    formatted_name = re.sub(r"\s+", "-", name)
+    formatted_name = re.sub(r"[^A-Za-z0-9\-_.~]", "", formatted_name)
+
+    if len(formatted_name) == 0:
+        formatted_name = "default-name"
+    return formatted_name
 
 
 def generate_project_api_docs(
@@ -21,6 +41,8 @@ def generate_project_api_docs(
     Returns:
     - dict: OpenAPI specification as a dictionary.
     """
+    formatted_project_name = format_name(project_name)
+
     # Base structure of the OpenAPI specification
     openapi_spec: Dict[str, Any] = {
         "openapi": "3.0.0",
@@ -43,8 +65,10 @@ def generate_project_api_docs(
         ai_function_name,
         input_variables,
     ) in route_params:
+        formatted_ai_function_name = format_name(ai_function_name)
+        # Format the AI function name
         # Construct the route
-        route = f"/{project_id}/{project_name}/{ai_function_name}"
+        route = f"/{project_id}/{formatted_project_name}/{formatted_ai_function_name}"
 
         # Define parameters for the input variables
         request_body_content: Dict[str, Any] = {

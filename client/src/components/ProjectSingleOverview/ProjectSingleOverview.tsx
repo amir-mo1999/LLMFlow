@@ -10,6 +10,8 @@ import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 import { useDeleteProject } from "@/api/apiComponents"
 import { AIFunctionPaper, PromptPaper } from "@/components"
+import SwaggerUI from "swagger-ui-react"
+import "swagger-ui-react/swagger-ui.css"
 
 interface ProjectSingleOverviewProps {
   onDeleteProject: () => void
@@ -86,6 +88,7 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         API Documentation
       </Typography>
+      <SwaggerUI url="/openapi.json"></SwaggerUI>
 
       <Divider sx={{ marginY: 2 }}></Divider>
       <Box>
@@ -114,6 +117,21 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
           Delete
         </Button>
       </Box>
+      <style jsx global>{`
+        /* Global styles to override Swagger UI defaults */
+        .swagger-ui,
+        .swagger-ui .wrapper,
+        .swagger-ui .swagger-container {
+          background-color: white;
+        }
+
+        /* Optional: Adjust text colors for better contrast */
+        .swagger-ui .topbar,
+        .swagger-ui .info,
+        .swagger-ui .opblock-summary {
+          color: black;
+        }
+      `}</style>
     </Box>
   )
 }
