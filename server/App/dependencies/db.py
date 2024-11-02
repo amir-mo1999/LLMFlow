@@ -260,9 +260,12 @@ class DB:
                     {"$set": {"ai_function_name": ai_function_patch.name}},
                 )
 
-        # update fields in ai function without validating
+        # update fields in ai function dump
+        ai_function_dump = ai_function.model_dump(by_alias=True)
         for key in ai_function_patch.model_dump(exclude_none=True):
-            ai_function.__setattr__(key, getattr(ai_function_patch, key))
+            ai_function_dump[key] = getattr(ai_function_patch, key)
+
+        ai_function = AIFunction(**ai_function_dump)
 
         # delete eval for prompts if any of the fields output_schema, assert, test_cases change
         if any(
