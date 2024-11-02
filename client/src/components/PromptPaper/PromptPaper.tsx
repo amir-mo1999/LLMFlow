@@ -87,7 +87,7 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
         <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1, maxWidth: "80%" }}>
-          <ItemTypeChip itemType="Project" />
+          <ItemTypeChip itemType="Prompt" />
           <Tooltip title={`${prompt.ai_function_name} #${prompt.index}`} placement="top">
             <Typography
               variant="h6"

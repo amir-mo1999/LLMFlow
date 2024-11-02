@@ -48,7 +48,7 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
     >
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
         <Box sx={{ display: "flex", flex: 1, alignItems: "center", gap: 1, maxWidth: "80%" }}>
-          <ItemTypeChip itemType="Project" />
+          <ItemTypeChip itemType="AI Function" />
           <Tooltip title={aiFunction.name} placement="top">
             <Typography
               variant="h6"
