@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from .auth import AUTH_ROUTER
 from .db import DB_ROUTER
 from .evaluate import EVAL_ROUTER
+from .execute import EXECUTE_ROUTER
 from .http_exceptions import DocumentNotFound, DuplicateDocument
 
 app = FastAPI(
@@ -26,6 +27,7 @@ app.add_middleware(
 app.include_router(AUTH_ROUTER)
 app.include_router(EVAL_ROUTER)
 app.include_router(DB_ROUTER)
+app.include_router(EXECUTE_ROUTER)
 
 
 ## add exception handlers
