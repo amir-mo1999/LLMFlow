@@ -3,6 +3,7 @@ from .ai_function import (
     AIFunctionPatchInput,
     AIFunctionRouteInput,
     Assertion,
+    InputVariable,
 )
 from .json_schema import JsonSchema
 from .project import Project, ProjectPatchInput, ProjectRouteInput
@@ -32,4 +33,5 @@ __all__ = [
     "ProjectRouteInput",
     "ProjectPatchInput",
     "Assertion",
+    "InputVariable",
 ]

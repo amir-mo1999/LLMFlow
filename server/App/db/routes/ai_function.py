@@ -88,7 +88,7 @@ async def get_ai_function(
     ai_function_id: str,
     db: Annotated[DB, Depends(get_db)],
     user: Annotated[User, Depends(user)],
-):
+) -> AIFunction:
     ai_function = await db.get_ai_function_by_id(ai_function_id)
 
     if ai_function is None:
@@ -137,9 +137,7 @@ async def patch_ai_function(
     user: Annotated[User, Depends(user)],
     db: Annotated[DB, Depends(get_db)],
 ):
-    ai_function = await get_ai_function(
-        ai_function_id=ai_function_id, db=db, user=user
-    )
+    ai_function = await get_ai_function(ai_function_id=ai_function_id, db=db, user=user)
 
     ai_function = await db.patch_ai_function(
         ai_function, ai_function_patch=ai_function_patch

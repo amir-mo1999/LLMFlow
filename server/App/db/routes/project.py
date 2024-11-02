@@ -87,7 +87,7 @@ async def get_project(
     project_id: str,
     db: Annotated[DB, Depends(get_db)],
     user: Annotated[User, Depends(user)],
-):
+) -> Project:
     project = await db.get_project_by_id(project_id)
 
     if project is None:
