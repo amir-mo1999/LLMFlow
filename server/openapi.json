@@ -1282,6 +1282,71 @@
                     }
                 }
             }
+        },
+        "/execute/{project_id}/{ai_function_id}": {
+            "post": {
+                "tags": [
+                    "execute"
+                ],
+                "summary": "Execute",
+                "operationId": "execute",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Project Id"
+                        }
+                    },
+                    {
+                        "name": "ai_function_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Ai Function Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "409": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -2634,6 +2699,12 @@
                             "My Project"
                         ]
                     },
+                    "route_name": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1,
+                        "title": "Route Name"
+                    },
                     "description": {
                         "type": "string",
                         "maxLength": 1000,
@@ -2643,15 +2714,12 @@
                             "This is a project"
                         ]
                     },
-                    "prompt_ids": {
+                    "api_routes": {
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/ProjectAPIRoute"
                         },
                         "type": "array",
-                        "title": "Prompt Ids",
-                        "examples": [
-                            []
-                        ]
+                        "title": "Api Routes"
                     },
                     "_id": {
                         "type": "string",
@@ -2671,12 +2739,36 @@
                 "type": "object",
                 "required": [
                     "name",
+                    "route_name",
                     "description",
-                    "prompt_ids",
+                    "api_routes",
                     "username",
                     "creation_time"
                 ],
                 "title": "Project"
+            },
+            "ProjectAPIRoute": {
+                "properties": {
+                    "ai_function_id": {
+                        "type": "string",
+                        "title": "Ai Function Id"
+                    },
+                    "prompt_id": {
+                        "type": "string",
+                        "title": "Prompt Id"
+                    },
+                    "route_name": {
+                        "type": "string",
+                        "title": "Route Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "ai_function_id",
+                    "prompt_id",
+                    "route_name"
+                ],
+                "title": "ProjectAPIRoute"
             },
             "ProjectPatchInput": {
                 "properties": {
@@ -2693,6 +2785,19 @@
                         ],
                         "title": "Name"
                     },
+                    "route_name": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 20,
+                                "minLength": 1
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Route Name"
+                    },
                     "description": {
                         "anyOf": [
                             {
@@ -2706,22 +2811,21 @@
                         ],
                         "title": "Description"
                     },
-                    "prompt_ids": {
+                    "api_routes": {
                         "anyOf": [
                             {
-                                "items": {
-                                    "type": "string"
-                                },
-                                "type": "array"
+                                "$ref": "#/components/schemas/ProjectAPIRoute"
                             },
                             {
                                 "type": "null"
                             }
-                        ],
-                        "title": "Prompt Ids"
+                        ]
                     }
                 },
                 "type": "object",
+                "required": [
+                    "route_name"
+                ],
                 "title": "ProjectPatchInput"
             },
             "ProjectRouteInput": {
@@ -2735,6 +2839,12 @@
                             "My Project"
                         ]
                     },
+                    "route_name": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1,
+                        "title": "Route Name"
+                    },
                     "description": {
                         "type": "string",
                         "maxLength": 1000,
@@ -2744,22 +2854,20 @@
                             "This is a project"
                         ]
                     },
-                    "prompt_ids": {
+                    "api_routes": {
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/ProjectAPIRoute"
                         },
                         "type": "array",
-                        "title": "Prompt Ids",
-                        "examples": [
-                            []
-                        ]
+                        "title": "Api Routes"
                     }
                 },
                 "type": "object",
                 "required": [
                     "name",
+                    "route_name",
                     "description",
-                    "prompt_ids"
+                    "api_routes"
                 ],
                 "title": "ProjectRouteInput"
             },

@@ -7,28 +7,34 @@ from pydantic import EmailStr, Field, StringConstraints
 from .root_model import RootModel
 
 
+class ProjectAPIRoute(RootModel):
+    ai_function_id: str
+    prompt_id: str
+    route_name: str
+
+
 class ProjectRouteInput(RootModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
         ..., examples=["My Project"]
     )
+    route_name: Annotated[str, StringConstraints(min_length=1, max_length=20)]
 
     description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = (
         Field(..., examples=["This is a project"])
     )
-    prompt_ids: List[str] = Field(
-        ...,
-        examples=[[]],
-    )
+    api_routes: List[ProjectAPIRoute]
 
 
 class ProjectPatchInput(RootModel):
     name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
         None
     )
+    route_name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=20)]]
+
     description: Optional[
         Annotated[str, StringConstraints(min_length=1, max_length=1000)]
     ] = None
-    prompt_ids: Optional[List[str]] = None
+    api_routes: Optional[ProjectAPIRoute] = None
 
 
 class Project(ProjectRouteInput):

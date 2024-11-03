@@ -41,8 +41,8 @@ async def post_project(
     now = datetime.now()
 
     # verify that prompts exist
-    for prompt_id in project_input.prompt_ids:
-        await get_prompt(prompt_id, db, user)
+    for api_route in project_input.api_routes:
+        await get_prompt(api_route.prompt_id, db, user)
 
     project = Project(
         **project_input.model_dump(by_alias=True),

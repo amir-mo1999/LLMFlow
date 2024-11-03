@@ -306,9 +306,11 @@ class DB:
             if query:
                 return None
 
-        # update fields in project without validating
+        project_dump = project.model_dump(by_alias=True)
         for key in project_patch.model_dump(exclude_none=True):
-            project.__setattr__(key, getattr(project_patch, key))
+            project_dump[key] = getattr(project_patch, key)
+
+        project = Project(**project_dump)
 
         # update project
         await self.projects.update_one(
