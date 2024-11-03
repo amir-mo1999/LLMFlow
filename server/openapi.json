@@ -2699,11 +2699,11 @@
                             "My Project"
                         ]
                     },
-                    "route_name": {
+                    "path_segment_name": {
                         "type": "string",
                         "maxLength": 20,
                         "minLength": 1,
-                        "title": "Route Name"
+                        "title": "Path Segment Name"
                     },
                     "description": {
                         "type": "string",
@@ -2739,7 +2739,7 @@
                 "type": "object",
                 "required": [
                     "name",
-                    "route_name",
+                    "path_segment_name",
                     "description",
                     "api_routes",
                     "username",
@@ -2753,20 +2753,15 @@
                         "type": "string",
                         "title": "Ai Function Id"
                     },
-                    "prompt_id": {
+                    "path_segment_name": {
                         "type": "string",
-                        "title": "Prompt Id"
-                    },
-                    "route_name": {
-                        "type": "string",
-                        "title": "Route Name"
+                        "title": "Path Segment Name"
                     }
                 },
                 "type": "object",
                 "required": [
                     "ai_function_id",
-                    "prompt_id",
-                    "route_name"
+                    "path_segment_name"
                 ],
                 "title": "ProjectAPIRoute"
             },
@@ -2785,7 +2780,7 @@
                         ],
                         "title": "Name"
                     },
-                    "route_name": {
+                    "path_segment_name": {
                         "anyOf": [
                             {
                                 "type": "string",
@@ -2796,7 +2791,7 @@
                                 "type": "null"
                             }
                         ],
-                        "title": "Route Name"
+                        "title": "Path Segment Name"
                     },
                     "description": {
                         "anyOf": [
@@ -2824,7 +2819,7 @@
                 },
                 "type": "object",
                 "required": [
-                    "route_name"
+                    "path_segment_name"
                 ],
                 "title": "ProjectPatchInput"
             },
@@ -2839,11 +2834,11 @@
                             "My Project"
                         ]
                     },
-                    "route_name": {
+                    "path_segment_name": {
                         "type": "string",
                         "maxLength": 20,
                         "minLength": 1,
-                        "title": "Route Name"
+                        "title": "Path Segment Name"
                     },
                     "description": {
                         "type": "string",
@@ -2865,7 +2860,7 @@
                 "type": "object",
                 "required": [
                     "name",
-                    "route_name",
+                    "path_segment_name",
                     "description",
                     "api_routes"
                 ],

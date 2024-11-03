@@ -9,15 +9,14 @@ from .root_model import RootModel
 
 class ProjectAPIRoute(RootModel):
     ai_function_id: str
-    prompt_id: str
-    route_name: str
+    path_segment_name: str
 
 
 class ProjectRouteInput(RootModel):
     name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
         ..., examples=["My Project"]
     )
-    route_name: Annotated[str, StringConstraints(min_length=1, max_length=20)]
+    path_segment_name: Annotated[str, StringConstraints(min_length=1, max_length=20)]
 
     description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = (
         Field(..., examples=["This is a project"])
@@ -29,7 +28,9 @@ class ProjectPatchInput(RootModel):
     name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
         None
     )
-    route_name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=20)]]
+    path_segment_name: Optional[
+        Annotated[str, StringConstraints(min_length=1, max_length=20)]
+    ]
 
     description: Optional[
         Annotated[str, StringConstraints(min_length=1, max_length=1000)]

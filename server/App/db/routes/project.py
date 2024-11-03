@@ -13,7 +13,7 @@ from App.models import (
     User,
 )
 
-from .prompt import get_prompt
+from .ai_function import get_ai_function
 
 PROJECT_ROUTER = APIRouter()
 
@@ -40,9 +40,9 @@ async def post_project(
 ):
     now = datetime.now()
 
-    # verify that prompts exist
+    # verify that ai functions exist
     for api_route in project_input.api_routes:
-        await get_prompt(api_route.prompt_id, db, user)
+        await get_ai_function(api_route.ai_function_id, db, user)
 
     project = Project(
         **project_input.model_dump(by_alias=True),
