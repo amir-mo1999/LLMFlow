@@ -9,14 +9,13 @@ import {
 } from "@/components"
 import Button from "@mui/material/Button"
 import { useState, createContext, useContext } from "react"
-import { AIFunction, Prompt, Project } from "@/api/apiSchemas"
+import { AIFunction, Project } from "@/api/apiSchemas"
 import { useRouter } from "next/navigation"
 import { AppContext } from "../layout"
 
 interface ProjectContextProps {
   projects: Project[]
   aiFunctions: AIFunction[]
-  prompts: Prompt[]
   onSubmitProject: (project: Project) => void
   setProject: (project: Project) => void
   onDeleteProject: () => void
@@ -27,7 +26,6 @@ interface ProjectContextProps {
 export const ProjectContext = createContext<ProjectContextProps>({
   projects: [],
   aiFunctions: [],
-  prompts: [],
   onSubmitProject: (project: Project) => {},
   setProject: (project: Project) => {},
   onDeleteProject: () => {},
@@ -54,7 +52,7 @@ export default function Layout({
   }
 
   const onDeleteProject = () => {
-    router.push("/ai-functions")
+    router.push("/projects")
     const updatedProjects = projects.filter((_, i) => i !== selectedProjectIndx)
     setProjects(updatedProjects)
     setSelectedProjectIndx(undefined)
@@ -108,7 +106,6 @@ export default function Layout({
           value={{
             projects: projects,
             aiFunctions: aiFunctions,
-            prompts: prompts,
             onSubmitProject: onSubmitProject,
             setProject: setProject,
             onDeleteProject: onDeleteProject,

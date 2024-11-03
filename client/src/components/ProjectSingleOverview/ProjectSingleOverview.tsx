@@ -4,7 +4,7 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
-import { AIFunction, Project, Prompt } from "@/api/apiSchemas"
+import { Project } from "@/api/apiSchemas"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
@@ -16,7 +16,6 @@ import "swagger-ui-react/swagger-ui.css"
 interface ProjectSingleOverviewProps {
   onDeleteProject: () => void
   project: Project
-  projectAIFunctionsPrompts: [AIFunction, Prompt][]
   onClickEdit?: (aiFunctionID: string) => void
   onClickAddPrompt?: (aiFunctionID: string) => void
 }
@@ -33,7 +32,6 @@ const options: Intl.DateTimeFormatOptions = {
 const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
   onDeleteProject,
   project,
-  projectAIFunctionsPrompts,
   onClickEdit = () => {},
   onClickAddPrompt,
 }) => {
@@ -61,35 +59,13 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         AI Functions and Prompts
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        {projectAIFunctionsPrompts.map(([aiFunction, prompt], indx) => {
-          return (
-            <Box
-              key={indx}
-              sx={{
-                display: "flex",
-                gap: 4,
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Box sx={{ width: "50%" }}>
-                <AIFunctionPaper aiFunction={aiFunction} disableHover />
-              </Box>
-              <Box sx={{ width: "50%" }}>
-                <PromptPaper prompt={prompt} disableHover />
-              </Box>
-            </Box>
-          )
-        })}
-      </Box>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}></Box>
       {/* API Docs */}
       <Divider sx={{ marginY: 2 }}></Divider>
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         API Documentation
       </Typography>
 
-      <Divider sx={{ marginY: 2 }}></Divider>
       <SwaggerUI
         url="/openapi.json"
         requestInterceptor={(req) => {

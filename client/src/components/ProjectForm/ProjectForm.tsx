@@ -1,23 +1,22 @@
 import React, { useEffect, useState, useRef } from "react"
 import { Typography, Button, Box, TextField } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
-import { Prompt, AIFunction, ProjectRouteInput, ProjectPatchInput } from "@/api/apiSchemas"
+import { AIFunction, ProjectRouteInput } from "@/api/apiSchemas"
 import { Project } from "@/api/apiSchemas"
 import AIFunctionPaper from "../AIFunctionPaper/AIFunctionPaper"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
 import SelectDialog from "@/components/SelectDialog/SelectDialog"
-import PromptPaper from "../PromptPaper/PromptPaper"
 import { usePostProject, usePatchProject } from "@/api/apiComponents"
 import { getProjectDiff } from "@/utils"
 import { ProjectAPIRoute } from "@/api/apiSchemas"
+import { useTheme } from "@mui/material"
 
 interface ProjectFormProps {
   onSubmitProject?: (project: Project) => void
   setProject?: (project: Project) => void
   editProject?: Project
   aiFunctions: AIFunction[]
-  prompts: Prompt[]
 }
 
 const options: Intl.DateTimeFormatOptions = {
@@ -31,52 +30,26 @@ const options: Intl.DateTimeFormatOptions = {
 
 const nameCharLimit = 40
 const descriptionCharLimit = 1000
-const pathNameCharLimit = 20
+const pathSegmentNameCharLimit = 20
 
 const ProjectForm: React.FC<ProjectFormProps> = ({
   onSubmitProject,
   setProject,
   editProject,
   aiFunctions,
-  prompts,
 }) => {
+  const theme = useTheme()
+
   const [name, setName] = useState<string>(editProject?.name || "")
   const nameRef = useRef<null | HTMLDivElement>(null)
   const [nameError, setNameError] = useState<boolean>(false)
-  const [projectPathName, setProjectPathName] = useState(editProject?.route_name || "")
-  const pathNameRef = useRef<null | HTMLDivElement>(null)
-  const [projectPathNameError, setProjectPathNameError] = useState(false)
+  const [pathSegmentName, setPathSegmentName] = useState(editProject?.path_segment_name || "")
+  const pathSegmentNameRef = useRef<null | HTMLDivElement>(null)
+  const [pathSegmentNameError, setPathSegmentNameError] = useState(false)
   const [description, setDescription] = useState<string>(editProject?.description || "")
   const [apiRoutes, setApiRoutes] = useState<ProjectAPIRoute[]>(editProject?.api_routes || [])
-
-  const [implementedAIFunctions, setImplementedAIFunctions] = useState<AIFunction[]>([])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
   const [openSelectAIFunction, setOpenSelectAIFunction] = useState(false)
-  const [openSelectPrompt, setOpenSelectPrompt] = useState(false)
-  const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState(0)
-  const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([])
-
-  const [selectedAIFunctionIndices, setSelectedAIFunctionIndices] = useState<number[]>([])
-  const [promptsMapping, setPromptsMapping] = useState<Record<number, Prompt>>({})
-
-  useEffect(() => {
-    const newImplementedAIFunctions = aiFunctions.filter((aiFunction) => aiFunction.implemented)
-    setImplementedAIFunctions(newImplementedAIFunctions)
-    setSelectedAIFunctionIndices([])
-
-    if (editProject) {
-      //TODO: fix with new project model
-      const newPromptsMapping = {}
-      setSelectedAIFunctionIndices(Object.keys(newPromptsMapping).map((key) => +key))
-      setPromptsMapping(newPromptsMapping)
-    }
-  }, [])
-
-  useEffect(() => {
-    setFilteredPrompts(
-      prompts.filter((prompt) => prompt.ai_function_id === aiFunctions[selectedAIFunctionIndx]._id)
-    )
-  }, [selectedAIFunctionIndx])
 
   const { mutate: postProject } = usePostProject({
     onSuccess: (project: Project) => {
@@ -110,11 +83,10 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
   const onClickSubmit = () => {
     setDisableSubmit(true)
-    // construct project
     const body: ProjectRouteInput = {
       name: name,
       description: description,
-      route_name: projectPathName,
+      path_segment_name: pathSegmentName,
       api_routes: apiRoutes,
     }
 
@@ -129,32 +101,32 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   }
 
   const onClickAIFunction = (indx: number) => {
-    if (!selectedAIFunctionIndices.includes(indx)) {
-      const newIndices = [...selectedAIFunctionIndices]
-      newIndices.push(indx)
-      setSelectedAIFunctionIndices(newIndices)
-    }
-  }
+    const aiFunctionID = aiFunctions[indx]._id
 
-  const onClickPrompt = (aiFunctionIndx: number) => {
-    const f = (promptIndx: number) => {
-      const newMapping = { ...promptsMapping }
-      newMapping[aiFunctionIndx] = filteredPrompts[promptIndx]
-      setPromptsMapping(newMapping)
+    if (!apiRoutes.find((route) => route.ai_function_id === aiFunctionID)) {
+      const newApiRoutes: ProjectAPIRoute[] = [
+        ...apiRoutes,
+        { ai_function_id: aiFunctionID as string, path_segment_name: "" },
+      ]
+      setApiRoutes(newApiRoutes)
     }
-    return f
   }
 
   const updateDisableSubmit = () => {
+    const pathSegmentNames = apiRoutes.reduce((acc, route) => {
+      acc.push(route.path_segment_name)
+      return acc
+    }, [] as string[])
+    const pathSegmentNamesSet = new Set(pathSegmentNames)
     if (name === "") setDisableSubmit(true)
     else if (description === "") setDisableSubmit(true)
-    else if (selectedAIFunctionIndices.length === 0) setDisableSubmit(true)
-    else if (selectedAIFunctionIndices.some((indx) => !(indx in promptsMapping)))
-      setDisableSubmit(true)
+    else if (apiRoutes.length === 0) setDisableSubmit(true)
+    else if (apiRoutes.some((route) => route.path_segment_name === "")) setDisableSubmit(true)
+    else if (pathSegmentNamesSet.size !== pathSegmentNames.length) setDisableSubmit(true)
     else setDisableSubmit(false)
   }
 
-  useEffect(updateDisableSubmit, [name, description, selectedAIFunctionIndices, promptsMapping])
+  useEffect(updateDisableSubmit, [name, description, apiRoutes])
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newName = e.target.value
@@ -164,12 +136,26 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     }
   }
 
-  const onPathNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const newName = e.target.value
-    if (newName.length <= pathNameCharLimit) {
-      setProjectPathName(e.target.value)
-      setProjectPathNameError(false)
+  const onPathSegmentNameChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newName = e.target.value.replace(/[^A-Za-z0-9._~-]/g, "")
+    if (newName.length <= pathSegmentNameCharLimit) {
+      setPathSegmentName(newName)
+      setPathSegmentNameError(false)
     }
+  }
+
+  const onRoutePathSegmentNameChange = (indx: number) => {
+    const f = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const newName = e.target.value.replace(/[^A-Za-z0-9._~-]/g, "")
+      const newApiRoutes = [...apiRoutes]
+      if (newName.length <= pathSegmentNameCharLimit) {
+        newApiRoutes[indx].path_segment_name = newName
+      }
+      setApiRoutes(newApiRoutes)
+    }
+    return f
   }
 
   const onDescriptionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -179,19 +165,10 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     }
   }
 
-  const onClickSelectPrompt = (aiFunctionIndx: number) => {
+  const onClickRemoveAIFunction = (indx: number) => {
     const f = () => {
-      setSelectedAIFunctionIndx(aiFunctionIndx)
-      setOpenSelectPrompt(true)
-    }
-    return f
-  }
-
-  const onClickRemoveAIFunction = (aiFunctionIndx: number) => {
-    const f = () => {
-      const newIndices = selectedAIFunctionIndices.filter((indx) => indx !== aiFunctionIndx)
-      setSelectedAIFunctionIndices(newIndices)
-      delete promptsMapping[aiFunctionIndx]
+      const newApiRoutes = apiRoutes.filter((_, i) => i !== indx)
+      setApiRoutes(newApiRoutes)
     }
     return f
   }
@@ -226,12 +203,12 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
           API Path Segment Name
         </Typography>
         <TextField
-          ref={pathNameRef}
+          ref={pathSegmentNameRef}
           sx={{ width: "100%" }}
-          value={projectPathName}
-          onChange={onPathNameChange}
-          helperText={`${projectPathName.length}/${pathNameCharLimit} ${projectPathNameError ? "Project with this path segment name already exists" : ""}`}
-          error={nameError}
+          value={pathSegmentName}
+          onChange={onPathSegmentNameChange}
+          helperText={`${pathSegmentName.length}/${pathSegmentNameCharLimit} ${pathSegmentNameError ? "Project with this path segment name already exists" : ""}`}
+          error={pathSegmentNameError}
         />
         <Divider sx={{ marginY: 2 }}></Divider>
 
@@ -255,38 +232,33 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
           </Button>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {selectedAIFunctionIndices.map((indx) => (
-            <Box key={indx} sx={{ display: "flex", justifyContent: "space-between" }}>
-              <AIFunctionPaper
-                aiFunction={aiFunctions[indx]}
-                sx={{ width: "45%" }}
-                disableHover
-              ></AIFunctionPaper>
-              {indx in promptsMapping ? (
-                <PromptPaper
-                  prompt={promptsMapping[indx]}
-                  sx={{ width: "45%" }}
-                  onClick={onClickSelectPrompt(indx)}
-                ></PromptPaper>
-              ) : (
-                <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-                  <Button
-                    variant="contained"
+          {apiRoutes.map((apiRoute, indx) => {
+            const aiFunction = aiFunctions.find(
+              (aiFunction) => aiFunction._id === apiRoute.ai_function_id
+            )
+            return (
+              <Box key={indx} sx={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <AIFunctionPaper
+                  aiFunction={aiFunction as AIFunction}
+                  sx={{ width: "50%" }}
+                  disableHover
+                ></AIFunctionPaper>
+                <Box>
+                  <Typography>Path Segment Name</Typography>
+                  <TextField
+                    value={apiRoute.path_segment_name}
+                    onChange={onRoutePathSegmentNameChange(indx)}
                     size="small"
-                    sx={{ marginRight: 40 }}
-                    onClick={onClickSelectPrompt(indx)}
-                  >
-                    Select Prompt
-                  </Button>
+                    helperText={`${apiRoute.path_segment_name.length}/${pathSegmentNameCharLimit}`}
+                    sx={{ minWidth: 240 }}
+                  ></TextField>
                 </Box>
-              )}
-              <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
-                <Button size="large" onClick={onClickRemoveAIFunction(indx)}>
-                  <ClearIcon fontSize="large" />
+                <Button onClick={onClickRemoveAIFunction(indx)}>
+                  <ClearIcon />
                 </Button>
               </Box>
-            </Box>
-          ))}
+            )
+          })}
         </Box>
 
         <Divider sx={{ marginY: 2 }}></Divider>
@@ -304,16 +276,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
       <SelectDialog
         open={openSelectAIFunction}
-        aiFunctions={implementedAIFunctions}
+        aiFunctions={aiFunctions}
         setOpen={setOpenSelectAIFunction}
         onClick={onClickAIFunction}
-      ></SelectDialog>
-
-      <SelectDialog
-        open={openSelectPrompt}
-        onClick={onClickPrompt(selectedAIFunctionIndx)}
-        prompts={filteredPrompts}
-        setOpen={setOpenSelectPrompt}
       ></SelectDialog>
     </>
   )

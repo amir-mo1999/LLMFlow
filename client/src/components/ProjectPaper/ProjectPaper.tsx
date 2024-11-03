@@ -17,7 +17,7 @@ interface ProjectPaperProps {
 
 const ProjectPaper: React.FC<ProjectPaperProps> = ({ sx, onClick, project, selected = false }) => {
   const renderFigures = () => {
-    const nAIFunctions = project.prompt_ids.length
+    const nAIFunctions = project.api_routes.length
 
     return (
       <Stack direction="row" spacing={2} mb={1}>
