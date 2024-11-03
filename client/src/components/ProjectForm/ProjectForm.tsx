@@ -10,6 +10,7 @@ import SelectDialog from "@/components/SelectDialog/SelectDialog"
 import PromptPaper from "../PromptPaper/PromptPaper"
 import { usePostProject, usePatchProject } from "@/api/apiComponents"
 import { getProjectDiff } from "@/utils"
+import { ProjectAPIRoute } from "@/api/apiSchemas"
 
 interface ProjectFormProps {
   onSubmitProject?: (project: Project) => void
@@ -30,6 +31,7 @@ const options: Intl.DateTimeFormatOptions = {
 
 const nameCharLimit = 40
 const descriptionCharLimit = 1000
+const pathNameCharLimit = 20
 
 const ProjectForm: React.FC<ProjectFormProps> = ({
   onSubmitProject,
@@ -41,16 +43,21 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   const [name, setName] = useState<string>(editProject?.name || "")
   const nameRef = useRef<null | HTMLDivElement>(null)
   const [nameError, setNameError] = useState<boolean>(false)
+  const [projectPathName, setProjectPathName] = useState(editProject?.route_name || "")
+  const pathNameRef = useRef<null | HTMLDivElement>(null)
+  const [projectPathNameError, setProjectPathNameError] = useState(false)
   const [description, setDescription] = useState<string>(editProject?.description || "")
+  const [apiRoutes, setApiRoutes] = useState<ProjectAPIRoute[]>(editProject?.api_routes || [])
+
   const [implementedAIFunctions, setImplementedAIFunctions] = useState<AIFunction[]>([])
-  const [promptIDs, setPromptIDs] = useState<string[]>(editProject?.prompt_ids || [])
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
   const [openSelectAIFunction, setOpenSelectAIFunction] = useState(false)
   const [openSelectPrompt, setOpenSelectPrompt] = useState(false)
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState(0)
+  const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([])
+
   const [selectedAIFunctionIndices, setSelectedAIFunctionIndices] = useState<number[]>([])
   const [promptsMapping, setPromptsMapping] = useState<Record<number, Prompt>>({})
-  const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([])
 
   useEffect(() => {
     const newImplementedAIFunctions = aiFunctions.filter((aiFunction) => aiFunction.implemented)
@@ -58,21 +65,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     setSelectedAIFunctionIndices([])
 
     if (editProject) {
-      // set selectedAIFunctionIndices and PromptsMapping with edit project
-      const newPromptsMapping = editProject.prompt_ids.reduce(
-        (acc, promptID) => {
-          const prompt = prompts.find((p) => p._id === promptID)
-          if (prompt) {
-            const aiFunctionID = prompt.ai_function_id as string
-            const aiFunctionIndx = newImplementedAIFunctions.findIndex(
-              (a) => a._id === aiFunctionID
-            )
-            acc[aiFunctionIndx] = prompt
-          }
-          return acc
-        },
-        {} as Record<number, Prompt>
-      )
+      //TODO: fix with new project model
+      const newPromptsMapping = {}
       setSelectedAIFunctionIndices(Object.keys(newPromptsMapping).map((key) => +key))
       setPromptsMapping(newPromptsMapping)
     }
@@ -120,10 +114,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     const body: ProjectRouteInput = {
       name: name,
       description: description,
-      prompt_ids: Object.values(promptsMapping).reduce((acc: string[], prompt: Prompt) => {
-        acc.push(prompt._id as string)
-        return acc
-      }, [] as string[]),
+      route_name: projectPathName,
+      api_routes: apiRoutes,
     }
 
     if (editProject) {
@@ -169,6 +161,14 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     if (newName.length <= nameCharLimit) {
       setName(e.target.value)
       setNameError(false)
+    }
+  }
+
+  const onPathNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newName = e.target.value
+    if (newName.length <= pathNameCharLimit) {
+      setProjectPathName(e.target.value)
+      setProjectPathNameError(false)
     }
   }
 
@@ -218,6 +218,19 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
           value={name}
           onChange={onNameChange}
           helperText={`${name.length}/${nameCharLimit} ${nameError ? "AI Function with this name already exists" : ""}`}
+          error={nameError}
+        />
+        <Divider sx={{ marginY: 2 }}></Divider>
+
+        <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+          API Path Segment Name
+        </Typography>
+        <TextField
+          ref={pathNameRef}
+          sx={{ width: "100%" }}
+          value={projectPathName}
+          onChange={onPathNameChange}
+          helperText={`${projectPathName.length}/${pathNameCharLimit} ${projectPathNameError ? "Project with this path segment name already exists" : ""}`}
           error={nameError}
         />
         <Divider sx={{ marginY: 2 }}></Divider>
