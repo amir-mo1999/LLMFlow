@@ -92,7 +92,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     }
 
     if (initProject) {
-      console.log(getProjectDiff(initProject, body))
       patchProject({
         body: getProjectDiff(initProject, body),
         pathParams: { projectId: initProject._id as string },
