@@ -157,3 +157,12 @@ class AIFunction(AIFunctionRouteInput):
     implemented: bool
     username: EmailStr
     creation_time: datetime
+
+
+class AIFunctionOutput(RootModel):
+    prompt: str
+    response: str
+    score: float
+    cost: float
+    latency: float
+    is_json: bool
