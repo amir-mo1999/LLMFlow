@@ -288,9 +288,9 @@ export type ProjectAPIRoute = {
 
 export type ProjectPatchInput = {
   name?: string | null
-  path_segment_name: string | null
+  path_segment_name?: string | null
   description?: string | null
-  api_routes?: ProjectAPIRoute | null
+  api_routes?: ProjectAPIRoute[] | null
 }
 
 export type ProjectRouteInput = {

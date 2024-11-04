@@ -30,12 +30,12 @@ class ProjectPatchInput(RootModel):
     )
     path_segment_name: Optional[
         Annotated[str, StringConstraints(min_length=1, max_length=20)]
-    ]
+    ] = None
 
     description: Optional[
         Annotated[str, StringConstraints(min_length=1, max_length=1000)]
     ] = None
-    api_routes: Optional[ProjectAPIRoute] = None
+    api_routes: Optional[List[ProjectAPIRoute]] = None
 
 
 class Project(ProjectRouteInput):

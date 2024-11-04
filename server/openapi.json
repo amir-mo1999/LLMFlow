@@ -2809,18 +2809,19 @@
                     "api_routes": {
                         "anyOf": [
                             {
-                                "$ref": "#/components/schemas/ProjectAPIRoute"
+                                "items": {
+                                    "$ref": "#/components/schemas/ProjectAPIRoute"
+                                },
+                                "type": "array"
                             },
                             {
                                 "type": "null"
                             }
-                        ]
+                        ],
+                        "title": "Api Routes"
                     }
                 },
                 "type": "object",
-                "required": [
-                    "path_segment_name"
-                ],
                 "title": "ProjectPatchInput"
             },
             "ProjectRouteInput": {

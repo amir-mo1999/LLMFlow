@@ -10,7 +10,6 @@ import SelectDialog from "@/components/SelectDialog/SelectDialog"
 import { usePostProject, usePatchProject } from "@/api/apiComponents"
 import { getProjectDiff } from "@/utils"
 import { ProjectAPIRoute } from "@/api/apiSchemas"
-import { useTheme } from "@mui/material"
 
 interface ProjectFormProps {
   onSubmitProject?: (project: Project) => void
@@ -38,7 +37,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   editProject,
   aiFunctions,
 }) => {
-  const theme = useTheme()
+  const [initProject, _] = useState<Project>(
+    editProject ? JSON.parse(JSON.stringify(editProject)) : undefined
+  )
 
   const [name, setName] = useState<string>(editProject?.name || "")
   const nameRef = useRef<null | HTMLDivElement>(null)
@@ -90,10 +91,11 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       api_routes: apiRoutes,
     }
 
-    if (editProject) {
+    if (initProject) {
+      console.log(getProjectDiff(initProject, body))
       patchProject({
-        body: getProjectDiff(editProject, body),
-        pathParams: { projectId: editProject._id as string },
+        body: getProjectDiff(initProject, body),
+        pathParams: { projectId: initProject._id as string },
       })
     } else {
       postProject({ body: body })
@@ -152,8 +154,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       const newApiRoutes = [...apiRoutes]
       if (newName.length <= pathSegmentNameCharLimit) {
         newApiRoutes[indx].path_segment_name = newName
+        setApiRoutes(newApiRoutes)
       }
-      setApiRoutes(newApiRoutes)
     }
     return f
   }
