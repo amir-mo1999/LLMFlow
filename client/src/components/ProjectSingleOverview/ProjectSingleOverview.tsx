@@ -65,12 +65,15 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
       </Typography>
       <Box sx={{ display: "flex", gap: 3, flexDirection: "column" }}>
         {project.api_routes.map((apiRoute, indx) => {
+          const aiFunction = aiFunctions.find(
+            (aiFunction) => aiFunction._id === apiRoute.ai_function_id
+          )
           return (
-            <AIFunctionPaper
-              key={indx}
-              sx={{ width: "50%" }}
-              aiFunction={aiFunctions.find((a) => a._id === apiRoute.ai_function_id) as AIFunction}
-            />
+            <React.Fragment key={indx}>
+              {aiFunction && (
+                <AIFunctionPaper disableHover sx={{ width: "50%" }} aiFunction={aiFunction} />
+              )}
+            </React.Fragment>
           )
         })}
       </Box>
