@@ -15,10 +15,12 @@ const MainContentContainer: React.FC<MainContentContainerProps> = ({ children })
         flexDirection: "column",
         paddingRight: 10,
         marginRight: 4,
+        paddingBottom: 20,
         width: "70%",
         height: "100%",
         overflow: "auto",
         alignItems: "center",
+        overflowX: "hidden",
       }}
     >
       {children}

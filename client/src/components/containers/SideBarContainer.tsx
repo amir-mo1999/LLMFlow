@@ -16,6 +16,7 @@ const SideBarContainer: React.FC<SideBarContainerProps> = ({ children }) => {
         overflow: "auto",
         alignItems: "center",
         paddingRight: 2,
+        overflowX: "hidden",
       }}
     >
       {children}

@@ -152,6 +152,7 @@ async def patch_project(
 @PROJECT_ROUTER.get(
     "/project-api-docs/{project_id}",
     response_model=OpenAPI,
+    response_model_exclude_none=True,
     responses={
         401: {"detail": "Not authenticated"},
         404: {"detail": "document not found"},

@@ -13,10 +13,14 @@ import { AIFunctionPaper } from "@/components"
 import SwaggerUI from "swagger-ui-react"
 import "swagger-ui-react/swagger-ui.css"
 import { useTheme } from "@mui/material"
+import { OpenAPI } from "@/api/apiSchemas"
+import CircularProgress from "@mui/material/CircularProgress"
 
 interface ProjectSingleOverviewProps {
   onDeleteProject: () => void
   project: Project
+  apiDocs?: OpenAPI
+  isFetchingApiDocs?: boolean
   aiFunctions: AIFunction[]
   onClickEdit?: (aiFunctionID: string) => void
   onClickAddPrompt?: (aiFunctionID: string) => void
@@ -34,6 +38,8 @@ const options: Intl.DateTimeFormatOptions = {
 const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
   onDeleteProject,
   project,
+  apiDocs,
+  isFetchingApiDocs = false,
   aiFunctions,
   onClickEdit = () => {},
   onClickAddPrompt,
@@ -84,18 +90,25 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         API Documentation
       </Typography>
-
-      <SwaggerUI
-        url="/openapi.json"
-        requestInterceptor={(req) => {
-          if (req.url === "/openapi.json") {
+      {apiDocs === undefined && isFetchingApiDocs ? (
+        <CircularProgress />
+      ) : apiDocs && !isFetchingApiDocs ? (
+        <SwaggerUI
+          spec={apiDocs}
+          requestInterceptor={(req) => {
+            if (req.url === "/openapi.json") {
+              return req
+            }
+            const parsedUrl = new URL(req.url)
+            req.url = "/api/proxy" + parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
             return req
-          }
-          const parsedUrl = new URL(req.url)
-          req.url = "/api/proxy" + parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
-          return req
-        }}
-      ></SwaggerUI>
+          }}
+        ></SwaggerUI>
+      ) : (
+        <></>
+      )}
+
+      {apiDocs === undefined}
 
       <Divider sx={{ marginY: 2 }}></Divider>
 
