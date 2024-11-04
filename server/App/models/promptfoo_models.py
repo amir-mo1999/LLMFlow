@@ -78,7 +78,12 @@ class GradingResult(RootModel):
     comment: Optional[str] = None
 
 
+class Prompt(RootModel):
+    raw: Optional[str] = None
+
+
 class EvaluateResult(RootModel):
+    prompt: Optional[Prompt] = None
     response: Optional[ProviderResponse] = None
     vars: Optional[Dict[str, str]] = None
     # error: Optional[str] = None
