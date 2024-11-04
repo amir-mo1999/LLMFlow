@@ -1,9 +1,11 @@
 from .ai_function import (
     AIFunction,
+    AIFunctionOutput,
     AIFunctionPatchInput,
     AIFunctionRouteInput,
     Assertion,
     InputVariable,
+    TestCase,
 )
 from .json_schema import JsonSchema
 from .project import Project, ProjectPatchInput, ProjectRouteInput
@@ -23,6 +25,8 @@ __all__ = [
     "AIFunctionRouteInput",
     "AIFunctionPatchInput",
     "AIFunction",
+    "AIFunctionOutput",
+    "TestCase",
     "PromptRouteInput",
     "Prompt",
     "EvaluateInput",
