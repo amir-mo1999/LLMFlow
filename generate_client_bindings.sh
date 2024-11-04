@@ -1,5 +1,5 @@
 cd server
-python3 generate_api_docs.py
+pipenv run python3 generate_api_docs.py
 
 cd ..
 cd client

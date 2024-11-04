@@ -24,6 +24,7 @@ fastapi-camelcase = "*"
 pydantic-partial = "*"
 pyright = "*"
 openapi-pydantic = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

@@ -18,9 +18,6 @@ class HttpExceptionModel(CamelModel):
 
 
 def get_openapi_schema():
-    # Load .env file
-    load_dotenv()
-
     # Set operation IDs to route names
     for route in app.routes:
         if isinstance(route, APIRoute):

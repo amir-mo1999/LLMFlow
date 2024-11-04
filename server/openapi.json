@@ -1259,6 +1259,17 @@
                         },
                         "description": "Unauthorized"
                     },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    },
                     "409": {
                         "detail": "document already exists",
                         "content": {
@@ -1269,6 +1280,75 @@
                             }
                         },
                         "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/project-api-docs/{project_id}": {
+            "get": {
+                "tags": [
+                    "db"
+                ],
+                "summary": "Get Project Api Docs",
+                "operationId": "get_project_api_docs",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Project Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OpenAPI"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "detail": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "detail": "document not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
                     },
                     "422": {
                         "description": "Validation Error",
@@ -1844,6 +1924,502 @@
                 ],
                 "title": "Body_login_auth_login_post"
             },
+            "Components": {
+                "properties": {
+                    "schemas": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/Schema"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Schemas"
+                    },
+                    "responses": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Response"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Responses"
+                    },
+                    "parameters": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Parameter"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Parameters"
+                    },
+                    "examples": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Example"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Examples"
+                    },
+                    "requestBodies": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/RequestBody"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requestbodies"
+                    },
+                    "headers": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Header"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Headers"
+                    },
+                    "securitySchemes": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SecurityScheme"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Securityschemes"
+                    },
+                    "links": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Link"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Links"
+                    },
+                    "callbacks": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "additionalProperties": {
+                                                "anyOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/PathItem"
+                                                    },
+                                                    {
+                                                        "$ref": "#/components/schemas/Reference"
+                                                    }
+                                                ]
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Callbacks"
+                    },
+                    "pathItems": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/PathItem"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Pathitems"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Components",
+                "description": "Holds a set of reusable objects for different aspects of the OAS.\nAll objects defined within the components object will have no effect on the API\nunless they are explicitly referenced from properties outside the components object.",
+                "examples": [
+                    {
+                        "parameters": {
+                            "limitParam": {
+                                "description": "max records to return",
+                                "in": "query",
+                                "name": "limit",
+                                "required": true,
+                                "schema": {
+                                    "format": "int32",
+                                    "type": "integer"
+                                }
+                            },
+                            "skipParam": {
+                                "description": "number of items to skip",
+                                "in": "query",
+                                "name": "skip",
+                                "required": true,
+                                "schema": {
+                                    "format": "int32",
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "responses": {
+                            "GeneralError": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/GeneralError"
+                                        }
+                                    }
+                                },
+                                "description": "General Error"
+                            },
+                            "IllegalInput": {
+                                "description": "Illegal input for operation."
+                            },
+                            "NotFound": {
+                                "description": "Entity not found."
+                            }
+                        },
+                        "schemas": {
+                            "Category": {
+                                "properties": {
+                                    "id": {
+                                        "format": "int64",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "GeneralError": {
+                                "properties": {
+                                    "code": {
+                                        "format": "int32",
+                                        "type": "integer"
+                                    },
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "Tag": {
+                                "properties": {
+                                    "id": {
+                                        "format": "int64",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "securitySchemes": {
+                            "api_key": {
+                                "in": "header",
+                                "name": "api_key",
+                                "type": "apiKey"
+                            },
+                            "petstore_auth": {
+                                "flows": {
+                                    "implicit": {
+                                        "authorizationUrl": "http://example.org/api/oauth/dialog",
+                                        "scopes": {
+                                            "read:pets": "read your pets",
+                                            "write:pets": "modify pets in your account"
+                                        }
+                                    }
+                                },
+                                "type": "oauth2"
+                            }
+                        }
+                    }
+                ]
+            },
+            "Contact": {
+                "properties": {
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "url": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Url"
+                    },
+                    "email": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Email"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Contact",
+                "description": "Contact information for the exposed API.",
+                "examples": [
+                    {
+                        "email": "support@example.com",
+                        "name": "API Support",
+                        "url": "http://www.example.com/support"
+                    }
+                ]
+            },
+            "DataType": {
+                "type": "string",
+                "enum": [
+                    "null",
+                    "string",
+                    "number",
+                    "integer",
+                    "boolean",
+                    "array",
+                    "object"
+                ],
+                "title": "DataType",
+                "description": "Data type of an object."
+            },
+            "Discriminator": {
+                "properties": {
+                    "propertyName": {
+                        "type": "string",
+                        "title": "Propertyname"
+                    },
+                    "mapping": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "type": "string"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mapping"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "propertyName"
+                ],
+                "title": "Discriminator",
+                "description": "When request bodies or response payloads may be one of a number of different\nschemas, a `discriminator` object can be used to aid in serialization,\ndeserialization, and validation.\n\nThe discriminator is a specific object in a schema which is used to inform the\nconsumer of the specification of an alternative schema based on the value\nassociated with it.\n\nWhen using the discriminator, _inline_ schemas will not be considered.",
+                "examples": [
+                    {
+                        "mapping": {
+                            "dog": "#/components/schemas/Dog",
+                            "monster": "https://gigantic-server.com/schemas/Monster/schema.json"
+                        },
+                        "propertyName": "petType"
+                    }
+                ]
+            },
+            "Encoding": {
+                "properties": {
+                    "contentType": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contenttype"
+                    },
+                    "headers": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Header"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Headers"
+                    },
+                    "style": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Style"
+                    },
+                    "explode": {
+                        "type": "boolean",
+                        "title": "Explode",
+                        "default": false
+                    },
+                    "allowReserved": {
+                        "type": "boolean",
+                        "title": "Allowreserved",
+                        "default": false
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Encoding",
+                "description": "A single encoding definition applied to a single schema property.",
+                "examples": [
+                    {
+                        "contentType": "image/png, image/jpeg",
+                        "headers": {
+                            "X-Rate-Limit-Limit": {
+                                "description": "The number of allowed requests in the current period",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
             "EvaluateResult": {
                 "properties": {
                     "response": {
@@ -1981,6 +2557,103 @@
                 ],
                 "title": "EvaluateSummary"
             },
+            "Example": {
+                "properties": {
+                    "summary": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Summary"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "value": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Value"
+                    },
+                    "externalValue": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Externalvalue"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Example",
+                "examples": [
+                    {
+                        "summary": "A foo example",
+                        "value": {
+                            "foo": "bar"
+                        }
+                    },
+                    {
+                        "externalValue": "http://example.org/examples/address-example.xml",
+                        "summary": "This is an example in XML"
+                    },
+                    {
+                        "externalValue": "http://foo.bar/examples/address-example.txt",
+                        "summary": "This is a text example"
+                    }
+                ]
+            },
+            "ExternalDocumentation": {
+                "properties": {
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "url": {
+                        "type": "string",
+                        "title": "Url"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "url"
+                ],
+                "title": "ExternalDocumentation",
+                "description": "Allows referencing an external resource for extended documentation.",
+                "examples": [
+                    {
+                        "description": "Find more info here",
+                        "url": "https://example.com"
+                    }
+                ]
+            },
             "GradingResult": {
                 "properties": {
                     "pass": {
@@ -2054,6 +2727,117 @@
                 "type": "object",
                 "title": "HTTPValidationError"
             },
+            "Header": {
+                "properties": {
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "required": {
+                        "type": "boolean",
+                        "title": "Required",
+                        "default": false
+                    },
+                    "deprecated": {
+                        "type": "boolean",
+                        "title": "Deprecated",
+                        "default": false
+                    },
+                    "style": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Style"
+                    },
+                    "explode": {
+                        "type": "boolean",
+                        "title": "Explode",
+                        "default": false
+                    },
+                    "schema": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Schema"
+                    },
+                    "example": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Example"
+                    },
+                    "examples": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Example"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Examples"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/MediaType"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Header",
+                "description": "The Header Object follows the structure of the\n[Parameter Object](#parameterObject) with the following changes:\n\n1. `name` MUST NOT be specified, it is given in the corresponding\n    `headers` map.\n2. `in` MUST NOT be specified, it is implicitly in `header`.\n3. All traits that are affected by the location MUST be applicable\n    to a location of `header` (for example, [`style`](#parameterStyle)).",
+                "examples": [
+                    {
+                        "description": "The number of allowed requests in the current period",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            },
             "HttpExceptionModel": {
                 "properties": {
                     "message": {
@@ -2071,6 +2855,97 @@
                     "status"
                 ],
                 "title": "HttpExceptionModel"
+            },
+            "Info": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "summary": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Summary"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "termsOfService": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Termsofservice"
+                    },
+                    "contact": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Contact"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "license": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/License"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "version": {
+                        "type": "string",
+                        "title": "Version"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "title",
+                    "version"
+                ],
+                "title": "Info",
+                "description": "The object provides metadata about the API.\nThe metadata MAY be used by the clients if needed,\nand MAY be presented in editing or documentation generation tools for convenience.",
+                "examples": [
+                    {
+                        "contact": {
+                            "email": "support@example.com",
+                            "name": "API Support",
+                            "url": "http://www.example.com/support"
+                        },
+                        "description": "This is a sample server for a pet store.",
+                        "license": {
+                            "name": "Apache 2.0",
+                            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+                        },
+                        "summary": "A pet store manager.",
+                        "termsOfService": "http://example.com/terms/",
+                        "title": "Sample Pet Store App",
+                        "version": "1.0.1"
+                    }
+                ]
             },
             "InputVariable": {
                 "properties": {
@@ -2688,6 +3563,1170 @@
                 ],
                 "title": "JsonSchema"
             },
+            "License": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "identifier": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Identifier"
+                    },
+                    "url": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Url"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "License",
+                "description": "License information for the exposed API.",
+                "examples": [
+                    {
+                        "identifier": "Apache-2.0",
+                        "name": "Apache 2.0"
+                    },
+                    {
+                        "name": "Apache 2.0",
+                        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+                    }
+                ]
+            },
+            "Link": {
+                "properties": {
+                    "operationRef": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Operationref"
+                    },
+                    "operationId": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Operationid"
+                    },
+                    "parameters": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Parameters"
+                    },
+                    "requestBody": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requestbody"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "server": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Server"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Link",
+                "description": "The `Link object` represents a possible design-time link for a response.\nThe presence of a link does not guarantee the caller's ability to successfully\ninvoke it, rather it provides a known relationship and traversal mechanism between\nresponses and other operations.\n\nUnlike _dynamic_ links (i.e. links provided **in** the response payload),\nthe OAS linking mechanism does not require link information in the runtime response.\n\nFor computing links, and providing instructions to execute them,\na [runtime expression](#runtimeExpression) is used for accessing values in an\noperation and using them as parameters while invoking the linked operation.",
+                "examples": [
+                    {
+                        "operationId": "getUserAddressByUUID",
+                        "parameters": {
+                            "userUuid": "$response.body#/uuid"
+                        }
+                    },
+                    {
+                        "operationRef": "#/paths/~12.0~1repositories~1{username}/get",
+                        "parameters": {
+                            "username": "$response.body#/username"
+                        }
+                    }
+                ]
+            },
+            "MediaType": {
+                "properties": {
+                    "schema": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Schema"
+                    },
+                    "example": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Example"
+                    },
+                    "examples": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Example"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Examples"
+                    },
+                    "encoding": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/Encoding"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Encoding"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "MediaType",
+                "description": "Each Media Type Object provides schema and examples for the media type\nidentified by its key.",
+                "examples": [
+                    {
+                        "examples": {
+                            "cat": {
+                                "summary": "An example of a cat",
+                                "value": {
+                                    "breed": "Persian",
+                                    "color": "White",
+                                    "gender": "male",
+                                    "name": "Fluffy",
+                                    "petType": "Cat"
+                                }
+                            },
+                            "dog": {
+                                "summary": "An example of a dog with a cat's name",
+                                "value": {
+                                    "breed": "Mixed",
+                                    "color": "Black",
+                                    "gender": "Female",
+                                    "name": "Puma",
+                                    "petType": "Dog"
+                                }
+                            },
+                            "frog": {
+                                "$ref": "#/components/examples/frog-example"
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    }
+                ]
+            },
+            "OAuthFlow": {
+                "properties": {
+                    "authorizationUrl": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Authorizationurl"
+                    },
+                    "tokenUrl": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tokenurl"
+                    },
+                    "refreshUrl": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Refreshurl"
+                    },
+                    "scopes": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "type": "string"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Scopes"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "OAuthFlow",
+                "description": "Configuration details for a supported OAuth Flow",
+                "examples": [
+                    {
+                        "authorizationUrl": "https://example.com/api/oauth/dialog",
+                        "scopes": {
+                            "read:pets": "read your pets",
+                            "write:pets": "modify pets in your account"
+                        }
+                    },
+                    {
+                        "authorizationUrl": "https://example.com/api/oauth/dialog",
+                        "scopes": {
+                            "read:pets": "read your pets",
+                            "write:pets": "modify pets in your account"
+                        },
+                        "tokenUrl": "https://example.com/api/oauth/token"
+                    },
+                    {
+                        "authorizationUrl": "/api/oauth/dialog",
+                        "refreshUrl": "/api/oauth/token",
+                        "scopes": {
+                            "read:pets": "read your pets",
+                            "write:pets": "modify pets in your account"
+                        },
+                        "tokenUrl": "/api/oauth/token"
+                    }
+                ]
+            },
+            "OAuthFlows": {
+                "properties": {
+                    "implicit": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OAuthFlow"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "password": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OAuthFlow"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "clientCredentials": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OAuthFlow"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "authorizationCode": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OAuthFlow"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "OAuthFlows",
+                "description": "Allows configuration of the supported OAuth Flows."
+            },
+            "OpenAPI": {
+                "properties": {
+                    "openapi": {
+                        "type": "string",
+                        "enum": [
+                            "3.1.0"
+                        ],
+                        "const": "3.1.0",
+                        "title": "Openapi",
+                        "default": "3.1.0"
+                    },
+                    "info": {
+                        "$ref": "#/components/schemas/Info"
+                    },
+                    "jsonSchemaDialect": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Jsonschemadialect"
+                    },
+                    "servers": {
+                        "items": {
+                            "$ref": "#/components/schemas/Server"
+                        },
+                        "type": "array",
+                        "title": "Servers",
+                        "default": [
+                            {
+                                "url": "/"
+                            }
+                        ]
+                    },
+                    "paths": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/PathItem"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Paths"
+                    },
+                    "webhooks": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/PathItem"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Webhooks"
+                    },
+                    "components": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Components"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "security": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "additionalProperties": {
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "type": "array"
+                                    },
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Security"
+                    },
+                    "tags": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/Tag"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tags"
+                    },
+                    "externalDocs": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ExternalDocumentation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "info"
+                ],
+                "title": "OpenAPI",
+                "description": "This is the root document object of the OpenAPI document."
+            },
+            "Operation": {
+                "properties": {
+                    "tags": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tags"
+                    },
+                    "summary": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Summary"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "externalDocs": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ExternalDocumentation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "operationId": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Operationid"
+                    },
+                    "parameters": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Parameter"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Parameters"
+                    },
+                    "requestBody": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/RequestBody"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requestbody"
+                    },
+                    "responses": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Response"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Responses"
+                    },
+                    "callbacks": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "additionalProperties": {
+                                                "anyOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/PathItem"
+                                                    },
+                                                    {
+                                                        "$ref": "#/components/schemas/Reference"
+                                                    }
+                                                ]
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Callbacks"
+                    },
+                    "deprecated": {
+                        "type": "boolean",
+                        "title": "Deprecated",
+                        "default": false
+                    },
+                    "security": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "additionalProperties": {
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "type": "array"
+                                    },
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Security"
+                    },
+                    "servers": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/Server"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Servers"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Operation",
+                "description": "Describes a single API operation on a path.",
+                "examples": [
+                    {
+                        "operationId": "updatePetWithForm",
+                        "parameters": [
+                            {
+                                "description": "ID of pet that needs to be updated",
+                                "in": "path",
+                                "name": "petId",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        ],
+                        "requestBody": {
+                            "content": {
+                                "application/x-www-form-urlencoded": {
+                                    "schema": {
+                                        "properties": {
+                                            "name": {
+                                                "description": "Updated name of the pet",
+                                                "type": "string"
+                                            },
+                                            "status": {
+                                                "description": "Updated status of the pet",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "status"
+                                        ],
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "content": {
+                                    "application/json": {},
+                                    "application/xml": {}
+                                },
+                                "description": "Pet updated."
+                            },
+                            "405": {
+                                "content": {
+                                    "application/json": {},
+                                    "application/xml": {}
+                                },
+                                "description": "Method Not Allowed"
+                            }
+                        },
+                        "security": [
+                            {
+                                "petstore_auth": [
+                                    "write:pets",
+                                    "read:pets"
+                                ]
+                            }
+                        ],
+                        "summary": "Updates a pet in the store with form data",
+                        "tags": [
+                            "pet"
+                        ]
+                    }
+                ]
+            },
+            "Parameter": {
+                "properties": {
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "required": {
+                        "type": "boolean",
+                        "title": "Required",
+                        "default": false
+                    },
+                    "deprecated": {
+                        "type": "boolean",
+                        "title": "Deprecated",
+                        "default": false
+                    },
+                    "style": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Style"
+                    },
+                    "explode": {
+                        "type": "boolean",
+                        "title": "Explode",
+                        "default": false
+                    },
+                    "schema": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Schema"
+                    },
+                    "example": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Example"
+                    },
+                    "examples": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Example"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Examples"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/MediaType"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "in": {
+                        "$ref": "#/components/schemas/ParameterLocation"
+                    },
+                    "allowEmptyValue": {
+                        "type": "boolean",
+                        "title": "Allowemptyvalue",
+                        "default": false
+                    },
+                    "allowReserved": {
+                        "type": "boolean",
+                        "title": "Allowreserved",
+                        "default": false
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "name",
+                    "in"
+                ],
+                "title": "Parameter",
+                "description": "Describes a single operation parameter.\n\nA unique parameter is defined by a combination of a [name](#parameterName) and\n[location](#parameterIn).",
+                "examples": [
+                    {
+                        "description": "token to be passed as a header",
+                        "in": "header",
+                        "name": "token",
+                        "required": true,
+                        "schema": {
+                            "items": {
+                                "format": "int64",
+                                "type": "integer"
+                            },
+                            "type": "array"
+                        },
+                        "style": "simple"
+                    },
+                    {
+                        "description": "username to fetch",
+                        "in": "path",
+                        "name": "username",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "ID of the object to fetch",
+                        "explode": true,
+                        "in": "query",
+                        "name": "id",
+                        "required": false,
+                        "schema": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "freeForm",
+                        "schema": {
+                            "additionalProperties": {
+                                "type": "integer"
+                            },
+                            "type": "object"
+                        },
+                        "style": "form"
+                    },
+                    {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "lat": {
+                                            "type": "number"
+                                        },
+                                        "long": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "required": [
+                                        "lat",
+                                        "long"
+                                    ],
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "in": "query",
+                        "name": "coordinates"
+                    }
+                ]
+            },
+            "ParameterLocation": {
+                "type": "string",
+                "enum": [
+                    "query",
+                    "header",
+                    "path",
+                    "cookie"
+                ],
+                "title": "ParameterLocation",
+                "description": "The location of a given parameter."
+            },
+            "PathItem": {
+                "properties": {
+                    "$ref": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "$Ref"
+                    },
+                    "summary": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Summary"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "get": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "put": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "post": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "delete": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "head": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "patch": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "trace": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Operation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "servers": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/Server"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Servers"
+                    },
+                    "parameters": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Parameter"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Parameters"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "PathItem",
+                "description": "Describes the operations available on a single path.\nA Path Item MAY be empty, due to [ACL constraints](#securityFiltering).\nThe path itself is still exposed to the documentation viewer\nbut they will not know which operations and parameters are available.",
+                "examples": [
+                    {
+                        "get": {
+                            "description": "Returns pets based on ID",
+                            "operationId": "getPetsById",
+                            "responses": {
+                                "200": {
+                                    "content": {
+                                        "*/*": {
+                                            "schema": {
+                                                "items": {
+                                                    "$ref": "#/components/schemas/Pet"
+                                                },
+                                                "type": "array"
+                                            }
+                                        }
+                                    },
+                                    "description": "pet response"
+                                },
+                                "default": {
+                                    "description": "error payload",
+                                    "content": {
+                                        "text/html": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/ErrorModel"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "summary": "Find pets by ID"
+                        },
+                        "parameters": [
+                            {
+                                "description": "ID of pet to use",
+                                "in": "path",
+                                "name": "id",
+                                "required": true,
+                                "schema": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "style": "simple"
+                            }
+                        ]
+                    }
+                ]
+            },
             "Project": {
                 "properties": {
                     "name": {
@@ -3076,6 +5115,276 @@
                 "type": "object",
                 "title": "ProviderResponse"
             },
+            "Reference": {
+                "properties": {
+                    "$ref": {
+                        "type": "string",
+                        "title": "$Ref"
+                    },
+                    "summary": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Summary"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "$ref"
+                ],
+                "title": "Reference",
+                "description": "A simple object to allow referencing other components in the OpenAPI document.\n\nThe `$ref` string value contains a URI [RFC3986](https://tools.ietf.org/html/rfc3986),\nwhich identifies the location of the value being referenced.\n\nSee the rules for resolving [Relative References](#relativeReferencesURI).",
+                "examples": [
+                    {
+                        "$ref": "#/components/schemas/Pet"
+                    },
+                    {
+                        "$ref": "Pet.json"
+                    },
+                    {
+                        "$ref": "definitions.json#/Pet"
+                    }
+                ]
+            },
+            "RequestBody": {
+                "properties": {
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "content": {
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/MediaType"
+                        },
+                        "type": "object",
+                        "title": "Content"
+                    },
+                    "required": {
+                        "type": "boolean",
+                        "title": "Required",
+                        "default": false
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "content"
+                ],
+                "title": "RequestBody",
+                "description": "Describes a single request body.",
+                "examples": [
+                    {
+                        "content": {
+                            "*/*": {
+                                "examples": {
+                                    "user": {
+                                        "externalValue": "http://foo.bar/examples/user-example.whatever",
+                                        "summary": "User example in other format"
+                                    }
+                                }
+                            },
+                            "application/json": {
+                                "examples": {
+                                    "user": {
+                                        "externalValue": "http://foo.bar/examples/user-example.json",
+                                        "summary": "User Example"
+                                    }
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            },
+                            "application/xml": {
+                                "examples": {
+                                    "user": {
+                                        "externalValue": "http://foo.bar/examples/user-example.xml",
+                                        "summary": "User example in XML"
+                                    }
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            },
+                            "text/plain": {
+                                "examples": {
+                                    "user": {
+                                        "externalValue": "http://foo.bar/examples/user-example.txt",
+                                        "summary": "User example in Plain text"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "user to add to the system"
+                    },
+                    {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "user to add to the system"
+                    }
+                ]
+            },
+            "Response": {
+                "properties": {
+                    "description": {
+                        "type": "string",
+                        "title": "Description"
+                    },
+                    "headers": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Header"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Headers"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/MediaType"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "links": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Link"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Links"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "description"
+                ],
+                "title": "Response",
+                "description": "Describes a single response from an API Operation, including design-time,\nstatic `links` to operations based on the response.",
+                "examples": [
+                    {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/VeryComplexType"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "A complex object array response"
+                    },
+                    {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "description": "A simple string response"
+                    },
+                    {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "example": "whoa!",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "description": "A simple string response",
+                        "headers": {
+                            "X-Rate-Limit-Limit": {
+                                "description": "The number of allowed requests in the current period",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            },
+                            "X-Rate-Limit-Remaining": {
+                                "description": "The number of remaining requests in the current period",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            },
+                            "X-Rate-Limit-Reset": {
+                                "description": "The number of seconds left in the current period",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "description": "object created"
+                    }
+                ]
+            },
             "RoleEnum": {
                 "type": "string",
                 "enum": [
@@ -3084,6 +5393,1102 @@
                     "assistant"
                 ],
                 "title": "RoleEnum"
+            },
+            "Schema": {
+                "properties": {
+                    "allOf": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Schema"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Allof"
+                    },
+                    "anyOf": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Schema"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Anyof"
+                    },
+                    "oneOf": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Schema"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Oneof"
+                    },
+                    "not": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Not"
+                    },
+                    "if": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "If"
+                    },
+                    "then": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Then"
+                    },
+                    "else": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Else"
+                    },
+                    "dependentSchemas": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Schema"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dependentschemas"
+                    },
+                    "prefixItems": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Schema"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Prefixitems"
+                    },
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Items"
+                    },
+                    "contains": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contains"
+                    },
+                    "properties": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Schema"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Properties"
+                    },
+                    "patternProperties": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Reference"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Schema"
+                                        }
+                                    ]
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Patternproperties"
+                    },
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Additionalproperties"
+                    },
+                    "propertyNames": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Propertynames"
+                    },
+                    "unevaluatedItems": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Unevaluateditems"
+                    },
+                    "unevaluatedProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Unevaluatedproperties"
+                    },
+                    "type": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/DataType"
+                            },
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/DataType"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Type"
+                    },
+                    "enum": {
+                        "anyOf": [
+                            {
+                                "items": {},
+                                "type": "array",
+                                "minItems": 1
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Enum"
+                    },
+                    "const": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Const"
+                    },
+                    "multipleOf": {
+                        "anyOf": [
+                            {
+                                "type": "number",
+                                "exclusiveMinimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Multipleof"
+                    },
+                    "maximum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maximum"
+                    },
+                    "exclusiveMaximum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Exclusivemaximum"
+                    },
+                    "minimum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minimum"
+                    },
+                    "exclusiveMinimum": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Exclusiveminimum"
+                    },
+                    "maxLength": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxlength"
+                    },
+                    "minLength": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minlength"
+                    },
+                    "pattern": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Pattern"
+                    },
+                    "maxItems": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxitems"
+                    },
+                    "minItems": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minitems"
+                    },
+                    "uniqueItems": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Uniqueitems"
+                    },
+                    "maxContains": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxcontains"
+                    },
+                    "minContains": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mincontains"
+                    },
+                    "maxProperties": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Maxproperties"
+                    },
+                    "minProperties": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0.0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Minproperties"
+                    },
+                    "required": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Required"
+                    },
+                    "dependentRequired": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dependentrequired"
+                    },
+                    "format": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Format"
+                    },
+                    "contentEncoding": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contentencoding"
+                    },
+                    "contentMediaType": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contentmediatype"
+                    },
+                    "contentSchema": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Schema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contentschema"
+                    },
+                    "title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Title"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "default": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Default"
+                    },
+                    "deprecated": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Deprecated"
+                    },
+                    "readOnly": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Readonly"
+                    },
+                    "writeOnly": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Writeonly"
+                    },
+                    "examples": {
+                        "anyOf": [
+                            {
+                                "items": {},
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Examples"
+                    },
+                    "discriminator": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Discriminator"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "xml": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/XML"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "externalDocs": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ExternalDocumentation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "example": {
+                        "anyOf": [
+                            {},
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Example"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Schema",
+                "description": "The Schema Object allows the definition of input and output data types.\nThese types can be objects, but also primitives and arrays.\nThis object is a superset of\nthe [JSON Schema Specification Draft 2020-12](https://tools.ietf.org/html/draft-bhutton-json-schema-00).\n\nFor more information about the properties,\nsee [JSON Schema Core](https://tools.ietf.org/html/draft-wright-json-schema-00)\nand [JSON Schema Validation](https://tools.ietf.org/html/draft-wright-json-schema-validation-00).\n\nUnless stated otherwise, the property definitions follow those of JSON Schema\nand do not add any additional semantics.\nWhere JSON Schema indicates that behavior is defined by the application (e.g. for\nannotations), OAS also defers the definition of semantics to the application\nconsuming the OpenAPI document.",
+                "examples": [
+                    {
+                        "format": "email",
+                        "type": "string"
+                    },
+                    {
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "address": {
+                                "$ref": "#/components/schemas/Address"
+                            },
+                            "age": {
+                                "format": "int32",
+                                "minimum": 0,
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "type": "object"
+                    },
+                    {
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/ComplexModel"
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "example": {
+                            "id": 1,
+                            "name": "Puma"
+                        },
+                        "properties": {
+                            "id": {
+                                "format": "int64",
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "type": "object"
+                    },
+                    {
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "code": {
+                                "maximum": 600,
+                                "minimum": 100,
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "message",
+                            "code"
+                        ],
+                        "type": "object"
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ErrorModel"
+                            },
+                            {
+                                "properties": {
+                                    "rootCause": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "rootCause"
+                                ],
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    {
+                        "discriminator": {
+                            "propertyName": "petType"
+                        },
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "petType": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "petType"
+                        ],
+                        "type": "object"
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Pet"
+                            },
+                            {
+                                "properties": {
+                                    "huntingSkill": {
+                                        "default": "lazy",
+                                        "description": "The measured skill for hunting",
+                                        "enum": [
+                                            "clueless",
+                                            "lazy",
+                                            "adventurous",
+                                            "aggressive"
+                                        ],
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "huntingSkill"
+                                ],
+                                "type": "object"
+                            }
+                        ],
+                        "description": "A representation of a cat. Note that `Cat` will be used as the discriminator value."
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Pet"
+                            },
+                            {
+                                "properties": {
+                                    "packSize": {
+                                        "default": 0,
+                                        "description": "the size of the pack the dog is from",
+                                        "format": "int32",
+                                        "minimum": 0,
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "packSize"
+                                ],
+                                "type": "object"
+                            }
+                        ],
+                        "description": "A representation of a dog. Note that `Dog` will be used as the discriminator value."
+                    }
+                ]
+            },
+            "SecurityScheme": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "in": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "In"
+                    },
+                    "scheme": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Scheme"
+                    },
+                    "bearerFormat": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Bearerformat"
+                    },
+                    "flows": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OAuthFlows"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "openIdConnectUrl": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Openidconnecturl"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "type"
+                ],
+                "title": "SecurityScheme",
+                "description": "Defines a security scheme that can be used by the operations.\n\nSupported schemes are HTTP authentication,\nan API key (either as a header, a cookie parameter or as a query parameter),\nmutual TLS (use of a client certificate),\nOAuth2's common flows (implicit, password, client credentials and authorization\ncode) as defined in [RFC6749](https://tools.ietf.org/html/rfc6749),\nand [OpenID Connect Discovery](https://tools.ietf.org/html/draft-ietf-oauth-discovery-06).\n\nPlease note that as of 2020, the implicit flow is about to be deprecated by\n[OAuth 2.0 Security Best Current Practice](https://tools.ietf.org/html/draft-ietf-oauth-security-topics).\nRecommended for most use case is Authorization Code Grant flow with PKCE.",
+                "examples": [
+                    {
+                        "scheme": "basic",
+                        "type": "http"
+                    },
+                    {
+                        "in": "header",
+                        "name": "api_key",
+                        "type": "apiKey"
+                    },
+                    {
+                        "bearerFormat": "JWT",
+                        "scheme": "bearer",
+                        "type": "http"
+                    },
+                    {
+                        "flows": {
+                            "implicit": {
+                                "authorizationUrl": "https://example.com/api/oauth/dialog",
+                                "scopes": {
+                                    "read:pets": "read your pets",
+                                    "write:pets": "modify pets in your account"
+                                }
+                            }
+                        },
+                        "type": "oauth2"
+                    },
+                    {
+                        "openIdConnectUrl": "https://example.com/openIdConnect",
+                        "type": "openIdConnect"
+                    },
+                    {
+                        "openIdConnectUrl": "openIdConnect",
+                        "type": "openIdConnect"
+                    }
+                ]
+            },
+            "Server": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "Url"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "variables": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/ServerVariable"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Variables"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "url"
+                ],
+                "title": "Server",
+                "description": "An object representing a Server.",
+                "examples": [
+                    {
+                        "description": "Development server",
+                        "url": "https://development.gigantic-server.com/v1"
+                    },
+                    {
+                        "description": "The production API server",
+                        "url": "https://{username}.gigantic-server.com:{port}/{basePath}",
+                        "variables": {
+                            "basePath": {
+                                "default": "v2"
+                            },
+                            "port": {
+                                "default": "8443",
+                                "enum": [
+                                    "8443",
+                                    "443"
+                                ]
+                            },
+                            "username": {
+                                "default": "demo",
+                                "description": "this value is assigned by the service provider, in this example `gigantic-server.com`"
+                            }
+                        }
+                    }
+                ]
+            },
+            "ServerVariable": {
+                "properties": {
+                    "enum": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Enum"
+                    },
+                    "default": {
+                        "type": "string",
+                        "title": "Default"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "default"
+                ],
+                "title": "ServerVariable",
+                "description": "An object representing a Server Variable for server URL template substitution."
             },
             "SuccessResponse": {
                 "properties": {
@@ -3095,6 +6500,48 @@
                 },
                 "type": "object",
                 "title": "SuccessResponse"
+            },
+            "Tag": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "externalDocs": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ExternalDocumentation"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "title": "Tag",
+                "description": "Adds metadata to a single tag that is used by the\n[Operation Object](#operationObject).\nIt is not mandatory to have a Tag Object per tag defined in the Operation Object\ninstances.",
+                "examples": [
+                    {
+                        "description": "Pets operations",
+                        "name": "pet"
+                    }
+                ]
             },
             "TestCase-Input": {
                 "properties": {
@@ -3314,6 +6761,76 @@
                     "type"
                 ],
                 "title": "ValidationError"
+            },
+            "XML": {
+                "properties": {
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "namespace": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Namespace"
+                    },
+                    "prefix": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Prefix"
+                    },
+                    "attribute": {
+                        "type": "boolean",
+                        "title": "Attribute",
+                        "default": false
+                    },
+                    "wrapped": {
+                        "type": "boolean",
+                        "title": "Wrapped",
+                        "default": false
+                    }
+                },
+                "additionalProperties": true,
+                "type": "object",
+                "title": "XML",
+                "description": "A metadata object that allows for more fine-tuned XML model definitions.\n\nWhen using arrays, XML element names are *not* inferred (for singular/plural forms)\nand the `name` property SHOULD be used to add that information.\nSee examples for expected behavior.",
+                "examples": [
+                    {
+                        "name": "animal"
+                    },
+                    {
+                        "attribute": true
+                    },
+                    {
+                        "wrapped": true
+                    },
+                    {
+                        "namespace": "http://example.com/schema/sample",
+                        "prefix": "sample"
+                    },
+                    {
+                        "name": "aliens",
+                        "wrapped": true
+                    }
+                ]
             }
         },
         "securitySchemes": {

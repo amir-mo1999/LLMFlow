@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Tuple
+
 from openapi_pydantic import OpenAPI
 
 from App.models import InputVariable

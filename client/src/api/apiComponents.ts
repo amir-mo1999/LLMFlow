@@ -894,6 +894,10 @@ export type PatchProjectError = Fetcher.ErrorWrapper<
       payload: Schemas.HttpExceptionModel
     }
   | {
+      status: 404
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
       status: 409
       payload: Schemas.HttpExceptionModel
     }
@@ -929,6 +933,62 @@ export const usePatchProject = (
     mutationFn: (variables: PatchProjectVariables) =>
       fetchPatchProject({ ...fetcherOptions, ...variables }),
     ...options,
+  })
+}
+
+export type GetProjectApiDocsPathParams = {
+  projectId: string
+}
+
+export type GetProjectApiDocsError = Fetcher.ErrorWrapper<
+  | {
+      status: 401
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 404
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type GetProjectApiDocsVariables = {
+  pathParams: GetProjectApiDocsPathParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchGetProjectApiDocs = (
+  variables: GetProjectApiDocsVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<Schemas.OpenAPI, GetProjectApiDocsError, undefined, {}, {}, GetProjectApiDocsPathParams>(
+    {
+      url: "/project-api-docs/{projectId}",
+      method: "get",
+      ...variables,
+      signal,
+    }
+  )
+
+export const useGetProjectApiDocs = <TData = Schemas.OpenAPI>(
+  variables: GetProjectApiDocsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.OpenAPI, GetProjectApiDocsError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
+  return reactQuery.useQuery<Schemas.OpenAPI, GetProjectApiDocsError, TData>({
+    queryKey: queryKeyFn({
+      path: "/project-api-docs/{projectId}",
+      operationId: "getProjectApiDocs",
+      variables,
+    }),
+    queryFn: ({ signal }) => fetchGetProjectApiDocs({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
   })
 }
 
@@ -1010,4 +1070,9 @@ export type QueryOperation =
       path: "/project/{projectId}"
       operationId: "getProject"
       variables: GetProjectVariables
+    }
+  | {
+      path: "/project-api-docs/{projectId}"
+      operationId: "getProjectApiDocs"
+      variables: GetProjectApiDocsVariables
     }
