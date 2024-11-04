@@ -1,55 +1,20 @@
-import re
 from typing import Any, Dict, List, Tuple
+from openapi_pydantic import OpenAPI
 
 from App.models import InputVariable
 
 
-def format_name(name: str) -> str:
-    """
-    Formats a name to be URL-friendly by replacing whitespaces with hyphens
-    and removing any characters that would require URL encoding.
-
-    Parameters:
-    - name (str): The original name string to format.
-
-    Returns:
-    - str: The formatted, URL-friendly name.
-    """
-    formatted_name = re.sub(r"\s+", "-", name)
-    formatted_name = re.sub(r"[^A-Za-z0-9\-_.~]", "", formatted_name)
-
-    if len(formatted_name) == 0:
-        formatted_name = "default-name"
-    return formatted_name
-
-
 def generate_project_api_docs(
-    project_id: str,
     project_name: str,
-    route_params: List[Tuple[str, List[InputVariable]]],
-) -> Dict[str, Any]:
-    """
-    Generates OpenAPI documentation for a given project and its AI functions.
-
-    Parameters:
-    - project_id (str): Unique UUID for the project.
-    - project_name (str): Name of the project.
-    - route_params (list): List of tuples, each containing:
-        - ai_function_name (str): Name of the AI function.
-        - input_variables (list): List of input variable names for the AI function.
-
-    Returns:
-    - dict: OpenAPI specification as a dictionary.
-    """
-    formatted_project_name = format_name(project_name)
-
-    # Base structure of the OpenAPI specification
+    path_segment_name: str,
+    route_params: List[Tuple[str, str, str, List[InputVariable]]],
+) -> OpenAPI:
     openapi_spec: Dict[str, Any] = {
-        "openapi": "3.0.0",
+        "openapi": "3.1.0",
         "info": {
             "title": f"API Documentation for Project: {project_name}",
             "version": "1.0.0",
-            "description": f"API documentation for project '{project_name}' with ID '{project_id}'.",
+            "description": f"API documentation for project {project_name}.",
         },
         "paths": {},
         "components": {
@@ -63,12 +28,12 @@ def generate_project_api_docs(
     # Construct endpoints for each AI function
     for (
         ai_function_name,
+        description,
+        ai_function_path_segment_name,
         input_variables,
     ) in route_params:
-        formatted_ai_function_name = format_name(ai_function_name)
-        # Format the AI function name
         # Construct the route
-        route = f"/{project_id}/{formatted_project_name}/{formatted_ai_function_name}"
+        route = f"/execute/{path_segment_name}/{ai_function_path_segment_name}"
 
         # Define parameters for the input variables
         request_body_content: Dict[str, Any] = {
@@ -90,8 +55,8 @@ def generate_project_api_docs(
         openapi_spec["paths"][route] = {
             "post": {
                 "summary": f"Execute AI function '{ai_function_name}'",
-                "description": f"Executes the AI function '{ai_function_name}' in project '{project_name}'.",
-                "operationId": f"{project_name}_{ai_function_name}",
+                "description": description,
+                "operationId": ai_function_path_segment_name,
                 "requestBody": {"required": True, "content": request_body_content},
                 "responses": {
                     "200": {
@@ -103,4 +68,4 @@ def generate_project_api_docs(
             }
         }
 
-    return openapi_spec
+    return OpenAPI(**openapi_spec)

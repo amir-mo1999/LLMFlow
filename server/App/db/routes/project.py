@@ -1,11 +1,13 @@
 from datetime import datetime
-from typing import Annotated, List
+from typing import Annotated, List, Tuple
 
 from fastapi import APIRouter, Depends
+from openapi_pydantic import OpenAPI
 
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound, DuplicateDocument
 from App.models import (
+    InputVariable,
     Project,
     ProjectPatchInput,
     ProjectRouteInput,
@@ -14,6 +16,7 @@ from App.models import (
 )
 
 from .ai_function import get_ai_function
+from .utils import generate_project_api_docs
 
 PROJECT_ROUTER = APIRouter()
 
@@ -125,6 +128,7 @@ async def delete_project(
     response_model=Project,
     responses={
         401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
         409: {"detail": "document already exists"},
     },
 )
@@ -143,3 +147,36 @@ async def patch_project(
         return project
     else:
         raise DuplicateDocument
+
+
+@PROJECT_ROUTER.get(
+    "/project-api-docs/{project_id}",
+    response_model=OpenAPI,
+    responses={
+        401: {"detail": "Not authenticated"},
+        404: {"detail": "document not found"},
+    },
+)
+async def get_project_api_docs(
+    project_id: str,
+    user: Annotated[User, Depends(user)],
+    db: Annotated[DB, Depends(get_db)],
+):
+    project = await get_project(project_id=project_id, db=db, user=user)
+
+    route_params: List[Tuple[str, str, str, List[InputVariable]]] = []
+    for api_route in project.api_routes:
+        ai_function = await get_ai_function(api_route.ai_function_id, db, user)
+        route_params.append(
+            (
+                ai_function.name,
+                ai_function.description,
+                api_route.path_segment_name,
+                ai_function.input_variables,
+            )
+        )
+
+    api_docs = generate_project_api_docs(
+        project.name, project.path_segment_name, route_params
+    )
+    return api_docs

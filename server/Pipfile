@@ -23,6 +23,7 @@ ipykernel = "*"
 fastapi-camelcase = "*"
 pydantic-partial = "*"
 pyright = "*"
+openapi-pydantic = "*"
 
 [dev-packages]
 

@@ -3,14 +3,14 @@
   "info": {
     "title": "API Documentation for Project: My Project",
     "version": "1.0.0",
-    "description": "API documentation for project 'My Project' with ID '467c8eaa-ae38-4074-a0bd-e85f2594e281'."
+    "description": "API documentation for project My Project."
   },
   "paths": {
-    "/467c8eaa-ae38-4074-a0bd-e85f2594e281/My-Project/Summarize-Texts": {
+    "/execute/my-project/summarize-text": {
       "post": {
         "summary": "Execute AI function 'Summarize Texts'",
-        "description": "Executes the AI function 'Summarize Texts' in project 'My Project'.",
-        "operationId": "My Project_Summarize Texts",
+        "description": "Summarizes english texts to a given number_of_sentences.",
+        "operationId": "summarize-text",
         "requestBody": {
           "required": true,
           "content": {
