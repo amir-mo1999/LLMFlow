@@ -182,10 +182,13 @@ class DB:
         # delete document
         await coll.delete_one({"_id": document_id})
 
-        # if the document was an ai function, also delete all prompts for that ai function
+        # if the document was an ai function, also delete all prompts for that ai function and delete the ai function from projects
         if coll.name == "ai-functions":
-            coll = self.collection_mapping["prompts"]
-            await coll.delete_many({"ai_function_id": document_id})
+            await self.prompts.delete_many({"ai_function_id": document_id})
+            await self.projects.update_many(
+                {"api_routes.ai_function_id": document_id},
+                {"$pull": {"api_routes": {"ai_function_id": document_id}}},
+            )
 
         return True
 
