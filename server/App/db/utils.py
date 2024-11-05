@@ -58,15 +58,22 @@ async def generate_project_api_docs(
     for path in app_openapi.paths:
         if path.startswith("/execute"):
             path_name = path
+
+    # get responses for default execute
     responses = app_openapi.paths[path_name].post.responses
-    # replace refs with actual schemas
-    schemas = app_openapi.components.schemas
-    responses["200"].content["application/json"].media_type_schema = schemas["AIFunctionOutput"]
-    responses["200"].content["application/json"].media_type_schema.properties["prompt"].items = schemas["PromptMessage"]
-    responses["200"].content["application/json"].media_type_schema.properties["prompt"].items.properties["role"] = schemas["RoleEnum"]
-    error_codes = ["400", "409", "422"]
-    for code in error_codes:
-        responses[code].content["application/json"].media_type_schema = schemas["HttpExceptionModel"]
+
+    # extract relevant schemas from components
+    schemas_to_select = [
+        "AIFunctionOutput",
+        "PromptMessage",
+        "RoleEnum",
+        "HttpExceptionModel",
+    ]
+    components = app_openapi.components
+    components.schemas = {
+        schema_name: app_openapi.components.schemas.get(schema_name)
+        for schema_name in schemas_to_select
+    }
 
     # Define the basic Info object
     info = Info(title=project_name, version="1.0.0", description=project_description)
@@ -117,6 +124,8 @@ async def generate_project_api_docs(
     servers = [Server(url=BACKEND_URL)]
 
     # Construct the OpenAPI object
-    openapi = OpenAPI(openapi="3.1.0", info=info, paths=paths, servers=servers)
+    openapi = OpenAPI(
+        openapi="3.1.0", info=info, paths=paths, servers=servers, components=components
+    )
 
     return openapi
