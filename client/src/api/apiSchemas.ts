@@ -48,6 +48,15 @@ export type AIFunction = {
   creation_time: string;
 };
 
+export type AIFunctionOutput = {
+  prompt: string;
+  response: string | Record<string, any>;
+  score: number;
+  cost: number;
+  latency: number;
+  is_json: boolean;
+};
+
 export type AIFunctionPatchInput = {
   name?: string | null;
   description?: string | null;
@@ -88,6 +97,34 @@ export type AIFunctionRouteInput = {
   test_cases: TestCaseInput[];
 };
 
+export type AppModelsPromptPrompt = {
+  /**
+   * @example [{"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}]
+   */
+  messages: PromptMessage[];
+  ai_function_id: string;
+  _id?: string;
+  /**
+   * @format email
+   */
+  username: string;
+  /**
+   * @format date-time
+   */
+  creation_time: string;
+  last_eval?: EvaluateSummary | null;
+  ai_function_name: string;
+  /**
+   * @default false
+   */
+  revision_required?: boolean | null;
+  index: number;
+};
+
+export type AppModelsPromptfooModelsPrompt = {
+  raw?: string | null;
+};
+
 export type Assertion = {
   type: BaseAssertionTypes;
   value?: string | string[] | Record<string, any> | null;
@@ -120,6 +157,10 @@ export type BaseAssertionTypes =
   | "regex"
   | "rouge-n"
   | "starts-with";
+
+export type Body = {
+  [key: string]: string;
+};
 
 export type BodyLoginAuthLoginPost = {
   grant_type?: string | null;
@@ -250,6 +291,7 @@ export type Encoding = {
 };
 
 export type EvaluateResult = {
+  prompt?: AppModelsPromptfooModelsPrompt | null;
   response?: ProviderResponse | null;
   vars?: {
     [key: string]: string;
@@ -765,30 +807,6 @@ export type ProjectRouteInput = {
    */
   description: string;
   api_routes: ProjectAPIRoute[];
-};
-
-export type Prompt = {
-  /**
-   * @example [{"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}]
-   */
-  messages: PromptMessage[];
-  ai_function_id: string;
-  _id?: string;
-  /**
-   * @format email
-   */
-  username: string;
-  /**
-   * @format date-time
-   */
-  creation_time: string;
-  last_eval?: EvaluateSummary | null;
-  ai_function_name: string;
-  /**
-   * @default false
-   */
-  revision_required?: boolean | null;
-  index: number;
 };
 
 export type PromptMessage = {

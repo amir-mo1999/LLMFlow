@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Annotated, List, Optional
+from typing import Annotated, Any, Dict, List, Optional
 
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
@@ -161,7 +161,7 @@ class AIFunction(AIFunctionRouteInput):
 
 class AIFunctionOutput(RootModel):
     prompt: str
-    response: str
+    response: str | Dict[str, Any]
     score: float
     cost: float
     latency: float

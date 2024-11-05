@@ -209,6 +209,16 @@ class DB:
 
         return project_objects
 
+    async def get_project_by_path_segment_name(
+        self, path_segment_name: str, username: str
+    ) -> Project | None:
+        project = await self.projects.find_one(
+            {"path_segment_name": path_segment_name, "username": username}
+        )
+        if project is None:
+            return None
+        return Project(**project)
+
     async def get_user(self, username: str) -> User | None:
         user = await self.users.find_one({"username": username})
         if user is None:

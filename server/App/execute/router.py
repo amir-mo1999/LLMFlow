@@ -1,21 +1,66 @@
-from typing import Annotated
+from typing import Annotated, Any, Dict
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
+from App.db.routes.ai_function import get_ai_function
 from App.dependencies import DB, get_db, user
-from App.models import User
+from App.http_exceptions import DocumentNotFound
+from App.models import AIFunctionOutput, Body, TestCase, User
+
+from .utils import execute_ai_function
 
 EXECUTE_ROUTER = APIRouter(tags=["Execute"])
 
 
 @EXECUTE_ROUTER.post(
-    "/execute/{project_id}/{ai_function_id}",
-    responses={409: {"detail": "document not found"}},
+    "/execute/{project_path_name}/{ai_function_path_name}",
+    response_model=AIFunctionOutput,
+    responses={
+        409: {"detail": "document not found"},
+        400: {"detail": "No prompts defined for AI Function"},
+        422: {
+            "detail": "Missmatch between request variables in request body and AI Function variables"
+        },
+    },
 )
 async def execute(
-    project_id: str,
-    ai_function_id: str,
+    project_path_name: str,
+    ai_function_path_name: str,
+    body: Body,
     db: Annotated[DB, Depends(get_db)],
     user: Annotated[User, Depends(user)],
 ):
-    pass
+    # get project
+    project = await db.get_project_by_path_segment_name(project_path_name, user.email)
+    if project is None:
+        raise DocumentNotFound
+
+    # get ai function
+    ai_function_id = None
+    for api_route in project.api_routes:
+        if api_route.path_segment_name == ai_function_path_name:
+            ai_function_id = api_route.ai_function_id
+            break
+    if ai_function_id is None:
+        raise DocumentNotFound
+    ai_function = await get_ai_function(ai_function_id, db, user)
+
+    # create test case with given body and validate
+    test_case_dump: Dict[str, Any] = {"vars": body.model_dump(), "assert": []}
+    test_case = TestCase(**test_case_dump)  # type ignore
+    try:
+        ai_function.test_cases = [test_case]
+    except ValueError as e:
+        raise HTTPException(422, detail=str(e))
+
+    # get prompt
+    prompts = await db.get_prompts_by_ai_function_id(ai_function_id)
+    if len(prompts) == 0:
+        raise HTTPException(
+            status_code=400,
+            detail=f"No prompts defined for AI Function {ai_function.name}",
+        )
+
+    # execute
+    result = await execute_ai_function(prompts[0], ai_function.assertions, test_case)
+    return result

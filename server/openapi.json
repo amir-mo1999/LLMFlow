@@ -565,7 +565,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Prompt"
+                                    "$ref": "#/components/schemas/App__models__prompt__Prompt"
                                 }
                             }
                         }
@@ -639,7 +639,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Prompt"
+                                    "$ref": "#/components/schemas/App__models__prompt__Prompt"
                                 }
                             }
                         }
@@ -787,7 +787,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Prompt"
+                                    "$ref": "#/components/schemas/App__models__prompt__Prompt"
                                 }
                             }
                         }
@@ -858,7 +858,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/Prompt"
+                                        "$ref": "#/components/schemas/App__models__prompt__Prompt"
                                     },
                                     "title": "Response Get Prompts Prompts  Ai Function Id  Get"
                                 }
@@ -914,7 +914,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "$ref": "#/components/schemas/Prompt"
+                                        "$ref": "#/components/schemas/App__models__prompt__Prompt"
                                     },
                                     "type": "array",
                                     "title": "Response Get All Prompts Prompts Get"
@@ -1363,7 +1363,7 @@
                 }
             }
         },
-        "/execute/{project_id}/{ai_function_id}": {
+        "/execute/{project_path_name}/{ai_function_path_name}": {
             "post": {
                 "tags": [
                     "execute"
@@ -1377,30 +1377,42 @@
                 ],
                 "parameters": [
                     {
-                        "name": "project_id",
+                        "name": "project_path_name",
                         "in": "path",
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "title": "Project Id"
+                            "title": "Project Path Name"
                         }
                     },
                     {
-                        "name": "ai_function_id",
+                        "name": "ai_function_path_name",
                         "in": "path",
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "title": "Ai Function Id"
+                            "title": "Ai Function Path Name"
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successful Response",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/AIFunctionOutput"
+                                }
                             }
                         }
                     },
@@ -1415,15 +1427,27 @@
                         },
                         "description": "Conflict"
                     },
-                    "422": {
-                        "description": "Validation Error",
+                    "400": {
+                        "detail": "No prompts defined for AI Function",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
                                 }
                             }
-                        }
+                        },
+                        "description": "Bad Request"
+                    },
+                    "422": {
+                        "detail": "Missmatch between request variables in request body and AI Function variables",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Unprocessable Entity"
                     }
                 }
             }
@@ -1572,6 +1596,51 @@
                     "creation_time"
                 ],
                 "title": "AIFunction"
+            },
+            "AIFunctionOutput": {
+                "properties": {
+                    "prompt": {
+                        "type": "string",
+                        "title": "Prompt"
+                    },
+                    "response": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object"
+                            }
+                        ],
+                        "title": "Response"
+                    },
+                    "score": {
+                        "type": "number",
+                        "title": "Score"
+                    },
+                    "cost": {
+                        "type": "number",
+                        "title": "Cost"
+                    },
+                    "latency": {
+                        "type": "number",
+                        "title": "Latency"
+                    },
+                    "is_json": {
+                        "type": "boolean",
+                        "title": "Is Json"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "prompt",
+                    "response",
+                    "score",
+                    "cost",
+                    "latency",
+                    "is_json"
+                ],
+                "title": "AIFunctionOutput"
             },
             "AIFunctionPatchInput": {
                 "properties": {
@@ -1772,6 +1841,100 @@
                 ],
                 "title": "AIFunctionRouteInput"
             },
+            "App__models__prompt__Prompt": {
+                "properties": {
+                    "messages": {
+                        "items": {
+                            "$ref": "#/components/schemas/PromptMessage"
+                        },
+                        "type": "array",
+                        "title": "Messages",
+                        "examples": [
+                            [
+                                {
+                                    "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
+                                    "role": "user"
+                                }
+                            ]
+                        ]
+                    },
+                    "ai_function_id": {
+                        "type": "string",
+                        "title": "Ai Function Id"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": " Id"
+                    },
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time"
+                    },
+                    "last_eval": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/EvaluateSummary"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "ai_function_name": {
+                        "type": "string",
+                        "title": "Ai Function Name"
+                    },
+                    "revision_required": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Revision Required",
+                        "default": false
+                    },
+                    "index": {
+                        "type": "integer",
+                        "title": "Index"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "messages",
+                    "ai_function_id",
+                    "username",
+                    "creation_time",
+                    "ai_function_name",
+                    "index"
+                ],
+                "title": "Prompt"
+            },
+            "App__models__promptfoo_models__Prompt": {
+                "properties": {
+                    "raw": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Raw"
+                    }
+                },
+                "type": "object",
+                "title": "Prompt"
+            },
             "Assertion": {
                 "properties": {
                     "type": {
@@ -1866,6 +2029,13 @@
                     "starts-with"
                 ],
                 "title": "BaseAssertionTypes"
+            },
+            "Body": {
+                "additionalProperties": {
+                    "type": "string"
+                },
+                "type": "object",
+                "title": "Body"
             },
             "Body_login_auth_login_post": {
                 "properties": {
@@ -2422,6 +2592,16 @@
             },
             "EvaluateResult": {
                 "properties": {
+                    "prompt": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/App__models__promptfoo_models__Prompt"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
                     "response": {
                         "anyOf": [
                             {
@@ -4905,83 +5085,6 @@
                     "api_routes"
                 ],
                 "title": "ProjectRouteInput"
-            },
-            "Prompt": {
-                "properties": {
-                    "messages": {
-                        "items": {
-                            "$ref": "#/components/schemas/PromptMessage"
-                        },
-                        "type": "array",
-                        "title": "Messages",
-                        "examples": [
-                            [
-                                {
-                                    "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
-                                    "role": "user"
-                                }
-                            ]
-                        ]
-                    },
-                    "ai_function_id": {
-                        "type": "string",
-                        "title": "Ai Function Id"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id"
-                    },
-                    "username": {
-                        "type": "string",
-                        "format": "email",
-                        "title": "Username"
-                    },
-                    "creation_time": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Creation Time"
-                    },
-                    "last_eval": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/EvaluateSummary"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
-                    },
-                    "ai_function_name": {
-                        "type": "string",
-                        "title": "Ai Function Name"
-                    },
-                    "revision_required": {
-                        "anyOf": [
-                            {
-                                "type": "boolean"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Revision Required",
-                        "default": false
-                    },
-                    "index": {
-                        "type": "integer",
-                        "title": "Index"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "messages",
-                    "ai_function_id",
-                    "username",
-                    "creation_time",
-                    "ai_function_name",
-                    "index"
-                ],
-                "title": "Prompt"
             },
             "PromptMessage": {
                 "properties": {

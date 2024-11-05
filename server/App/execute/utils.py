@@ -1,10 +1,10 @@
+import json
 import os
 from typing import Dict, List, Literal
 
 import aiohttp
 
 from App.models import (
-    AIFunction,
     AIFunctionOutput,
     Assertion,
     EvaluateInput,
@@ -17,13 +17,11 @@ PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL") or ""
 
 
 async def execute_ai_function(
-    prompt: Prompt, ai_function: AIFunction, input: TestCase
+    prompt: Prompt, assertions: List[Assertion], test_case: TestCase
 ) -> AIFunctionOutput:
     prompts = [prompt.messages]
-    defaultTest: Dict[Literal["assert"], List[Assertion]] = {
-        "assert": ai_function.assertions
-    }
-    tests = ai_function.test_cases
+    defaultTest: Dict[Literal["assert"], List[Assertion]] = {"assert": assertions}
+    tests = [test_case]
 
     # parse as EvaluateInpiut for validation
     evaluate_input = EvaluateInput(
@@ -68,7 +66,9 @@ async def execute_ai_function(
         # parse as AIFunctionOutput
         output = AIFunctionOutput(
             prompt=result.prompt.raw,
-            response=result.response.output,
+            response=json.loads(result.response.output)
+            if is_json
+            else result.response.output,
             score=result.score,
             cost=result.cost,
             latency=result.latencyMs,

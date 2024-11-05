@@ -7,6 +7,7 @@ from .ai_function import (
     InputVariable,
     TestCase,
 )
+from .body import Body
 from .json_schema import JsonSchema
 from .project import Project, ProjectPatchInput, ProjectRouteInput
 from .prompt import Prompt, PromptMessage, PromptRouteInput
@@ -22,6 +23,7 @@ __all__ = [
     "SuccessResponse",
     "Token",
     "DecodedToken",
+    "Body",
     "AIFunctionRouteInput",
     "AIFunctionPatchInput",
     "AIFunction",
