@@ -161,9 +161,16 @@ class AIFunction(AIFunctionRouteInput):
 
 
 class AIFunctionOutput(RootModel):
-    prompt: List[PromptMessage]
-    response: str | Dict[str, Any]
-    score: float
-    cost: float
-    latency: float
-    is_json: bool
+    prompt: List[PromptMessage] = Field(
+        ...,
+        examples=[
+            {"role": "user", "content": "Hey, AI! What's the weather like today?"}
+        ],
+    )
+    response: str | Dict[str, Any] = Field(
+        ..., examples=["The weather is sunny today."]
+    )
+    score: float = Field(..., examples=[0.9])
+    cost: float = Field(..., examples=[0.000001])
+    latency: float = Field(..., examples=[1200])
+    is_json: bool = Field(..., examples=[False])
