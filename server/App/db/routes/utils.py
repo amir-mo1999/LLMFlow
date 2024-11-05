@@ -1,29 +1,27 @@
+import os
 from typing import Any, Dict, List, Tuple
 
-from openapi_pydantic import OpenAPI
+from openapi_pydantic import OpenAPI, Server
 
 from App.models import InputVariable
+
+BACKEND_URL = os.getenv("BACKEND_URL") or "/"
 
 
 def generate_project_api_docs(
     project_name: str,
+    project_description: str,
     path_segment_name: str,
     route_params: List[Tuple[str, str, str, List[InputVariable]]],
 ) -> OpenAPI:
     openapi_spec: Dict[str, Any] = {
         "openapi": "3.1.0",
         "info": {
-            "title": f"API Documentation for Project: {project_name}",
+            "title": project_name,
             "version": "1.0.0",
-            "description": f"API documentation for project {project_name}.",
+            "description": project_description,
         },
         "paths": {},
-        "components": {
-            "securitySchemes": {
-                "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "x-api-key"}
-            }
-        },
-        "security": [{"ApiKeyAuth": []}],
     }
 
     # Construct endpoints for each AI function
@@ -69,4 +67,4 @@ def generate_project_api_docs(
             }
         }
 
-    return OpenAPI(**openapi_spec)
+    return OpenAPI(**openapi_spec, servers=[Server(url=BACKEND_URL)])

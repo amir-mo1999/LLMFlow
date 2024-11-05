@@ -178,6 +178,6 @@ async def get_project_api_docs(
         )
 
     api_docs = generate_project_api_docs(
-        project.name, project.path_segment_name, route_params
+        project.name, project.description, project.path_segment_name, route_params
     )
     return api_docs
