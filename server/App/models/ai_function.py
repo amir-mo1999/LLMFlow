@@ -113,7 +113,7 @@ class AIFunctionPatchInput(RootModel):
     ] = None
     input_variables: Optional[List[InputVariable]] = None
     output_schema: Optional[JsonSchema] = None
-    assertions: Optional[List[Assertion]] = None
+    assertions: Optional[List[Assertion]] = Field(default=None, alias="assert")
     test_cases: Optional[List[TestCase]] = None
 
     @model_validator(mode="after")
@@ -121,10 +121,19 @@ class AIFunctionPatchInput(RootModel):
         if self.input_variables is None and self.test_cases is None:
             return self
 
-        if self.input_variables is None or self.test_cases is None:
+        if self.input_variables is not None and self.test_cases is None:
             raise ValueError(
-                "Only setting input variables or test cases when patching is not allowed. They may only be patched together."
+                """When patching input variables, test cases must also be patched."""
             )
+
+        if self.input_variables is None and self.test_cases is not None:
+            return self
+
+        assert self.input_variables
+        assert self.test_cases
+
+        if len(self.input_variables) == 0:
+            return self
 
         # get variable names of ai function
         variable_names = [var.name for var in self.input_variables]

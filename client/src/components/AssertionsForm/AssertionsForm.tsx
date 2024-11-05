@@ -9,14 +9,14 @@ import AssertionFormDialog from "./AssertionsFormDialog"
 
 interface AssertionsFormProps {
   assertions: Assertion[]
-  jsonAssertions?: Assertion[]
+  jsonAssertion?: Assertion
   setAssertions: (assertions: Assertion[]) => void
   headerVariant?: TypographyOwnProps["variant"]
 }
 
 const AssertionsForm: React.FC<AssertionsFormProps> = ({
   assertions,
-  jsonAssertions = [],
+  jsonAssertion = undefined,
   setAssertions,
   headerVariant = "h5",
 }) => {
@@ -52,6 +52,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({
   }
 
   const handleUpdateAssertion = (index: number, assertion: Assertion) => {
+    if (jsonAssertion) index -= 1
     const updatedAssertions = [...assertions]
     updatedAssertions[index] = assertion
     setAssertions(updatedAssertions)
@@ -59,6 +60,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({
 
   const handleDeleteAssertion = (index: number) => {
     const f = () => {
+      if (jsonAssertion) index -= 1
       const updatedAssertions = assertions.filter((_, i) => i !== index)
       setAssertions(updatedAssertions)
     }
@@ -75,7 +77,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({
         </Button>
       </Box>
       <AssertionsOverview
-        assertions={[...jsonAssertions, ...assertions]}
+        assertions={jsonAssertion ? [jsonAssertion, ...assertions] : [...assertions]}
         onClick={handleOpenEditDialog}
         onDelete={handleDeleteAssertion}
       ></AssertionsOverview>

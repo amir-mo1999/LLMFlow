@@ -277,7 +277,7 @@ class DB:
                 )
 
         # update fields in ai function dump
-        ai_function_dump = ai_function.model_dump(by_alias=True)
+        ai_function_dump = ai_function.model_dump()
         for key in ai_function_patch.model_dump(exclude_none=True):
             ai_function_dump[key] = getattr(ai_function_patch, key)
 
