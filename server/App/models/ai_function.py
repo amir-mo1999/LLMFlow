@@ -5,6 +5,7 @@ from typing import Annotated, Any, Dict, List, Optional
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
 from .json_schema import JsonSchema
+from .prompt import PromptMessage
 from .promptfoo_models import Assertion, TestCase
 from .root_model import RootModel
 
@@ -160,7 +161,7 @@ class AIFunction(AIFunctionRouteInput):
 
 
 class AIFunctionOutput(RootModel):
-    prompt: str
+    prompt: List[PromptMessage]
     response: str | Dict[str, Any]
     score: float
     cost: float

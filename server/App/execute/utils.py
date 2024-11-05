@@ -10,6 +10,7 @@ from App.models import (
     EvaluateInput,
     EvaluateSummary,
     Prompt,
+    PromptMessage,
     TestCase,
 )
 
@@ -65,7 +66,7 @@ async def execute_ai_function(
 
         # parse as AIFunctionOutput
         output = AIFunctionOutput(
-            prompt=result.prompt.raw,
+            prompt=[PromptMessage(**data) for data in json.loads(result.prompt.raw)],
             response=json.loads(result.response.output)
             if is_json
             else result.response.output,

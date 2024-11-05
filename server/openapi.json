@@ -1600,7 +1600,10 @@
             "AIFunctionOutput": {
                 "properties": {
                     "prompt": {
-                        "type": "string",
+                        "items": {
+                            "$ref": "#/components/schemas/PromptMessage"
+                        },
+                        "type": "array",
                         "title": "Prompt"
                     },
                     "response": {
