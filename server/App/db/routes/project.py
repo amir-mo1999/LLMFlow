@@ -15,6 +15,7 @@ from App.models import (
     ProjectPatchInput,
     ProjectRouteInput,
     SuccessResponse,
+    TestCase,
     User,
 )
 
@@ -177,7 +178,7 @@ async def get_project_api_docs(
 ):
     project = await get_project(project_id=project_id, db=db, user=user)
 
-    route_params: List[Tuple[str, str, str, List[InputVariable]]] = []
+    route_params: List[Tuple[str, str, str, List[InputVariable], List[TestCase]]] = []
     for api_route in project.api_routes:
         ai_function = await get_ai_function(api_route.ai_function_id, db, user)
         route_params.append(
@@ -186,6 +187,7 @@ async def get_project_api_docs(
                 ai_function.description,
                 api_route.path_segment_name,
                 ai_function.input_variables,
+                ai_function.test_cases,
             )
         )
 

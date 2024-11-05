@@ -29,6 +29,7 @@ async def execute(
     body: Body,
     db: Annotated[DB, Depends(get_db)],
     user: Annotated[User, Depends(user)],
+    prompt_id: str | None = None,
 ):
     # get project
     project = await db.get_project_by_path_segment_name(project_path_name, user.email)

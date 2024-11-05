@@ -14,7 +14,7 @@ from openapi_pydantic import (
     Server,
 )
 
-from App.models import InputVariable
+from App.models import InputVariable, TestCase
 
 BACKEND_URL = os.getenv("BACKEND_URL") or "/"
 
@@ -32,7 +32,7 @@ async def generate_project_api_docs(
     project_name: str,
     project_description: str,
     path_segment_name: str,
-    route_params: List[Tuple[str, str, str, List[InputVariable]]],
+    route_params: List[Tuple[str, str, str, List[InputVariable], List[TestCase]]],
 ) -> OpenAPI:
     """
     Generates an OpenAPI specification for the given project using openapi_pydantic models.
@@ -47,6 +47,7 @@ async def generate_project_api_docs(
                 - Description of the AI function
                 - Path segment name for the AI function
                 - List of input variables required by the AI function
+                - List of test cases for the AI function
 
     Returns:
         OpenAPI: The constructed OpenAPI specification.
@@ -87,12 +88,20 @@ async def generate_project_api_docs(
         description,
         ai_function_path_segment_name,
         input_variables,
+        test_cases,
     ) in route_params:
         # Construct the full route path
         route = f"/execute/{path_segment_name}/{ai_function_path_segment_name}"
 
-        # Define the schema for the request body
-        properties = {var.name: Schema(type="string") for var in input_variables}
+        # define properties including examples extracted from test cases
+        properties: Dict[str, Schema] = {}
+        # add the test cases as examples to the params
+        for var in input_variables:
+            schema = Schema(type="string")
+            schema.examples = []
+            for test_case in test_cases:
+                schema.examples.append(test_case.variables[var.name])
+            properties[var.name] = schema
         required = [var.name for var in input_variables]
 
         request_schema = Schema(type="object", properties=properties, required=required)
