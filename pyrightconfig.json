@@ -6,5 +6,6 @@
   "reportUnusedVariable": true,
   "reportUnboundVariable": true,
   "reportUnknownMemberType": true,
-  "pythonVersion": "3.12"
+  "pythonVersion": "3.12",
+  "exclude": ["server/App/db/utils.py"]
 }

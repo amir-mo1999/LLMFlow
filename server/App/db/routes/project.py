@@ -18,8 +18,8 @@ from App.models import (
     User,
 )
 
+from ..utils import generate_project_api_docs
 from .ai_function import get_ai_function
-from .utils import generate_project_api_docs
 
 PROJECT_ROUTER = APIRouter()
 
@@ -189,7 +189,7 @@ async def get_project_api_docs(
             )
         )
 
-    api_docs = generate_project_api_docs(
+    api_docs = await generate_project_api_docs(
         project.name, project.description, project.path_segment_name, route_params
     )
     return api_docs
