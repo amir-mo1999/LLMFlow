@@ -15,6 +15,9 @@ export const handleRequest: HandlerFunction = async (request, { path }) => {
     secret: process.env.JWT_SECRET,
   })
 
+  // parse url
+  const query = new URL(request.url).search
+
   // If no token is found, return a 401 Unauthorized response
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -25,7 +28,7 @@ export const handleRequest: HandlerFunction = async (request, { path }) => {
 
   // Construct the backend URL
   const backendPath = path.join("/")
-  const backendUrl = `${process.env.BACKEND_URL}/${backendPath}`
+  const backendUrl = `${process.env.BACKEND_URL}/${backendPath}${query}`
 
   // Prepare the headers
   const headers: HeadersInit = {
@@ -53,11 +56,9 @@ export const handleRequest: HandlerFunction = async (request, { path }) => {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
     }
   }
-
   try {
     // Forward the request to the backend
     const backendResponse = await fetch(backendUrl, fetchOptions)
-
     // Clone the backend response to read its body
     const responseBody = await backendResponse.json()
     // Create a new NextResponse with the backend's status and body

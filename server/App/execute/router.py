@@ -68,6 +68,7 @@ async def execute(
     else:
         prompt = await db.get_prompt_by_tag(ai_function.id, prompt_tag)
 
+    print(prompt_tag)
     if prompt is None:
         raise HTTPException(
             status_code=400,

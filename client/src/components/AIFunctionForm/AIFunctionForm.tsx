@@ -128,11 +128,9 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
 
   const { mutate: patchAIFunction } = usePatchAiFunction({
     onSuccess: (response) => {
-      console.log(response)
       setAIFunction(response)
     },
     onError: (err) => {
-      console.log(err)
       //@ts-ignore
       if (err.stack.status === 409) {
         setNameError(true)

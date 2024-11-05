@@ -1393,6 +1393,48 @@
                             "type": "string",
                             "title": "Ai Function Path Name"
                         }
+                    },
+                    {
+                        "name": "prompt_tag",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "enum": [
+                                        "highest score",
+                                        "cheapest",
+                                        "fastest"
+                                    ],
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Specify by which criteria to select the prompt.",
+                            "default": "highest score",
+                            "title": "Prompt Tag"
+                        },
+                        "description": "Specify by which criteria to select the prompt."
+                    },
+                    {
+                        "name": "prompt_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'.",
+                            "title": "Prompt Id"
+                        },
+                        "description": "If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'."
                     }
                 ],
                 "requestBody": {

@@ -49,9 +49,9 @@ async def execute_ai_function(
             result
             and result.gradingResult
             and result.gradingResult.componentResults
-            and result.score
-            and result.cost
-            and result.latencyMs
+            and result.score is not None
+            and result.cost is not None
+            and result.latencyMs is not None
             and result.response
             and result.prompt
             and result.response.output

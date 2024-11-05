@@ -8,6 +8,7 @@ from openapi_pydantic import (
     MediaType,
     OpenAPI,
     Operation,
+    ParameterLocation,
     PathItem,
     RequestBody,
     Schema,
@@ -60,8 +61,13 @@ async def generate_project_api_docs(
         if path.startswith("/execute"):
             path_name = path
 
-    # get responses for default execute
-    responses = app_openapi.paths[path_name].post.responses
+    # get responses and query params for default execute
+    execute_operation = app_openapi.paths[path_name].post
+    responses = execute_operation.responses
+    query_params = []
+    for param in execute_operation.parameters:
+        if param.param_in == ParameterLocation.QUERY:
+            query_params.append(param)
 
     # extract relevant schemas from components
     schemas_to_select = [
@@ -121,6 +127,8 @@ async def generate_project_api_docs(
             operation_id=ai_function_path_segment_name,
             requestBody=request_body,
             responses=responses,
+            parameters=query_params,
+            tags=[ai_function_name],
         )
 
         # Define the PathItem with the POST operation
