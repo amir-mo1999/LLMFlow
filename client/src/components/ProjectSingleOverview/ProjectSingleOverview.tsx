@@ -1,18 +1,14 @@
 "use client"
 import React from "react"
 import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { AIFunction, Project } from "@/api/apiSchemas"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
-import AddIcon from "@mui/icons-material/Add"
 import { useDeleteProject } from "@/api/apiComponents"
-import { AIFunctionPaper } from "@/components"
 import SwaggerUI from "swagger-ui-react"
 import "swagger-ui-react/swagger-ui.css"
-import { useTheme } from "@mui/material"
 import { OpenAPI } from "@/api/apiSchemas"
 import CircularProgress from "@mui/material/CircularProgress"
 
@@ -23,16 +19,6 @@ interface ProjectSingleOverviewProps {
   isFetchingApiDocs?: boolean
   aiFunctions: AIFunction[]
   onClickEdit?: (aiFunctionID: string) => void
-  onClickAddPrompt?: (aiFunctionID: string) => void
-}
-
-const options: Intl.DateTimeFormatOptions = {
-  timeZone: "Europe/Berlin",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
 }
 
 const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
@@ -40,11 +26,8 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
   project,
   apiDocs,
   isFetchingApiDocs = false,
-  aiFunctions,
   onClickEdit = () => {},
-  onClickAddPrompt,
 }) => {
-  const theme = useTheme()
   const { mutate: deleteProject } = useDeleteProject({})
 
   const onClickDelete = () => {
@@ -54,42 +37,6 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
 
   return (
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-      {/* Project Name */}
-      <Typography variant="h4">{project.name}</Typography>
-
-      {/* Creation Time */}
-      <Typography gutterBottom>
-        {new Date(project.creation_time).toLocaleString("de-DE", options)}
-      </Typography>
-
-      {/* Description */}
-      <Typography variant="body1">{project.description}</Typography>
-      <Divider sx={{ marginY: 2 }}></Divider>
-      {/* AI Functions and Prompts */}
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        AI Functions
-      </Typography>
-      <Box sx={{ display: "flex", gap: 3, flexDirection: "column" }}>
-        {project.api_routes.map((apiRoute, indx) => {
-          const aiFunction = aiFunctions.find(
-            (aiFunction) => aiFunction._id === apiRoute.ai_function_id
-          )
-          return (
-            <React.Fragment key={indx}>
-              {aiFunction && (
-                <AIFunctionPaper disableHover sx={{ width: "50%" }} aiFunction={aiFunction} />
-              )}
-            </React.Fragment>
-          )
-        })}
-      </Box>
-
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}></Box>
-      {/* API Docs */}
-      <Divider sx={{ marginY: 2 }}></Divider>
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        API Documentation
-      </Typography>
       {apiDocs === undefined && isFetchingApiDocs ? (
         <CircularProgress />
       ) : apiDocs && !isFetchingApiDocs ? (
@@ -107,9 +54,6 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
       ) : (
         <></>
       )}
-
-      {apiDocs === undefined}
-
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <Box>
@@ -120,14 +64,6 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
           startIcon={<EditIcon sx={{ mb: 0.4 }} />}
         >
           Edit
-        </Button>
-        <Button
-          variant="contained"
-          sx={{ mr: 5, display: onClickAddPrompt ? "normal" : "none" }}
-          onClick={() => onClickAddPrompt?.(project._id as string)}
-          startIcon={<AddIcon sx={{ mb: 0.4 }} />}
-        >
-          Add Prompt
         </Button>
         <Button
           variant="contained"
@@ -142,8 +78,8 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
         /* Global styles to override Swagger UI defaults */
         .swagger-ui,
         .swagger-ui .wrapper,
-        .swagger-ui .swagger-container {
-          background-color: white;
+        .scheme-container {
+          background: transparent !important;
         }
 
         /* Optional: Adjust text colors for better contrast */
