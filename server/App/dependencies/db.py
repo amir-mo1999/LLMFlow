@@ -219,6 +219,12 @@ class DB:
             return None
         return Project(**project)
 
+    async def get_project_by_name(self, name: str, username: str) -> Project | None:
+        project = await self.projects.find_one({"name": name, "username": username})
+        if project is None:
+            return None
+        return Project(**project)
+
     async def get_user(self, username: str) -> User | None:
         user = await self.users.find_one({"username": username})
         if user is None:
@@ -312,6 +318,17 @@ class DB:
         if project.name:
             query = await self.projects.find_one(
                 {"_id": {"$ne": project.id}, "name": project_patch.name}
+            )
+            if query:
+                return None
+
+        # check if project with new path segment name
+        if project.name:
+            query = await self.projects.find_one(
+                {
+                    "_id": {"$ne": project.id},
+                    "path_segment_name": project_patch.path_segment_name,
+                }
             )
             if query:
                 return None

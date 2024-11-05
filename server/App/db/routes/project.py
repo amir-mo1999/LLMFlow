@@ -5,7 +5,10 @@ from fastapi import APIRouter, Depends
 from openapi_pydantic import OpenAPI
 
 from App.dependencies import DB, get_db, user
-from App.http_exceptions import DocumentNotFound, DuplicateDocument
+from App.http_exceptions import (
+    DocumentNotFound,
+    DuplicateDocument,
+)
 from App.models import (
     InputVariable,
     Project,
@@ -42,6 +45,15 @@ async def post_project(
     db: Annotated[DB, Depends(get_db)],
 ):
     now = datetime.now()
+
+    project = await db.get_project_by_name(project_input.name, user.email)
+    if project:
+        raise DuplicateDocument
+    project = await db.get_project_by_path_segment_name(
+        project_input.path_segment_name, user.email
+    )
+    if project:
+        raise DuplicateDocument
 
     # verify that ai functions exist
     for api_route in project_input.api_routes:
