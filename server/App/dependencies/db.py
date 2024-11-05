@@ -5,6 +5,7 @@ from fastapi import Depends
 from motor.motor_asyncio import (
     AsyncIOMotorClient,
     AsyncIOMotorCollection,
+    AsyncIOMotorCommandCursor,
     AsyncIOMotorCursor,
 )
 
@@ -16,6 +17,7 @@ from App.models import (
     ProjectPatchInput,
     Prompt,
     PromptMessage,
+    PromptTag,
     User,
 )
 
@@ -24,7 +26,9 @@ Object = Union[AIFunction, Prompt, User, Project]
 Document = Dict[str, Any]
 
 
-async def cursor_to_list(cursor: AsyncIOMotorCursor[Document]) -> List[Document]:
+async def cursor_to_list(
+    cursor: AsyncIOMotorCursor[Document] | AsyncIOMotorCommandCursor[Document],
+) -> List[Document]:
     docs: List[Document] = []
     async for doc in cursor:
         docs.append(doc)
@@ -380,6 +384,43 @@ class DB:
             prompts.append(Prompt(**prompt_dump))
 
         return prompts
+
+    async def get_prompt_by_tag(
+        self, ai_function_id: str, tag: PromptTag | None = "highest score"
+    ) -> Prompt | None:
+        match_query = {"$match": {"ai_function_id": ai_function_id}}
+
+        aggregate_query = {
+            "$addFields": {
+                "average_score": {"$avg": "$last_eval.results.score"},
+                "average_latency": {"$avg": "$last_eval.results.latencyMs"},
+                "average_cost": {"$avg": "$last_eval.results.cost"},
+            }
+        }
+
+        if tag == "highest score":
+            sort_query = {"$sort": {"average_score": -1}}
+        elif tag == "cheapest":
+            sort_query = {"$sort": {"average_cost": 1}}
+        else:
+            sort_query = {"$sort": {"average_latency": 1}}
+
+        pipeline = [
+            match_query,
+            aggregate_query,
+            sort_query,
+            {
+                # Stage 4: Limit the result to the top document
+                "$limit": 1
+            },
+        ]
+        results_cursor: AsyncIOMotorCommandCursor[Document] = self.prompts.aggregate(
+            pipeline
+        )
+        results = await cursor_to_list(results_cursor)
+        if len(results) > 0:
+            return Prompt(**results[0])
+        return None
 
 
 async def get_client() -> AsyncGenerator[AsyncIOMotorClient[Document], None]:

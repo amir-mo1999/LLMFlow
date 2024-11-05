@@ -10,7 +10,7 @@ from .ai_function import (
 from .body import Body
 from .json_schema import JsonSchema
 from .project import Project, ProjectPatchInput, ProjectRouteInput
-from .prompt import Prompt, PromptMessage, PromptRouteInput
+from .prompt import Prompt, PromptMessage, PromptRouteInput, PromptTag
 from .promptfoo_models import EvaluateInput, EvaluateSummary
 from .success_response import SuccessResponse
 from .token import DecodedToken, Token
@@ -31,6 +31,7 @@ __all__ = [
     "TestCase",
     "PromptRouteInput",
     "Prompt",
+    "PromptTag",
     "EvaluateInput",
     "JsonSchema",
     "EvaluateSummary",

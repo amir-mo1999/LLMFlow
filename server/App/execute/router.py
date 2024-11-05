@@ -1,11 +1,12 @@
-from typing import Annotated, Any, Dict
+from typing import Annotated, Any, Dict, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from App.db.routes.ai_function import get_ai_function
+from App.db.routes.prompt import get_prompt
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound
-from App.models import AIFunctionOutput, Body, TestCase, User
+from App.models import AIFunctionOutput, Body, PromptTag, TestCase, User
 
 from .utils import execute_ai_function
 
@@ -29,7 +30,14 @@ async def execute(
     body: Body,
     db: Annotated[DB, Depends(get_db)],
     user: Annotated[User, Depends(user)],
-    prompt_id: str | None = None,
+    prompt_tag: Optional[PromptTag] = Query(
+        default="highest score",
+        description="Specify by which criteria to select the prompt.",
+    ),
+    prompt_id: Optional[str | None] = Query(
+        default=None,
+        description="If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'.",
+    ),
 ):
     # get project
     project = await db.get_project_by_path_segment_name(project_path_name, user.email)
@@ -55,13 +63,17 @@ async def execute(
         raise HTTPException(422, detail=str(e))
 
     # get prompt
-    prompts = await db.get_prompts_by_ai_function_id(ai_function_id)
-    if len(prompts) == 0:
+    if prompt_id:
+        prompt = await get_prompt(prompt_id, db, user)
+    else:
+        prompt = await db.get_prompt_by_tag(ai_function.id, prompt_tag)
+
+    if prompt is None:
         raise HTTPException(
             status_code=400,
             detail=f"No prompts defined for AI Function {ai_function.name}",
         )
 
     # execute
-    result = await execute_ai_function(prompts[0], ai_function.assertions, test_case)
+    result = await execute_ai_function(prompt, ai_function.assertions, test_case)
     return result

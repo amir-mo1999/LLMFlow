@@ -1,11 +1,13 @@
 import uuid
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from pydantic import EmailStr, Field, ValidationInfo, field_validator
 
 from .promptfoo_models import EvaluateSummary, PromptMessage, RoleEnum
 from .root_model import RootModel
+
+PromptTag = Literal["highest score", "cheapest", "fastest"]
 
 
 # Define the prompt schema
