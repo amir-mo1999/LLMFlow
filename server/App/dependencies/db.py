@@ -291,12 +291,13 @@ class DB:
 
         ai_function = AIFunction(**ai_function_dump)
 
-        # delete eval for prompts if any of the fields output_schema, assert, test_cases change
+        # delete eval for prompts if any of the fields output_schema, assert, test_cases, providers change
         if any(
             [
                 ai_function_patch.output_schema is not None,
                 ai_function_patch.assertions is not None,
                 ai_function_patch.test_cases is not None,
+                ai_function_patch.providers is not None,
             ]
         ):
             await self.prompts.update_many(
