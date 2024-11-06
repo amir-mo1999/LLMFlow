@@ -1,12 +1,12 @@
 import uuid
 from datetime import datetime
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any, Dict, List, Optional, Set
 
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
 from .json_schema import JsonSchema
 from .prompt import PromptMessage
-from .promptfoo_models import Assertion, TestCase
+from .promptfoo_models import Assertion, TestCase, Provider
 from .root_model import RootModel
 
 
@@ -26,6 +26,8 @@ class AIFunctionRouteInput(RootModel):
             ..., examples=["Summarizes english texts to a given number_of_sentences."]
         )
     )
+
+    providers: Set[Provider] = Field(..., examples=["openai:gpt-4o-mini"])
 
     input_variables: List[InputVariable] = Field(
         ..., examples=[[{"name": "text"}, {"name": "number_of_sentences"}]]
@@ -111,6 +113,8 @@ class AIFunctionPatchInput(RootModel):
     description: Optional[
         Annotated[str, StringConstraints(min_length=1, max_length=1000)]
     ] = None
+    providers: Optional[Set[Provider]] = 0
+
     input_variables: Optional[List[InputVariable]] = None
     output_schema: Optional[JsonSchema] = None
     assertions: Optional[List[Assertion]] = Field(default=None, alias="assert")
