@@ -9,7 +9,6 @@ from .root_model import RootModel
 
 PromptTag = Literal["highest score", "cheapest", "fastest"]
 
-
 # Define the prompt schema
 class PromptRouteInput(RootModel):
     messages: List[PromptMessage] = Field(

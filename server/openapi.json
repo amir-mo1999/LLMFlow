@@ -1523,11 +1523,7 @@
                     },
                     "providers": {
                         "items": {
-                            "type": "string",
-                            "enum": [
-                                "openai:gpt-4o-mini",
-                                "openai:gpt-4"
-                            ]
+                            "$ref": "#/components/schemas/Provider"
                         },
                         "type": "array",
                         "title": "Providers",
@@ -1762,21 +1758,15 @@
                         "anyOf": [
                             {
                                 "items": {
-                                    "type": "string",
-                                    "enum": [
-                                        "openai:gpt-4o-mini",
-                                        "openai:gpt-4"
-                                    ]
+                                    "$ref": "#/components/schemas/Provider"
                                 },
-                                "type": "array",
-                                "uniqueItems": true
+                                "type": "array"
                             },
                             {
                                 "type": "null"
                             }
                         ],
-                        "title": "Providers",
-                        "default": 0
+                        "title": "Providers"
                     },
                     "input_variables": {
                         "anyOf": [
@@ -1856,11 +1846,7 @@
                     },
                     "providers": {
                         "items": {
-                            "type": "string",
-                            "enum": [
-                                "openai:gpt-4o-mini",
-                                "openai:gpt-4"
-                            ]
+                            "$ref": "#/components/schemas/Provider"
                         },
                         "type": "array",
                         "title": "Providers",
@@ -5279,6 +5265,14 @@
                     "ai_function_id"
                 ],
                 "title": "PromptRouteInput"
+            },
+            "Provider": {
+                "type": "string",
+                "enum": [
+                    "openai:gpt-4o-mini",
+                    "openai:gpt-4"
+                ],
+                "title": "Provider"
             },
             "ProviderResponse": {
                 "properties": {

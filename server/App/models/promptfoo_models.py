@@ -122,10 +122,13 @@ class PromptMessage(RootModel):
     class Config:
         use_enum_values = True
 
-Provider = Literal["openai:gpt-4o-mini", "openai:gpt-4"]
+class Provider(str, Enum):
+    gtp_4o_mini = "openai:gpt-4o-mini"
+    gpt_4 = "openai:gpt-4"
+
 
 class EvaluateInput(RootModel):
     prompts: List[List[PromptMessage]]
-    providers: Provider = "openai:gpt-4o-mini"
+    providers: Provider = Provider.gtp_4o_mini
     defaultTest: Dict[Literal["assert"], List[Assertion]]
     tests: List[TestCase]

@@ -28,7 +28,7 @@ class AIFunctionRouteInput(RootModel):
     )
 
     providers: List[Provider] = Field(
-        ..., examples=[["openai:gpt-4o-mini", "openai:gpt-4"]]
+        ..., examples=[[Provider.gtp_4o_mini, Provider.gpt_4]]
     )
 
     input_variables: List[InputVariable] = Field(

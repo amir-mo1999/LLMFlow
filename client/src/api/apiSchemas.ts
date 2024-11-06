@@ -19,7 +19,7 @@ export type AIFunction = {
   /**
    * @example ["openai:gpt-4o-mini","openai:gpt-4"]
    */
-  providers: ("openai:gpt-4o-mini" | "openai:gpt-4")[]
+  providers: Provider[]
   /**
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
@@ -56,36 +56,33 @@ export type AIFunctionOutput = {
   /**
    * @example {"content":"Hey, AI! What's the weather like today?","role":"user"}
    */
-  prompt: PromptMessage[];
+  prompt: PromptMessage[]
   /**
    * @example The weather is sunny today.
    */
-  response: string | Record<string, any>;
+  response: string | Record<string, any>
   /**
    * @example 0.9
    */
-  score: number;
+  score: number
   /**
    * @example 0.000001
    */
-  cost: number;
+  cost: number
   /**
    * @example 1200
    */
-  latency: number;
+  latency: number
   /**
    * @example false
    */
-  is_json: boolean;
-};
+  is_json: boolean
+}
 
 export type AIFunctionPatchInput = {
   name?: string | null
   description?: string | null
-  /**
-   * @default 0
-   */
-  providers?: ("openai:gpt-4o-mini" | "openai:gpt-4")[] | null
+  providers?: Provider[] | null
   input_variables?: InputVariable[] | null
   output_schema?: JsonSchemaInput | null
   assert?: Assertion[] | null
@@ -108,7 +105,7 @@ export type AIFunctionRouteInput = {
   /**
    * @example ["openai:gpt-4o-mini","openai:gpt-4"]
    */
-  providers: ("openai:gpt-4o-mini" | "openai:gpt-4")[]
+  providers: Provider[]
   /**
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
@@ -154,16 +151,16 @@ export type AppModelsPromptPrompt = {
 }
 
 export type AppModelsPromptfooModelsPrompt = {
-  raw?: string | null;
-};
+  raw?: string | null
+}
 
 export type Assertion = {
-  type: BaseAssertionTypes;
-  value?: string | string[] | Record<string, any> | null;
-  threshold?: number | null;
-  weight?: number | null;
-  metric?: string | null;
-};
+  type: BaseAssertionTypes
+  value?: string | string[] | Record<string, any> | null
+  threshold?: number | null
+  weight?: number | null
+  metric?: string | null
+}
 
 export type BaseAssertionTypes =
   | "contains"
@@ -188,23 +185,23 @@ export type BaseAssertionTypes =
   | "python"
   | "regex"
   | "rouge-n"
-  | "starts-with";
+  | "starts-with"
 
 export type Body = {
-  [key: string]: string;
-};
+  [key: string]: string
+}
 
 export type BodyLoginAuthLoginPost = {
-  grant_type?: string | null;
-  username: string;
-  password: string;
+  grant_type?: string | null
+  username: string
+  password: string
   /**
    * @default
    */
-  scope?: string;
-  client_id?: string | null;
-  client_secret?: string | null;
-};
+  scope?: string
+  client_id?: string | null
+  client_secret?: string | null
+}
 
 /**
  * Holds a set of reusable objects for different aspects of the OAS.
@@ -215,42 +212,42 @@ export type BodyLoginAuthLoginPost = {
  */
 export type Components = {
   schemas?: {
-    [key: string]: Schema;
-  } | null;
+    [key: string]: Schema
+  } | null
   responses?: {
-    [key: string]: Response | Reference;
-  } | null;
+    [key: string]: Response | Reference
+  } | null
   parameters?: {
-    [key: string]: Parameter | Reference;
-  } | null;
+    [key: string]: Parameter | Reference
+  } | null
   examples?: {
-    [key: string]: Example | Reference;
-  } | null;
+    [key: string]: Example | Reference
+  } | null
   requestBodies?: {
-    [key: string]: RequestBody | Reference;
-  } | null;
+    [key: string]: RequestBody | Reference
+  } | null
   headers?: {
-    [key: string]: Header | Reference;
-  } | null;
+    [key: string]: Header | Reference
+  } | null
   securitySchemes?: {
-    [key: string]: SecurityScheme | Reference;
-  } | null;
+    [key: string]: SecurityScheme | Reference
+  } | null
   links?: {
-    [key: string]: Link | Reference;
-  } | null;
+    [key: string]: Link | Reference
+  } | null
   callbacks?: {
     [key: string]:
       | {
-          [key: string]: PathItem | Reference;
+          [key: string]: PathItem | Reference
         }
-      | Reference;
-  } | null;
+      | Reference
+  } | null
   pathItems?: {
-    [key: string]: PathItem | Reference;
-  } | null;
+    [key: string]: PathItem | Reference
+  } | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Contact information for the exposed API.
@@ -258,24 +255,17 @@ export type Components = {
  * @example {"email":"support@example.com","name":"API Support","url":"http://www.example.com/support"}
  */
 export type Contact = {
-  name?: string | null;
-  url?: string | null;
-  email?: string | null;
+  name?: string | null
+  url?: string | null
+  email?: string | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Data type of an object.
  */
-export type DataType =
-  | "null"
-  | "string"
-  | "number"
-  | "integer"
-  | "boolean"
-  | "array"
-  | "object";
+export type DataType = "null" | "string" | "number" | "integer" | "boolean" | "array" | "object"
 
 /**
  * When request bodies or response payloads may be one of a number of different
@@ -291,13 +281,13 @@ export type DataType =
  * @example {"mapping":{"dog":"#/components/schemas/Dog","monster":"https://gigantic-server.com/schemas/Monster/schema.json"},"propertyName":"petType"}
  */
 export type Discriminator = {
-  propertyName: string;
+  propertyName: string
   mapping?: {
-    [key: string]: string;
-  } | null;
+    [key: string]: string
+  } | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * A single encoding definition applied to a single schema property.
@@ -305,50 +295,50 @@ export type Discriminator = {
  * @example {"contentType":"image/png, image/jpeg","headers":{"X-Rate-Limit-Limit":{"description":"The number of allowed requests in the current period","schema":{"type":"integer"}}}}
  */
 export type Encoding = {
-  contentType?: string | null;
+  contentType?: string | null
   headers?: {
-    [key: string]: Header | Reference;
-  } | null;
-  style?: string | null;
-  explode?: boolean | null;
+    [key: string]: Header | Reference
+  } | null
+  style?: string | null
+  explode?: boolean | null
   /**
    * @default false
    */
-  allowReserved?: boolean;
+  allowReserved?: boolean
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 export type EvaluateResult = {
-  prompt?: AppModelsPromptfooModelsPrompt | null;
-  response?: ProviderResponse | null;
+  prompt?: AppModelsPromptfooModelsPrompt | null
+  response?: ProviderResponse | null
   vars?: {
-    [key: string]: string;
-  } | null;
-  score: number | null;
-  latencyMs: number;
-  gradingResult?: GradingResult | null;
+    [key: string]: string
+  } | null
+  score: number | null
+  latencyMs: number
+  gradingResult?: GradingResult | null
   namedScores: {
-    [key: string]: number;
-  };
-  cost?: number | null;
-  metadata?: Record<string, any> | null;
-};
+    [key: string]: number
+  }
+  cost?: number | null
+  metadata?: Record<string, any> | null
+}
 
 export type EvaluateStats = {
-  successes: number;
-  failures: number;
-  tokenUsage: TokenUsage;
-};
+  successes: number
+  failures: number
+  tokenUsage: TokenUsage
+}
 
 export type EvaluateSummary = {
   /**
    * @format date-time
    */
-  timestamp: string;
-  results: EvaluateResult[];
-  stats: EvaluateStats;
-};
+  timestamp: string
+  results: EvaluateResult[]
+  stats: EvaluateStats
+}
 
 /**
  * @example {"summary":"A foo example","value":{"foo":"bar"}}
@@ -356,13 +346,13 @@ export type EvaluateSummary = {
  * @example {"externalValue":"http://foo.bar/examples/address-example.txt","summary":"This is a text example"}
  */
 export type Example = {
-  summary?: string | null;
-  description?: string | null;
-  value?: void | null;
-  externalValue?: string | null;
+  summary?: string | null
+  description?: string | null
+  value?: void | null
+  externalValue?: string | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Allows referencing an external resource for extended documentation.
@@ -370,23 +360,23 @@ export type Example = {
  * @example {"description":"Find more info here","url":"https://example.com"}
  */
 export type ExternalDocumentation = {
-  description?: string | null;
-  url: string;
+  description?: string | null
+  url: string
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 export type GradingResult = {
-  pass: boolean;
-  score: number | null;
-  componentResults?: GradingResult[] | null;
-  assertion?: Assertion | null;
-  comment?: string | null;
-};
+  pass: boolean
+  score: number | null
+  componentResults?: GradingResult[] | null
+  assertion?: Assertion | null
+  comment?: string | null
+}
 
 export type HTTPValidationError = {
-  detail?: ValidationError[];
-};
+  detail?: ValidationError[]
+}
 
 /**
  * The Header Object follows the structure of the
@@ -401,33 +391,33 @@ export type HTTPValidationError = {
  * @example {"description":"The number of allowed requests in the current period","schema":{"type":"integer"}}
  */
 export type Header = {
-  description?: string | null;
+  description?: string | null
   /**
    * @default false
    */
-  required?: boolean;
+  required?: boolean
   /**
    * @default false
    */
-  deprecated?: boolean;
-  style?: string | null;
-  explode?: boolean | null;
-  schema?: Reference | Schema | null;
-  example?: void | null;
+  deprecated?: boolean
+  style?: string | null
+  explode?: boolean | null
+  schema?: Reference | Schema | null
+  example?: void | null
   examples?: {
-    [key: string]: Example | Reference;
-  } | null;
+    [key: string]: Example | Reference
+  } | null
   content?: {
-    [key: string]: MediaType;
-  } | null;
+    [key: string]: MediaType
+  } | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 export type HttpExceptionModel = {
-  message: string;
-  status: number;
-};
+  message: string
+  status: number
+}
 
 /**
  * The object provides metadata about the API.
@@ -437,16 +427,16 @@ export type HttpExceptionModel = {
  * @example {"contact":{"email":"support@example.com","name":"API Support","url":"http://www.example.com/support"},"description":"This is a sample server for a pet store.","license":{"name":"Apache 2.0","url":"https://www.apache.org/licenses/LICENSE-2.0.html"},"summary":"A pet store manager.","termsOfService":"http://example.com/terms/","title":"Sample Pet Store App","version":"1.0.1"}
  */
 export type Info = {
-  title: string;
-  summary?: string | null;
-  description?: string | null;
-  termsOfService?: string | null;
-  contact?: Contact | null;
-  license?: License | null;
-  version: string;
+  title: string
+  summary?: string | null
+  description?: string | null
+  termsOfService?: string | null
+  contact?: Contact | null
+  license?: License | null
+  version: string
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 export type InputVariable = {
   /**
@@ -454,84 +444,70 @@ export type InputVariable = {
    * @minLength 1
    * @pattern ^[^\s]+$
    */
-  name: string;
-};
+  name: string
+}
 
 export type JsonSchemaInput = {
-  type:
-    | "string"
-    | "number"
-    | "integer"
-    | "boolean"
-    | "object"
-    | "array"
-    | "null";
-  title?: string | null;
-  ["enum"]?: string[] | number[] | number[] | null;
-  maxLength?: number | null;
-  minLength?: number | null;
-  pattern?: string | null;
-  multipleOf?: number | null;
-  maximum?: number | null;
-  exclusiveMaximum?: number | null;
-  minimum?: number | null;
-  exclusiveMinimum?: number | null;
-  items?: JsonSchemaInput | null;
-  contains?: JsonSchemaInput | null;
-  maxContains?: number | null;
-  minContains?: number | null;
-  maxItems?: number | null;
-  minItems?: number | null;
-  uniqueItems?: boolean | null;
+  type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
+  title?: string | null
+  ["enum"]?: string[] | number[] | number[] | null
+  maxLength?: number | null
+  minLength?: number | null
+  pattern?: string | null
+  multipleOf?: number | null
+  maximum?: number | null
+  exclusiveMaximum?: number | null
+  minimum?: number | null
+  exclusiveMinimum?: number | null
+  items?: JsonSchemaInput | null
+  contains?: JsonSchemaInput | null
+  maxContains?: number | null
+  minContains?: number | null
+  maxItems?: number | null
+  minItems?: number | null
+  uniqueItems?: boolean | null
   properties?: {
-    [key: string]: JsonSchemaInput;
-  } | null;
+    [key: string]: JsonSchemaInput
+  } | null
   patternProperties?: {
-    [key: string]: JsonSchemaInput;
-  } | null;
-  additionalProperties?: boolean | JsonSchemaInput | null;
-  maxProperties?: number | null;
-  minProperties?: number | null;
-  required?: string[] | null;
-};
+    [key: string]: JsonSchemaInput
+  } | null
+  additionalProperties?: boolean | JsonSchemaInput | null
+  maxProperties?: number | null
+  minProperties?: number | null
+  required?: string[] | null
+}
 
 export type JsonSchemaOutput = {
-  type:
-    | "string"
-    | "number"
-    | "integer"
-    | "boolean"
-    | "object"
-    | "array"
-    | "null";
-  title?: string | null;
-  ["enum"]?: string[] | number[] | number[] | null;
-  maxLength?: number | null;
-  minLength?: number | null;
-  pattern?: string | null;
-  multipleOf?: number | null;
-  maximum?: number | null;
-  exclusiveMaximum?: number | null;
-  minimum?: number | null;
-  exclusiveMinimum?: number | null;
-  items?: JsonSchemaOutput | null;
-  contains?: JsonSchemaOutput | null;
-  maxContains?: number | null;
-  minContains?: number | null;
-  maxItems?: number | null;
-  minItems?: number | null;
-  uniqueItems?: boolean | null;
+  type: "string" | "number" | "integer" | "boolean" | "object" | "array" | "null"
+  title?: string | null
+  ["enum"]?: string[] | number[] | number[] | null
+  maxLength?: number | null
+  minLength?: number | null
+  pattern?: string | null
+  multipleOf?: number | null
+  maximum?: number | null
+  exclusiveMaximum?: number | null
+  minimum?: number | null
+  exclusiveMinimum?: number | null
+  items?: JsonSchemaOutput | null
+  contains?: JsonSchemaOutput | null
+  maxContains?: number | null
+  minContains?: number | null
+  maxItems?: number | null
+  minItems?: number | null
+  uniqueItems?: boolean | null
   properties?: {
-    [key: string]: JsonSchemaOutput;
-  } | null;
+    [key: string]: JsonSchemaOutput
+  } | null
   patternProperties?: {
-    [key: string]: JsonSchemaOutput;
-  } | null;
-  additionalProperties?: boolean | JsonSchemaOutput | null;
-  maxProperties?: number | null;
-  minProperties?: number | null;
-  required?: string[] | null;
-};
+    [key: string]: JsonSchemaOutput
+  } | null
+  additionalProperties?: boolean | JsonSchemaOutput | null
+  maxProperties?: number | null
+  minProperties?: number | null
+  required?: string[] | null
+}
 
 /**
  * License information for the exposed API.
@@ -540,12 +516,12 @@ export type JsonSchemaOutput = {
  * @example {"name":"Apache 2.0","url":"https://www.apache.org/licenses/LICENSE-2.0.html"}
  */
 export type License = {
-  name: string;
-  identifier?: string | null;
-  url?: string | null;
+  name: string
+  identifier?: string | null
+  url?: string | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * The `Link object` represents a possible design-time link for a response.
@@ -564,15 +540,15 @@ export type License = {
  * @example {"operationRef":"#/paths/~12.0~1repositories~1{username}/get","parameters":{"username":"$response.body#/username"}}
  */
 export type Link = {
-  operationRef?: string | null;
-  operationId?: string | null;
-  parameters?: Record<string, any> | null;
-  requestBody?: void | null;
-  description?: string | null;
-  server?: Server | null;
+  operationRef?: string | null
+  operationId?: string | null
+  parameters?: Record<string, any> | null
+  requestBody?: void | null
+  description?: string | null
+  server?: Server | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Each Media Type Object provides schema and examples for the media type
@@ -581,17 +557,17 @@ export type Link = {
  * @example {"examples":{"cat":{"summary":"An example of a cat","value":{"breed":"Persian","color":"White","gender":"male","name":"Fluffy","petType":"Cat"}},"dog":{"summary":"An example of a dog with a cat's name","value":{"breed":"Mixed","color":"Black","gender":"Female","name":"Puma","petType":"Dog"}},"frog":{"$ref":"#/components/examples/frog-example"}},"schema":{"$ref":"#/components/schemas/Pet"}}
  */
 export type MediaType = {
-  schema?: Reference | Schema | null;
-  example?: void | null;
+  schema?: Reference | Schema | null
+  example?: void | null
   examples?: {
-    [key: string]: Example | Reference;
-  } | null;
+    [key: string]: Example | Reference
+  } | null
   encoding?: {
-    [key: string]: Encoding;
-  } | null;
+    [key: string]: Encoding
+  } | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Configuration details for a supported OAuth Flow
@@ -601,27 +577,27 @@ export type MediaType = {
  * @example {"authorizationUrl":"/api/oauth/dialog","refreshUrl":"/api/oauth/token","scopes":{"read:pets":"read your pets","write:pets":"modify pets in your account"},"tokenUrl":"/api/oauth/token"}
  */
 export type OAuthFlow = {
-  authorizationUrl?: string | null;
-  tokenUrl?: string | null;
-  refreshUrl?: string | null;
+  authorizationUrl?: string | null
+  tokenUrl?: string | null
+  refreshUrl?: string | null
   scopes?: {
-    [key: string]: string;
-  } | null;
+    [key: string]: string
+  } | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Allows configuration of the supported OAuth Flows.
  */
 export type OAuthFlows = {
-  implicit?: OAuthFlow | null;
-  password?: OAuthFlow | null;
-  clientCredentials?: OAuthFlow | null;
-  authorizationCode?: OAuthFlow | null;
+  implicit?: OAuthFlow | null
+  password?: OAuthFlow | null
+  clientCredentials?: OAuthFlow | null
+  authorizationCode?: OAuthFlow | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * This is the root document object of the OpenAPI document.
@@ -630,30 +606,30 @@ export type OpenAPI = {
   /**
    * @default 3.1.1
    */
-  openapi?: "3.1.1" | "3.1.0";
-  info: Info;
-  jsonSchemaDialect?: string | null;
+  openapi?: "3.1.1" | "3.1.0"
+  info: Info
+  jsonSchemaDialect?: string | null
   /**
    * @default {"url":"/"}
    */
-  servers?: Server[];
+  servers?: Server[]
   paths?: {
-    [key: string]: PathItem;
-  } | null;
+    [key: string]: PathItem
+  } | null
   webhooks?: {
-    [key: string]: PathItem | Reference;
-  } | null;
-  components?: Components | null;
+    [key: string]: PathItem | Reference
+  } | null
+  components?: Components | null
   security?:
     | {
-        [key: string]: string[];
+        [key: string]: string[]
       }[]
-    | null;
-  tags?: Tag[] | null;
-  externalDocs?: ExternalDocumentation | null;
+    | null
+  tags?: Tag[] | null
+  externalDocs?: ExternalDocumentation | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Describes a single API operation on a path.
@@ -661,36 +637,36 @@ export type OpenAPI = {
  * @example {"operationId":"updatePetWithForm","parameters":[{"description":"ID of pet that needs to be updated","in":"path","name":"petId","required":true,"schema":{"type":"string"}}],"requestBody":{"content":{"application/x-www-form-urlencoded":{"schema":{"properties":{"name":{"description":"Updated name of the pet","type":"string"},"status":{"description":"Updated status of the pet","type":"string"}},"required":["status"],"type":"object"}}}},"responses":{"200":{"content":{"application/json":{},"application/xml":{}},"description":"Pet updated."},"405":{"content":{"application/json":{},"application/xml":{}},"description":"Method Not Allowed"}},"security":[{"petstore_auth":["write:pets","read:pets"]}],"summary":"Updates a pet in the store with form data","tags":["pet"]}
  */
 export type Operation = {
-  tags?: string[] | null;
-  summary?: string | null;
-  description?: string | null;
-  externalDocs?: ExternalDocumentation | null;
-  operationId?: string | null;
-  parameters?: (Parameter | Reference)[] | null;
-  requestBody?: RequestBody | Reference | null;
+  tags?: string[] | null
+  summary?: string | null
+  description?: string | null
+  externalDocs?: ExternalDocumentation | null
+  operationId?: string | null
+  parameters?: (Parameter | Reference)[] | null
+  requestBody?: RequestBody | Reference | null
   responses?: {
-    [key: string]: Response | Reference;
-  } | null;
+    [key: string]: Response | Reference
+  } | null
   callbacks?: {
     [key: string]:
       | {
-          [key: string]: PathItem | Reference;
+          [key: string]: PathItem | Reference
         }
-      | Reference;
-  } | null;
+      | Reference
+  } | null
   /**
    * @default false
    */
-  deprecated?: boolean;
+  deprecated?: boolean
   security?:
     | {
-        [key: string]: string[];
+        [key: string]: string[]
       }[]
-    | null;
-  servers?: Server[] | null;
+    | null
+  servers?: Server[] | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * Describes a single operation parameter.
@@ -705,43 +681,43 @@ export type Operation = {
  * @example {"content":{"application/json":{"schema":{"properties":{"lat":{"type":"number"},"long":{"type":"number"}},"required":["lat","long"],"type":"object"}}},"in":"query","name":"coordinates"}
  */
 export type Parameter = {
-  description?: string | null;
+  description?: string | null
   /**
    * @default false
    */
-  required?: boolean;
+  required?: boolean
   /**
    * @default false
    */
-  deprecated?: boolean;
-  style?: string | null;
-  explode?: boolean | null;
-  schema?: Reference | Schema | null;
-  example?: void | null;
+  deprecated?: boolean
+  style?: string | null
+  explode?: boolean | null
+  schema?: Reference | Schema | null
+  example?: void | null
   examples?: {
-    [key: string]: Example | Reference;
-  } | null;
+    [key: string]: Example | Reference
+  } | null
   content?: {
-    [key: string]: MediaType;
-  } | null;
-  name: string;
-  ["in"]: ParameterLocation;
+    [key: string]: MediaType
+  } | null
+  name: string
+  ["in"]: ParameterLocation
   /**
    * @default false
    */
-  allowEmptyValue?: boolean;
+  allowEmptyValue?: boolean
   /**
    * @default false
    */
-  allowReserved?: boolean;
+  allowReserved?: boolean
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 /**
  * The location of a given parameter.
  */
-export type ParameterLocation = "query" | "header" | "path" | "cookie";
+export type ParameterLocation = "query" | "header" | "path" | "cookie"
 
 /**
  * Describes the operations available on a single path.
@@ -752,22 +728,22 @@ export type ParameterLocation = "query" | "header" | "path" | "cookie";
  * @example [see original specs]
  */
 export type PathItem = {
-  $ref?: string | null;
-  summary?: string | null;
-  description?: string | null;
-  get?: Operation | null;
-  put?: Operation | null;
-  post?: Operation | null;
-  ["delete"]?: Operation | null;
-  options?: Operation | null;
-  head?: Operation | null;
-  patch?: Operation | null;
-  trace?: Operation | null;
-  servers?: Server[] | null;
-  parameters?: (Parameter | Reference)[] | null;
+  $ref?: string | null
+  summary?: string | null
+  description?: string | null
+  get?: Operation | null
+  put?: Operation | null
+  post?: Operation | null
+  ["delete"]?: Operation | null
+  options?: Operation | null
+  head?: Operation | null
+  patch?: Operation | null
+  trace?: Operation | null
+  servers?: Server[] | null
+  parameters?: (Parameter | Reference)[] | null
 } & {
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 export type Project = {
   /**
@@ -775,41 +751,41 @@ export type Project = {
    * @minLength 1
    * @example My Project
    */
-  name: string;
+  name: string
   /**
    * @maxLength 20
    * @minLength 1
    */
-  path_segment_name: string;
+  path_segment_name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example This is a project
    */
-  description: string;
-  api_routes: ProjectAPIRoute[];
-  _id?: string;
+  description: string
+  api_routes: ProjectAPIRoute[]
+  _id?: string
   /**
    * @format email
    */
-  username: string;
+  username: string
   /**
    * @format date-time
    */
-  creation_time: string;
-};
+  creation_time: string
+}
 
 export type ProjectAPIRoute = {
-  ai_function_id: string;
-  path_segment_name: string;
-};
+  ai_function_id: string
+  path_segment_name: string
+}
 
 export type ProjectPatchInput = {
-  name?: string | null;
-  path_segment_name?: string | null;
-  description?: string | null;
-  api_routes?: ProjectAPIRoute[] | null;
-};
+  name?: string | null
+  path_segment_name?: string | null
+  description?: string | null
+  api_routes?: ProjectAPIRoute[] | null
+}
 
 export type ProjectRouteInput = {
   /**
@@ -817,33 +793,35 @@ export type ProjectRouteInput = {
    * @minLength 1
    * @example My Project
    */
-  name: string;
+  name: string
   /**
    * @maxLength 20
    * @minLength 1
    */
-  path_segment_name: string;
+  path_segment_name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example This is a project
    */
-  description: string;
-  api_routes: ProjectAPIRoute[];
-};
+  description: string
+  api_routes: ProjectAPIRoute[]
+}
 
 export type PromptMessage = {
-  role: RoleEnum;
-  content: string;
-};
+  role: RoleEnum
+  content: string
+}
 
 export type PromptRouteInput = {
   /**
    * @example [{"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}]
    */
-  messages: PromptMessage[];
-  ai_function_id: string;
-};
+  messages: PromptMessage[]
+  ai_function_id: string
+}
+
+export type Provider = "openai:gpt-4o-mini" | "openai:gpt-4"
 
 export type ProviderResponse = {
   cached?: number | null;
