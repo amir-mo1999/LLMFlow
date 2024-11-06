@@ -86,7 +86,11 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/EvaluateSummary"
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "$ref": "#/components/schemas/EvaluateSummary"
+                                    },
+                                    "title": "Response Evaluate Evaluate  Prompt Id  Post"
                                 }
                             }
                         }
@@ -1517,6 +1521,23 @@
                             "Summarizes english texts to a given number_of_sentences."
                         ]
                     },
+                    "providers": {
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "openai:gpt-4o-mini",
+                                "openai:gpt-4"
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Providers",
+                        "examples": [
+                            [
+                                "openai:gpt-4o-mini",
+                                "openai:gpt-4"
+                            ]
+                        ]
+                    },
                     "input_variables": {
                         "items": {
                             "$ref": "#/components/schemas/InputVariable"
@@ -1628,6 +1649,7 @@
                 "required": [
                     "name",
                     "description",
+                    "providers",
                     "input_variables",
                     "output_schema",
                     "assert",
@@ -1736,6 +1758,26 @@
                         ],
                         "title": "Description"
                     },
+                    "providers": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "openai:gpt-4o-mini",
+                                        "openai:gpt-4"
+                                    ]
+                                },
+                                "type": "array",
+                                "uniqueItems": true
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Providers",
+                        "default": 0
+                    },
                     "input_variables": {
                         "anyOf": [
                             {
@@ -1810,6 +1852,23 @@
                         "title": "Description",
                         "examples": [
                             "Summarizes english texts to a given number_of_sentences."
+                        ]
+                    },
+                    "providers": {
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "openai:gpt-4o-mini",
+                                "openai:gpt-4"
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Providers",
+                        "examples": [
+                            [
+                                "openai:gpt-4o-mini",
+                                "openai:gpt-4"
+                            ]
                         ]
                     },
                     "input_variables": {
@@ -1900,6 +1959,7 @@
                 "required": [
                     "name",
                     "description",
+                    "providers",
                     "input_variables",
                     "output_schema",
                     "assert",
@@ -1942,15 +2002,19 @@
                         "format": "date-time",
                         "title": "Creation Time"
                     },
-                    "last_eval": {
+                    "evals": {
                         "anyOf": [
                             {
-                                "$ref": "#/components/schemas/EvaluateSummary"
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/EvaluateSummary"
+                                },
+                                "type": "object"
                             },
                             {
                                 "type": "null"
                             }
-                        ]
+                        ],
+                        "title": "Evals"
                     },
                     "ai_function_name": {
                         "type": "string",

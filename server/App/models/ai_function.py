@@ -1,12 +1,12 @@
 import uuid
 from datetime import datetime
-from typing import Annotated, Any, Dict, List, Optional, Set
+from typing import Annotated, Any, Dict, List, Optional
 
 from pydantic import EmailStr, Field, NonNegativeInt, StringConstraints, model_validator
 
 from .json_schema import JsonSchema
 from .prompt import PromptMessage
-from .promptfoo_models import Assertion, TestCase, Provider
+from .promptfoo_models import Assertion, Provider, TestCase
 from .root_model import RootModel
 
 
@@ -115,7 +115,7 @@ class AIFunctionPatchInput(RootModel):
     description: Optional[
         Annotated[str, StringConstraints(min_length=1, max_length=1000)]
     ] = None
-    providers: Optional[Set[Provider]] = 0
+    providers: Optional[List[Provider]] = None
 
     input_variables: Optional[List[InputVariable]] = None
     output_schema: Optional[JsonSchema] = None

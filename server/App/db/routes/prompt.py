@@ -59,7 +59,7 @@ async def post_prompt(
         )
     except ValueError as e:
         raise HTTPException(422, detail=str(e))
- 
+
     result = await db.insert(prompt, "prompts")
 
     if result:

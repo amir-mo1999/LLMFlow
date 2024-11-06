@@ -18,8 +18,8 @@ from App.models import (
     Prompt,
     PromptMessage,
     PromptTag,
-    User,
     Provider,
+    User,
 )
 
 Collection = Literal["ai-functions", "prompts", "users", "projects"]
@@ -357,7 +357,7 @@ class DB:
         return project
 
     async def post_eval(
-        self, eval_mapping: Mapping[Provider, EvaluateSummary], prompt_id: str
+        self, eval_mapping: Dict[Provider, EvaluateSummary], prompt_id: str
     ):
         eval_mapping_dump = {}
         for provider in eval_mapping:

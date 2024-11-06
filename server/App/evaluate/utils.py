@@ -1,10 +1,10 @@
 import os
-from typing import Dict, List, Literal, Mapping
+from asyncio import TaskGroup
+from typing import Dict, List, Literal
 
 import aiohttp
 from aiohttp import ClientSession
 from fastapi import APIRouter
-from asyncio import TaskGroup
 
 from App.models import (
     AIFunction,
@@ -21,7 +21,7 @@ PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL") or ""
 
 async def eval_prompt(
     prompt: Prompt, ai_function: AIFunction
-) -> Mapping[Provider, EvaluateSummary]:
+) -> Dict[Provider, EvaluateSummary]:
     # extract needed data
     prompts = [prompt.messages]
     defaultTest: Dict[Literal["assert"], List[Assertion]] = {"assert": ai_function.assertions}
@@ -31,14 +31,14 @@ async def eval_prompt(
     providers = set(ai_function.providers)
 
     # create EvaluateInput for each provider
-    evaluate_inputs: Mapping[Provider, EvaluateInput] = {}
+    evaluate_inputs: Dict[Provider, EvaluateInput] = {}
     for provider in providers:
         evaluate_input = EvaluateInput(
             prompts=prompts, defaultTest=defaultTest, tests=tests, providers=provider
         )
         evaluate_inputs[provider] = evaluate_input
 
-    eval_summary_mapping: Mapping[Provider, EvaluateSummary] = {}
+    eval_summary_mapping: Dict[Provider, EvaluateSummary] = {}
 
     # request eval for each provider
     async with aiohttp.ClientSession() as session:
@@ -58,7 +58,7 @@ async def eval_prompt(
 
 async def _fetch(
     session: ClientSession,
-    eval_summary_mapping: Mapping[Provider, EvaluateSummary],
+    eval_summary_mapping: Dict[Provider, EvaluateSummary],
     provider: Provider,
     evaluate_input: EvaluateInput,
 ) -> None:

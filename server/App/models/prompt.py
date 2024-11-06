@@ -1,10 +1,10 @@
 import uuid
 from datetime import datetime
-from typing import List, Literal, Optional, Mapping
+from typing import Dict, List, Literal, Optional
 
 from pydantic import EmailStr, Field, ValidationInfo, field_validator
 
-from .promptfoo_models import EvaluateSummary, PromptMessage, RoleEnum, Provider
+from .promptfoo_models import EvaluateSummary, PromptMessage, Provider, RoleEnum
 from .root_model import RootModel
 
 PromptTag = Literal["highest score", "cheapest", "fastest"]
@@ -30,7 +30,7 @@ class Prompt(PromptRouteInput):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     username: EmailStr
     creation_time: datetime
-    evals: Mapping[Provider, EvaluateSummary] | None = None
+    evals: Dict[Provider, EvaluateSummary] | None = None
     ai_function_name: str
     revision_required: Optional[bool] = False
     index: int

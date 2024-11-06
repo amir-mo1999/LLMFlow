@@ -9,44 +9,48 @@ export type AIFunction = {
    * @minLength 1
    * @example Summarize Texts
    */
-  name: string;
+  name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example Summarizes english texts to a given number_of_sentences.
    */
-  description: string;
+  description: string
+  /**
+   * @example ["openai:gpt-4o-mini","openai:gpt-4"]
+   */
+  providers: ("openai:gpt-4o-mini" | "openai:gpt-4")[]
   /**
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
-  input_variables: InputVariable[];
+  input_variables: InputVariable[]
   /**
    * @example {"type":"string"}
    */
-  output_schema: JsonSchemaOutput;
+  output_schema: JsonSchemaOutput
   /**
    * @example [{"type":"icontains","value":"the","weight":1},{"type":"contains","value":"thgewgewgewgewge","weight":1}]
    */
-  assert: Assertion[];
+  assert: Assertion[]
   /**
    * @example [{"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}},{"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}]
    */
-  test_cases: TestCaseOutput[];
-  _id?: string;
+  test_cases: TestCaseOutput[]
+  _id?: string
   /**
    * @minimum 0
    */
-  number_of_prompts: number;
-  implemented: boolean;
+  number_of_prompts: number
+  implemented: boolean
   /**
    * @format email
    */
-  username: string;
+  username: string
   /**
    * @format date-time
    */
-  creation_time: string;
-};
+  creation_time: string
+}
 
 export type AIFunctionOutput = {
   /**
@@ -76,13 +80,17 @@ export type AIFunctionOutput = {
 };
 
 export type AIFunctionPatchInput = {
-  name?: string | null;
-  description?: string | null;
-  input_variables?: InputVariable[] | null;
-  output_schema?: JsonSchemaInput | null;
-  assert?: Assertion[] | null;
-  test_cases?: TestCaseInput[] | null;
-};
+  name?: string | null
+  description?: string | null
+  /**
+   * @default 0
+   */
+  providers?: ("openai:gpt-4o-mini" | "openai:gpt-4")[] | null
+  input_variables?: InputVariable[] | null
+  output_schema?: JsonSchemaInput | null
+  assert?: Assertion[] | null
+  test_cases?: TestCaseInput[] | null
+}
 
 export type AIFunctionRouteInput = {
   /**
@@ -90,54 +98,60 @@ export type AIFunctionRouteInput = {
    * @minLength 1
    * @example Summarize Texts
    */
-  name: string;
+  name: string
   /**
    * @maxLength 1000
    * @minLength 1
    * @example Summarizes english texts to a given number_of_sentences.
    */
-  description: string;
+  description: string
+  /**
+   * @example ["openai:gpt-4o-mini","openai:gpt-4"]
+   */
+  providers: ("openai:gpt-4o-mini" | "openai:gpt-4")[]
   /**
    * @example [{"name":"text"},{"name":"number_of_sentences"}]
    */
-  input_variables: InputVariable[];
+  input_variables: InputVariable[]
   /**
    * @example {"type":"string"}
    */
-  output_schema: JsonSchemaInput;
+  output_schema: JsonSchemaInput
   /**
    * @example [{"type":"icontains","value":"the","weight":1},{"type":"contains","value":"thgewgewgewgewge","weight":1}]
    */
-  assert: Assertion[];
+  assert: Assertion[]
   /**
    * @example [{"assert":[{"type":"icontains","value":"serendipity","weight":5}],"vars":{"number_of_sentences":"2","text":"The power of serendipity is fascinating. Sometimes, the most unexpected encounters can lead to life-changing experiences. Imagine strolling through a park and stumbling upon a group of musicians, their melodies drawing you in. You pause for a moment, only to realize that this spontaneous moment of joy is exactly what you needed—a break from the routine, a reminder of life's simple pleasures. Serendipity teaches us that not everything needs to be planned. Sometimes, the best moments are the ones that catch us by surprise."}},{"assert":[{"type":"icontains","value":"minimalism","weight":5}],"vars":{"number_of_sentences":"2","text":"The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."}}]
    */
-  test_cases: TestCaseInput[];
-};
+  test_cases: TestCaseInput[]
+}
 
 export type AppModelsPromptPrompt = {
   /**
    * @example [{"content":"Summarize the following text: {{text}} in {{number_of_sentences}} sentences.","role":"user"}]
    */
-  messages: PromptMessage[];
-  ai_function_id: string;
-  _id?: string;
+  messages: PromptMessage[]
+  ai_function_id: string
+  _id?: string
   /**
    * @format email
    */
-  username: string;
+  username: string
   /**
    * @format date-time
    */
-  creation_time: string;
-  last_eval?: EvaluateSummary | null;
-  ai_function_name: string;
+  creation_time: string
+  evals?: {
+    [key: string]: EvaluateSummary
+  } | null
+  ai_function_name: string
   /**
    * @default false
    */
-  revision_required?: boolean | null;
-  index: number;
-};
+  revision_required?: boolean | null
+  index: number
+}
 
 export type AppModelsPromptfooModelsPrompt = {
   raw?: string | null;

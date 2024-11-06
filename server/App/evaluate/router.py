@@ -1,5 +1,5 @@
 import os
-from typing import Annotated, Mapping
+from typing import Annotated, Dict
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -16,7 +16,7 @@ PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 
 @EVAL_ROUTER.post(
     "/{prompt_id}",
-    response_model=Mapping[Provider, EvaluateSummary],
+    response_model=Dict[Provider, EvaluateSummary],
     responses={409: {"detail": "document not found"}},
 )
 async def evaluate(
