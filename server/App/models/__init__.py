@@ -11,7 +11,7 @@ from .body import Body
 from .json_schema import JsonSchema
 from .project import Project, ProjectPatchInput, ProjectRouteInput
 from .prompt import Prompt, PromptMessage, PromptRouteInput, PromptTag
-from .promptfoo_models import EvaluateInput, EvaluateSummary
+from .promptfoo_models import EvaluateInput, EvaluateSummary, Provider
 from .success_response import SuccessResponse
 from .token import DecodedToken, Token
 from .user import User, UserRootInput, UserWithAccessToken
@@ -27,6 +27,7 @@ __all__ = [
     "AIFunctionRouteInput",
     "AIFunctionPatchInput",
     "AIFunction",
+    "Provider",
     "AIFunctionOutput",
     "TestCase",
     "PromptRouteInput",

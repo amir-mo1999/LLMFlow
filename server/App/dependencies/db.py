@@ -19,6 +19,7 @@ from App.models import (
     PromptMessage,
     PromptTag,
     User,
+    Provider,
 )
 
 Collection = Literal["ai-functions", "prompts", "users", "projects"]
@@ -354,10 +355,17 @@ class DB:
 
         return project
 
-    async def post_eval(self, eval_summary: EvaluateSummary, prompt_id: str):
+    async def post_eval(
+        self, eval_mapping: Mapping[Provider, EvaluateSummary], prompt_id: str
+    ):
+        eval_mapping_dump = {}
+        for provider in eval_mapping:
+            eval_mapping_dump[provider] = eval_mapping[provider].model_dump(
+                by_alias=True
+            )
         await self.prompts.update_one(
             {"_id": prompt_id},
-            {"$set": {"last_eval": eval_summary.model_dump(by_alias=True)}},
+            {"$set": {"evals": eval_mapping_dump}},
         )
 
     async def get_prompts_by_ai_function_id(self, ai_function_id: str) -> List[Prompt]:

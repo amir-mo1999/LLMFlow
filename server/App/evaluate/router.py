@@ -1,11 +1,11 @@
 import os
-from typing import Annotated
+from typing import Annotated, Mapping
 
 from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound
-from App.models import EvaluateSummary
+from App.models import EvaluateSummary, Provider
 
 from .utils import eval_prompt
 
@@ -16,7 +16,7 @@ PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL")
 
 @EVAL_ROUTER.post(
     "/{prompt_id}",
-    response_model=EvaluateSummary,
+    response_model=Mapping[Provider, EvaluateSummary],
     responses={409: {"detail": "document not found"}},
 )
 async def evaluate(
@@ -37,11 +37,11 @@ async def evaluate(
         raise DocumentNotFound
 
     try:
-        summary = await eval_prompt(prompt, ai_function)
+        evals = await eval_prompt(prompt, ai_function)
     except ValueError as e:
         raise HTTPException(422, str(e))
 
     # post EvaluateSummary to prompt
-    await db.post_eval(summary, prompt.id)
+    await db.post_eval(evals, prompt.id) # TODO: update
 
-    return summary
+    return evals
