@@ -152,7 +152,7 @@ class DB:
             {
                 "$set": {
                     "messages": new_messages,
-                    "last_eval": None,
+                    "evals": None,
                     "revision_required": False,
                 }
             },
@@ -300,7 +300,7 @@ class DB:
             ]
         ):
             await self.prompts.update_many(
-                {"ai_function_id": ai_function.id}, {"$set": {"last_eval": None}}
+                {"ai_function_id": ai_function.id}, {"$set": {"evals": None}}
             )
 
         # set revision_required to true if input variables change
@@ -398,6 +398,7 @@ class DB:
     ) -> Prompt | None:
         match_query = {"$match": {"ai_function_id": ai_function_id}}
 
+        # TODO: add logic to group by provider
         aggregate_query = {
             "$addFields": {
                 "average_score": {"$avg": "$last_eval.results.score"},

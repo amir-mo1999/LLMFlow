@@ -59,15 +59,8 @@ async def post_prompt(
         )
     except ValueError as e:
         raise HTTPException(422, detail=str(e))
-
-    # insert document if no duplicate exists
-    compare_fields = list(
-        prompt.model_dump(
-            exclude=["creation_time", "last_eval_time", "last_eval"], by_alias=True
-        ).keys()
-    )
-
-    result = await db.insert(prompt, "prompts", compare_fields=compare_fields)
+ 
+    result = await db.insert(prompt, "prompts")
 
     if result:
         await db.increment_prompt_count(ai_function_id=ai_function.id)
