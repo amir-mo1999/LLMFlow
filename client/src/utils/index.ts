@@ -7,6 +7,7 @@ import {
   Project,
   AIFunctionPatchInput,
   ProjectRouteInput,
+  Provider,
 } from "@/api/apiSchemas"
 import _ from "lodash"
 import { BaseAssertionTypes } from "@/api/apiSchemas"
@@ -194,6 +195,8 @@ export function getProjectDiff(project: Project, routeInput: ProjectRouteInput) 
 
   return newProject
 }
+
+export const providersArray: Provider[] = ["openai:gpt-4o-mini", "openai:gpt-4"]
 
 export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "contains",

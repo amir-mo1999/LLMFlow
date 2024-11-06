@@ -9,6 +9,7 @@ interface TextChipProps {
   sx?: SxProps<Theme>
   variant?: "outlined" | "filled"
   color?: "primary" | "secondary" | "success" | "warning" | "error"
+  size?: "small" | "medium"
 }
 
 const TextChip: React.FC<TextChipProps> = ({
@@ -16,8 +17,9 @@ const TextChip: React.FC<TextChipProps> = ({
   sx,
   variant = "outlined",
   color = "primary",
+  size = "small",
 }) => {
-  return <Chip sx={sx} variant={variant} color={color} size="small" label={label} />
+  return <Chip sx={sx} variant={variant} color={color} size={size} label={label} />
 }
 
 export default TextChip

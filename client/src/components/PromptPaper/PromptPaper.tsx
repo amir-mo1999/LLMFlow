@@ -78,7 +78,6 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
         paddingX: 2,
         paddingTop: 1,
         paddingBottom: 1.5,
-        maxHeight: 150,
         "&:hover": {
           backgroundColor: disableHover ? "white" : "#E8E3F2",
         },

@@ -530,7 +530,7 @@ export const fetchPostPrompt = (
   signal?: AbortSignal,
 ) =>
   apiFetch<
-    Schemas.AppModelsPromptPrompt,
+    Schemas.Prompt,
     PostPromptError,
     Schemas.PromptRouteInput,
     {},
@@ -541,7 +541,7 @@ export const fetchPostPrompt = (
 export const usePostPrompt = (
   options?: Omit<
     reactQuery.UseMutationOptions<
-      Schemas.AppModelsPromptPrompt,
+      Schemas.Prompt,
       PostPromptError,
       PostPromptVariables
     >,
@@ -550,7 +550,7 @@ export const usePostPrompt = (
 ) => {
   const { fetcherOptions } = useApiContext();
   return reactQuery.useMutation<
-    Schemas.AppModelsPromptPrompt,
+    Schemas.Prompt,
     PostPromptError,
     PostPromptVariables
   >({
@@ -588,7 +588,7 @@ export const fetchGetPrompt = (
   signal?: AbortSignal,
 ) =>
   apiFetch<
-    Schemas.AppModelsPromptPrompt,
+    Schemas.Prompt,
     GetPromptError,
     undefined,
     {},
@@ -596,23 +596,15 @@ export const fetchGetPrompt = (
     GetPromptPathParams
   >({ url: "/prompt/{promptId}", method: "get", ...variables, signal });
 
-export const useGetPrompt = <TData = Schemas.AppModelsPromptPrompt,>(
+export const useGetPrompt = <TData = Schemas.Prompt,>(
   variables: GetPromptVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<
-      Schemas.AppModelsPromptPrompt,
-      GetPromptError,
-      TData
-    >,
+    reactQuery.UseQueryOptions<Schemas.Prompt, GetPromptError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    Schemas.AppModelsPromptPrompt,
-    GetPromptError,
-    TData
-  >({
+  return reactQuery.useQuery<Schemas.Prompt, GetPromptError, TData>({
     queryKey: queryKeyFn({
       path: "/prompt/{promptId}",
       operationId: "getPrompt",
@@ -714,7 +706,7 @@ export const fetchPatchPrompt = (
   signal?: AbortSignal,
 ) =>
   apiFetch<
-    Schemas.AppModelsPromptPrompt,
+    Schemas.Prompt,
     PatchPromptError,
     PatchPromptRequestBody,
     {},
@@ -725,7 +717,7 @@ export const fetchPatchPrompt = (
 export const usePatchPrompt = (
   options?: Omit<
     reactQuery.UseMutationOptions<
-      Schemas.AppModelsPromptPrompt,
+      Schemas.Prompt,
       PatchPromptError,
       PatchPromptVariables
     >,
@@ -734,7 +726,7 @@ export const usePatchPrompt = (
 ) => {
   const { fetcherOptions } = useApiContext();
   return reactQuery.useMutation<
-    Schemas.AppModelsPromptPrompt,
+    Schemas.Prompt,
     PatchPromptError,
     PatchPromptVariables
   >({
@@ -763,7 +755,7 @@ export type GetPromptsError = Fetcher.ErrorWrapper<
     }
 >;
 
-export type GetPromptsResponse = Schemas.AppModelsPromptPrompt[];
+export type GetPromptsResponse = Schemas.Prompt[];
 
 export type GetPromptsVariables = {
   pathParams: GetPromptsPathParams;
@@ -814,7 +806,7 @@ export type GetAllPromptsError = Fetcher.ErrorWrapper<
     }
 >;
 
-export type GetAllPromptsResponse = Schemas.AppModelsPromptPrompt[];
+export type GetAllPromptsResponse = Schemas.Prompt[];
 
 export type GetAllPromptsVariables = ApiContext["fetcherOptions"];
 

@@ -11,7 +11,7 @@ import { addTitlesToSchema } from "@/utils"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
-import { JsonSchemaEditor, AssertionsOverview, TestCasesOverview } from "@/components"
+import { JsonSchemaEditor, AssertionsOverview, TestCasesOverview, TextChip } from "@/components"
 
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
@@ -65,14 +65,32 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       </Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
         {aiFunction.input_variables.map((inputVar, indx) => (
-          <Chip
+          <TextChip
             key={indx}
             label={inputVar.name}
             sx={{ fontSize: "1rem" }}
             color="primary"
             variant="outlined"
             size="medium"
-          ></Chip>
+          ></TextChip>
+        ))}
+      </Box>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
+      {/* Providers */}
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Providers
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {aiFunction.providers.map((provider, indx) => (
+          <TextChip
+            key={indx}
+            label={provider}
+            sx={{ fontSize: "1rem" }}
+            color="primary"
+            variant="outlined"
+            size="medium"
+          ></TextChip>
         ))}
       </Box>
 

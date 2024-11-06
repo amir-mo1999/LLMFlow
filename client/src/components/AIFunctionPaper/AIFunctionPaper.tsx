@@ -2,6 +2,7 @@ import React from "react"
 import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
 import Box from "@mui/material/Box"
+import Stack from "@mui/material/Stack"
 import { SxProps } from "@mui/material"
 import { AIFunction } from "@/api/apiSchemas"
 import { UserChip, NumberChip, DateChip, TextChip, ItemTypeChip } from "../Chips"
@@ -39,7 +40,6 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
         paddingX: 2,
         paddingTop: 1,
         paddingBottom: 1.5,
-        maxHeight: 150,
         "&:hover": {
           backgroundColor: disableHover ? "white" : "#E8E3F2",
         },
@@ -77,22 +77,39 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
         {aiFunction.description}
       </Typography>
 
-      <NumberChip
-        number={aiFunction.input_variables.length}
-        label="Variables"
-        sx={{ marginRight: 2 }}
-      />
-      <NumberChip
-        number={numberOfAssertions}
-        label={numberOfAssertions === 1 ? "Assertion" : "Assertions"}
-        sx={{ marginRight: 2 }}
-      />
-      <NumberChip
-        number={aiFunction.number_of_prompts}
-        label={aiFunction.number_of_prompts === 1 ? "Prompt" : "Prompts"}
-        sx={{ marginRight: 2 }}
-      />
-      <TextChip label={aiFunction.output_schema.type === "string" ? "string" : "json"} />
+      <Stack
+        direction="row"
+        columnGap={2}
+        mb={1}
+        rowGap={1}
+        flexWrap="wrap"
+        justifyContent="flex-start"
+        alignItems="start"
+      >
+        <NumberChip
+          number={aiFunction.input_variables.length}
+          label="Variables"
+          sx={{ marginRight: 2 }}
+        />
+        <NumberChip
+          number={numberOfAssertions}
+          label={numberOfAssertions === 1 ? "Assertion" : "Assertions"}
+          sx={{ marginRight: 2 }}
+        />
+        <NumberChip
+          number={aiFunction.number_of_prompts}
+          label={aiFunction.number_of_prompts === 1 ? "Prompt" : "Prompts"}
+          sx={{ marginRight: 2 }}
+        />
+        <TextChip
+          label={aiFunction.output_schema.type === "string" ? "string" : "json"}
+          sx={{ marginRight: 2 }}
+        />
+        <NumberChip
+          number={aiFunction.providers.length}
+          label={aiFunction.providers.length === 1 ? "Provider" : "Providers"}
+        />
+      </Stack>
     </Paper>
   )
 }

@@ -5,7 +5,10 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
-import { parseJsonSchema, addTitlesToSchema, getAIFunctionDiff } from "@/utils"
+import Checkbox from "@mui/material/Checkbox"
+import ListItemText from "@mui/material/ListItemText"
+import OutlinedInput from "@mui/material/OutlinedInput"
+import { parseJsonSchema, addTitlesToSchema, getAIFunctionDiff, providersArray } from "@/utils"
 import {
   TestCaseInput,
   InputVariable,
@@ -13,8 +16,9 @@ import {
   AIFunctionRouteInput,
   AIFunction,
   JsonSchemaInput,
+  Provider,
 } from "@/api/apiSchemas"
-import Select from "@mui/material/Select"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import Divider from "@mui/material/Divider"
 import { usePostAiFunction, usePatchAiFunction } from "@/api/apiComponents"
@@ -54,7 +58,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
           title: "root",
         }
   )
-
+  const [providers, setProviders] = useState<Provider[]>(aiFunction ? aiFunction.providers : [])
   const [useJsonSchema, setUseJsonSchema] = useState<boolean>(false)
   const [assertions, setAssertions] = useState<Assertion[]>([])
   const [jsonAssertion, setJsonAssertion] = useState<Assertion>()
@@ -84,6 +88,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       setName(aiFunction.name)
       setDescription(aiFunction.description)
       setInputVariables(aiFunction.input_variables)
+      setProviders(aiFunction.providers)
       setOutputSchema(aiFunction.output_schema)
       setAssertions(aiFunction.assert)
       setTestCases(aiFunction.test_cases)
@@ -109,6 +114,13 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
     if (newDescription.length <= descriptionCharLimit) {
       setDescription(e.target.value)
     }
+  }
+
+  const onProvidersChange = (event: SelectChangeEvent<Provider[]>) => {
+    const {
+      target: { value },
+    } = event
+    setProviders((typeof value === "string" ? value.split(",") : value) as Provider[])
   }
 
   const { mutate: postAiFunction } = usePostAiFunction({
@@ -144,8 +156,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   const updateDisableSubmit = () => {
     if (name === "") setDisableSubmit(true)
     else if (description === "") setDisableSubmit(true)
-    else if (inputVariables.some((inputVariable) => inputVariable.name === ""))
-      setDisableSubmit(true)
+    else if (inputVariables.some((inputVariable) => inputVariable.name === "")) setDisableSubmit(true)
+    else if (providers.length === 0) setDisableSubmit(true)
     else setDisableSubmit(false)
   }
 
@@ -172,6 +184,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       name: name,
       description: description,
       input_variables: inputVariables,
+      providers: providers,
       output_schema: useJsonSchema ? (jsonAssertion?.value as JsonSchemaInput) : { type: "string" },
       assert: jsonAssertion ? [jsonAssertion, ...assertions] : [...assertions],
       test_cases: testCases,
@@ -247,6 +260,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
         helperText={`${name.length}/${nameCharLimit} ${nameError ? "AI Function with this name already exists" : ""}`}
         error={nameError}
       />
+
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
@@ -264,6 +278,25 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
 
       <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
       <Divider sx={{ marginY: 2 }}></Divider>
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Providers
+      </Typography>
+      <Select
+        value={providers}
+        multiple
+        onChange={onProvidersChange}
+        input={<OutlinedInput />}
+        renderValue={(selected: Provider[]) => selected.join(", ")}
+      >
+        {providersArray.map((provider, indx) => (
+          <MenuItem key={indx} value={provider}>
+            <Checkbox checked={providers.includes(provider)} />
+            <ListItemText primary={provider} />
+          </MenuItem>
+        ))}
+      </Select>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
         Output Type
       </Typography>

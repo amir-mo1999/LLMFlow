@@ -569,7 +569,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/App__models__prompt__Prompt"
+                                    "$ref": "#/components/schemas/Prompt"
                                 }
                             }
                         }
@@ -643,7 +643,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/App__models__prompt__Prompt"
+                                    "$ref": "#/components/schemas/Prompt"
                                 }
                             }
                         }
@@ -791,7 +791,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/App__models__prompt__Prompt"
+                                    "$ref": "#/components/schemas/Prompt"
                                 }
                             }
                         }
@@ -862,7 +862,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/App__models__prompt__Prompt"
+                                        "$ref": "#/components/schemas/Prompt"
                                     },
                                     "title": "Response Get Prompts Prompts  Ai Function Id  Get"
                                 }
@@ -918,7 +918,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "$ref": "#/components/schemas/App__models__prompt__Prompt"
+                                        "$ref": "#/components/schemas/Prompt"
                                     },
                                     "type": "array",
                                     "title": "Response Get All Prompts Prompts Get"
@@ -1659,12 +1659,12 @@
             },
             "AIFunctionOutput": {
                 "properties": {
-                    "prompt": {
+                    "prompt_messages": {
                         "items": {
                             "$ref": "#/components/schemas/PromptMessage"
                         },
                         "type": "array",
-                        "title": "Prompt",
+                        "title": "Prompt Messages",
                         "examples": [
                             {
                                 "content": "Hey, AI! What's the weather like today?",
@@ -1717,7 +1717,7 @@
                 },
                 "type": "object",
                 "required": [
-                    "prompt",
+                    "prompt_messages",
                     "response",
                     "score",
                     "cost",
@@ -1952,104 +1952,6 @@
                     "test_cases"
                 ],
                 "title": "AIFunctionRouteInput"
-            },
-            "App__models__prompt__Prompt": {
-                "properties": {
-                    "messages": {
-                        "items": {
-                            "$ref": "#/components/schemas/PromptMessage"
-                        },
-                        "type": "array",
-                        "title": "Messages",
-                        "examples": [
-                            [
-                                {
-                                    "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
-                                    "role": "user"
-                                }
-                            ]
-                        ]
-                    },
-                    "ai_function_id": {
-                        "type": "string",
-                        "title": "Ai Function Id"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id"
-                    },
-                    "username": {
-                        "type": "string",
-                        "format": "email",
-                        "title": "Username"
-                    },
-                    "creation_time": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Creation Time"
-                    },
-                    "evals": {
-                        "anyOf": [
-                            {
-                                "additionalProperties": {
-                                    "$ref": "#/components/schemas/EvaluateSummary"
-                                },
-                                "type": "object"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Evals"
-                    },
-                    "ai_function_name": {
-                        "type": "string",
-                        "title": "Ai Function Name"
-                    },
-                    "revision_required": {
-                        "anyOf": [
-                            {
-                                "type": "boolean"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Revision Required",
-                        "default": false
-                    },
-                    "index": {
-                        "type": "integer",
-                        "title": "Index"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "messages",
-                    "ai_function_id",
-                    "username",
-                    "creation_time",
-                    "ai_function_name",
-                    "index"
-                ],
-                "title": "Prompt"
-            },
-            "App__models__promptfoo_models__Prompt": {
-                "properties": {
-                    "raw": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Raw"
-                    }
-                },
-                "type": "object",
-                "title": "Prompt"
             },
             "Assertion": {
                 "properties": {
@@ -2717,7 +2619,7 @@
                     "prompt": {
                         "anyOf": [
                             {
-                                "$ref": "#/components/schemas/App__models__promptfoo_models__Prompt"
+                                "$ref": "#/components/schemas/RawPrompt"
                             },
                             {
                                 "type": "null"
@@ -5220,6 +5122,87 @@
                 ],
                 "title": "ProjectRouteInput"
             },
+            "Prompt": {
+                "properties": {
+                    "messages": {
+                        "items": {
+                            "$ref": "#/components/schemas/PromptMessage"
+                        },
+                        "type": "array",
+                        "title": "Messages",
+                        "examples": [
+                            [
+                                {
+                                    "content": "Summarize the following text: {{text}} in {{number_of_sentences}} sentences.",
+                                    "role": "user"
+                                }
+                            ]
+                        ]
+                    },
+                    "ai_function_id": {
+                        "type": "string",
+                        "title": "Ai Function Id"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": " Id"
+                    },
+                    "username": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Username"
+                    },
+                    "creation_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Creation Time"
+                    },
+                    "evals": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": {
+                                    "$ref": "#/components/schemas/EvaluateSummary"
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Evals"
+                    },
+                    "ai_function_name": {
+                        "type": "string",
+                        "title": "Ai Function Name"
+                    },
+                    "revision_required": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Revision Required",
+                        "default": false
+                    },
+                    "index": {
+                        "type": "integer",
+                        "title": "Index"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "messages",
+                    "ai_function_id",
+                    "username",
+                    "creation_time",
+                    "ai_function_name",
+                    "index"
+                ],
+                "title": "Prompt"
+            },
             "PromptMessage": {
                 "properties": {
                     "role": {
@@ -5359,6 +5342,23 @@
                 },
                 "type": "object",
                 "title": "ProviderResponse"
+            },
+            "RawPrompt": {
+                "properties": {
+                    "raw": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Raw"
+                    }
+                },
+                "type": "object",
+                "title": "RawPrompt"
             },
             "Reference": {
                 "properties": {

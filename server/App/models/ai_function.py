@@ -176,7 +176,7 @@ class AIFunction(AIFunctionRouteInput):
 
 
 class AIFunctionOutput(RootModel):
-    prompt: List[PromptMessage] = Field(
+    prompt_messages: List[PromptMessage] = Field(
         ...,
         examples=[
             {"role": "user", "content": "Hey, AI! What's the weather like today?"}
