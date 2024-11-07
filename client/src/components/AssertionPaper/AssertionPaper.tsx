@@ -42,7 +42,7 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
         ...sx,
         minWidth: "20%",
         padding: 1,
-        maxHeight: 210,
+        maxHeight: 300,
         height: "auto",
         position: "relative",
         overflow: "auto",
