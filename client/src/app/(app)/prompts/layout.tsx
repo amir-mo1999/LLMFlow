@@ -40,8 +40,9 @@ export default function Layout({
   const [selectedPromptIndx, setSelectedPromptIndx] = useState<number | undefined>()
 
   const router = useRouter()
+
   const onClickCreate = () => {
-    router.push("/prompts/create")
+    setSelectedPromptIndx(undefined)
   }
 
   const onClickPrompt = (indx: number) => {
@@ -109,11 +110,13 @@ export default function Layout({
         <Button
           sx={{ marginBottom: 2 }}
           variant="contained"
-          onClick={onClickCreate}
           disabled={aiFunctions.length === 0 ? true : false}
+          onClick={onClickCreate}
+          href="/prompts/create"
         >
           Create Prompt
         </Button>
+
         <ItemOverview
           itemType="Prompt"
           selectedIndx={selectedPromptIndx}

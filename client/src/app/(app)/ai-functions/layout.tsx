@@ -40,7 +40,6 @@ export default function Layout({
 
   const onClickCreate = () => {
     setSelectedAIFunctionIndx(undefined)
-    router.push("/ai-functions/create")
   }
 
   const addAIFunction = (aiFunction: AIFunction) => {
@@ -82,7 +81,12 @@ export default function Layout({
   return (
     <PageContainer>
       <SideBarContainer>
-        <Button sx={{ marginBottom: 2 }} variant="contained" onClick={onClickCreate}>
+        <Button
+          sx={{ marginBottom: 2 }}
+          variant="contained"
+          href="/ai-functions/create"
+          onClick={onClickCreate}
+        >
           Create AI Function
         </Button>
         <ItemOverview

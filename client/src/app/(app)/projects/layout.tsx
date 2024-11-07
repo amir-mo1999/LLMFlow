@@ -41,7 +41,6 @@ export default function Layout({
 
   const onClickCreate = () => {
     setSelectedProjectIndx(undefined)
-    router.push("/projects/create")
   }
 
   const onDeleteProject = () => {
@@ -79,7 +78,12 @@ export default function Layout({
   return (
     <PageContainer>
       <SideBarContainer>
-        <Button sx={{ marginBottom: 2 }} variant="contained" onClick={onClickCreate}>
+        <Button
+          sx={{ marginBottom: 2 }}
+          variant="contained"
+          onClick={onClickCreate}
+          href="/projects/create"
+        >
           Create Project
         </Button>
         <ItemOverview
