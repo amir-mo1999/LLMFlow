@@ -55,6 +55,12 @@ async def execute(
         raise DocumentNotFound
     ai_function = await get_ai_function(ai_function_id, db, user)
 
+    if provider not in ai_function.providers:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Provider {provider.value} not supported by AI Function {ai_function.name}",
+        )
+
     # create test case with given body and validate
     test_case_dump: Dict[str, Any] = {"vars": body.model_dump(), "assert": []}
     test_case = TestCase(**test_case_dump)  # type ignore

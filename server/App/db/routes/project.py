@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Tuple
+from typing import Annotated, Dict, List
 
 from fastapi import APIRouter, Depends
 from openapi_pydantic import OpenAPI
@@ -10,12 +10,11 @@ from App.http_exceptions import (
     DuplicateDocument,
 )
 from App.models import (
-    InputVariable,
+    AIFunction,
     Project,
     ProjectPatchInput,
     ProjectRouteInput,
     SuccessResponse,
-    TestCase,
     User,
 )
 
@@ -178,20 +177,12 @@ async def get_project_api_docs(
 ):
     project = await get_project(project_id=project_id, db=db, user=user)
 
-    route_params: List[Tuple[str, str, str, List[InputVariable], List[TestCase]]] = []
+    ai_functions: Dict[str, AIFunction] = {}
     for api_route in project.api_routes:
         ai_function = await get_ai_function(api_route.ai_function_id, db, user)
-        route_params.append(
-            (
-                ai_function.name,
-                ai_function.description,
-                api_route.path_segment_name,
-                ai_function.input_variables,
-                ai_function.test_cases,
-            )
-        )
+        ai_functions[api_route.path_segment_name] = ai_function
 
     api_docs = await generate_project_api_docs(
-        project.name, project.description, project.path_segment_name, route_params
+        project.name, project.description, project.path_segment_name, ai_functions
     )
     return api_docs

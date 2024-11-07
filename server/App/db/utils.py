@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict
 
 from openapi_pydantic import (
     Info,
@@ -15,7 +15,7 @@ from openapi_pydantic import (
     Server,
 )
 
-from App.models import InputVariable, TestCase
+from App.models import AIFunction
 
 BACKEND_URL = os.getenv("BACKEND_URL") or "/"
 
@@ -33,7 +33,7 @@ async def generate_project_api_docs(
     project_name: str,
     project_description: str,
     path_segment_name: str,
-    route_params: List[Tuple[str, str, str, List[InputVariable], List[TestCase]]],
+    route_mapping: Dict[str, AIFunction],
 ) -> OpenAPI:
     """
     Generates an OpenAPI specification for the given project using openapi_pydantic models.
@@ -47,6 +47,7 @@ async def generate_project_api_docs(
                 - AI function name
                 - Description of the AI function
                 - Path segment name for the AI function
+                - List of providers supported by the AI function
                 - List of input variables required by the AI function
                 - List of test cases for the AI function
 
@@ -90,26 +91,21 @@ async def generate_project_api_docs(
     paths: Dict[str, PathItem] = {}
 
     # Iterate over each route parameter to construct paths
-    for (
-        ai_function_name,
-        description,
-        ai_function_path_segment_name,
-        input_variables,
-        test_cases,
-    ) in route_params:
+    for path_name in route_mapping:
+        ai_function = route_mapping[path_name]
         # Construct the full route path
-        route = f"/execute/{path_segment_name}/{ai_function_path_segment_name}"
+        route = f"/execute/{path_segment_name}/{path_name}"
 
         # define properties including examples extracted from test cases
         properties: Dict[str, Schema] = {}
         # add the test cases as examples to the params
-        for var in input_variables:
+        for var in ai_function.input_variables:
             schema = Schema(type="string")
             schema.examples = []
-            for test_case in test_cases:
+            for test_case in ai_function.test_cases:
                 schema.examples.append(test_case.variables[var.name])
             properties[var.name] = schema
-        required = [var.name for var in input_variables]
+        required = [var.name for var in ai_function.input_variables]
 
         request_schema = Schema(type="object", properties=properties, required=required)
 
@@ -121,15 +117,23 @@ async def generate_project_api_docs(
             required=True, content={"application/json": request_media}
         )
 
+        # set available providers for "provider" query param
+        for param in query_params:
+            if param.name == "provider":
+                param.param_schema = Schema(
+                    type="string",
+                    enum=ai_function.providers,
+                )
+
         # Define the Operation object for the POST method
         operation = Operation(
-            summary=f"Execute AI function '{ai_function_name}'",
-            description=description,
-            operation_id=ai_function_path_segment_name,
+            summary=f"Execute AI function '{ai_function.name}'",
+            description=ai_function.description,
+            operation_id=path_name,
             requestBody=request_body,
             responses=responses,
             parameters=query_params,
-            tags=[ai_function_name],
+            tags=[ai_function.name],
         )
 
         # Define the PathItem with the POST operation
