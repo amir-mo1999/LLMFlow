@@ -75,6 +75,7 @@ async def generate_project_api_docs(
         "PromptMessage",
         "RoleEnum",
         "HttpExceptionModel",
+        "Provider",
     ]
     components = app_openapi.components
     components.schemas = {

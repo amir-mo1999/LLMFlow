@@ -1399,6 +1399,14 @@
                         }
                     },
                     {
+                        "name": "provider",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/Provider"
+                        }
+                    },
+                    {
                         "name": "prompt_tag",
                         "in": "query",
                         "required": false,

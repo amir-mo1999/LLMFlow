@@ -399,16 +399,33 @@ class DB:
         return prompts
 
     async def get_prompt_by_tag(
-        self, ai_function_id: str, tag: PromptTag | None = "highest score"
+        self,
+        ai_function_id: str,
+        provider: Provider,
+        tag: PromptTag | None = "highest score",
     ) -> Prompt | None:
         match_query = {"$match": {"ai_function_id": ai_function_id}}
+        project_query = {
+            "$addFields": {
+                "results": {
+                    "$getField": {
+                        "field": "results",
+                        "input": {
+                            "$getField": {
+                                "field": provider.value,  # Dynamically access the provider field
+                                "input": "$evals",
+                            }
+                        },
+                    }
+                }
+            }
+        }
 
-        # TODO: add logic to group by provider
         aggregate_query = {
             "$addFields": {
-                "average_score": {"$avg": "$last_eval.results.score"},
-                "average_latency": {"$avg": "$last_eval.results.latencyMs"},
-                "average_cost": {"$avg": "$last_eval.results.cost"},
+                "average_score": {"$avg": "$results.score"},
+                "average_latency": {"$avg": "$results.latencyMs"},
+                "average_cost": {"$avg": "$results.cost"},
             }
         }
 
@@ -421,6 +438,7 @@ class DB:
 
         pipeline = [
             match_query,
+            project_query,
             aggregate_query,
             sort_query,
             {

@@ -1191,6 +1191,7 @@ export type ExecutePathParams = {
 };
 
 export type ExecuteQueryParams = {
+  provider: Schemas.Provider;
   /**
    * Specify by which criteria to select the prompt.
    *
@@ -1221,7 +1222,7 @@ export type ExecuteError = Fetcher.ErrorWrapper<
 export type ExecuteVariables = {
   body?: Schemas.Body;
   pathParams: ExecutePathParams;
-  queryParams?: ExecuteQueryParams;
+  queryParams: ExecuteQueryParams;
 } & ApiContext["fetcherOptions"];
 
 export const fetchExecute = (

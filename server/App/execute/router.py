@@ -6,7 +6,7 @@ from App.db.routes.ai_function import get_ai_function
 from App.db.routes.prompt import get_prompt
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound
-from App.models import AIFunctionOutput, Body, PromptTag, TestCase, User
+from App.models import AIFunctionOutput, Body, PromptTag, Provider, TestCase, User
 
 from .utils import execute_ai_function
 
@@ -28,6 +28,7 @@ async def execute(
     project_path_name: str,
     ai_function_path_name: str,
     body: Body,
+    provider: Provider,
     db: Annotated[DB, Depends(get_db)],
     user: Annotated[User, Depends(user)],
     prompt_tag: Optional[PromptTag] = Query(
@@ -66,9 +67,8 @@ async def execute(
     if prompt_id:
         prompt = await get_prompt(prompt_id, db, user)
     else:
-        prompt = await db.get_prompt_by_tag(ai_function.id, prompt_tag)
+        prompt = await db.get_prompt_by_tag(ai_function.id, provider, prompt_tag)
 
-    print(prompt_tag)
     if prompt is None:
         raise HTTPException(
             status_code=400,
@@ -76,5 +76,7 @@ async def execute(
         )
 
     # execute
-    result = await execute_ai_function(prompt, ai_function.assertions, test_case)
+    result = await execute_ai_function(
+        provider, prompt, ai_function.assertions, test_case
+    )
     return result

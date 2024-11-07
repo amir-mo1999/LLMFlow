@@ -11,13 +11,14 @@ from App.models import (
     EvaluateSummary,
     Prompt,
     PromptMessage,
+    Provider,
     TestCase,
 )
 
 PROMPTFOO_SERVER_URL = os.environ.get("PROMPTFOO_SERVER_URL") or ""
 
 
-async def execute_ai_function(
+async def execute_ai_function(provider: Provider,
     prompt: Prompt, assertions: List[Assertion], test_case: TestCase
 ) -> AIFunctionOutput:
     prompts = [prompt.messages]
@@ -26,7 +27,7 @@ async def execute_ai_function(
 
     # parse as EvaluateInpiut for validation
     evaluate_input = EvaluateInput(
-        prompts=prompts, defaultTest=defaultTest, tests=tests
+        prompts=prompts, defaultTest=defaultTest, tests=tests, providers=provider
     )
 
     # send request to promptfoo-server
