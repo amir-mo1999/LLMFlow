@@ -5,9 +5,14 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
-import { Prompt } from "@/api/apiSchemas"
+import InputLabel from "@mui/material/InputLabel"
+import { Prompt, Provider } from "@/api/apiSchemas"
 import { useDeletePrompt } from "@/api/apiComponents"
 import EvalOverview from "../EvalOverview/EvalOverview"
+import FormControl from "@mui/material/FormControl"
+
+import Select, { SelectChangeEvent } from "@mui/material/Select"
+import MenuItem from "@mui/material/MenuItem"
 import theme from "@/theme"
 import { PromptMessagesOverview } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
@@ -33,11 +38,17 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
   onClickEdit,
 }) => {
   const [disableDelete, setDisableDelete] = useState(false)
+  const [selectedProvider, setSelectedProvider] = useState<Provider>()
+
   const { mutate: deletePromptAPI } = useDeletePrompt({
     onSuccess: () => {
       onDelete()
     },
   })
+
+  const handleSelectedProviderChange = (event: SelectChangeEvent) => {
+    setSelectedProvider(event.target.value as Provider)
+  }
 
   const handleDelete = () => {
     setDisableDelete(true)
@@ -87,7 +98,29 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
       <Typography variant="h5" paddingBottom={1}>
         Evaluation Results
       </Typography>
-      {prompt.last_eval ? <EvalOverview evalResult={prompt.last_eval}></EvalOverview> : <></>}
+
+      {prompt.evals && (
+        <>
+          <FormControl>
+            <InputLabel id="provider-select">Provider</InputLabel>
+            <Select
+              labelId="provider-select"
+              value={selectedProvider}
+              label="Provider"
+              onChange={handleSelectedProviderChange}
+            >
+              {Object.keys(prompt.evals).map((provider, indx) => {
+                return (
+                  <MenuItem key={indx} value={provider}>
+                    {provider}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+          {selectedProvider && <EvalOverview evalResult={prompt.evals[selectedProvider]} />}
+        </>
+      )}
 
       <Divider sx={{ marginY: 2 }}></Divider>
 

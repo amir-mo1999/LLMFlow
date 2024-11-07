@@ -8,6 +8,7 @@ import {
   AIFunctionPatchInput,
   ProjectRouteInput,
   Provider,
+  Prompt,
 } from "@/api/apiSchemas"
 import _ from "lodash"
 import { BaseAssertionTypes } from "@/api/apiSchemas"
@@ -135,30 +136,33 @@ export function addTitlesToSchema(
   return newSchema
 }
 
-export function getMeanScore(evalSummary: EvaluateSummary) {
-  let meanScore =
-    evalSummary.results.reduce((acc, result) => acc + (result.score as number), 0) /
-    evalSummary.results.length
+export function getEvalAverages(evals: Prompt["evals"]) {
+  if (!evals) return [0, 0, 0]
+  const providers = Object.keys(evals)
 
+  let meanScore = 0
+  let totalCost = 0
+  let meanLatency = 0
+  providers.forEach((provider) => {
+    let score =
+      evals[provider].results.reduce((acc, result) => acc + (result.score as number), 0) /
+      evals[provider].results.length
+    let cost = evals[provider].results.reduce((acc, result) => acc + (result.cost as number), 0)
+    let latency =
+      evals[provider].results.reduce((acc, result) => acc + (result.latencyMs as number), 0) /
+      evals[provider].results.length
+
+    meanScore += score
+    cost += cost
+    latency += latency
+  })
+  meanScore /= providers.length
   meanScore = Math.round(meanScore * 100) / 100
-  return meanScore
-}
-
-export function getTotalCost(evalSummary: EvaluateSummary) {
-  let totalCost = evalSummary.results.reduce((acc, result) => acc + (result.cost as number), 0)
-
   totalCost = Math.round(totalCost * 100000000) / 100000000
-  return totalCost
-}
-
-export function getMeanLatency(evalSummary: EvaluateSummary) {
-  let meanLatency =
-    evalSummary.results.reduce((acc, result) => acc + (result.latencyMs as number), 0) /
-    evalSummary.results.length
   meanLatency = Math.round(meanLatency)
-  return meanLatency
-}
 
+  return [meanScore, totalCost, meanLatency]
+}
 /**
 /**
  * Compares two objects and returns an object containing only the fields

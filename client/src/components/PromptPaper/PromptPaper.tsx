@@ -5,7 +5,7 @@ import { SxProps } from "@mui/material"
 import { Prompt } from "@/api/apiSchemas"
 import LinearProgress from "@mui/material/LinearProgress"
 import { UserChip, NumberChip, DateChip, TextChip, ItemTypeChip } from "@/components"
-import { getMeanLatency, getMeanScore, getTotalCost } from "@/utils"
+import { getEvalAverages } from "@/utils"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
 import Tooltip from "@mui/material/Tooltip"
@@ -28,13 +28,10 @@ const PromptPaper: React.FC<PromptPaperProps> = ({
   const numberOfMessages: number = prompt.messages.length
 
   const renderFigures = () => {
-    if (!prompt.last_eval) {
+    if (!prompt.evals) {
       return <LinearProgress sx={{ display: prompt.revision_required ? "none" : "normal" }} />
     }
-
-    const meanScore = getMeanScore(prompt.last_eval)
-    const totalCost = getTotalCost(prompt.last_eval)
-    const meanLatency = getMeanLatency(prompt.last_eval)
+    const [meanScore, totalCost, meanLatency] = getEvalAverages(prompt.evals)
 
     return (
       <Stack

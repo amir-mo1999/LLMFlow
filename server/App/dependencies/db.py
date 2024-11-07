@@ -97,7 +97,11 @@ class DB:
         additional_data: Dict[Any, Any] = {},
     ) -> bool:
         coll = self.collection_mapping[collection]
-
+        if len(compare_fields) == 0:
+            await coll.insert_one(
+                {**document.model_dump(by_alias=True), **additional_data}
+            )
+            return True
         # always exclude the id field
         if "_id" in compare_fields:
             compare_fields.remove("_id")

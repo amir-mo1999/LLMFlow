@@ -79,7 +79,7 @@ export default function Layout({
     const newPrompts = [...prompts]
     const promptToUpdateIndx = prompts.findIndex((prompt) => prompt._id === promptID)
     newPrompts[promptToUpdateIndx].messages = messages
-    newPrompts[promptToUpdateIndx].last_eval = undefined
+    newPrompts[promptToUpdateIndx].evals = undefined
     newPrompts[promptToUpdateIndx].revision_required = false
     setPrompts([...newPrompts])
     router.push("/prompts")
@@ -87,7 +87,7 @@ export default function Layout({
 
   useEffect(() => {
     for (let i = 0; i < prompts.length; i++) {
-      if (!prompts[i].last_eval && !prompts[i].revision_required) {
+      if (!prompts[i].evals && !prompts[i].revision_required) {
         evaluate({ pathParams: { promptId: prompts[i]._id as string } })
       }
     }
@@ -99,7 +99,7 @@ export default function Layout({
       const promptId = vars.pathParams.promptId
       const promptIndx = newPrompts.findIndex((prompt) => prompt._id === promptId)
       if (promptIndx !== undefined) {
-        newPrompts[promptIndx].last_eval = response
+        newPrompts[promptIndx].evals = response
         setPrompts([...newPrompts])
         refetchPrompts()
       }
