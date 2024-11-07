@@ -8,6 +8,7 @@ import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import UserAvatar from "./UserAvatar"
 import { useSession } from "next-auth/react"
+import Link from "next/link"
 
 function getInitials(fullName: string): string {
   if (!fullName) return ""
@@ -36,9 +37,11 @@ const MyAppBar: React.FC = () => {
       <Toolbar sx={{ gap: 15 }}>
         {/* Left Section: App Icon and App Name */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="h6" component="div">
-            LLM Flow
-          </Typography>
+          <Link href="/">
+            <Typography variant="h6" component="div">
+              LLM Flow
+            </Typography>
+          </Link>
         </Box>
 
         {/* Middle Section: Navigation Buttons */}
