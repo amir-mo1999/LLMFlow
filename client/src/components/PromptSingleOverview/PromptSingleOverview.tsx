@@ -5,17 +5,19 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
+import Stack from "@mui/material/Stack"
 import InputLabel from "@mui/material/InputLabel"
-import { Prompt, Provider } from "@/api/apiSchemas"
+import { Prompt, Provider, EvaluateSummary } from "@/api/apiSchemas"
 import { useDeletePrompt } from "@/api/apiComponents"
 import EvalOverview from "../EvalOverview/EvalOverview"
 import FormControl from "@mui/material/FormControl"
-
+import Grid from "@mui/material/Grid"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import theme from "@/theme"
-import { PromptMessagesOverview } from "@/components"
+import { PromptMessagesOverview, NumberChip } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
+import { getEvalAverages } from "@/utils"
 
 interface PromptSingleOverviewProps {
   prompt: Prompt
@@ -93,12 +95,55 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
         </Typography>
       </Box>
       <PromptMessagesOverview messages={prompt.messages}></PromptMessagesOverview>
+      <Divider sx={{ marginY: 2 }}></Divider>
+
+      <Typography variant="h5" paddingBottom={1}>
+        Model Results
+      </Typography>
+      {prompt.evals && (
+        <Grid container columns={{ xs: 4, sm: 8, md: 8 }} width={700} rowGap={2}>
+          {Object.entries(prompt.evals).map(([provider, evalSummary], indx) => {
+            const aux: Record<string, EvaluateSummary> = {}
+            aux[provider] = evalSummary
+            const [score, cost, latency] = getEvalAverages(aux)
+
+            return (
+              <>
+                <Grid xs={2} sm={4} md={2}>
+                  <Typography>{provider}</Typography>
+                </Grid>
+                <Grid xs={2} sm={4} md={2}>
+                  <NumberChip labelFirst number={cost} label="Cost" unit="$" />
+                </Grid>
+                <Grid xs={2} sm={4} md={1}>
+                  <NumberChip
+                    labelFirst
+                    number={score as number}
+                    label="Score"
+                    color={2 >= 0.8 ? "success" : 2 >= 0.4 ? "warning" : "error"}
+                    variant="filled"
+                  />
+                </Grid>
+                <Grid xs={2} sm={4} md={2}>
+                  <NumberChip
+                    labelFirst
+                    number={latency as number}
+                    label="Latency"
+                    unit="ms"
+                    sx={{ marginLeft: 0 }}
+                  />
+                </Grid>
+              </>
+            )
+          })}
+        </Grid>
+      )}
 
       <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Evaluation Results Section */}
-      <Typography variant="h5" paddingBottom={1}>
-        Evaluation Results
+      <Typography variant="h5" paddingBottom={1.5}>
+        Test Case Results
       </Typography>
 
       {prompt.evals && (

@@ -1,12 +1,12 @@
 import os
 from typing import Annotated, Dict
 
+from aiohttp.client_exceptions import ServerDisconnectedError
 from fastapi import APIRouter, Depends, HTTPException
 
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound
 from App.models import EvaluateSummary, Provider
-from aiohttp.client_exceptions import ServerDisconnectedError
 
 from .utils import eval_prompt
 
