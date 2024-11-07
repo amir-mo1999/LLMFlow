@@ -59,6 +59,9 @@ const ListTypesForm: React.FC<ListTypesFormProps> = ({
             placeholder={placeholder}
             fullWidth
             required={required}
+            multiline
+            minRows={2}
+            maxRows={8}
           />
           <Button onClick={handleDeleteValue(index)}>
             <ClearIcon />

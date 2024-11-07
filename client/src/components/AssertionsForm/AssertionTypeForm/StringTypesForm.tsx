@@ -22,7 +22,7 @@ const StringTypeForm: React.FC<StringTypeFormProps> = ({ value, setValue, sx }) 
         fullWidth
         multiline
         minRows={2}
-        maxRows={4}
+        maxRows={8}
       />
     </>
   )

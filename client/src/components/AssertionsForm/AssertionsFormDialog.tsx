@@ -148,7 +148,7 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   }
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>{isEditing ? "Edit Assertion" : "Add Assertion"}</DialogTitle>
       <DialogContent>
         <Box>
