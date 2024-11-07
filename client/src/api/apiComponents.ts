@@ -1199,7 +1199,7 @@ export type ExecuteQueryParams = {
    */
   prompt_tag?: ("highest score" | "cheapest" | "fastest") | null;
   /**
-   * If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'.
+   * If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'. If no 'provider' is specified, one is selected based on 'prompt_tag'
    */
   prompt_id?: string | null;
 };

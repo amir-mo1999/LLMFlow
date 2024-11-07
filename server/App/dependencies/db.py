@@ -398,6 +398,18 @@ class DB:
 
         return prompts
 
+    async def get_sort_query_by_tag(self, tag: PromptTag | None = "highest score") -> Tuple[str, int]:
+        if tag == "highest score":
+            sort_field = "average_score"
+            sort_order = -1
+        elif tag == "cheapest":
+            sort_field = "average_cost"
+            sort_order = 1
+        else:
+            sort_field = "average_latency"
+            sort_order = 1
+        return sort_field, sort_order
+
     async def get_prompt_by_tag_and_provider(
         self,
         ai_function_id: str,
@@ -457,16 +469,7 @@ class DB:
     async def get_prompt_by_tag(
         self, ai_function_id: str, tag: PromptTag | None = "highest score"
     ) -> Tuple[Prompt, Provider] | None:
-        # define sort critera
-        if tag == "highest score":
-            sort_field = "average_score"
-            sort_order = -1
-        elif tag == "cheapest":
-            sort_field = "average_cost"
-            sort_order = 1
-        else:
-            sort_field = "average_latency"
-            sort_order = 1
+        sort_field, sort_order = await self.get_sort_query_by_tag(tag)
 
         pipeline = [
             # match prompts by ai_function_id
@@ -515,6 +518,51 @@ class DB:
             provider_name = results[0]["chosen_provider"]["provider_name"]
             return Prompt(**results[0]), provider_name
 
+        return None
+
+
+    async def get_provider_by_tag(self, prompt_id: str, tag: PromptTag | None = "highest score") -> Provider | None:
+        sort_field, sort_order = await self.get_sort_query_by_tag(tag)
+        pipeline = [
+            {"$match": {"_id": prompt_id}},
+            # unpack evals as array
+            {"$addFields": {"evals_array": {"$objectToArray": "$evals"}}},
+            {
+                "$addFields": {
+                    "evals_array": {
+                        "$map": {
+                            "input": "$evals_array",
+                            "as": "provider",
+                            "in": {
+                                "provider_name": "$$provider.k",
+                                "average_score": {"$avg": "$$provider.v.results.score"},
+                                "average_latency": {
+                                    "$avg": "$$provider.v.results.latencyMs"
+                                },
+                                "average_cost": {"$avg": "$$provider.v.results.cost"},
+                            },
+                        }
+                    }
+                }
+            },
+            {
+                "$addFields": {
+                    "sorted_evals": {
+                        "$sortArray": {
+                            "input": "$evals_array",
+                            "sortBy": {sort_field: sort_order},
+                        }
+                    }
+                }
+            },
+            # Stage 5: Assign 'chosen_provider' as the first element in 'sorted_evals'
+            {"$addFields": {"chosen_provider": {"$arrayElemAt": ["$sorted_evals", 0]}}}]
+
+        results_cursor: AsyncIOMotorCommandCursor[Document] = self.prompts.aggregate(pipeline)
+        results = await cursor_to_list(results_cursor)
+        if len(results) > 0:
+            provider_name = results[0]["chosen_provider"]["provider_name"]
+            return provider_name
         return None
 
 

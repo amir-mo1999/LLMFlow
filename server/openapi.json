@@ -1451,10 +1451,10 @@
                                     "type": "null"
                                 }
                             ],
-                            "description": "If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'.",
+                            "description": "If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'. If no 'provider' is specified, one is selected based on 'prompt_tag'",
                             "title": "Prompt Id"
                         },
-                        "description": "If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'."
+                        "description": "If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'. If no 'provider' is specified, one is selected based on 'prompt_tag'"
                     }
                 ],
                 "requestBody": {

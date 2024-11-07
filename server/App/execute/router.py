@@ -37,7 +37,7 @@ async def execute(
     ),
     prompt_id: Optional[str | None] = Query(
         default=None,
-        description="If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'.",
+        description="If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'. If no 'provider' is specified, one is selected based on 'prompt_tag'",
     ),
 ):
     # get project
@@ -70,13 +70,18 @@ async def execute(
         raise HTTPException(422, detail=str(e))
 
     prompt = None
+
     # get prompt
     if prompt_id:
         prompt = await get_prompt(prompt_id, db, user)
+        if provider is None:
+            provider = await db.get_provider_by_tag(prompt.id, prompt_tag)
+
     elif provider:
         prompt = await db.get_prompt_by_tag_and_provider(
             ai_function.id, provider, prompt_tag
         )
+
     else:
         res = await db.get_prompt_by_tag(ai_function.id, prompt_tag)
         if res:
