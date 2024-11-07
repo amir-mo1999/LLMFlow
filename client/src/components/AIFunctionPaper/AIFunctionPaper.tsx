@@ -86,25 +86,16 @@ const AIFunctionPaper: React.FC<AIFunctionPaperProps> = ({
         justifyContent="flex-start"
         alignItems="start"
       >
-        <NumberChip
-          number={aiFunction.input_variables.length}
-          label="Variables"
-          sx={{ marginRight: 2 }}
-        />
+        <NumberChip number={aiFunction.input_variables.length} label="Variables" />
         <NumberChip
           number={numberOfAssertions}
           label={numberOfAssertions === 1 ? "Assertion" : "Assertions"}
-          sx={{ marginRight: 2 }}
         />
         <NumberChip
           number={aiFunction.number_of_prompts}
           label={aiFunction.number_of_prompts === 1 ? "Prompt" : "Prompts"}
-          sx={{ marginRight: 2 }}
         />
-        <TextChip
-          label={aiFunction.output_schema.type === "string" ? "string" : "json"}
-          sx={{ marginRight: 2 }}
-        />
+        <TextChip label={aiFunction.output_schema.type === "string" ? "string" : "json"} />
         <NumberChip
           number={aiFunction.providers.length}
           label={aiFunction.providers.length === 1 ? "Provider" : "Providers"}
