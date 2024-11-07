@@ -1,12 +1,14 @@
-from .root_model import RootModel
 from typing import Dict, List
+
 from pydantic import model_validator
+
+from .root_model import RootModel
 
 
 class GenerateTestCasesInput(RootModel):
     description: str
     input_variables: List[str]
-    test_cases: Dict[str, Dict[str, str]]
+    test_cases: List[Dict[str, str]]
 
     @model_validator(mode="after")
     def assert_input_variables_are_unique(self):
@@ -31,8 +33,8 @@ class GenerateTestCasesInput(RootModel):
         var_names.sort()
 
         # assert that all test cases contain each input variable
-        for i, test in enumerate(self.test_cases):
-            keys = list(test.variables.keys())
+        for i, test_case in enumerate(self.test_cases):
+            keys = list(test_case.keys())
             keys.sort()
             if var_names != keys:
                 raise ValueError(

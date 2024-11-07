@@ -7,12 +7,12 @@ function GenerateTestCases(description:string, test_cases: map<string, string>[]
 
         Generate data points for my function that each contain a value for the following fields:
         {% for var in input_variables %}
-        {{ var }}, 
+        {{ var }},
         {% endfor %}
 
         Here are some examples:
         {% for test_case in test_cases %}
-        {{ test_case}}, 
+        {{ test_case}},
         {% endfor %}
     "#
 }

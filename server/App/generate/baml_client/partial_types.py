@@ -13,13 +13,14 @@
 # flake8: noqa: E501,F401
 # pylint: disable=unused-import,line-too-long
 # fmt: off
-import baml_py
 from enum import Enum
+from typing import Dict, List, Literal, Optional, Union
+
+import baml_py
 from pydantic import BaseModel, ConfigDict
-from typing import Dict, List, Optional, Union, Literal
 
 from . import types
-from .types import Checked, Check
+from .types import Check, Checked
 
 ###############################################################################
 #
@@ -30,8 +31,8 @@ from .types import Checked, Check
 
 
 class Resume(BaseModel):
-    
-    
+
+
     name: Optional[str] = None
     email: Optional[str] = None
     experience: List[Optional[str]]

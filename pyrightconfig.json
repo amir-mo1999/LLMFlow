@@ -7,5 +7,5 @@
   "reportUnboundVariable": true,
   "reportUnknownMemberType": true,
   "pythonVersion": "3.12",
-  "exclude": ["server/App/db/utils.py"]
+  "exclude": ["server/App/db/utils.py", "server/App/generate/baml_client/"]
 }

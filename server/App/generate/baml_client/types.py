@@ -13,11 +13,11 @@
 # flake8: noqa: E501,F401
 # pylint: disable=unused-import,line-too-long
 # fmt: off
-import baml_py
 from enum import Enum
-from pydantic import BaseModel, ConfigDict
 from typing import Dict, Generic, List, Literal, Optional, TypeVar, Union
 
+import baml_py
+from pydantic import BaseModel, ConfigDict
 
 T = TypeVar('T')
 CheckName = TypeVar('CheckName', bound=str)
@@ -40,8 +40,8 @@ def all_succeeded(checks: Dict[CheckName, Check]) -> bool:
 
 
 class Resume(BaseModel):
-    
-    
+
+
     name: str
     email: str
     experience: List[str]
