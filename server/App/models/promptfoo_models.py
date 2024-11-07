@@ -36,7 +36,6 @@ class BaseAssertionTypes(str, Enum):
     is_json = "is-json"
     javascript = "javascript"
     levenshtein = "levenshtein"
-    perplexity_score = "perplexity-score"
     python = "python"
     regex = "regex"
     starts_with = "starts-with"

@@ -62,25 +62,14 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
     }
 
     // for all where value is array
-    if (
-      [
-        "contains-all",
-        "contains-any",
-        "icontains-all",
-        "icontains-any",
-        "contains-xml",
-        "is-xml",
-      ].includes(type)
-    ) {
+    if (["contains-all", "contains-any", "icontains-all", "icontains-any"].includes(type)) {
       if (Array.isArray(value)) {
         return !value.every((v) => v !== "")
       }
     }
 
     // for all where threshold is required
-    if (
-      ["cost", "latency", "levenshtein", "perplexity-score", "perplexity", "rogue-n"].includes(type)
-    ) {
+    if (["levenshtein"].includes(type)) {
       if (threshold === null || threshold === undefined) return true
     }
 

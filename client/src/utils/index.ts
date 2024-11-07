@@ -218,7 +218,6 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "icontains-all",
   "icontains-any",
   "levenshtein",
-  "perplexity-score",
   "javascript",
   "python",
 ]

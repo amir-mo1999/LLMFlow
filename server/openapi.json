@@ -2056,7 +2056,6 @@
                     "is-json",
                     "javascript",
                     "levenshtein",
-                    "perplexity-score",
                     "python",
                     "regex",
                     "starts-with"

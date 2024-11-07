@@ -53,16 +53,7 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
         </>
       )
       break
-    case "perplexity-score":
-      componentToRender = (
-        <ThresholdTypeForm
-          threshold={threshold}
-          setThreshold={setThreshold}
-          minValue={0}
-          maxValue={1}
-        ></ThresholdTypeForm>
-      )
-      break
+
     case "levenshtein":
       componentToRender = (
         <>

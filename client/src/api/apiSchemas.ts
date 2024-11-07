@@ -148,10 +148,9 @@ export type BaseAssertionTypes =
   | "is-json"
   | "javascript"
   | "levenshtein"
-  | "perplexity-score"
   | "python"
   | "regex"
-  | "starts-with"
+  | "starts-with";
 
 export type Body = {
   [key: string]: string;
