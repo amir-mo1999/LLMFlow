@@ -154,6 +154,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
               value={selectedProvider}
               label="Provider"
               onChange={handleSelectedProviderChange}
+              sx={{ mb: 2 }}
             >
               {Object.keys(prompt.evals).map((provider, indx) => {
                 return (
