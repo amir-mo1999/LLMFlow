@@ -1,20 +1,23 @@
-# pull official base image
-FROM node:20-alpine
+# Use the official Node.js 18 Alpine image
+FROM node:22-alpine
 
-# set working directory
-WORKDIR /home/appuser
+# Set the working directory
+WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
+# Install dependencies
+RUN npm install
 
-# add app
-COPY . ./
+# Copy the rest of the application code
+COPY . .
 
-# start app
-CMD ["npm", "run", "dev"]
+# Build the Next.js application
+RUN npm run build
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]

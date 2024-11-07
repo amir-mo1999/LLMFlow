@@ -8,7 +8,7 @@ type HandlerFunction = (request: NextRequest, params: { path: string[] }) => Pro
 /**
  * Common handler to process all HTTP methods.
  */
-export const handleRequest: HandlerFunction = async (request, { path }) => {
+const handleRequest: HandlerFunction = async (request, { path }) => {
   // Retrieve the token using next-auth's getToken
   const token = await getToken({
     req: request,

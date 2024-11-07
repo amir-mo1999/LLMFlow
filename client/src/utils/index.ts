@@ -1,7 +1,6 @@
 import {
   AIFunction,
   AIFunctionRouteInput,
-  EvaluateSummary,
   JsonSchemaInput,
   ProjectPatchInput,
   Project,
