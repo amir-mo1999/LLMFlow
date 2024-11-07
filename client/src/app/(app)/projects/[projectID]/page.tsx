@@ -5,7 +5,8 @@ import { ProjectContext } from "../layout"
 import { useGetProjectApiDocs } from "@/api/apiComponents"
 
 export default function Page({ params }: { params: { projectID: string } }) {
-  const { projects, onDeleteProject, aiFunctions, onClickEdit } = useContext(ProjectContext)
+  const { projects, onDeleteProject, aiFunctions, onClickEdit, setSelectedProjectIndx } =
+    useContext(ProjectContext)
   const { data: apiDocs, isFetching: isFetchingApiDocs } = useGetProjectApiDocs({
     pathParams: { projectId: params.projectID },
   })
@@ -13,6 +14,7 @@ export default function Page({ params }: { params: { projectID: string } }) {
   const project = projects.find((project) => project._id === params.projectID)
 
   if (project === undefined) return <></>
+  setSelectedProjectIndx(projects.findIndex((project) => project._id === params.projectID))
 
   return (
     <ProjectSingleOverview
