@@ -14,8 +14,8 @@ interface TestCasesFormDialogProps {
   open: boolean
   inputVariables: InputVariable[]
   handleClose: () => void
-  handleAddTestCase: (testCase: TestCaseInput) => void
-  handleUpdateTestCase?: (index: number, testCase: TestCaseInput) => void
+  handleAddTestCase: (_: TestCaseInput) => void
+  handleUpdateTestCase?: (_: number, __: TestCaseInput) => void
   initialTestCase?: TestCaseInput
   isEditing?: boolean
   index?: number
@@ -71,12 +71,11 @@ const TestCasesFormDialog: React.FC<TestCasesFormDialogProps> = ({
     handleClose()
   }
 
-  const checkDisableSubmit = () => {
-    const varContents = Object.values(vars)
-    return !varContents.every((v) => v !== "")
-  }
-
   useEffect(() => {
+    const checkDisableSubmit = () => {
+      const varContents = Object.values(vars)
+      return !varContents.every((v) => v !== "")
+    }
     setDisableSubmit(checkDisableSubmit())
   }, [vars])
 

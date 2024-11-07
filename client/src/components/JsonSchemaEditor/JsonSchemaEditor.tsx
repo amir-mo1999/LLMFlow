@@ -54,7 +54,7 @@ const settingsFieldsMapping: Record<
 
 interface JsonSchemaEditorProps {
   schema: JsonSchemaInput
-  setSchema?: (schema: JsonSchemaInput) => void
+  setSchema?: (_: JsonSchemaInput) => void
   displayOnly?: boolean
 }
 

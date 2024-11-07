@@ -10,7 +10,7 @@ import AssertionFormDialog from "./AssertionsFormDialog"
 interface AssertionsFormProps {
   assertions: Assertion[]
   jsonAssertion?: Assertion
-  setAssertions: (assertions: Assertion[]) => void
+  setAssertions: (_: Assertion[]) => void
   headerVariant?: TypographyOwnProps["variant"]
 }
 

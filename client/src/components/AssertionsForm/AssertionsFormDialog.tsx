@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from "react"
+import React, { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
@@ -16,8 +16,8 @@ import { baseAssertionTypesArray } from "@/utils"
 interface AssertionFormDialogProps {
   open: boolean
   handleClose: () => void
-  handleAdd: (assertion: Assertion) => void
-  handleUpdate?: (index: number, assertion: Assertion) => void
+  handleAdd: (_: Assertion) => void
+  handleUpdate?: (_: number, __: Assertion) => void
   assertion?: Assertion
   isEditing?: boolean
   index?: number
@@ -38,52 +38,51 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
   const [threshold, setThreshold] = useState<Assertion["threshold"]>(null)
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
 
-  const checkDisableSubmit = () => {
-    // for all where value is required
-    if (
-      [
-        "contains",
-        "contains-all",
-        "contains-any",
-        "equals",
-        "icontains",
-        "icontains-all",
-        "icontains-any",
-        "javascript",
-        "levenshtein",
-        "python",
-        "regex",
-        "starts-with",
-      ].includes(type)
-    ) {
-      if (!value || value.length === 0) {
-        return true
-      }
-    }
-
-    // for all where value is array
-    if (["contains-all", "contains-any", "icontains-all", "icontains-any"].includes(type)) {
-      if (Array.isArray(value)) {
-        return !value.every((v) => v !== "")
-      }
-    }
-
-    // for all where threshold is required
-    if (["levenshtein"].includes(type)) {
-      if (threshold === null || threshold === undefined) return true
-    }
-
-    // for all where value is object
-    if (["contains-json", "is-json"].includes(type)) {
-      if (value && typeof type === "object") {
-        return Object.keys(value).length === 0
-      }
-    }
-
-    return false
-  }
-
   useEffect(() => {
+    const checkDisableSubmit = () => {
+      // for all where value is required
+      if (
+        [
+          "contains",
+          "contains-all",
+          "contains-any",
+          "equals",
+          "icontains",
+          "icontains-all",
+          "icontains-any",
+          "javascript",
+          "levenshtein",
+          "python",
+          "regex",
+          "starts-with",
+        ].includes(type)
+      ) {
+        if (!value || value.length === 0) {
+          return true
+        }
+      }
+
+      // for all where value is array
+      if (["contains-all", "contains-any", "icontains-all", "icontains-any"].includes(type)) {
+        if (Array.isArray(value)) {
+          return !value.every((v) => v !== "")
+        }
+      }
+
+      // for all where threshold is required
+      if (["levenshtein"].includes(type)) {
+        if (threshold === null || threshold === undefined) return true
+      }
+
+      // for all where value is object
+      if (["contains-json", "is-json"].includes(type)) {
+        if (value && typeof type === "object") {
+          return Object.keys(value).length === 0
+        }
+      }
+
+      return false
+    }
     setDisableSubmit(checkDisableSubmit())
   }, [value, threshold, type])
 
@@ -107,13 +106,13 @@ const AssertionFormDialog: React.FC<AssertionFormDialogProps> = ({
     }
   }, [assertion, open])
 
-  const handleTypeChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
+  const handleTypeChange = (event: SelectChangeEvent<string>) => {
     setValue(undefined)
     setThreshold(undefined)
     setType(event.target.value as BaseAssertionTypes)
   }
 
-  const handleWeightChange = (event: SelectChangeEvent<string>, child: ReactNode) => {
+  const handleWeightChange = (event: SelectChangeEvent<string>) => {
     const n = Number(event.target.value)
     setWeight(n)
   }

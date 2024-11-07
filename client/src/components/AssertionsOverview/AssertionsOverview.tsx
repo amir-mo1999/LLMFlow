@@ -8,16 +8,16 @@ interface AssertionsOverviewProps {
   assertions: Assertion[]
   displayOnly?: boolean
   sx?: SxProps
-  onClick?: (indx: number) => () => void
-  onDelete?: (indx: number) => () => void
+  onClick?: (_: number) => () => void
+  onDelete?: (_: number) => () => void
 }
 
 const AssertionsOverview: React.FC<AssertionsOverviewProps> = ({
   assertions,
   sx,
   displayOnly = false,
-  onClick = (indx: number) => () => {},
-  onDelete = (indx: number) => () => {},
+  onClick = () => () => {},
+  onDelete = () => () => {},
 }) => {
   return (
     <Box

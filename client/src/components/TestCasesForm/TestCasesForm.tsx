@@ -77,7 +77,7 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
 
   useEffect(() => {
     const newTestCases = [...testCases]
-    newTestCases.forEach((testCase, testCaseIndx) => {
+    newTestCases.forEach((testCase) => {
       const newVars: TestCaseInput["vars"] = {}
       // get the variable names and contents from the test case variables
       const varNames = Object.keys(testCase.vars)
@@ -89,7 +89,7 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
         return varNames
       }, [] as string[])
 
-      inputVarNames.forEach((varName, varIndx) => {
+      inputVarNames.forEach((varName) => {
         if (varNames.includes(varName)) {
           newVars[varName] = varContents[varNames.indexOf(varName)]
         } else {
@@ -100,7 +100,8 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
       testCase.vars = { ...newVars }
     })
     setTestCases(newTestCases)
-  }, [inputVariables])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputVariables, setTestCases])
 
   return (
     <Box>

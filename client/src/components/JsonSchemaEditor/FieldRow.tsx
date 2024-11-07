@@ -35,7 +35,7 @@ export type ObjectSchema = Pick<
 interface FieldRowProps {
   schema: JsonSchemaInput
   schemaSettings?: StringSchema | NumberSchema | ArraySchema | ObjectSchema
-  setSchema?: (schema: JsonSchemaInput) => void
+  setSchema?: (_: JsonSchemaInput) => void
   displayOnly?: boolean
   disableTitleEdit?: boolean
   disableTypeEdit?: boolean
@@ -80,6 +80,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
   useEffect(() => {
     const newSchema: JsonSchemaInput = { type: type, title: title, ...settings }
     setSchema(newSchema)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings])
 
   const handleTypeChange = (event: SelectChangeEvent) => {
@@ -106,7 +107,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
           title: `newProperty${Object.keys(schema.properties || {}).length}`,
         },
       }
-      //@ts-ignore
+      //@ts-expect-error: idk
       updateSchema({ properties: newProperties })
     }
   }
@@ -140,6 +141,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
           displayOnly={displayOnly}
           indent={indent + 2}
           onDelete={() => {
+            // eslint-disable-next-line
             const { [key]: _, ...rest } = schema.properties || {}
             updateSchema({ properties: rest })
           }}

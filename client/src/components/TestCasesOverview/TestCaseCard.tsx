@@ -19,7 +19,7 @@ interface TestCaseCardProps {
   displayOnly?: boolean
   sx?: SxProps
   onClickVars?: () => void
-  setAssertions?: (assertions: Assertion[]) => void
+  setAssertions?: (_: Assertion[]) => void
   onDelete?: () => void
 }
 

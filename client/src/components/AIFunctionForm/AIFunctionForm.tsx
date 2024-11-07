@@ -35,7 +35,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   aiFunction,
   setAIFunction = () => {},
 }) => {
-  const [initAIFunction, ] = useState<AIFunction>(
+  const [initAIFunction] = useState<AIFunction>(
     aiFunction ? JSON.parse(JSON.stringify(aiFunction)) : undefined
   )
 
