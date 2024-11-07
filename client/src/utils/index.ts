@@ -143,11 +143,11 @@ export function getEvalAverages(evals: Prompt["evals"]) {
   let totalCost = 0
   let meanLatency = 0
   providers.forEach((provider) => {
-    let score =
+    const score =
       evals[provider].results.reduce((acc, result) => acc + (result.score as number), 0) /
       evals[provider].results.length
-    let cost = evals[provider].results.reduce((acc, result) => acc + (result.cost as number), 0)
-    let latency =
+    const cost = evals[provider].results.reduce((acc, result) => acc + (result.cost as number), 0)
+    const latency =
       evals[provider].results.reduce((acc, result) => acc + (result.latencyMs as number), 0) /
       evals[provider].results.length
 

@@ -81,7 +81,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
     }
   }, [])
   //@ts-ignore
-  let parsedExamples: AIFunctionRouteInput[] = examples
+  const parsedExamples: AIFunctionRouteInput[] = examples
 
   const onClickExample = (aiFunction: AIFunctionRouteInput) => {
     const f = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -156,7 +156,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   const updateDisableSubmit = () => {
     if (name === "") setDisableSubmit(true)
     else if (description === "") setDisableSubmit(true)
-    else if (inputVariables.some((inputVariable) => inputVariable.name === "")) setDisableSubmit(true)
+    else if (inputVariables.some((inputVariable) => inputVariable.name === ""))
+      setDisableSubmit(true)
     else if (providers.length === 0) setDisableSubmit(true)
     else setDisableSubmit(false)
   }

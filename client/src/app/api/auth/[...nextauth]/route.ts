@@ -71,8 +71,7 @@ const handler = NextAuth({
             name: user.name,
             email: user.email,
           })
-        } catch (error) {
-        }
+        } catch (error) {}
       }
 
       // Return previous token if the access token has not expired yet
