@@ -219,7 +219,7 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "levenshtein",
   "perplexity-score",
   "perplexity",
-  "python",
+  // "python",
   "regex",
   "starts-with",
 ]
