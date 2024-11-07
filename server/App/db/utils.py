@@ -13,12 +13,9 @@ from openapi_pydantic import (
     PathItem,
     RequestBody,
     Schema,
-    Server,
 )
 
 from App.models import AIFunction
-
-BACKEND_URL = os.getenv("BACKEND_URL") or "/"
 
 
 async def get_app_api_docs() -> OpenAPI:
@@ -144,12 +141,7 @@ async def generate_project_api_docs(
         # Add the PathItem to the Paths object
         paths[route] = path_item
 
-    # Define the Server object
-    servers = [Server(url=BACKEND_URL)]
-
     # Construct the OpenAPI object
-    openapi = OpenAPI(
-        openapi="3.1.0", info=info, paths=paths, servers=servers, components=components
-    )
+    openapi = OpenAPI(openapi="3.1.0", info=info, paths=paths, components=components)
 
     return openapi
