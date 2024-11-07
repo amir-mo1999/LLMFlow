@@ -66,7 +66,6 @@ const FieldRow: React.FC<FieldRowProps> = ({
   )
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
   const [settings, setSettings] = useState(schemaSettings)
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
 
   useEffect(() => {
@@ -203,22 +202,24 @@ const FieldRow: React.FC<FieldRowProps> = ({
           </Tooltip>
         )}
 
-        <Tooltip
-          title="tooltip"
-          placement="top"
-          sx={{ display: type === "string" ? "normal" : "none" }}
-        >
-          <IconButton onClick={() => setOpenDialog(true)}>
-            <Badge
-              variant="dot"
-              sx={{}}
-              color="primary"
-              invisible={Object.keys(settings).length === 0 ? true : false}
-            >
-              <SettingsIcon />
-            </Badge>
-          </IconButton>
-        </Tooltip>
+        {!displayOnly && (
+          <Tooltip
+            title="tooltip"
+            placement="top"
+            sx={{ display: type === "string" ? "normal" : "none" }}
+          >
+            <IconButton onClick={() => setOpenDialog(true)}>
+              <Badge
+                variant="dot"
+                sx={{}}
+                color="primary"
+                invisible={Object.keys(settings).length === 0 ? true : false}
+              >
+                <SettingsIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+        )}
 
         {showDelete && !displayOnly && (
           <Tooltip title="Delete" placement="top">
