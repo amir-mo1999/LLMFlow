@@ -33,6 +33,7 @@ const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
       {testCases.map((testCase, index) => (
         <TestCaseCard
           key={index}
+          indx={index}
           testCase={testCase}
           displayOnly={displayOnly}
           onClickVars={onClickVars(index)}
