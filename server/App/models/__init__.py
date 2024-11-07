@@ -8,6 +8,7 @@ from .ai_function import (
     TestCase,
 )
 from .body import Body
+from .generate import GenerateTestCasesInput
 from .json_schema import JsonSchema
 from .project import Project, ProjectPatchInput, ProjectRouteInput
 from .prompt import Prompt, PromptMessage, PromptRouteInput, PromptTag
@@ -19,6 +20,7 @@ from .user import User, UserRootInput, UserWithAccessToken
 __all__ = [
     "User",
     "UserRootInput",
+    "GenerateTestCasesInput",
     "UserWithAccessToken",
     "SuccessResponse",
     "Token",
