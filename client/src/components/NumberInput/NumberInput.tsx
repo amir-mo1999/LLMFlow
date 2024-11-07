@@ -34,14 +34,12 @@ const NumberInput: React.FC<NumberInputProps> = ({
   )
 
   useEffect(() => {
-    console.log(number?.toString(), inputValue)
     const inputValueNum = integer ? parseInt(inputValue, 10) : parseFloat(inputValue)
     if (number !== undefined && (inputValueNum > number || inputValueNum < number)) {
       setInputValue(number.toString())
     } else if (number === undefined && inputValue !== "") {
       setInputValue("")
     }
-    console.log("number state", number)
   }, [number, inputValue])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,13 +57,11 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
       if (value !== "" && value !== "-" && value !== "." && value !== "-.") {
         const num = integer ? parseInt(value, 10) : parseFloat(value)
-        console.log(num)
         if (!isNaN(num)) {
           let validatedNum = num
           if (positive && validatedNum < 0) validatedNum = 0
           if (minValue !== undefined && validatedNum < minValue) validatedNum = minValue
           if (maxValue !== undefined && validatedNum > maxValue) validatedNum = maxValue
-          console.log(validatedNum)
           setNumber(validatedNum)
           return
         }

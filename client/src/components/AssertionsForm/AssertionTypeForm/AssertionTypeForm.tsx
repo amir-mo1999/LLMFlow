@@ -33,13 +33,15 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
       componentToRender = <StringTypeForm value={value} setValue={setValue}></StringTypeForm>
       break
     case "javascript":
-      componentToRender = <CodeTypeForm extension="javascript" value={value} setValue={setValue}></CodeTypeForm>
+      componentToRender = (
+        <CodeTypeForm extension="javascript" value={value} setValue={setValue}></CodeTypeForm>
+      )
       break
     case "python":
-        componentToRender = (
-          <CodeTypeForm extension="python" value={value} setValue={setValue}></CodeTypeForm>
-        )
-        break
+      componentToRender = (
+        <CodeTypeForm extension="python" value={value} setValue={setValue}></CodeTypeForm>
+      )
+      break
     case "contains-all":
     case "contains-any":
     case "icontains-all":
@@ -51,27 +53,14 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
         </>
       )
       break
-    case "contains-xml":
-    case "is-xml":
-      componentToRender = (
-        <>
-          <Typography>Required XML Elements </Typography>{" "}
-          <ListTypesForm
-            open={open}
-            values={value}
-            placeholder="root.child"
-            setValues={setValue}
-          ></ListTypesForm>
-        </>
-      )
-      break
-    case "cost":
-    case "latency":
-    case "perplexity":
     case "perplexity-score":
-    case "rouge-n":
       componentToRender = (
-        <ThresholdTypeForm threshold={threshold} setThreshold={setThreshold}></ThresholdTypeForm>
+        <ThresholdTypeForm
+          threshold={threshold}
+          setThreshold={setThreshold}
+          minValue={0}
+          maxValue={1}
+        ></ThresholdTypeForm>
       )
       break
     case "levenshtein":

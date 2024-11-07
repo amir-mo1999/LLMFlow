@@ -141,25 +141,17 @@ export type BaseAssertionTypes =
   | "contains-all"
   | "contains-any"
   | "contains-json"
-  | "contains-sql"
-  | "contains-xml"
-  | "cost"
   | "equals"
   | "icontains"
   | "icontains-all"
   | "icontains-any"
   | "is-json"
-  | "is-sql"
-  | "is-xml"
   | "javascript"
-  | "latency"
   | "levenshtein"
   | "perplexity-score"
-  | "perplexity"
   | "python"
   | "regex"
-  | "rouge-n"
-  | "starts-with";
+  | "starts-with"
 
 export type Body = {
   [key: string]: string;
