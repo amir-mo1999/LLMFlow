@@ -3,6 +3,7 @@ import { Assertion, BaseAssertionTypes } from "@/api/apiSchemas"
 import StringTypeForm from "./StringTypesForm"
 import ListTypesForm from "./ListTypesForm"
 import ThresholdTypeForm from "./ThresholdTypeForm"
+import CodeTypeForm from "./CodeTypeForm"
 import { Typography } from "@mui/material"
 
 interface AssertionTypeFormProps {
@@ -27,11 +28,13 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
     case "contains":
     case "equals":
     case "icontains":
-    case "javascript":
-    case "python":
     case "regex":
     case "starts-with":
       componentToRender = <StringTypeForm value={value} setValue={setValue}></StringTypeForm>
+      break
+    case "javascript":
+    case "python":
+      componentToRender = <CodeTypeForm value={value} setValue={setValue}></CodeTypeForm>
       break
     case "contains-all":
     case "contains-any":
@@ -70,7 +73,7 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
     case "levenshtein":
       componentToRender = (
         <>
-          <StringTypeForm value={value} setValue={setValue} sx={{mb:1}}></StringTypeForm>
+          <StringTypeForm value={value} setValue={setValue} sx={{ mb: 1 }}></StringTypeForm>
           <ThresholdTypeForm threshold={threshold} setThreshold={setThreshold}></ThresholdTypeForm>
         </>
       )
