@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { ProviderExoticComponent, useState } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
@@ -38,7 +38,9 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
   onClickEdit,
 }) => {
   const [disableDelete, setDisableDelete] = useState(false)
-  const [selectedProvider, setSelectedProvider] = useState<Provider>()
+  const [selectedProvider, setSelectedProvider] = useState<Provider | undefined>(
+    prompt.evals ? (Object.keys(prompt.evals)[0] as Provider) : undefined
+  )
 
   const { mutate: deletePromptAPI } = useDeletePrompt({
     onSuccess: () => {
