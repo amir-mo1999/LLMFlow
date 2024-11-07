@@ -21,7 +21,7 @@ import PromptPaper from "./PromptPaper/PromptPaper"
 import PromptSingleOverview from "./PromptSingleOverview/PromptSingleOverview"
 import RegexInput from "./RegexInput/RegexInput"
 import SearchField from "./SearchField/SearchField"
-import SelectDialog from "./SelectDialog/SelectDialog"
+import SelectAIFunctionDialog from "./SelectAIFunctionDialog/SelectDialog"
 import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import TestCasesOverview from "./TestCasesOverview/TestCasesOverview"
 import ProjectPaper from "./ProjectPaper/ProjectPaper"
@@ -36,6 +36,7 @@ export {
   AssertionsForm,
   AssertionsOverview,
   NumberChip,
+  SelectAIFunctionDialog,
   TextChip,
   DateChip,
   UserChip,
@@ -57,7 +58,6 @@ export {
   PromptSingleOverview,
   RegexInput,
   SearchField,
-  SelectDialog,
   TestCasesForm,
   TestCasesOverview,
   ProjectPaper,

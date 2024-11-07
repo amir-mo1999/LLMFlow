@@ -1,11 +1,5 @@
 "use client"
-import {
-  ItemOverview,
-  MainContentContainer,
-  SideBarContainer,
-  PageContainer,
-  SearchField,
-} from "@/components"
+import { ItemOverview, MainContentContainer, SideBarContainer, PageContainer } from "@/components"
 import Button from "@mui/material/Button"
 import { useEvaluate } from "@/api/apiComponents"
 import { useState, useEffect, createContext, useContext } from "react"
@@ -43,7 +37,6 @@ export default function Layout({
   const { aiFunctions, prompts, setPrompts, refetchAIFunctions, refetchPrompts } =
     useContext(AppContext)
 
-  const [searchValue, setSearchValue] = useState("")
   const [selectedPromptIndx, setSelectedPromptIndx] = useState<number | undefined>()
 
   const router = useRouter()
@@ -113,9 +106,8 @@ export default function Layout({
   return (
     <PageContainer>
       <SideBarContainer>
-        <SearchField value={searchValue} setValue={setSearchValue} placeholder=""></SearchField>
         <Button
-          sx={{ marginTop: 2 }}
+          sx={{ marginBottom: 2 }}
           variant="contained"
           onClick={onClickCreate}
           disabled={aiFunctions.length === 0 ? true : false}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react"
 import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
 import { PromptRouteInput, PromptMessage, Prompt, AIFunction } from "@/api/apiSchemas"
-import { AIFunctionPaper, SelectDialog } from "@/components"
+import { AIFunctionPaper, SelectAIFunctionDialog } from "@/components"
 import { usePostPrompt, usePatchPrompt } from "@/api/apiComponents"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
@@ -310,12 +310,12 @@ const PromptForm: React.FC<PromptFormProps> = ({
           </>
         )}
       </Box>
-      <SelectDialog
+      <SelectAIFunctionDialog
         open={openSelectDialog}
         setOpen={setOpenSelectDialog}
         aiFunctions={aiFunctions}
         onClick={onClickAIFunction}
-      ></SelectDialog>
+      ></SelectAIFunctionDialog>
     </>
   )
 }

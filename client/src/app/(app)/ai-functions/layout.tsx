@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  ItemOverview,
-  MainContentContainer,
-  SideBarContainer,
-  PageContainer,
-  SearchField,
-} from "@/components"
+import { ItemOverview, MainContentContainer, SideBarContainer, PageContainer } from "@/components"
 import Button from "@mui/material/Button"
 import { useState, createContext, useContext } from "react"
 import { AIFunction } from "@/api/apiSchemas"
@@ -40,7 +34,6 @@ export default function Layout({
 }>) {
   const { aiFunctions, setAIFunctions } = useContext(AppContext)
 
-  const [searchValue, setSearchValue] = useState("")
   const [selectedAIFunctionIndx, setSelectedAIFunctionIndx] = useState<number | undefined>()
 
   const router = useRouter()
@@ -89,16 +82,11 @@ export default function Layout({
   return (
     <PageContainer>
       <SideBarContainer>
-        <SearchField
-          value={searchValue}
-          setValue={setSearchValue}
-          placeholder="AI Function Name"
-        ></SearchField>
-        <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
+        <Button sx={{ marginBottom: 2 }} variant="contained" onClick={onClickCreate}>
           Create AI Function
         </Button>
         <ItemOverview
-          itemType="AIFunction"
+          itemType="AI Function"
           selectedIndx={selectedAIFunctionIndx}
           items={aiFunctions}
           onClick={onClickAIFunction}

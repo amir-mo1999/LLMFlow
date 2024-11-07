@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  MainContentContainer,
-  SideBarContainer,
-  PageContainer,
-  SearchField,
-  ItemOverview,
-} from "@/components"
+import { MainContentContainer, SideBarContainer, PageContainer, ItemOverview } from "@/components"
 import Button from "@mui/material/Button"
 import { useState, createContext, useContext } from "react"
 import { AIFunction, Project } from "@/api/apiSchemas"
@@ -41,7 +35,6 @@ export default function Layout({
   const { aiFunctions, setAIFunctions, prompts, setPrompts, projects, setProjects } =
     useContext(AppContext)
 
-  const [searchValue, setSearchValue] = useState("")
   const [selectedProjectIndx, setSelectedProjectIndx] = useState<number | undefined>()
 
   const router = useRouter()
@@ -86,12 +79,7 @@ export default function Layout({
   return (
     <PageContainer>
       <SideBarContainer>
-        <SearchField
-          value={searchValue}
-          setValue={setSearchValue}
-          placeholder="Project Name"
-        ></SearchField>
-        <Button sx={{ marginTop: 2 }} variant="contained" onClick={onClickCreate}>
+        <Button sx={{ marginBottom: 2 }} variant="contained" onClick={onClickCreate}>
           Create Project
         </Button>
         <ItemOverview

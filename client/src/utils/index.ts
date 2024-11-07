@@ -207,11 +207,6 @@ export const providersArray: Provider[] = [
   "openai:gpt-3.5-turbo",
 ]
 
-
-
-
-
-
 export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "contains",
   "contains-all",
@@ -242,4 +237,28 @@ export function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
     }
   })
   return result
+}
+
+export function getNonMatchingIndices(
+  arr: Prompt[] | AIFunction[] | Project[],
+  searchValue: string,
+  itemType: "Prompt" | "AI Function" | "Project"
+): number[] {
+  const regex = new RegExp(searchValue, "i")
+
+  return arr
+    .map((item, index) => {
+      if (itemType === "Prompt") {
+        const prompt = item as Prompt
+        return regex.test(prompt.ai_function_name + prompt.index.toString()) ? -1 : index
+      } else if (itemType === "AI Function") {
+        const aiFunction = item as AIFunction
+        return regex.test(aiFunction.name) ? -1 : index
+      } else if (itemType === "Project") {
+        const project = item as Project
+        return regex.test(project.name) ? -1 : index
+      }
+      return -1
+    })
+    .filter((index) => index !== -1)
 }

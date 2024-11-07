@@ -6,7 +6,7 @@ import { Project } from "@/api/apiSchemas"
 import AIFunctionPaper from "../AIFunctionPaper/AIFunctionPaper"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
-import SelectDialog from "@/components/SelectDialog/SelectDialog"
+import { SelectAIFunctionDialog } from "@/components"
 import { usePostProject, usePatchProject } from "@/api/apiComponents"
 import { getProjectDiff } from "@/utils"
 import { ProjectAPIRoute } from "@/api/apiSchemas"
@@ -275,12 +275,12 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         </Box>
       </Box>
 
-      <SelectDialog
+      <SelectAIFunctionDialog
         open={openSelectAIFunction}
         aiFunctions={aiFunctions}
         setOpen={setOpenSelectAIFunction}
         onClick={onClickAIFunction}
-      ></SelectDialog>
+      ></SelectAIFunctionDialog>
     </>
   )
 }

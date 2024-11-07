@@ -2,6 +2,7 @@ import React from "react"
 
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
+import Box from "@mui/material/Box"
 import DialogContent from "@mui/material/DialogContent"
 import { ItemOverview } from "@/components"
 import { AIFunction, Prompt } from "@/api/apiSchemas"
@@ -14,7 +15,7 @@ interface SelectAIFunctionDialogProps {
   onClick?: (indx: number) => void
 }
 
-const SelectDialog: React.FC<SelectAIFunctionDialogProps> = ({
+const SelectAIFunctionDialog: React.FC<SelectAIFunctionDialogProps> = ({
   open,
   setOpen,
   aiFunctions,
@@ -34,11 +35,13 @@ const SelectDialog: React.FC<SelectAIFunctionDialogProps> = ({
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>Select AI Function</DialogTitle>
         <DialogContent>
-          <ItemOverview
-            itemType="AIFunction"
-            items={aiFunctions}
-            onClick={onClickPaper}
-          ></ItemOverview>
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <ItemOverview
+              itemType="AI Function"
+              items={aiFunctions}
+              onClick={onClickPaper}
+            ></ItemOverview>
+          </Box>
         </DialogContent>
       </Dialog>
     )
@@ -54,4 +57,4 @@ const SelectDialog: React.FC<SelectAIFunctionDialogProps> = ({
   }
 }
 
-export default SelectDialog
+export default SelectAIFunctionDialog
