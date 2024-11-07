@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import TextField from "@mui/material/TextField"
 import { SxProps, Theme } from "@mui/material/styles"
 
@@ -29,10 +29,23 @@ const NumberInput: React.FC<NumberInputProps> = ({
   disabled = false,
   sx,
 }) => {
+  const [inputValue, setInputValue] = useState<string>(
+    number !== undefined ? number.toString() : ""
+  )
+
+  useEffect(() => {
+    console.log(number?.toString(), inputValue)
+    const inputValueNum = integer ? parseInt(inputValue, 10) : parseFloat(inputValue)
+    if (number !== undefined && (inputValueNum > number || inputValueNum < number)) {
+      setInputValue(number.toString())
+    } else if (number === undefined && inputValue !== "") {
+      setInputValue("")
+    }
+    console.log("number state", number)
+  }, [number, inputValue])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-
-    // Regex to allow only numbers, optional decimal, and minus at start if not positive
     const regex = integer
       ? positive
         ? /^\d*$/
@@ -42,31 +55,23 @@ const NumberInput: React.FC<NumberInputProps> = ({
         : /^-?\d*\.?\d*$/
 
     if (regex.test(value)) {
-      let num: number | undefined = integer ? parseInt(value, 10) : parseFloat(value)
+      setInputValue(value)
 
-      if (value === "" || value === "-") {
-        setNumber(undefined)
-        return
+      if (value !== "" && value !== "-" && value !== "." && value !== "-.") {
+        const num = integer ? parseInt(value, 10) : parseFloat(value)
+        console.log(num)
+        if (!isNaN(num)) {
+          let validatedNum = num
+          if (positive && validatedNum < 0) validatedNum = 0
+          if (minValue !== undefined && validatedNum < minValue) validatedNum = minValue
+          if (maxValue !== undefined && validatedNum > maxValue) validatedNum = maxValue
+          console.log(validatedNum)
+          setNumber(validatedNum)
+          return
+        }
       }
 
-      if (isNaN(num)) {
-        setNumber(undefined)
-        return
-      }
-
-      if (positive && num < 0) {
-        num = 0
-      }
-
-      if (minValue !== undefined && num < minValue) {
-        num = minValue
-      }
-
-      if (maxValue !== undefined && num > maxValue) {
-        num = maxValue
-      }
-
-      setNumber(num)
+      setNumber(undefined)
     }
   }
 
@@ -88,7 +93,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   return (
     <TextField
       type="text"
-      value={number !== undefined ? number : ""}
+      value={inputValue}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       variant={variant}
