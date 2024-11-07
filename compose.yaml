@@ -4,8 +4,6 @@ services:
     hostname: client
     build:
       context: client/.
-    volumes:
-      - ./client/src:/home/appuser/src
     env_file:
       - ./client/.env
     ports:
@@ -18,14 +16,12 @@ services:
   server:
     container_name: server
     hostname: server
-    volumes:
-      - ./server/App:/home/appuser/App
     build:
       context: server/.
     ports:
       - "4000:4000"
     env_file:
-      - ./server/.env
+      - ./server/.docker.env
     networks:
       - app-network
     depends_on:
@@ -35,8 +31,6 @@ services:
   promptfoo-server:
     container_name: promptfoo-server
     hostname: promptfoo-server
-    volumes:
-      - ./promptfoo-server/src:/usr/src/app/src
     build:
       context: promptfoo-server/.
     ports:
