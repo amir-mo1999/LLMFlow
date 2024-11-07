@@ -23,6 +23,6 @@ app.post("/", async (req, res) => {
 });
 
 
-app.listen(port, () => {
+app.listen(port, "::", () => {
   console.log(`promptfoo-server listening on port ${port}`);
 });
