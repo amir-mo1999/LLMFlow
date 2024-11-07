@@ -78,7 +78,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
         setJsonAssertion(aiFunction.assert[jsonAssertionIndx])
       }
     }
-  }, [])
+  }, [aiFunction])
   //@ts-expect-error: Did not type examples
   const parsedExamples: AIFunctionRouteInput[] = examples
 
@@ -161,7 +161,14 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
     else setDisableSubmit(false)
   }
 
-  useEffect(updateDisableSubmit, [name, description, inputVariables, outputSchema, assertions])
+  useEffect(updateDisableSubmit, [
+    name,
+    description,
+    inputVariables,
+    outputSchema,
+    assertions,
+    providers,
+  ])
 
   useEffect(() => {
     if (useJsonSchema) {
