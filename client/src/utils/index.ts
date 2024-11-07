@@ -153,12 +153,13 @@ export function getEvalAverages(evals: Prompt["evals"]) {
       evals[provider].results.length
 
     meanScore += score
-    cost += cost
-    latency += latency
+    totalCost += cost
+    meanLatency += latency
   })
   meanScore /= providers.length
   meanScore = Math.round(meanScore * 100) / 100
   totalCost = Math.round(totalCost * 100000000) / 100000000
+  meanLatency /= providers.length
   meanLatency = Math.round(meanLatency)
 
   return [meanScore, totalCost, meanLatency]
