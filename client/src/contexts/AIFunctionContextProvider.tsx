@@ -7,12 +7,12 @@ import { AppContext } from "@/contexts"
 
 interface AIFunctionsContextProps {
   aiFunctions: AIFunction[]
-  addAIFunction: (aiFunction: AIFunction) => void
+  addAIFunction: (_: AIFunction) => void
   onDeleteAIFunction: () => void
-  setSelectedAIFunctionIndx: (indx: number | undefined) => void
-  setAIFunction: (aiFunction: AIFunction) => void
-  onClickEdit: (aiFunctionID: string) => void
-  onClickAddPrompt: (aiFunctionID: string) => void
+  setSelectedAIFunctionIndx: (_: number | undefined) => void
+  setAIFunction: (_: AIFunction) => void
+  onClickEdit: (_: string) => void
+  onClickAddPrompt: (_: string) => void
 }
 
 export const AIFunctionsContext = createContext<AIFunctionsContextProps>({

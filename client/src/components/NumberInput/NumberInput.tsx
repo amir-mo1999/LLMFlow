@@ -6,7 +6,7 @@ import { SxProps, Theme } from "@mui/material/styles"
 
 interface NumberInputProps {
   number?: number
-  setNumber: (value: number | undefined) => void
+  setNumber: (_: number | undefined) => void
   maxValue?: number
   minValue?: number
   integer?: boolean
@@ -40,7 +40,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     } else if (number === undefined && inputValue !== "") {
       setInputValue("")
     }
-  }, [number, inputValue])
+  }, [number, inputValue, integer])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value

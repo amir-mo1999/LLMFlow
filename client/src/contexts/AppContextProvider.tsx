@@ -8,9 +8,9 @@ interface AppContextProps {
   aiFunctions: AIFunction[]
   prompts: Prompt[]
   projects: Project[]
-  setAIFunctions: (aiFunctions: AIFunction[]) => void
-  setPrompts: (prompts: Prompt[]) => void
-  setProjects: (projects: Project[]) => void
+  setAIFunctions: (_: AIFunction[]) => void
+  setPrompts: (_: Prompt[]) => void
+  setProjects: (_: Project[]) => void
   refetchAIFunctions: () => void
   refetchPrompts: () => void
 }

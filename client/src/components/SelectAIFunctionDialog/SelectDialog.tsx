@@ -9,10 +9,10 @@ import { AIFunction, Prompt } from "@/api/apiSchemas"
 
 interface SelectAIFunctionDialogProps {
   open: boolean
-  setOpen: (open: boolean) => void
+  setOpen: (_: boolean) => void
   aiFunctions?: AIFunction[]
   prompts?: Prompt[]
-  onClick?: (indx: number) => void
+  onClick?: (_: number) => void
 }
 
 const SelectAIFunctionDialog: React.FC<SelectAIFunctionDialogProps> = ({

@@ -16,7 +16,7 @@ interface ProjectSingleOverviewProps {
   apiDocs?: OpenAPI
   isFetchingApiDocs?: boolean
   aiFunctions: AIFunction[]
-  onClickEdit?: (aiFunctionID: string) => void
+  onClickEdit?: (_: string) => void
 }
 
 const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({

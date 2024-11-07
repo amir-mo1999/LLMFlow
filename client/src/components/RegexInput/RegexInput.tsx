@@ -5,8 +5,8 @@ import { TextField, TextFieldProps } from "@mui/material"
 
 interface RegexInputProps {
   pattern?: string
-  setPattern: (pattern: string) => void
-  setError: (error: boolean) => void
+  setPattern: (_: string) => void
+  setError: (_: boolean) => void
   showError?: boolean
   variant?: TextFieldProps["variant"]
   size?: TextFieldProps["size"]
@@ -46,7 +46,7 @@ const RegexInput: React.FC<RegexInputProps> = ({
       new RegExp(value)
       setIsValid(true)
       setError(false)
-    } catch (e) {
+    } catch {
       setIsValid(false)
       setError(true)
     }

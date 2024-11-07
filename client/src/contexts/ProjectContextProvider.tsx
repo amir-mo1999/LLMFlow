@@ -8,21 +8,21 @@ import { AppContext } from "@/contexts"
 interface ProjectContextProps {
   projects: Project[]
   aiFunctions: AIFunction[]
-  onSubmitProject: (project: Project) => void
-  setProject: (project: Project) => void
+  onSubmitProject: (_: Project) => void
+  setProject: (_: Project) => void
   onDeleteProject: () => void
-  onClickEdit: (projectID: string) => void
-  setSelectedProjectIndx: (indx: number | undefined) => void
+  onClickEdit: (_: string) => void
+  setSelectedProjectIndx: (_: number | undefined) => void
 }
 
 export const ProjectContext = createContext<ProjectContextProps>({
   projects: [],
   aiFunctions: [],
-  onSubmitProject: (project: Project) => {},
-  setProject: (project: Project) => {},
+  onSubmitProject: () => {},
+  setProject: () => {},
   onDeleteProject: () => {},
-  onClickEdit: (projectID: string) => {},
-  setSelectedProjectIndx: (indx: number | undefined) => {},
+  onClickEdit: () => {},
+  setSelectedProjectIndx: () => {},
 })
 
 export default function ProjectContextProvider({
@@ -69,7 +69,7 @@ export default function ProjectContextProvider({
         setProject: setProject,
         onDeleteProject: onDeleteProject,
         onClickEdit: onClickEdit,
-        setSelectedProjectIndx: (indx: number | undefined) => {},
+        setSelectedProjectIndx: setSelectedProjectIndx,
       }}
     >
       {children}

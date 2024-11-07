@@ -8,7 +8,6 @@ import { useDeleteAiFunction } from "@/api/apiComponents"
 import { AIFunction } from "@/api/apiSchemas"
 import Chip from "@mui/material/Chip"
 import { addTitlesToSchema } from "@/utils"
-import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
 import {
   JsonSchemaEditor,
@@ -22,8 +21,8 @@ import {
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
   aiFunction: AIFunction
-  onClickEdit?: (aiFunctionID: string) => void
-  onClickAddPrompt?: (aiFunctionID: string) => void
+  onClickEdit?: (_: string) => void
+  onClickAddPrompt?: (_: string) => void
 }
 
 const options: Intl.DateTimeFormatOptions = {

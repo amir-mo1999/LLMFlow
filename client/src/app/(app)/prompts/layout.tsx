@@ -30,14 +30,6 @@ export default function Layout({
     return f
   }
 
-  useEffect(() => {
-    for (let i = 0; i < prompts.length; i++) {
-      if (!prompts[i].evals && !prompts[i].revision_required) {
-        evaluate({ pathParams: { promptId: prompts[i]._id as string } })
-      }
-    }
-  }, [prompts])
-
   const { mutate: evaluate } = useEvaluate({
     onSuccess: (response, vars) => {
       const newPrompts = prompts
@@ -50,6 +42,14 @@ export default function Layout({
       }
     },
   })
+
+  useEffect(() => {
+    for (let i = 0; i < prompts.length; i++) {
+      if (!prompts[i].evals && !prompts[i].revision_required) {
+        evaluate({ pathParams: { promptId: prompts[i]._id as string } })
+      }
+    }
+  }, [prompts, evaluate])
 
   if (!aiFunctions) {
     return <></>

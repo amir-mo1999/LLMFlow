@@ -18,8 +18,6 @@ interface UserAvatarProps {
 const UserAvatar: React.FC<UserAvatarProps> = ({ initials }) => {
   const [avatarEl, setAvatarEl] = React.useState<HTMLButtonElement | null>(null)
 
-  const [invisible, setInvisible] = React.useState(true)
-
   const handleAvatarClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAvatarEl(e.currentTarget)
   }

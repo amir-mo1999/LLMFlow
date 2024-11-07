@@ -1,3 +1,13 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "^_+$",
+        "argsIgnorePattern": "^_+$"
+      }
+    ]
+  },
+  "ignorePatterns": [".husky/", ".next/", "node_modules/", "src/api/", "public/**/*.js"]
 }

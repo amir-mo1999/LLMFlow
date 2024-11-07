@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 
-type HandlerFunction = (request: NextRequest, params: { path: string[] }) => Promise<NextResponse>
+type HandlerFunction = (_: NextRequest, __: { path: string[] }) => Promise<NextResponse>
 
 /**
  * Common handler to process all HTTP methods.
@@ -52,7 +52,7 @@ const handleRequest: HandlerFunction = async (request, { path }) => {
     try {
       const requestBody = await request.json()
       fetchOptions.body = JSON.stringify(requestBody)
-    } catch (error) {
+    } catch {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
     }
   }

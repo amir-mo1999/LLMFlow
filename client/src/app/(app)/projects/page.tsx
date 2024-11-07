@@ -5,6 +5,6 @@ import { ProjectContext } from "@/contexts"
 
 export default function Page() {
   const { setSelectedProjectIndx } = useContext(ProjectContext)
-  useEffect(() => setSelectedProjectIndx(undefined), [])
+  useEffect(() => setSelectedProjectIndx(undefined), [setSelectedProjectIndx])
   return <></>
 }

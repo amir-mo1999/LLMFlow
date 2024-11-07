@@ -8,13 +8,13 @@ import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/Add"
 
 interface PromptFormProps {
-  addPrompt: (prompt: Prompt) => void
+  addPrompt: (_: Prompt) => void
   aiFunctions: AIFunction[]
   selectedAIFunctionIndx?: number
   refetchAIFunctions: () => void
   edit?: boolean
   prompt?: Prompt
-  setPromptMessages?: (promptID: string, messages: PromptMessage[]) => void
+  setPromptMessages?: (_: string, __: PromptMessage[]) => void
 }
 
 const options: Intl.DateTimeFormatOptions = {
@@ -50,41 +50,36 @@ const PromptForm: React.FC<PromptFormProps> = ({
     textFieldRefs.current = textFieldRefs.current.slice(0, messages.length)
   }, [messages])
 
-  const inputVarsInMessage = (message: string) => {
-    if (selectedAIFunctionIndx !== undefined) {
-      const aiFunction = aiFunctions[selectedAIFunctionIndx]
-      return aiFunction.input_variables.every((inputVariable) =>
-        message.includes(`{{${inputVariable.name}}}`)
-      )
+  useEffect(() => {
+    const inputVarsInMessage = (message: string) => {
+      if (selectedAIFunctionIndx !== undefined) {
+        const aiFunction = aiFunctions[selectedAIFunctionIndx]
+        return aiFunction.input_variables.every((inputVariable) =>
+          message.includes(`{{${inputVariable.name}}}`)
+        )
+      }
     }
-  }
-
-  const updateDisableSubmit = () => {
     const messagesJoined = messages.every((msg) => msg.content !== "")
       ? messages.map((msg) => msg.content).join("")
       : ""
 
     setDisableSubmit(!inputVarsInMessage(messagesJoined))
-  }
-
-  useEffect(updateDisableSubmit, [messages, selectedAIFunctionIndx])
+  }, [messages, selectedAIFunctionIndx, aiFunctions])
 
   const { mutate: postPrompt } = usePostPrompt({
     onSuccess: (response) => {
       addPrompt(response as Prompt)
       refetchAIFunctions()
     },
-    onError: (err) => {},
   })
 
   const { mutate: patchPrompt } = usePatchPrompt({
-    onSuccess: (response, vars) => {
+    onSuccess: (_, vars) => {
       if (vars.body !== undefined && prompt) {
         const messages: PromptMessage[] = vars.body
         setPromptMessages(prompt._id as string, messages)
       }
     },
-    onError: (err) => {},
   })
 
   const onClickSubmit = () => {

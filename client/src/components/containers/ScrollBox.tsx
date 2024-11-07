@@ -2,7 +2,7 @@ import Box, { BoxProps } from "@mui/material/Box"
 import { styled } from "@mui/material/styles"
 
 // Define the styled component with scrollbar styles
-const StyledBox = styled(Box)(({ theme }) => ({
+const StyledBox = styled(Box)(() => ({
   /* Standard Scrollbar Styles for Firefox */
   scrollbarWidth: "thin",
   scrollbarColor: "rgba(80, 60, 128, 0.8) transparent",

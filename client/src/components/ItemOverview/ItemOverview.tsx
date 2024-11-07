@@ -10,7 +10,7 @@ type Item = "Prompt" | "AI Function" | "Project"
 
 interface ItemOverviewProps {
   itemType: Item
-  onClick?: (indx: number) => () => void
+  onClick?: (_: number) => () => void
   items: AIFunction[] | Prompt[] | Project[]
   selectedIndx?: number
 }
@@ -24,7 +24,7 @@ const ItemOverview: React.FC<ItemOverviewProps> = ({ itemType, onClick, items, s
   useEffect(() => {
     const newNonMatchingIndices = getNonMatchingIndices(items, searchValue, itemType)
     setNonMatchingIndices(newNonMatchingIndices)
-  }, [searchValue])
+  }, [searchValue, items, itemType])
 
   switch (itemType) {
     case "AI Function":

@@ -38,7 +38,7 @@ if (output) {
       setDefaultVal(
         extension === "python" ? pythonDefault : extension === "javascript" ? javascriptDefault : ""
       ),
-    [extension]
+    [extension, javascriptDefault, pythonDefault]
   )
 
   return (

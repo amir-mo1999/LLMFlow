@@ -25,11 +25,11 @@ const ListTypesForm: React.FC<ListTypesFormProps> = ({
   const [valuesList, setValuesList] = useState<string[]>([])
   useEffect(() => {
     if (Array.isArray(values)) setValuesList(values)
-  }, [open])
+  }, [open, values])
 
   useEffect(() => {
     setValues(valuesList)
-  }, [valuesList])
+  }, [valuesList, setValues])
 
   const handleValueChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatedValues = [...valuesList]

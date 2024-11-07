@@ -21,7 +21,7 @@ import { getEvalAverages } from "@/utils"
 interface PromptSingleOverviewProps {
   prompt: Prompt
   onDelete: () => void
-  onClickEdit: (promptID: string) => void
+  onClickEdit: (_: string) => void
 }
 
 const options: Intl.DateTimeFormatOptions = {
@@ -38,7 +38,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
   onDelete,
   onClickEdit,
 }) => {
-  const [disableDelete, setDisableDelete] = useState(false)
+  const [, setDisableDelete] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<Provider | undefined>(
     prompt.evals ? (Object.keys(prompt.evals)[0] as Provider) : undefined
   )
@@ -101,7 +101,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
       </Typography>
       {prompt.evals && (
         <Grid container columns={{ xs: 4, sm: 8, md: 8 }} width={700} rowGap={2}>
-          {Object.entries(prompt.evals).map(([provider, evalSummary], indx) => {
+          {Object.entries(prompt.evals).map(([provider, evalSummary]) => {
             const aux: Record<string, EvaluateSummary> = {}
             aux[provider] = evalSummary
             const [score, cost, latency] = getEvalAverages(aux)

@@ -12,8 +12,8 @@ import { getProjectDiff } from "@/utils"
 import { ProjectAPIRoute } from "@/api/apiSchemas"
 
 interface ProjectFormProps {
-  onSubmitProject?: (project: Project) => void
-  setProject?: (project: Project) => void
+  onSubmitProject?: (_: Project) => void
+  setProject?: (_: Project) => void
   editProject?: Project
   aiFunctions: AIFunction[]
 }
@@ -37,7 +37,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   editProject,
   aiFunctions,
 }) => {
-  const [initProject, _] = useState<Project>(
+  const [initProject] = useState<Project>(
     editProject ? JSON.parse(JSON.stringify(editProject)) : undefined
   )
 
@@ -57,7 +57,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       onSubmitProject?.(project)
     },
     onError: (err) => {
-      //@ts-ignore
+      //@ts-expect-error: Error not parsed correctly by fetcher
       if (err.stack.status === 409) {
         setNameError(true)
         if (nameRef.current) {
@@ -72,7 +72,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       setProject?.(project)
     },
     onError: (err) => {
-      //@ts-ignore
+      //@ts-expect-error: Error not parsed correctly by fetcher
       if (err.stack.status === 409) {
         setNameError(true)
         if (nameRef.current) {

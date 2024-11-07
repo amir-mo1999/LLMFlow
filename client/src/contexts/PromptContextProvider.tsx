@@ -10,11 +10,11 @@ interface PromptsContextProps {
   prompts: Prompt[]
   aiFunctions: AIFunction[]
   refetchAIFunctions: () => void
-  addPrompt: (prompt: Prompt) => void
+  addPrompt: (_: Prompt) => void
   onDeletePrompt: () => void
-  setSelectedPromptIndx: (indx: number | undefined) => void
-  onClickEdit: (promptID: string) => void
-  setPromptMessages: (promptID: string, messages: PromptMessage[]) => void
+  setSelectedPromptIndx: (_: number | undefined) => void
+  onClickEdit: (_: string) => void
+  setPromptMessages: (_: string, __: PromptMessage[]) => void
 }
 
 export const PromptsContext = createContext<PromptsContextProps>({
@@ -66,14 +66,6 @@ export default function PromptContextProvider({
     router.push("/prompts")
   }
 
-  useEffect(() => {
-    for (let i = 0; i < prompts.length; i++) {
-      if (!prompts[i].evals && !prompts[i].revision_required) {
-        evaluate({ pathParams: { promptId: prompts[i]._id as string } })
-      }
-    }
-  }, [prompts])
-
   const { mutate: evaluate } = useEvaluate({
     onSuccess: (response, vars) => {
       const newPrompts = prompts
@@ -86,6 +78,14 @@ export default function PromptContextProvider({
       }
     },
   })
+
+  useEffect(() => {
+    for (let i = 0; i < prompts.length; i++) {
+      if (!prompts[i].evals && !prompts[i].revision_required) {
+        evaluate({ pathParams: { promptId: prompts[i]._id as string } })
+      }
+    }
+  }, [prompts, evaluate])
 
   if (!aiFunctions) {
     return <></>

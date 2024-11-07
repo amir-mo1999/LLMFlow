@@ -13,7 +13,7 @@ import _ from "lodash"
 import { BaseAssertionTypes } from "@/api/apiSchemas"
 
 export function splitArrayIntoChunks<T>(array: T[], chunkSize: number): T[][] {
-  const result: Array<Array<any>> = []
+  const result: Array<Array<T>> = []
   for (let i = 0; i < array.length; i += chunkSize) {
     result.push(array.slice(i, i + chunkSize))
   }
@@ -176,9 +176,9 @@ export function getAIFunctionDiff(aiFunction: AIFunction, routeInput: AIFunction
   const newAIFunction: AIFunctionPatchInput = {}
 
   Object.keys(routeInput).forEach((key) => {
-    //@ts-ignore
+    //@ts-expect-error: type of keys not defined
     if (!_.isEqual(routeInput[key], aiFunction[key])) {
-      //@ts-ignore
+      //@ts-expect-error: type of keys not defined
       newAIFunction[key] = routeInput[key]
     }
   })
@@ -190,9 +190,9 @@ export function getProjectDiff(project: Project, routeInput: ProjectRouteInput) 
   const newProject: ProjectPatchInput = {}
 
   Object.keys(routeInput).forEach((key) => {
-    //@ts-ignore
+    //@ts-expect-error: type of keys not defined
     if (!_.isEqual(routeInput[key], project[key])) {
-      //@ts-ignore
+      //@ts-expect-error: type of keys not defined
       newProject[key] = routeInput[key]
     }
   })
@@ -224,7 +224,7 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
 export function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>
   keys.forEach((key) => {
-    //@ts-ignore
+    //@ts-expect-error: type of keys not defined
     if (key in obj) {
       result[key] = obj[key]
     }

@@ -15,7 +15,7 @@ import RegexInput from "@/components/RegexInput/RegexInput"
 
 interface StringDialogProps {
   stringSettings: StringSchema
-  onSubmit: (settings: StringSchema | NumberSchema | ArraySchema | ObjectSchema) => void
+  onSubmit: (_: StringSchema | NumberSchema | ArraySchema | ObjectSchema) => void
   onClose: () => void
   open: boolean
   displayOnly?: boolean

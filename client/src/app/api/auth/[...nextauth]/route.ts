@@ -39,7 +39,7 @@ async function refreshAccessToken(token: JWT) {
       accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     }
-  } catch (error) {
+  } catch {
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -71,7 +71,7 @@ const handler = NextAuth({
             name: user.name,
             email: user.email,
           })
-        } catch (error) {}
+        } catch {}
       }
 
       // Return previous token if the access token has not expired yet

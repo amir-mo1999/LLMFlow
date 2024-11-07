@@ -8,7 +8,6 @@ import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import UserAvatar from "./UserAvatar"
 import { useSession } from "next-auth/react"
-interface AppBarProps {}
 
 function getInitials(fullName: string): string {
   if (!fullName) return ""
@@ -23,7 +22,7 @@ function getInitials(fullName: string): string {
   return initials.join("")
 }
 
-const MyAppBar: React.FC<AppBarProps> = () => {
+const MyAppBar: React.FC = () => {
   const { data: session } = useSession()
 
   let initials: string

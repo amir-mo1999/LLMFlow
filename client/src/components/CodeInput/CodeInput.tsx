@@ -7,7 +7,7 @@ import { autocompletion } from "@codemirror/autocomplete"
 
 interface CodeInputProps {
   value: string
-  onChange: (value: string) => void
+  onChange: (_: string) => void
   extension: "python" | "javascript"
   sx?: SxProps
 }

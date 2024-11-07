@@ -5,6 +5,6 @@ import { AIFunctionsContext } from "@/contexts"
 
 export default function Page() {
   const { setSelectedAIFunctionIndx } = useContext(AIFunctionsContext)
-  useEffect(() => setSelectedAIFunctionIndx(undefined), [])
+  useEffect(() => setSelectedAIFunctionIndx(undefined), [setSelectedAIFunctionIndx])
   return <></>
 }
