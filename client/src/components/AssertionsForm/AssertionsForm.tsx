@@ -33,6 +33,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({
 
   const handleOpenEditDialog = (index: number) => {
     const f = () => {
+      if (jsonAssertion) index -= 1
       setCurrentIndex(index)
       setCurrentAssertion(assertions[index])
       setIsEditing(true)
