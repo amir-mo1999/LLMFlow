@@ -53,7 +53,6 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({
   }
 
   const handleUpdateAssertion = (index: number, assertion: Assertion) => {
-    if (jsonAssertion) index -= 1
     const updatedAssertions = [...assertions]
     updatedAssertions[index] = assertion
     setAssertions(updatedAssertions)
@@ -62,6 +61,7 @@ const AssertionsForm: React.FC<AssertionsFormProps> = ({
   const handleDeleteAssertion = (index: number) => {
     const f = () => {
       if (jsonAssertion) index -= 1
+
       const updatedAssertions = assertions.filter((_, i) => i !== index)
       setAssertions(updatedAssertions)
     }
