@@ -842,7 +842,10 @@ export type PromptRouteInput = {
   ai_function_id: string;
 };
 
-export type Provider = "openai:gpt-4o-mini" | "openai:gpt-4";
+export type Provider =
+  | "openai:gpt-4o-mini"
+  | "openai:gpt-4"
+  | "openai:gpt-3.5-turbo";
 
 export type ProviderResponse = {
   cached?: number | null;

@@ -120,7 +120,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
                     labelFirst
                     number={score as number}
                     label="Score"
-                    color={2 >= 0.8 ? "success" : 2 >= 0.4 ? "warning" : "error"}
+                    color={score >= 0.8 ? "success" : score >= 0.4 ? "warning" : "error"}
                     variant="filled"
                   />
                 </Grid>

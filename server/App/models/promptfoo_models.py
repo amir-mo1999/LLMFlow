@@ -125,7 +125,7 @@ class PromptMessage(RootModel):
 class Provider(str, Enum):
     gtp_4o_mini = "openai:gpt-4o-mini"
     gpt_4 = "openai:gpt-4"
-
+    gpt_3_5_turbo = "openai:gpt-3.5-turbo"
 
 class EvaluateInput(RootModel):
     prompts: List[List[PromptMessage]]

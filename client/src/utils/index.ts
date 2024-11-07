@@ -201,7 +201,16 @@ export function getProjectDiff(project: Project, routeInput: ProjectRouteInput) 
   return newProject
 }
 
-export const providersArray: Provider[] = ["openai:gpt-4o-mini", "openai:gpt-4"]
+export const providersArray: Provider[] = [
+  "openai:gpt-4o-mini",
+  "openai:gpt-4",
+  "openai:gpt-3.5-turbo",
+]
+
+
+
+
+
 
 export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "contains",
