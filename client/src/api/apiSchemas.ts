@@ -77,6 +77,10 @@ export type AIFunctionOutput = {
    * @example false
    */
   is_json: boolean;
+  /**
+   * @example openai:gpt-4o-mini
+   */
+  provider: Provider;
 };
 
 export type AIFunctionPatchInput = {

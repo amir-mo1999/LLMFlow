@@ -189,3 +189,4 @@ class AIFunctionOutput(RootModel):
     cost: float = Field(..., examples=[0.000001])
     latency: float = Field(..., examples=[1200])
     is_json: bool = Field(..., examples=[False])
+    provider: Provider = Field(..., examples=[Provider.gtp_4o_mini])

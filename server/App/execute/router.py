@@ -28,9 +28,9 @@ async def execute(
     project_path_name: str,
     ai_function_path_name: str,
     body: Body,
-    provider: Provider,
     db: Annotated[DB, Depends(get_db)],
     user: Annotated[User, Depends(user)],
+    provider: Optional[Provider] = None,
     prompt_tag: Optional[PromptTag] = Query(
         default="highest score",
         description="Specify by which criteria to select the prompt.",
@@ -55,7 +55,7 @@ async def execute(
         raise DocumentNotFound
     ai_function = await get_ai_function(ai_function_id, db, user)
 
-    if provider not in ai_function.providers:
+    if provider and provider not in ai_function.providers:
         raise HTTPException(
             status_code=400,
             detail=f"Provider {provider.value} not supported by AI Function {ai_function.name}",
@@ -69,13 +69,20 @@ async def execute(
     except ValueError as e:
         raise HTTPException(422, detail=str(e))
 
+    prompt = None
     # get prompt
     if prompt_id:
         prompt = await get_prompt(prompt_id, db, user)
+    elif provider:
+        prompt = await db.get_prompt_by_tag_and_provider(
+            ai_function.id, provider, prompt_tag
+        )
     else:
-        prompt = await db.get_prompt_by_tag(ai_function.id, provider, prompt_tag)
+        res = await db.get_prompt_by_tag(ai_function.id, prompt_tag)
+        if res:
+            prompt, provider = res
 
-    if prompt is None:
+    if prompt is None or provider is None:
         raise HTTPException(
             status_code=400,
             detail=f"No prompts defined for AI Function {ai_function.name}",

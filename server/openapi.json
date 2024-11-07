@@ -1401,9 +1401,17 @@
                     {
                         "name": "provider",
                         "in": "query",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "$ref": "#/components/schemas/Provider"
+                            "anyOf": [
+                                {
+                                    "$ref": "#/components/schemas/Provider"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Provider"
                         }
                     },
                     {
@@ -1721,6 +1729,12 @@
                         "examples": [
                             false
                         ]
+                    },
+                    "provider": {
+                        "$ref": "#/components/schemas/Provider",
+                        "examples": [
+                            "openai:gpt-4o-mini"
+                        ]
                     }
                 },
                 "type": "object",
@@ -1730,7 +1744,8 @@
                     "score",
                     "cost",
                     "latency",
-                    "is_json"
+                    "is_json",
+                    "provider"
                 ],
                 "title": "AIFunctionOutput"
             },

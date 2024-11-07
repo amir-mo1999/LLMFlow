@@ -1,5 +1,6 @@
 import json
 import os
+from copy import deepcopy
 from pathlib import Path
 from typing import Dict
 
@@ -118,7 +119,8 @@ async def generate_project_api_docs(
         )
 
         # set available providers for "provider" query param
-        for param in query_params:
+        query_params_copy = deepcopy(query_params)
+        for param in query_params_copy:
             if param.name == "provider":
                 param.param_schema = Schema(
                     type="string",
@@ -132,7 +134,7 @@ async def generate_project_api_docs(
             operation_id=path_name,
             requestBody=request_body,
             responses=responses,
-            parameters=query_params,
+            parameters=query_params_copy,
             tags=[ai_function.name],
         )
 

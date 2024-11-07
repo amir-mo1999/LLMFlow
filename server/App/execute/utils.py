@@ -75,6 +75,7 @@ async def execute_ai_function(provider: Provider,
             cost=result.cost,
             latency=result.latencyMs,
             is_json=is_json,
+            provider=provider
         )
 
         return output
