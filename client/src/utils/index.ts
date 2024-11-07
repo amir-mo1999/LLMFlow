@@ -213,8 +213,6 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "icontains",
   "icontains-all",
   "icontains-any",
-  "is-sql",
-  "is-xml",
   "javascript",
   "latency",
   "levenshtein",
@@ -222,7 +220,6 @@ export const baseAssertionTypesArray: BaseAssertionTypes[] = [
   "perplexity",
   "python",
   "regex",
-  "rouge-n",
   "starts-with",
 ]
 
