@@ -21,7 +21,7 @@ services:
     ports:
       - "4000:4000"
     env_file:
-      - ./server/.docker.env
+      - ./server/.env.docker
     networks:
       - app-network
     depends_on:
