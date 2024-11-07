@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext } from "react"
-import { PromptsContext } from "../../layout"
+import { PromptsContext } from "@/contexts"
 import { PromptForm } from "@/components"
 
 export default function Page({ params }: { params: { promptID: string } }) {

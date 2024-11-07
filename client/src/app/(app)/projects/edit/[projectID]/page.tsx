@@ -1,6 +1,6 @@
 "use client"
 import { useContext } from "react"
-import { ProjectContext } from "../../layout"
+import { ProjectContext } from "@/contexts"
 import { ProjectForm } from "@/components"
 
 export default function Page({ params }: { params: { projectID: string } }) {

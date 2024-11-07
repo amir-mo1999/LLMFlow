@@ -1,7 +1,7 @@
 "use client"
 import { ProjectSingleOverview } from "@/components"
 import { useContext } from "react"
-import { ProjectContext } from "../layout"
+import { ProjectContext } from "@/contexts"
 import { useGetProjectApiDocs } from "@/api/apiComponents"
 
 export default function Page({ params }: { params: { projectID: string } }) {

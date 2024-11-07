@@ -1,7 +1,7 @@
 "use client"
 import { PromptSingleOverview } from "@/components"
 import { useContext } from "react"
-import { PromptsContext } from "../layout"
+import { PromptsContext } from "@/contexts"
 
 export default function Page({ params }: { params: { promptID: string } }) {
   const { prompts, onDeletePrompt, onClickEdit, setSelectedPromptIndx } = useContext(PromptsContext)

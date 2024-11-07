@@ -1,6 +1,5 @@
 import { EvaluateResult } from "@/api/apiSchemas"
 import { SxProps } from "@mui/material"
-import theme from "@/theme"
 import { InputVariablePaper, InputVariableOverview } from "@/components"
 import Typography from "@mui/material/Typography"
 import React, { useState } from "react"
@@ -71,7 +70,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
           <NumberChip labelFirst number={latency} label="Latency" unit="ms" />
         </Stack>
 
-        <IconButton onClick={handleCollapse} sx={{ marginLeft: "auto", marginRight: 70 }}>
+        <IconButton onClick={handleCollapse} sx={{ marginLeft: "auto", marginRight: 65 }}>
           {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
         </IconButton>
       </Box>

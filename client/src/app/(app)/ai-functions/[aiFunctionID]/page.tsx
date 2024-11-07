@@ -1,7 +1,7 @@
 "use client"
 import { AIFunctionSingleOverview } from "@/components"
 import { useContext } from "react"
-import { AIFunctionsContext } from "../layout"
+import { AIFunctionsContext } from "@/contexts"
 
 export default function Page({ params }: { params: { aiFunctionID: string } }) {
   const {

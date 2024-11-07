@@ -1,7 +1,7 @@
 "use client"
 import { AIFunctionForm } from "@/components"
 import { useContext } from "react"
-import { AIFunctionsContext } from "../layout"
+import { AIFunctionsContext } from "@/contexts"
 
 export default function Page() {
   const { addAIFunction } = useContext(AIFunctionsContext)

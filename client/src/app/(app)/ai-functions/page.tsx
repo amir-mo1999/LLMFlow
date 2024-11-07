@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext, useEffect } from "react"
-import { AIFunctionsContext } from "./layout"
+import { AIFunctionsContext } from "@/contexts"
 
 export default function Page() {
   const { setSelectedAIFunctionIndx } = useContext(AIFunctionsContext)
