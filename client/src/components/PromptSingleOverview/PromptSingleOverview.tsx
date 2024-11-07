@@ -1,11 +1,10 @@
 "use client"
 
-import React, { ProviderExoticComponent, useState } from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
-import Stack from "@mui/material/Stack"
 import InputLabel from "@mui/material/InputLabel"
 import { Prompt, Provider, EvaluateSummary } from "@/api/apiSchemas"
 import { useDeletePrompt } from "@/api/apiComponents"
@@ -15,7 +14,7 @@ import Grid from "@mui/material/Grid"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import theme from "@/theme"
-import { PromptMessagesOverview, NumberChip } from "@/components"
+import { PromptMessagesOverview, NumberChip, DeleteButton, EditButton } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import { getEvalAverages } from "@/utils"
 
@@ -172,9 +171,10 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
       <Divider sx={{ marginY: 2 }}></Divider>
 
       {/* Delete Prompt Button */}
-      <Button variant="contained" color="error" onClick={handleDelete} disabled={disableDelete}>
-        Delete Prompt
-      </Button>
+      <Box>
+        <EditButton onClick={() => onClickEdit(prompt._id as string)} />
+        <DeleteButton onClick={handleDelete} />
+      </Box>
     </Box>
   )
 }

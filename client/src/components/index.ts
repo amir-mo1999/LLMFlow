@@ -26,8 +26,12 @@ import TestCasesForm from "./TestCasesForm/TestCasesForm"
 import TestCasesOverview from "./TestCasesOverview/TestCasesOverview"
 import ProjectPaper from "./ProjectPaper/ProjectPaper"
 import ProjectSingleOverview from "./ProjectSingleOverview/ProjectSingleOverview"
+import DeleteButton from "./Buttons/DeleteButton"
+import EditButton from "./Buttons/EditButton"
 
 export {
+  DeleteButton,
+  EditButton,
   AIFunctionForm,
   AIFunctionPaper,
   AIFunctionSingleOverview,

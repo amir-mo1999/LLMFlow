@@ -1,16 +1,14 @@
 "use client"
 import React from "react"
 import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { AIFunction, Project } from "@/api/apiSchemas"
-import DeleteIcon from "@mui/icons-material/Delete"
-import EditIcon from "@mui/icons-material/Edit"
 import { useDeleteProject } from "@/api/apiComponents"
 import SwaggerUI from "swagger-ui-react"
 import "swagger-ui-react/swagger-ui.css"
 import { OpenAPI } from "@/api/apiSchemas"
 import CircularProgress from "@mui/material/CircularProgress"
+import { EditButton, DeleteButton } from "@/components"
 
 interface ProjectSingleOverviewProps {
   onDeleteProject: () => void
@@ -57,22 +55,8 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <Box>
-        <Button
-          variant="contained"
-          sx={{ mr: 5 }}
-          onClick={() => onClickEdit(project._id as string)}
-          startIcon={<EditIcon sx={{ mb: 0.4 }} />}
-        >
-          Edit
-        </Button>
-        <Button
-          variant="contained"
-          color="error"
-          startIcon={<DeleteIcon sx={{ mb: 0.4 }} />}
-          onClick={onClickDelete}
-        >
-          Delete
-        </Button>
+        <EditButton onClick={() => onClickEdit(project._id as string)} />
+        <DeleteButton onClick={onClickDelete} />
       </Box>
       <style jsx global>{`
         /* Global styles to override Swagger UI defaults */

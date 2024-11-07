@@ -8,10 +8,16 @@ import { useDeleteAiFunction } from "@/api/apiComponents"
 import { AIFunction } from "@/api/apiSchemas"
 import Chip from "@mui/material/Chip"
 import { addTitlesToSchema } from "@/utils"
-import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import AddIcon from "@mui/icons-material/Add"
-import { JsonSchemaEditor, AssertionsOverview, TestCasesOverview, TextChip } from "@/components"
+import {
+  JsonSchemaEditor,
+  AssertionsOverview,
+  TestCasesOverview,
+  TextChip,
+  DeleteButton,
+  EditButton,
+} from "@/components"
 
 interface AIFunctionSingleOverviewProps {
   onDeleteAIFunction: () => void
@@ -152,14 +158,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
 
       <Divider sx={{ marginY: 2 }}></Divider>
       <Box>
-        <Button
-          variant="contained"
-          sx={{ mr: 5 }}
-          onClick={() => onClickEdit(aiFunction._id as string)}
-          startIcon={<EditIcon sx={{ mb: 0.4 }} />}
-        >
-          Edit
-        </Button>
+        <EditButton onClick={() => onClickEdit(aiFunction._id as string)} />
         <Button
           variant="contained"
           sx={{ mr: 5, display: onClickAddPrompt ? "normal" : "none" }}
@@ -168,14 +167,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
         >
           Add Prompt
         </Button>
-        <Button
-          variant="contained"
-          color="error"
-          startIcon={<DeleteIcon sx={{ mb: 0.4 }} />}
-          onClick={onClickDelete}
-        >
-          Delete
-        </Button>
+        <DeleteButton onClick={onClickDelete} />
       </Box>
     </Box>
   )
