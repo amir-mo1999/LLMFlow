@@ -63,7 +63,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, sx }) => {
         >
           <InputVariablePaper
             displayOnly
-            sx={{ maxHeight: 400 }}
+            sx={{ maxHeight: 500 }}
             content={output}
           ></InputVariablePaper>
         </Box>
