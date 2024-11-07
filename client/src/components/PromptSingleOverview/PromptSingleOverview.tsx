@@ -115,7 +115,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
                 <Grid xs={2} sm={4} md={2}>
                   <NumberChip labelFirst number={cost} label="Cost" unit="$" />
                 </Grid>
-                <Grid xs={2} sm={4} md={1}>
+                <Grid xs={2} sm={4} md={1.5}>
                   <NumberChip
                     labelFirst
                     number={score as number}
