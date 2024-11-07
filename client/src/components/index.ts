@@ -28,8 +28,10 @@ import ProjectPaper from "./ProjectPaper/ProjectPaper"
 import ProjectSingleOverview from "./ProjectSingleOverview/ProjectSingleOverview"
 import DeleteButton from "./Buttons/DeleteButton"
 import EditButton from "./Buttons/EditButton"
+import CodeInput from "./CodeInput/CodeInput"
 
 export {
+  CodeInput,
   DeleteButton,
   EditButton,
   AIFunctionForm,

@@ -30,6 +30,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/lang-python": "^6.1.6",
     "@openapi-codegen/cli": "^2.0.2",
     "@openapi-codegen/typescript": "^8.0.2",
     "@types/deep-diff": "^1.0.5",

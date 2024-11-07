@@ -33,9 +33,13 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
       componentToRender = <StringTypeForm value={value} setValue={setValue}></StringTypeForm>
       break
     case "javascript":
-    case "python":
-      componentToRender = <CodeTypeForm value={value} setValue={setValue}></CodeTypeForm>
+      componentToRender = <CodeTypeForm extension="javascript" value={value} setValue={setValue}></CodeTypeForm>
       break
+    case "python":
+        componentToRender = (
+          <CodeTypeForm extension="python" value={value} setValue={setValue}></CodeTypeForm>
+        )
+        break
     case "contains-all":
     case "contains-any":
     case "icontains-all":
