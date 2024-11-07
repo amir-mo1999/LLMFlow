@@ -93,6 +93,12 @@ async def execute(
             detail=f"No prompts defined for AI Function {ai_function.name}",
         )
 
+    if prompt.ai_function_id != ai_function.id:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Prompt {prompt.id} is not defined under the given AI Function",
+        )
+
     # execute
     result = await execute_ai_function(
         provider, prompt, ai_function.assertions, test_case
