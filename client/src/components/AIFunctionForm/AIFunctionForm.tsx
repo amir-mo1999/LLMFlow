@@ -23,12 +23,11 @@ import MenuItem from "@mui/material/MenuItem"
 import Divider from "@mui/material/Divider"
 import { usePostAiFunction, usePatchAiFunction } from "@/api/apiComponents"
 import examples from "@/examples/aiFunctions.json"
-import _ from "lodash"
 
 interface AIFunctionFormProps {
-  addAIFunction: (aiFunction: AIFunction) => void
+  addAIFunction: (_: AIFunction) => void
   aiFunction?: AIFunction
-  setAIFunction?: (newAIFunction: AIFunction) => void
+  setAIFunction?: (_: AIFunction) => void
 }
 
 const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
@@ -36,7 +35,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   aiFunction,
   setAIFunction = () => {},
 }) => {
-  const [initAIFunction, _] = useState<AIFunction>(
+  const [initAIFunction, ] = useState<AIFunction>(
     aiFunction ? JSON.parse(JSON.stringify(aiFunction)) : undefined
   )
 
@@ -80,11 +79,11 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       }
     }
   }, [])
-  //@ts-ignore
+  //@ts-expect-error: Did not type examples
   const parsedExamples: AIFunctionRouteInput[] = examples
 
   const onClickExample = (aiFunction: AIFunctionRouteInput) => {
-    const f = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    const f = () => {
       setName(aiFunction.name)
       setDescription(aiFunction.description)
       setInputVariables(aiFunction.input_variables)
@@ -128,7 +127,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       addAIFunction(response)
     },
     onError: (err) => {
-      //@ts-ignore
+      //@ts-expect-error: Fetcher does not parse error correctly
       if (err.stack.status === 409) {
         setNameError(true)
         if (nameRef.current) {
@@ -143,7 +142,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       setAIFunction(response)
     },
     onError: (err) => {
-      //@ts-ignore
+      //@ts-expect-error: Fetcher does not parse error correctly
       if (err.stack.status === 409) {
         setNameError(true)
         if (nameRef.current) {
