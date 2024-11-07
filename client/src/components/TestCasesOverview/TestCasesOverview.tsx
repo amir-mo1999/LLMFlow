@@ -11,9 +11,9 @@ interface TestCasesOverviewProps {
   testCases: TestCaseInput[]
   displayOnly?: boolean
   sx?: SxProps
-  onClickVars?: (index: number) => () => void
-  setAssertions?: (index: number) => (assertions: Assertion[]) => void
-  onDelete?: (index: number) => () => void
+  onClickVars?: (_: number) => () => void
+  setAssertions?: (_: number) => (_: Assertion[]) => void
+  onDelete?: (_: number) => () => void
 }
 
 const TestCasesOverview: React.FC<TestCasesOverviewProps> = ({
