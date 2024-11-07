@@ -5,7 +5,7 @@ services:
     build:
       context: client/.
     env_file:
-      - ./client/.env
+      - ./client/.env.docker
     ports:
       - "3000:3000"
     networks:
