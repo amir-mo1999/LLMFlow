@@ -6,6 +6,7 @@ from App.db.routes.ai_function import get_ai_function
 from App.db.routes.prompt import get_prompt
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound
+from aiohttp.client_exceptions import ServerDisconnectedError
 from App.models import AIFunctionOutput, Body, PromptTag, Provider, TestCase, User
 
 from .utils import execute_ai_function
@@ -100,7 +101,13 @@ async def execute(
         )
 
     # execute
-    result = await execute_ai_function(
-        provider, prompt, ai_function.assertions, test_case
-    )
+    try:
+        result = await execute_ai_function(
+            provider, prompt, ai_function.assertions, test_case
+        )
+    except ServerDisconnectedError:
+        raise HTTPException(
+            status_code=500,
+            detail="promptfoo-server could not process request",
+        )
     return result

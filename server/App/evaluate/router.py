@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from App.dependencies import DB, get_db, user
 from App.http_exceptions import DocumentNotFound
 from App.models import EvaluateSummary, Provider
+from aiohttp.client_exceptions import ServerDisconnectedError
 
 from .utils import eval_prompt
 
@@ -40,6 +41,11 @@ async def evaluate(
         evals = await eval_prompt(prompt, ai_function)
     except ValueError as e:
         raise HTTPException(422, str(e))
+    except ServerDisconnectedError:
+        raise HTTPException(
+            500,
+            detail="promptfoo-server could not process request",
+        )
 
     # post EvaluateSummary to prompt
     await db.post_eval(evals, prompt.id) # TODO: update

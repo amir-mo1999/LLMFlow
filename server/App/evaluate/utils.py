@@ -4,6 +4,7 @@ from typing import Dict, List, Literal
 
 import aiohttp
 from aiohttp import ClientSession
+from aiohttp.client_exceptions import ServerDisconnectedError
 from fastapi import APIRouter
 
 from App.models import (
@@ -62,17 +63,20 @@ async def _fetch(
     provider: Provider,
     evaluate_input: EvaluateInput,
 ) -> None:
-    dump = evaluate_input.model_dump(by_alias=True)
-    res = await session.post(
-        PROMPTFOO_SERVER_URL,
-        json=dump,
-        headers={"Content-Type": "application/json"},
-    )
+    try:
+        dump = evaluate_input.model_dump(by_alias=True)
+        res = await session.post(
+            PROMPTFOO_SERVER_URL,
+            json=dump,
+            headers={"Content-Type": "application/json"},
+        )
 
-    # create EvaluateSummary
-    data = await res.json()
-    summary = EvaluateSummary(
-        timestamp=data["timestamp"], results=data["results"], stats=data["stats"]
-    )
+        # create EvaluateSummary
+        data = await res.json()
+        summary = EvaluateSummary(
+            timestamp=data["timestamp"], results=data["results"], stats=data["stats"]
+        )
 
-    eval_summary_mapping[provider] = summary
+        eval_summary_mapping[provider] = summary
+    except ServerDisconnectedError:
+        return
