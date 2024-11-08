@@ -108,13 +108,13 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
 
             return (
               <Grid container direction="row" columnGap={4} key={indx}>
-                <Grid xs={true}>
+                <Grid xs>
                   <Typography>{provider}</Typography>
                 </Grid>
-                <Grid>
+                <Grid xs>
                   <NumberChip labelFirst number={cost} label="Cost" unit="$" />
                 </Grid>
-                <Grid>
+                <Grid xs>
                   <NumberChip
                     labelFirst
                     number={score as number}
@@ -123,7 +123,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
                     variant="filled"
                   />
                 </Grid>
-                <Grid>
+                <Grid xs>
                   <NumberChip
                     labelFirst
                     number={latency as number}
