@@ -14,18 +14,22 @@ function GenerateTestCases(params: GenTestCasesParams) -> GenTestCases {
     client GPT4Mini
     prompt #"
         To test out a function I wrote I require additional testing data.
-        Here is a short description of my function:
+        Here is a short description of the function:
+
         {{params.description}}
 
-        Generate data points for my function that each contain a value for the following fields:
+        Generate one to two data points for my function that each contain a value for the following fields:
         {% for var in params.input_variables %}
         {{ var }},
         {% endfor %}
 
-        Here are some examples, note that the examples your generate must not necessarily be similiar but they most contain the same fields:
+        Here are some examples:
         {% for test_case in params.test_cases %}
         {{ test_case}},
         {% endfor %}
+
+        If the provided is not sufficient to generate data points, simply output "insufficient context".
+        Note that the data points must not necessarily be exactly like the examples. They may differ. But they must all contain the specified fields.
     "#
 }
 
