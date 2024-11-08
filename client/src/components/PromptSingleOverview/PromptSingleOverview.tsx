@@ -100,15 +100,15 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
         Model Results
       </Typography>
       {prompt.evals && (
-        <Grid container columns={{ xs: 4, sm: 8, md: 8 }} width={700} columnGap={2}>
-          {Object.entries(prompt.evals).map(([provider, evalSummary]) => {
+        <Grid container direction="column" rowGap={1} width={700} columnGap={2}>
+          {Object.entries(prompt.evals).map(([provider, evalSummary], indx) => {
             const aux: Record<string, EvaluateSummary> = {}
             aux[provider] = evalSummary
             const [score, cost, latency] = getEvalAverages(aux)
 
             return (
-              <>
-                <Grid>
+              <Grid container direction="row" columnGap={4} key={indx}>
+                <Grid xs={true}>
                   <Typography>{provider}</Typography>
                 </Grid>
                 <Grid>
@@ -132,7 +132,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
                     sx={{ marginLeft: 0 }}
                   />
                 </Grid>
-              </>
+              </Grid>
             )
           })}
         </Grid>
