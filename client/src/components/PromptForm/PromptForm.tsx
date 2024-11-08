@@ -72,6 +72,10 @@ const PromptForm: React.FC<PromptFormProps> = ({
   const textFieldRefs = useRef<(HTMLTextAreaElement | null)[]>([])
 
   useEffect(() => {
+    setMessages([])
+  }, [selectedAIFunctionIndx])
+  
+  useEffect(() => {
     textFieldRefs.current = textFieldRefs.current.slice(0, messages.length)
   }, [messages])
 
