@@ -1,11 +1,34 @@
 import React, { useEffect, useState, useRef } from "react"
-import { Typography, Select, MenuItem, Button, Box, TextField, Chip, Paper } from "@mui/material"
+import {
+  Typography,
+  Select,
+  MenuItem,
+  Button,
+  Box,
+  TextField,
+  Chip,
+  Paper,
+  IconButton,
+} from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
-import { PromptRouteInput, PromptMessage, Prompt, AIFunction } from "@/api/apiSchemas"
+import {
+  PromptRouteInput,
+  PromptMessage,
+  Prompt,
+  AIFunction,
+  GenParams,
+  RoleEnum,
+  GenRole,
+} from "@/api/apiSchemas"
 import { AIFunctionPaper, SelectAIFunctionDialog } from "@/components"
 import { usePostPrompt, usePatchPrompt } from "@/api/apiComponents"
 import Divider from "@mui/material/Divider"
+import Snackbar from "@mui/material/Snackbar"
 import AddIcon from "@mui/icons-material/Add"
+import CloseIcon from "@mui/icons-material/Close"
+import { useGeneratePromptMessages } from "@/api/apiComponents"
+import CircularProgress from "@mui/material/CircularProgress"
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome"
 
 interface PromptFormProps {
   addPrompt: (_: Prompt) => void
@@ -43,6 +66,8 @@ const PromptForm: React.FC<PromptFormProps> = ({
   )
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
   const [openSelectDialog, setOpenSelectDialog] = useState<boolean>(false)
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [snackbarMsg, setSnackbarMsg] = useState("")
 
   const textFieldRefs = useRef<(HTMLTextAreaElement | null)[]>([])
 
@@ -159,6 +184,58 @@ const PromptForm: React.FC<PromptFormProps> = ({
     setSelectedAIFunctionIndx(indx)
   }
 
+  const { mutate: generatePromptMessages, isPending: isGenerating } = useGeneratePromptMessages({
+    onSuccess: (res) => {
+      const newMessages: PromptMessage[] = []
+
+      res.forEach((msg) => {
+        const conversion: Record<GenRole, RoleEnum> = {
+          System: "system",
+          Assistant: "assistant",
+          User: "user",
+        }
+
+        const newMsg: PromptMessage = {
+          role: conversion[msg.role],
+          content: msg.content,
+        }
+
+        newMessages.push(newMsg)
+      })
+
+      setMessages([...newMessages])
+
+      setSnackbarMsg("Prompt generated")
+      setOpenSnackbar(true)
+    },
+    onError: () => {
+      setSnackbarMsg("Failed to generate prompt")
+      setOpenSnackbar(true)
+    },
+  })
+
+  const onClickGenerate = () => {
+    if (selectedAIFunctionIndx !== undefined) {
+      const aiFunction = aiFunctions[selectedAIFunctionIndx]
+
+      const varNames = aiFunction.input_variables.reduce((acc, inputVar) => {
+        acc.push(inputVar.name)
+        return acc
+      }, [] as string[])
+
+      if (aiFunction.test_cases.length >= 1) {
+        const body: GenParams = {
+          name: aiFunction.name,
+          description: aiFunction.description,
+          test_case: aiFunction.test_cases[0].vars,
+          variables: varNames,
+        }
+
+        generatePromptMessages({ body: body })
+      }
+    }
+  }
+
   if (aiFunctions.length === 0) {
     return <></>
   }
@@ -203,9 +280,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
         </Box>
         <Divider sx={{ marginY: 2 }}></Divider>
 
-        {selectedAIFunctionIndx === undefined ? (
-          <></>
-        ) : (
+        {selectedAIFunctionIndx !== undefined && (
           <>
             <Typography variant="h5" gutterBottom>
               Variables
@@ -227,6 +302,9 @@ const PromptForm: React.FC<PromptFormProps> = ({
 
               <Button onClick={addMessage}>
                 <AddIcon />
+              </Button>
+              <Button onClick={onClickGenerate} disabled={isGenerating ? true : false}>
+                {isGenerating ? <CircularProgress size={23} /> : <AutoAwesomeIcon />}
               </Button>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -311,6 +389,18 @@ const PromptForm: React.FC<PromptFormProps> = ({
         aiFunctions={aiFunctions}
         onClick={onClickAIFunction}
       ></SelectAIFunctionDialog>
+      <Snackbar
+        open={openSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        message={snackbarMsg}
+        action={
+          <IconButton size="small" color="primary" onClick={() => setOpenSnackbar(false)}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </>
   )
 }

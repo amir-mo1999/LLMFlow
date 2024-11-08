@@ -117,7 +117,7 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
           <AddIcon />
         </Button>
         <Button onClick={onGenerate} disabled={isGeneratingTestCases ? true : false}>
-          {isGeneratingTestCases ? <CircularProgress size={25} /> : <AutoAwesomeIcon />}
+          {isGeneratingTestCases ? <CircularProgress size={23} /> : <AutoAwesomeIcon />}
         </Button>
       </Box>
 
