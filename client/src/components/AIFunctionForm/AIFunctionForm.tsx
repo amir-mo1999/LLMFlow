@@ -78,7 +78,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   )
   const [disableSubmit, setDisableSubmit] = useState<boolean>(false)
 
-  const [openSnackbar, setOpenSnackbar] = useState(true)
+  const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackbarMsg, setSnackbarMsg] = useState("")
 
   useEffect(() => {

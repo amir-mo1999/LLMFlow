@@ -56,28 +56,29 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
       }}
     >
       <Grid
-        spacing={1}
+        columnGap={2}
         container
         sx={{ alignItems: "center", width: "100%", mt: 0 }}
         direction={"row"}
       >
         <Grid>
-          <Typography sx={{ color: theme.palette.primary.main }} noWrap variant="h6">
-            # {index}
-          </Typography>
+          <Box display="flex" alignItems={"center"}>
+            <Typography sx={{ color: theme.palette.primary.main }} noWrap variant="h6">
+              # {index}
+            </Typography>
+            <IconButton onClick={handleCollapse}>
+              {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
+            </IconButton>
+          </Box>
         </Grid>
-        <Grid>
-          <IconButton onClick={handleCollapse}>
-            {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
-          </IconButton>
-        </Grid>
+
         {cost && (
-          <Grid xs={2}>
+          <Grid>
             <NumberChip labelFirst number={cost} label="Cost" unit="$" />
           </Grid>
         )}
         {score && (
-          <Grid xs={1}>
+          <Grid>
             <NumberChip
               labelFirst
               number={score as number}

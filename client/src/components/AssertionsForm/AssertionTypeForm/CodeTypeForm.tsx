@@ -13,7 +13,7 @@ interface CodeTypeFormProps {
 }
 
 const CodeTypeForm: React.FC<CodeTypeFormProps> = ({ value, setValue, extension, sx }) => {
-  const pythonDefault = `# Define logic for your assertion by writing a script that either returns True or False depending on if the assertion is met
+  const pythonDefault = `# Implement your assertion logic as a script that returns 'True' if the result passed the assertion and 'False' otherwise
 # the 'output' variable is injected which holds the Provider response as a string
 if output:
     return True
@@ -21,7 +21,7 @@ else:
     return False
 `
 
-  const javascriptDefault = `// Define logic for your assertion by writing a script that either returns true or false depending on if the assertion is met
+  const javascriptDefault = `// Implement your assertion logic as a script that returns 'true' if the result passed the assertion and 'false' otherwise
 // the 'output' variable is injected which holds the Provider response as a string
 if (output) {
   return true

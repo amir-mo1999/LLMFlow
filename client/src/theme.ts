@@ -137,7 +137,6 @@ export const lightThemeOptions: ThemeOptions = {
         root: {
           "&:hover": {
             backgroundColor: "#313323",
-            color: "red",
           },
         },
       },

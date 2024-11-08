@@ -52,21 +52,22 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
     >
       <Grid
         container
-        spacing={1}
+        columnGap={2}
         sx={{ alignItems: "center", justifyContent: "space-between", width: "100%", mt: 0 }}
       >
         <Grid>
-          <Typography sx={{ color: theme.palette.primary.main }} variant="h6">
-            # {indx}
-          </Typography>
+          <Box display="flex" alignItems="center">
+            <Typography sx={{ color: theme.palette.primary.main }} variant="h6">
+              # {indx}
+            </Typography>
+            <IconButton onClick={handleCollapse}>
+              {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
+            </IconButton>
+          </Box>
         </Grid>
-        <Grid>
-          <IconButton onClick={handleCollapse}>
-            {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
-          </IconButton>
-        </Grid>
+
         {testCase.assert && (
-          <Grid xs={2}>
+          <Grid>
             <NumberChip
               number={testCase.assert.length}
               label={testCase.assert.length === 1 ? "Assertion" : "Assertions"}

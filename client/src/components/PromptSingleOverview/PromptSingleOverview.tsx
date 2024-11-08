@@ -100,7 +100,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
         Model Results
       </Typography>
       {prompt.evals && (
-        <Grid container columns={{ xs: 4, sm: 8, md: 8 }} width={700} rowGap={2}>
+        <Grid container columns={{ xs: 4, sm: 8, md: 8 }} width={700} columnGap={2}>
           {Object.entries(prompt.evals).map(([provider, evalSummary]) => {
             const aux: Record<string, EvaluateSummary> = {}
             aux[provider] = evalSummary
@@ -108,13 +108,13 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
 
             return (
               <>
-                <Grid xs={2} sm={4} md={2}>
+                <Grid>
                   <Typography>{provider}</Typography>
                 </Grid>
-                <Grid xs={2} sm={4} md={2}>
+                <Grid>
                   <NumberChip labelFirst number={cost} label="Cost" unit="$" />
                 </Grid>
-                <Grid xs={2} sm={4} md={1.5}>
+                <Grid>
                   <NumberChip
                     labelFirst
                     number={score as number}
@@ -123,7 +123,7 @@ const PromptSingleOverview: React.FC<PromptSingleOverviewProps> = ({
                     variant="filled"
                   />
                 </Grid>
-                <Grid xs={2} sm={4} md={2}>
+                <Grid>
                   <NumberChip
                     labelFirst
                     number={latency as number}
