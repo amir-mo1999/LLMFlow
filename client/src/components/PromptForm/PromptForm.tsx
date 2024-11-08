@@ -72,10 +72,6 @@ const PromptForm: React.FC<PromptFormProps> = ({
   const textFieldRefs = useRef<(HTMLTextAreaElement | null)[]>([])
 
   useEffect(() => {
-    setMessages([])
-  }, [selectedAIFunctionIndx])
-
-  useEffect(() => {
     textFieldRefs.current = textFieldRefs.current.slice(0, messages.length)
   }, [messages])
 
@@ -126,6 +122,10 @@ const PromptForm: React.FC<PromptFormProps> = ({
       }
     }
   }
+
+  useEffect(() => {
+    if (!edit) setMessages([])
+  }, [selectedAIFunctionIndx, edit])
 
   const handleRoleChange = (index: number, newRole: "user" | "system" | "assistant") => {
     const updatedMessages = [...messages]
@@ -259,7 +259,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
           </Box>
         )}
         {selectedAIFunctionIndx !== undefined && (
-          <Box sx={{ display: edit ? "none" : "normal" }}>
+          <Box>
             <Divider sx={{ marginY: 2 }}></Divider>
             <Typography variant="h5" gutterBottom>
               Selected AI Function
