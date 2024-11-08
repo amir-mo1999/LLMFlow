@@ -39,7 +39,7 @@ function GenerateTestCases(params: GenParams) -> GenTestCase[] {
         {{params.test_case}}
 
 
-        If the provided informtation is not sufficient to generate data points, simply output "insufficient context".
+        If the provided information is not sufficient to generate data points, simply output "insufficient context".
         Do not exactly follow the example provided. The data points you generate may differ from the example but they must contain the same fields.
     "#
 }
@@ -49,8 +49,25 @@ function GeneratePromptMessages(params: GenParams) -> GenPromptMessage[] {
   client GPT4Mini
 
   prompt #"
-    I defined an AI function that takes a set parameters as input and returns a specific output. The AI function is called {{params.name}}.
-    Here is a short description of the function {{params.description}}.
+    I defined an AI function that takes a set of parameters as input and returns a specific output. Now I must define a prompt for this function.
+    A prompt consists of several prompt messages. Prompt messages follow the OpenAI specification. Each prompt message has a role: "user", "system" or "assistant" and content as a string.
+    
+    Each parameter of the AI function must be contained in at least one prompt message in between two sets of braces.
+
+    Here is an example of a prompt for the AI Function “Translate Text” that translates text to a target language, which takes the parameters: “text” and “language”:
+    [
+        {
+            "role": "system",
+            "content": "You are a translation AI that accurately translates text into specified target languages."
+        },
+        {
+            "role": "user",
+            "content": "Translate the following text into {% raw %}{{language}}{% endraw %}: {% raw %}{{text}}{% endraw %}"
+        }
+    ]
+
+    Now generate a prompt for the AI function: {{params.name}}.
+    Here is a short description of the function: {{params.description}}.
 
     The function takes the following parameters as input:
     {% for var in params.variables %}
@@ -60,9 +77,7 @@ function GeneratePromptMessages(params: GenParams) -> GenPromptMessage[] {
     Here are example values for each parameter:
     {{params.test_case}}
 
-    A prompt is a set of prompt messages. Prompt messages follow the OpenAI specification. Each prompt message has a role: "user", "system" or "assistent" and content as a string.
-    The prompt you generate may contain up to three prompt messages.
-
-    Generate a prompt for the described AI Function in the specified output format for a prompt.
+    If the provided context is not sufficient to generate a prompt simply output: "insufficient context".
   "#
+
 }
