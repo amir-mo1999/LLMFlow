@@ -1064,6 +1064,54 @@ export const useExecute = (
   })
 }
 
+export type GenerateTestCasesError = Fetcher.ErrorWrapper<
+  | {
+      status: 400
+      payload: Schemas.HttpExceptionModel
+    }
+  | {
+      status: 422
+      payload: Schemas.HTTPValidationError
+    }
+>
+
+export type GenerateTestCasesVariables = {
+  body: Schemas.GenTestCasesParams
+} & ApiContext["fetcherOptions"]
+
+export const fetchGenerateTestCases = (
+  variables: GenerateTestCasesVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<Schemas.GenTestCases, GenerateTestCasesError, Schemas.GenTestCasesParams, {}, {}, {}>({
+    url: "/generate/test-cases",
+    method: "post",
+    ...variables,
+    signal,
+  })
+
+export const useGenerateTestCases = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.GenTestCases,
+      GenerateTestCasesError,
+      GenerateTestCasesVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useApiContext()
+  return reactQuery.useMutation<
+    Schemas.GenTestCases,
+    GenerateTestCasesError,
+    GenerateTestCasesVariables
+  >({
+    mutationFn: (variables: GenerateTestCasesVariables) =>
+      fetchGenerateTestCases({ ...fetcherOptions, ...variables }),
+    ...options,
+  })
+}
+
 export type QueryOperation =
   | {
       path: "/user/{username}"

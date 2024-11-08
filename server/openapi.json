@@ -1513,6 +1513,63 @@
                     }
                 }
             }
+        },
+        "/generate/test-cases": {
+            "post": {
+                "tags": [
+                    "generate"
+                ],
+                "summary": "Generate Test Cases",
+                "operationId": "generate_test_cases",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GenTestCasesParams"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenTestCases"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Failed"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -2871,6 +2928,57 @@
                         "url": "https://example.com"
                     }
                 ]
+            },
+            "GenTestCases": {
+                "properties": {
+                    "test_cases": {
+                        "items": {
+                            "additionalProperties": {
+                                "type": "string"
+                            },
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Test Cases"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "test_cases"
+                ],
+                "title": "GenTestCases"
+            },
+            "GenTestCasesParams": {
+                "properties": {
+                    "description": {
+                        "type": "string",
+                        "title": "Description"
+                    },
+                    "test_cases": {
+                        "items": {
+                            "additionalProperties": {
+                                "type": "string"
+                            },
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Test Cases"
+                    },
+                    "input_variables": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Input Variables"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "description",
+                    "test_cases",
+                    "input_variables"
+                ],
+                "title": "GenTestCasesParams"
             },
             "GradingResult": {
                 "properties": {

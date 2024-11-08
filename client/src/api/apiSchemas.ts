@@ -331,6 +331,20 @@ export type ExternalDocumentation = {
   [key: string]: any
 }
 
+export type GenTestCases = {
+  test_cases: {
+    [key: string]: string
+  }[]
+}
+
+export type GenTestCasesParams = {
+  description: string
+  test_cases: {
+    [key: string]: string
+  }[]
+  input_variables: string[]
+}
+
 export type GradingResult = {
   pass: boolean
   score: number | null

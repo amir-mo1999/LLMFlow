@@ -39,7 +39,7 @@ test Test1 {
         number_of_sentences "2"
       }]
       input_variables [
-        "text" 
+        "text"
         "number_of_sentences"
         ]
     }
