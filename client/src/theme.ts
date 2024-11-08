@@ -132,6 +132,16 @@ export const lightThemeOptions: ThemeOptions = {
         },
       },
     },
+    MuiSnackbarContent: {
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            backgroundColor: "#313323",
+            color: "red",
+          },
+        },
+      },
+    },
     MuiTypography: {
       styleOverrides: {
         root: {

@@ -255,3 +255,9 @@ export function getNonMatchingIndices(
     })
     .filter((index) => index !== -1)
 }
+
+export function areKeysMatching(obj: Record<string, string>, arr: string[]): boolean {
+  const objectKeys = Object.keys(obj).sort()
+  const sortedArray = arr.sort()
+  return JSON.stringify(objectKeys) === JSON.stringify(sortedArray)
+}

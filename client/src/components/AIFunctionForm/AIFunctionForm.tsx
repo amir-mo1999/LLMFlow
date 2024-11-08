@@ -8,7 +8,15 @@ import TextField from "@mui/material/TextField"
 import Checkbox from "@mui/material/Checkbox"
 import ListItemText from "@mui/material/ListItemText"
 import OutlinedInput from "@mui/material/OutlinedInput"
-import { parseJsonSchema, addTitlesToSchema, getAIFunctionDiff, providersArray } from "@/utils"
+import CloseIcon from "@mui/icons-material/Close"
+import IconButton from "@mui/material/IconButton"
+import {
+  parseJsonSchema,
+  addTitlesToSchema,
+  getAIFunctionDiff,
+  providersArray,
+  areKeysMatching,
+} from "@/utils"
 import {
   TestCaseInput,
   InputVariable,
@@ -17,7 +25,11 @@ import {
   AIFunction,
   JsonSchemaInput,
   Provider,
+  GenTestCasesParams,
 } from "@/api/apiSchemas"
+import Snackbar from "@mui/material/Snackbar"
+
+import { useGenerateTestCases } from "@/api/apiComponents"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
 import Divider from "@mui/material/Divider"
@@ -64,7 +76,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   const [testCases, setTestCases] = useState<TestCaseInput[]>(
     aiFunction ? aiFunction.test_cases : []
   )
-  const [disableSubmit, setDisableSubmit] = useState<boolean>(true)
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(false)
+
+  const [openSnackbar, setOpenSnackbar] = useState(true)
+  const [snackbarMsg, setSnackbarMsg] = useState("")
 
   useEffect(() => {
     if (aiFunction) {
@@ -159,6 +174,55 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       setDisableSubmit(true)
     else if (providers.length === 0) setDisableSubmit(true)
     else setDisableSubmit(false)
+  }
+
+  const { mutate: generateTestCases, isPending: isGeneratingTestCases } = useGenerateTestCases({
+    onSuccess: (res) => {
+      setOpenSnackbar(true)
+      setSnackbarMsg(
+        `${res.test_cases.length} Test ${res.test_cases.length === 1 ? "Case" : "Cases"} generated`
+      )
+      const newTestCases = [...testCases]
+
+      res.test_cases.forEach((testCase) => {
+        const varNames = inputVariables.reduce((acc, inputVar) => {
+          acc.push(inputVar.name)
+          return acc
+        }, [] as string[])
+
+        if (areKeysMatching(testCase, varNames)) {
+          newTestCases.push({ vars: testCase, assert: [] })
+        }
+      })
+      setTestCases([...newTestCases])
+    },
+    onError: () => {
+      setOpenSnackbar(true)
+      setSnackbarMsg("Failed to generate Test Cases")
+    },
+  })
+
+  const onGenerate = () => {
+    const varNames = inputVariables.reduce((acc, inputVar) => {
+      acc.push(inputVar.name)
+      return acc
+    }, [] as string[])
+
+    const testCasesParam: GenTestCasesParams["test_cases"] = testCases.reduce(
+      (acc, testCase) => {
+        acc.push(testCase.vars)
+        return acc
+      },
+      [] as GenTestCasesParams["test_cases"]
+    )
+
+    const genParams: GenTestCasesParams = {
+      description: description,
+      input_variables: varNames,
+      test_cases: testCasesParam,
+    }
+
+    generateTestCases({ body: genParams })
   }
 
   useEffect(updateDisableSubmit, [
@@ -342,12 +406,27 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
         inputVariables={inputVariables}
         testCases={testCases}
         setTestCases={setTestCases}
+        onGenerate={onGenerate}
+        isGeneratingTestCases={isGeneratingTestCases}
       ></TestCasesForm>
       <Divider sx={{ marginY: 2 }}></Divider>
 
       <Button variant="contained" onClick={onClickSubmit} disabled={disableSubmit}>
         Submit
       </Button>
+
+      <Snackbar
+        open={openSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        message={snackbarMsg}
+        action={
+          <IconButton size="small" color="primary" onClick={() => setOpenSnackbar(false)}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </Box>
   )
 }

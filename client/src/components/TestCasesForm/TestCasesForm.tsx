@@ -7,17 +7,23 @@ import TestCasesFormDialog from "./TestCasesFormDialog"
 import { TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
 import AddIcon from "@mui/icons-material/Add"
 import { TestCasesOverview } from "@/components"
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome"
+import CircularProgress from "@mui/material/CircularProgress"
 
 interface TestCasesFormProps {
   inputVariables: InputVariable[]
   testCases: TestCaseInput[]
   setTestCases: React.Dispatch<React.SetStateAction<TestCaseInput[]>>
+  onGenerate?: () => void
+  isGeneratingTestCases?: boolean
 }
 
 const TestCasesForm: React.FC<TestCasesFormProps> = ({
   inputVariables,
   testCases,
   setTestCases,
+  onGenerate,
+  isGeneratingTestCases = false,
 }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -109,6 +115,9 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
         <Typography variant="h5">Test Cases</Typography>
         <Button onClick={handleOpenAddDialog} color="primary">
           <AddIcon />
+        </Button>
+        <Button onClick={onGenerate}>
+          {isGeneratingTestCases ? <CircularProgress size={25} /> : <AutoAwesomeIcon />}
         </Button>
       </Box>
 
