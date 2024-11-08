@@ -39,14 +39,27 @@ def all_succeeded(checks: Dict[CheckName, Check]) -> bool:
 
 
 
-class GenTestCases(BaseModel):
+class GenRole(str, Enum):
+
+    System = "System"
+    User = "User"
+    Assistant = "Assistant"
+
+class GenParams(BaseModel):
 
 
-    test_cases: List[Dict[str, str]]
-
-class GenTestCasesParams(BaseModel):
-
-
+    name: str
     description: str
-    test_cases: List[Dict[str, str]]
-    input_variables: List[str]
+    test_case: List[Dict[str, str]]
+    variables: List[str]
+
+class GenPromptMessage(BaseModel):
+
+
+    role: "GenRole"
+    content: str
+
+class GenTestCase(BaseModel):
+
+
+    variables: Dict[str, str]

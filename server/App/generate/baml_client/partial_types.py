@@ -30,14 +30,21 @@ from .types import Check, Checked
 ###############################################################################
 
 
-class GenTestCases(BaseModel):
+class GenParams(BaseModel):
 
 
-    test_cases: List[Dict[str, Optional[str]]]
-
-class GenTestCasesParams(BaseModel):
-
-
+    name: Optional[str] = None
     description: Optional[str] = None
-    test_cases: List[Dict[str, Optional[str]]]
-    input_variables: List[Optional[str]]
+    test_case: List[Dict[str, Optional[str]]]
+    variables: List[Optional[str]]
+
+class GenPromptMessage(BaseModel):
+
+
+    role: Optional[types.GenRole] = None
+    content: Optional[str] = None
+
+class GenTestCase(BaseModel):
+
+
+    variables: Dict[str, Optional[str]]

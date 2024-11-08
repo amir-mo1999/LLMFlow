@@ -63,11 +63,34 @@ class BamlAsyncClient:
 
 
 
+    async def GeneratePromptMessages(
+        self,
+        params: types.GenParams,
+        baml_options: BamlCallOptions = {},
+    ) -> List[types.GenPromptMessage]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = await self.__runtime.call_function(
+        "GeneratePromptMessages",
+        {
+          "params": params,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+      return cast(List[types.GenPromptMessage], raw.cast_to(types, types))
+
     async def GenerateTestCases(
         self,
-        params: types.GenTestCasesParams,
+        params: types.GenParams,
         baml_options: BamlCallOptions = {},
-    ) -> types.GenTestCases:
+    ) -> List[types.GenTestCase]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -84,7 +107,7 @@ class BamlAsyncClient:
         tb,
         __cr__,
       )
-      return cast(types.GenTestCases, raw.cast_to(types, types))
+      return cast(List[types.GenTestCase], raw.cast_to(types, types))
 
 
 
@@ -97,11 +120,41 @@ class BamlStreamClient:
       self.__ctx_manager = ctx_manager
 
 
+    def GeneratePromptMessages(
+        self,
+        params: types.GenParams,
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlStream[List[partial_types.GenPromptMessage], List[types.GenPromptMessage]]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+
+      raw = self.__runtime.stream_function(
+        "GeneratePromptMessages",
+        {
+          "params": params,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+      )
+
+      return baml_py.BamlStream[List[partial_types.GenPromptMessage], List[types.GenPromptMessage]](
+        raw,
+        lambda x: cast(List[partial_types.GenPromptMessage], x.cast_to(types, partial_types)),
+        lambda x: cast(List[types.GenPromptMessage], x.cast_to(types, types)),
+        self.__ctx_manager.get(),
+      )
+
     def GenerateTestCases(
         self,
-        params: types.GenTestCasesParams,
+        params: types.GenParams,
         baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlStream[partial_types.GenTestCases, types.GenTestCases]:
+    ) -> baml_py.BamlStream[List[partial_types.GenTestCase], List[types.GenTestCase]]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -120,10 +173,10 @@ class BamlStreamClient:
         __cr__,
       )
 
-      return baml_py.BamlStream[partial_types.GenTestCases, types.GenTestCases](
+      return baml_py.BamlStream[List[partial_types.GenTestCase], List[types.GenTestCase]](
         raw,
-        lambda x: cast(partial_types.GenTestCases, x.cast_to(types, partial_types)),
-        lambda x: cast(types.GenTestCases, x.cast_to(types, types)),
+        lambda x: cast(List[partial_types.GenTestCase], x.cast_to(types, partial_types)),
+        lambda x: cast(List[types.GenTestCase], x.cast_to(types, types)),
         self.__ctx_manager.get(),
       )
 
