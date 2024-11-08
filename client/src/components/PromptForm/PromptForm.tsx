@@ -254,7 +254,6 @@ const PromptForm: React.FC<PromptFormProps> = ({
             </Typography>
           </Box>
         )}
-
         {selectedAIFunctionIndx !== undefined && (
           <Box sx={{ display: edit ? "none" : "normal" }}>
             <Divider sx={{ marginY: 2 }}></Divider>
@@ -272,31 +271,14 @@ const PromptForm: React.FC<PromptFormProps> = ({
             ></AIFunctionPaper>
           </Box>
         )}
-
         <Box mt={2} sx={{ display: edit ? "none" : "normal" }}>
           <Button variant="contained" onClick={() => setOpenSelectDialog(true)}>
             Select AI Function
           </Button>
         </Box>
         <Divider sx={{ marginY: 2 }}></Divider>
-
         {selectedAIFunctionIndx !== undefined && (
           <>
-            <Typography variant="h5" gutterBottom>
-              Variables
-            </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {aiFunctions[selectedAIFunctionIndx].input_variables.map((variable, indx) => (
-                <Chip
-                  key={indx}
-                  label={variable.name}
-                  onClick={() => insertVariable(variable.name, messages.length - 1)}
-                  color="primary"
-                  variant="outlined"
-                />
-              ))}
-            </Box>
-            <Divider sx={{ marginY: 2 }}></Divider>
             <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
               <Typography variant="h5">Prompt Messages</Typography>
 
@@ -359,18 +341,32 @@ const PromptForm: React.FC<PromptFormProps> = ({
                       fullWidth
                       inputRef={(el) => (textFieldRefs.current[index] = el)}
                     />
-                    <Box
-                      sx={{
-                        display:
-                          aiFunctions[selectedAIFunctionIndx].output_schema.type === "string"
-                            ? "none"
-                            : "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Button variant="contained" onClick={() => insertOutputSchema(index)}>
-                        Insert Output Schema
-                      </Button>
+                    <Box display="flex" gap={1} alignItems="center">
+                      <Chip
+                        variant="outlined"
+                        color="primary"
+                        sx={{
+                          display:
+                            aiFunctions[selectedAIFunctionIndx].output_schema.type === "string"
+                              ? "none"
+                              : "flex",
+                        }}
+                        onClick={() => insertOutputSchema(index)}
+                        label="Output Schema"
+                      ></Chip>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                        {aiFunctions[selectedAIFunctionIndx].input_variables.map(
+                          (variable, indx) => (
+                            <Chip
+                              key={indx}
+                              label={variable.name}
+                              onClick={() => insertVariable(variable.name, messages.length - 1)}
+                              color="primary"
+                              variant="outlined"
+                            />
+                          )
+                        )}
+                      </Box>
                     </Box>
                   </Box>
                 </Paper>
