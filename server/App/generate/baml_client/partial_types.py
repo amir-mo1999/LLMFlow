@@ -30,10 +30,14 @@ from .types import Check, Checked
 ###############################################################################
 
 
-class Resume(BaseModel):
+class GenTestCases(BaseModel):
 
 
-    name: Optional[str] = None
-    email: Optional[str] = None
-    experience: List[Optional[str]]
-    skills: List[Optional[str]]
+    test_cases: List[Dict[str, Optional[str]]]
+
+class GenTestCasesParams(BaseModel):
+
+
+    description: Optional[str] = None
+    test_cases: List[Dict[str, Optional[str]]]
+    input_variables: List[Optional[str]]

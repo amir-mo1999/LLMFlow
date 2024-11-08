@@ -7,6 +7,7 @@ from .auth import AUTH_ROUTER
 from .db import DB_ROUTER
 from .evaluate import EVAL_ROUTER
 from .execute import EXECUTE_ROUTER
+from .generate import GENERATE_ROUTER
 from .http_exceptions import DocumentNotFound, DuplicateDocument
 
 app = FastAPI(
@@ -28,7 +29,7 @@ app.include_router(AUTH_ROUTER)
 app.include_router(EVAL_ROUTER)
 app.include_router(DB_ROUTER)
 app.include_router(EXECUTE_ROUTER)
-
+app.include_router(GENERATE_ROUTER)
 
 ## add exception handlers
 @app.exception_handler(DuplicateDocument)

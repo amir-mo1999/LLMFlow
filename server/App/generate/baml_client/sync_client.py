@@ -61,34 +61,11 @@ class BamlSyncClient:
       return self.__stream_client
 
 
-    def ExtractResume(
-        self,
-        resume: str,
-        baml_options: BamlCallOptions = {},
-    ) -> types.Resume:
-      __tb__ = baml_options.get("tb", None)
-      if __tb__ is not None:
-        tb = __tb__._tb
-      else:
-        tb = None
-      __cr__ = baml_options.get("client_registry", None)
-
-      raw = self.__runtime.call_function_sync(
-        "ExtractResume",
-        {
-          "resume": resume,
-        },
-        self.__ctx_manager.get(),
-        tb,
-        __cr__,
-      )
-      return cast(types.Resume, raw.cast_to(types, types))
-
     def GenerateTestCases(
         self,
-        description: str,test_cases: List[Dict[str, str]],input_variables: List[str],
+        params: types.GenTestCasesParams,
         baml_options: BamlCallOptions = {},
-    ) -> List[Dict[str, str]]:
+    ) -> types.GenTestCases:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -99,13 +76,13 @@ class BamlSyncClient:
       raw = self.__runtime.call_function_sync(
         "GenerateTestCases",
         {
-          "description": description,"test_cases": test_cases,"input_variables": input_variables,
+          "params": params,
         },
         self.__ctx_manager.get(),
         tb,
         __cr__,
       )
-      return cast(List[Dict[str, str]], raw.cast_to(types, types))
+      return cast(types.GenTestCases, raw.cast_to(types, types))
 
 
 
@@ -119,41 +96,11 @@ class BamlStreamClient:
       self.__ctx_manager = ctx_manager
 
 
-    def ExtractResume(
-        self,
-        resume: str,
-        baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlSyncStream[partial_types.Resume, types.Resume]:
-      __tb__ = baml_options.get("tb", None)
-      if __tb__ is not None:
-        tb = __tb__._tb
-      else:
-        tb = None
-      __cr__ = baml_options.get("client_registry", None)
-
-      raw = self.__runtime.stream_function_sync(
-        "ExtractResume",
-        {
-          "resume": resume,
-        },
-        None,
-        self.__ctx_manager.get(),
-        tb,
-        __cr__,
-      )
-
-      return baml_py.BamlSyncStream[partial_types.Resume, types.Resume](
-        raw,
-        lambda x: cast(partial_types.Resume, x.cast_to(types, partial_types)),
-        lambda x: cast(types.Resume, x.cast_to(types, types)),
-        self.__ctx_manager.get(),
-      )
-
     def GenerateTestCases(
         self,
-        description: str,test_cases: List[Dict[str, str]],input_variables: List[str],
+        params: types.GenTestCasesParams,
         baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlSyncStream[List[Dict[str, Optional[str]]], List[Dict[str, str]]]:
+    ) -> baml_py.BamlSyncStream[partial_types.GenTestCases, types.GenTestCases]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb
@@ -164,9 +111,7 @@ class BamlStreamClient:
       raw = self.__runtime.stream_function_sync(
         "GenerateTestCases",
         {
-          "description": description,
-          "test_cases": test_cases,
-          "input_variables": input_variables,
+          "params": params,
         },
         None,
         self.__ctx_manager.get(),
@@ -174,10 +119,10 @@ class BamlStreamClient:
         __cr__,
       )
 
-      return baml_py.BamlSyncStream[List[Dict[str, Optional[str]]], List[Dict[str, str]]](
+      return baml_py.BamlSyncStream[partial_types.GenTestCases, types.GenTestCases](
         raw,
-        lambda x: cast(List[Dict[str, Optional[str]]], x.cast_to(types, partial_types)),
-        lambda x: cast(List[Dict[str, str]], x.cast_to(types, types)),
+        lambda x: cast(partial_types.GenTestCases, x.cast_to(types, partial_types)),
+        lambda x: cast(types.GenTestCases, x.cast_to(types, types)),
         self.__ctx_manager.get(),
       )
 

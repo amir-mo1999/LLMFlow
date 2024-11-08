@@ -28,7 +28,7 @@ from baml_py.type_builder import TypeBuilder as _TypeBuilder
 class TypeBuilder(_TypeBuilder):
     def __init__(self):
         super().__init__(classes=set(
-          ["Resume",]
+          ["GenTestCases","GenTestCasesParams",]
         ), enums=set(
           []
         ))

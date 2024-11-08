@@ -39,10 +39,14 @@ def all_succeeded(checks: Dict[CheckName, Check]) -> bool:
 
 
 
-class Resume(BaseModel):
+class GenTestCases(BaseModel):
 
 
-    name: str
-    email: str
-    experience: List[str]
-    skills: List[str]
+    test_cases: List[Dict[str, str]]
+
+class GenTestCasesParams(BaseModel):
+
+
+    description: str
+    test_cases: List[Dict[str, str]]
+    input_variables: List[str]

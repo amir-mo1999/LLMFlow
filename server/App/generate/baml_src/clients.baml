@@ -1,7 +1,14 @@
 // Learn more about clients at https://docs.boundaryml.com/docs/snippets/clients/overview
 
+client<llm> CustomGPT4o {
+  provider openai
+  options {
+    model "gpt-4o"
+    api_key env.OPENAI_API_KEY
+  }
+}
 
-client<llm> GPT4 {
+client<llm> GPT4Mini {
   provider openai
   retry_policy Exponential
   options {
@@ -10,6 +17,23 @@ client<llm> GPT4 {
   }
 }
 
+client<llm> CustomSonnet {
+  provider anthropic
+  options {
+    model "claude-3-5-sonnet-20241022"
+    api_key env.ANTHROPIC_API_KEY
+  }
+}
+
+
+client<llm> CustomHaiku {
+  provider anthropic
+  retry_policy Constant
+  options {
+    model "claude-3-haiku-20240307"
+    api_key env.ANTHROPIC_API_KEY
+  }
+}
 
 // https://docs.boundaryml.com/docs/snippets/clients/round-robin
 client<llm> CustomFast {
