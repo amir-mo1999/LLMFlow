@@ -63,7 +63,7 @@ async def post_project(
         **project_input.model_dump(by_alias=True),
         creation_time=now,
         username=user.email,
-        api_key=await generate_api_key(),
+        api_key=await generate_api_key(user),
     )
 
     result = await db.insert(project, "projects", ["username", "name"])

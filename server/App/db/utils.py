@@ -1,10 +1,10 @@
 import json
 import os
-import secrets
 from copy import deepcopy
 from pathlib import Path
 from typing import Dict
 
+from jose import jwt
 from openapi_pydantic import (
     Info,
     MediaType,
@@ -15,8 +15,9 @@ from openapi_pydantic import (
     RequestBody,
     Schema,
 )
+from passlib.context import CryptContext
 
-from App.models import AIFunction
+from App.models import AIFunction, User
 
 PROJECT_SECRET = os.getenv("PROJECT_SECRET")
 assert PROJECT_SECRET
@@ -150,5 +151,19 @@ async def generate_project_api_docs(
     return openapi
 
 
-async def generate_api_key() -> str:
-    return secrets.token_hex(32)
+# encryption context
+PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
+SECRET_KEY = os.getenv("PROJECT_SECRET")
+ALGORITHM = "HS256"
+
+
+async def generate_api_key(user: User) -> str:
+    to_encode = {"user": user.model_dump()}
+    api_key = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return api_key
+
+
+async def get_user_from_api_key(api_key) -> User:
+    data = jwt.decode(api_key, SECRET_KEY, ALGORITHM)
+    user = User(**data["user"])
+    return user
