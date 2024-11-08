@@ -30,11 +30,12 @@ const handleRequest: HandlerFunction = async (request, { path }) => {
   const backendPath = path.join("/")
   const backendUrl = `${process.env.BACKEND_URL}/${backendPath}${query}`
 
-  // Prepare the headers
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    authorization: `Bearer ${jwtToken}`,
-  }
+
+const headers = new Headers()
+headers.append("api_key", request.headers.get("api_key") || "")
+headers.append("Content-type", "application/json")
+headers.append("authorization", `Bearer ${jwtToken}`)
+
   // Prepare the fetch options
   const fetchOptions: RequestInit = {
     method: request.method,

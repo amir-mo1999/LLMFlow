@@ -72,6 +72,9 @@ async def generate_project_api_docs(
         if param.param_in == ParameterLocation.QUERY:
             query_params.append(param)
 
+    # get security schema for default execute endpoint
+    security = execute_operation.security
+
     # extract relevant schemas from components
     schemas_to_select = [
         "AIFunctionOutput",
@@ -84,6 +87,9 @@ async def generate_project_api_docs(
     components.schemas = {
         schema_name: app_openapi.components.schemas.get(schema_name)
         for schema_name in schemas_to_select
+    }
+    components.securitySchemes = {
+        "APIKeyHeader": app_openapi.components.securitySchemes["APIKeyHeader"]
     }
 
     # Define the basic Info object
@@ -137,6 +143,7 @@ async def generate_project_api_docs(
             responses=responses,
             parameters=query_params_copy,
             tags=[ai_function.name],
+            security=security
         )
 
         # Define the PathItem with the POST operation

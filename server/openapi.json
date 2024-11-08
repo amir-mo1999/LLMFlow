@@ -1376,7 +1376,7 @@
                 "operationId": "execute",
                 "security": [
                     {
-                        "OAuth2PasswordBearer": []
+                        "APIKeyHeader": []
                     }
                 ],
                 "parameters": [
@@ -1488,6 +1488,17 @@
                             }
                         },
                         "description": "Conflict"
+                    },
+                    "403": {
+                        "detail": "not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "description": "Forbidden"
                     },
                     "400": {
                         "detail": "No prompts defined for AI Function",
@@ -5201,6 +5212,10 @@
                         "type": "string",
                         "format": "date-time",
                         "title": "Creation Time"
+                    },
+                    "api_key": {
+                        "type": "string",
+                        "title": "Api Key"
                     }
                 },
                 "type": "object",
@@ -5210,7 +5225,8 @@
                     "description",
                     "api_routes",
                     "username",
-                    "creation_time"
+                    "creation_time",
+                    "api_key"
                 ],
                 "title": "Project"
             },
@@ -7300,6 +7316,11 @@
                         "tokenUrl": "/auth/login"
                     }
                 }
+            },
+            "APIKeyHeader": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "api_key"
             }
         }
     }

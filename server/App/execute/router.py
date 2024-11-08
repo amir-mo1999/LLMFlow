@@ -22,6 +22,7 @@ api_key_schema = APIKeyHeader(name="api_key")
     response_model=AIFunctionOutput,
     responses={
         409: {"detail": "document not found"},
+        403: {"detail": "not authenticated"},
         400: {"detail": "No prompts defined for AI Function"},
         422: {
             "detail": "Missmatch between request variables in request body and AI Function variables"
@@ -45,7 +46,6 @@ async def execute(
     ),
 ):
     user = await get_user_from_api_key(api_key)
-    raise HTTPException(400)
 
     # get project
     project = await db.get_project_by_path_segment_name(project_path_name, user.email)
