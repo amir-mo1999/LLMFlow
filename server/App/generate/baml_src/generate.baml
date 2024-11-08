@@ -51,7 +51,7 @@ function GeneratePromptMessages(params: GenParams) -> GenPromptMessage[] {
   prompt #"
     I defined an AI function that takes a set of parameters as input and returns a specific output. Now I must define a prompt for this function.
     A prompt consists of several prompt messages. Prompt messages follow the OpenAI specification. Each prompt message has a role: "user", "system" or "assistant" and content as a string.
-    
+
     Each parameter of the AI function must be contained in at least one prompt message in between two sets of braces.
 
     Here is an example of a prompt for the AI Function “Translate Text” that translates text to a target language, which takes the parameters: “text” and “language”:

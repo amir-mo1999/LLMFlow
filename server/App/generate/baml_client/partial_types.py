@@ -13,13 +13,14 @@
 # flake8: noqa: E501,F401
 # pylint: disable=unused-import,line-too-long
 # fmt: off
-import baml_py
 from enum import Enum
+from typing import Dict, List, Literal, Optional, Union
+
+import baml_py
 from pydantic import BaseModel, ConfigDict
-from typing import Dict, List, Optional, Union, Literal
 
 from . import types
-from .types import Checked, Check
+from .types import Check, Checked
 
 ###############################################################################
 #
@@ -30,20 +31,20 @@ from .types import Checked, Check
 
 
 class GenParams(BaseModel):
-    
-    
+
+
     name: Optional[str] = None
     description: Optional[str] = None
     test_case: Dict[str, Optional[str]]
     variables: List[Optional[str]]
 
 class GenPromptMessage(BaseModel):
-    
-    
+
+
     role: Optional[types.GenRole] = None
     content: Optional[str] = None
 
 class GenTestCase(BaseModel):
-    
-    
+
+
     variables: Dict[str, Optional[str]]
