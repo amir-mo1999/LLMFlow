@@ -9,7 +9,7 @@ const WelcomePage: React.FC = () => {
       sx={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 5 }}
     >
       <Typography variant="h2" sx={{ mb: 3 }}>
-        Welcome to the LMM Flow!
+        Welcome to the LLM Flow!
       </Typography>
       <Typography variant="h6" align="center" sx={{ mb: 5, width: 1000 }}>
         LLM Flow simplifies the process of working with AI models, starting from defining AI powered
