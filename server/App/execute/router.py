@@ -2,17 +2,20 @@ from typing import Annotated, Any, Dict, Optional
 
 from aiohttp.client_exceptions import ServerDisconnectedError
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.security import APIKeyHeader
 
 from App.db.routes.ai_function import get_ai_function
 from App.db.routes.prompt import get_prompt
-from App.dependencies import DB, get_db, user
+from App.db.utils import get_user_from_api_key
+from App.dependencies import DB, get_db
 from App.http_exceptions import DocumentNotFound
-from App.models import AIFunctionOutput, Body, PromptTag, Provider, TestCase, User
+from App.models import AIFunctionOutput, Body, PromptTag, Provider, TestCase
 
 from .utils import execute_ai_function
 
 EXECUTE_ROUTER = APIRouter(tags=["Execute"])
 
+api_key_schema = APIKeyHeader(name="api_key")
 
 @EXECUTE_ROUTER.post(
     "/execute/{project_path_name}/{ai_function_path_name}",
@@ -30,7 +33,7 @@ async def execute(
     ai_function_path_name: str,
     body: Body,
     db: Annotated[DB, Depends(get_db)],
-    user: Annotated[User, Depends(user)],
+    api_key: str = Depends(api_key_schema),
     provider: Optional[Provider] = None,
     prompt_tag: Optional[PromptTag] = Query(
         default="highest score",
@@ -41,6 +44,9 @@ async def execute(
         description="If specified the prompt with the given id is used. This takes precedence over 'prompt_tag'. If no 'provider' is specified, one is selected based on 'prompt_tag'",
     ),
 ):
+    user = await get_user_from_api_key(api_key)
+    raise HTTPException(400)
+
     # get project
     project = await db.get_project_by_path_segment_name(project_path_name, user.email)
     if project is None:

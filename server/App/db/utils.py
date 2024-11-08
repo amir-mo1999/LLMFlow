@@ -163,7 +163,7 @@ async def generate_api_key(user: User) -> str:
     return api_key
 
 
-async def get_user_from_api_key(api_key) -> User:
+async def get_user_from_api_key(api_key: str) -> User:
     data = jwt.decode(api_key, SECRET_KEY, ALGORITHM)
     user = User(**data["user"])
     return user
