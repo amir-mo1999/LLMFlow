@@ -18,7 +18,7 @@ from App.models import (
     User,
 )
 
-from ..utils import generate_project_api_docs
+from ..utils import generate_api_key, generate_project_api_docs
 from .ai_function import get_ai_function
 
 PROJECT_ROUTER = APIRouter()
@@ -63,6 +63,7 @@ async def post_project(
         **project_input.model_dump(by_alias=True),
         creation_time=now,
         username=user.email,
+        api_key=await generate_api_key(),
     )
 
     result = await db.insert(project, "projects", ["username", "name"])

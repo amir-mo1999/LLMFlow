@@ -1,5 +1,6 @@
 import json
 import os
+import secrets
 from copy import deepcopy
 from pathlib import Path
 from typing import Dict
@@ -17,6 +18,8 @@ from openapi_pydantic import (
 
 from App.models import AIFunction
 
+PROJECT_SECRET = os.getenv("PROJECT_SECRET")
+assert PROJECT_SECRET
 
 async def get_app_api_docs() -> OpenAPI:
     root_dir = Path(__file__).resolve().parent.parent.parent
@@ -145,3 +148,7 @@ async def generate_project_api_docs(
     openapi = OpenAPI(openapi="3.1.0", info=info, paths=paths, components=components)
 
     return openapi
+
+
+async def generate_api_key() -> str:
+    return secrets.token_hex(32)

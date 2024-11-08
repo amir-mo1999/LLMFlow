@@ -42,3 +42,4 @@ class Project(ProjectRouteInput):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     username: EmailStr
     creation_time: datetime
+    api_key: str
