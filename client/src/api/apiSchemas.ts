@@ -331,18 +331,26 @@ export type ExternalDocumentation = {
   [key: string]: any
 }
 
-export type GenTestCases = {
-  test_cases: {
+export type GenParams = {
+  name: string
+  description: string
+  test_case: {
     [key: string]: string
-  }[]
+  }
+  variables: string[]
 }
 
-export type GenTestCasesParams = {
-  description: string
-  test_cases: {
+export type GenPromptMessage = {
+  role: GenRole
+  content: string
+}
+
+export type GenRole = "System" | "User" | "Assistant"
+
+export type GenTestCase = {
+  variables: {
     [key: string]: string
-  }[]
-  input_variables: string[]
+  }
 }
 
 export type GradingResult = {

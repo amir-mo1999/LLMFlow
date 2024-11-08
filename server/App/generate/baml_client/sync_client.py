@@ -13,31 +13,17 @@
 # flake8: noqa: E501,F401
 # pylint: disable=unused-import,line-too-long
 # fmt: off
+from typing import Any, Dict, List, Optional, TypeVar, Union, TypedDict, Type, Literal, cast
+from typing_extensions import NotRequired
 import pprint
-from typing import (
-    Any,
-    Dict,
-    List,
-    Literal,
-    Optional,
-    Type,
-    TypedDict,
-    TypeVar,
-    Union,
-    cast,
-)
 
 import baml_py
 from pydantic import BaseModel, ValidationError, create_model
-from typing_extensions import NotRequired
 
 from . import partial_types, types
-from .globals import (
-    DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_CTX,
-    DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME,
-)
+from .types import Checked, Check
 from .type_builder import TypeBuilder
-from .types import Check, Checked
+from .globals import DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_CTX, DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME
 
 OutputType = TypeVar('OutputType')
 
@@ -60,7 +46,7 @@ class BamlSyncClient:
     def stream(self):
       return self.__stream_client
 
-
+    
     def GeneratePromptMessages(
         self,
         params: types.GenParams,
@@ -83,7 +69,7 @@ class BamlSyncClient:
         __cr__,
       )
       return cast(List[types.GenPromptMessage], raw.cast_to(types, types))
-
+    
     def GenerateTestCases(
         self,
         params: types.GenParams,
@@ -106,7 +92,7 @@ class BamlSyncClient:
         __cr__,
       )
       return cast(List[types.GenTestCase], raw.cast_to(types, types))
-
+    
 
 
 
@@ -118,7 +104,7 @@ class BamlStreamClient:
       self.__runtime = runtime
       self.__ctx_manager = ctx_manager
 
-
+    
     def GeneratePromptMessages(
         self,
         params: types.GenParams,
@@ -148,7 +134,7 @@ class BamlStreamClient:
         lambda x: cast(List[types.GenPromptMessage], x.cast_to(types, types)),
         self.__ctx_manager.get(),
       )
-
+    
     def GenerateTestCases(
         self,
         params: types.GenParams,
@@ -178,7 +164,7 @@ class BamlStreamClient:
         lambda x: cast(List[types.GenTestCase], x.cast_to(types, types)),
         self.__ctx_manager.get(),
       )
-
+    
 
 b = BamlSyncClient(DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_RUNTIME, DO_NOT_USE_DIRECTLY_UNLESS_YOU_KNOW_WHAT_YOURE_DOING_CTX)
 

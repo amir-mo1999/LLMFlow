@@ -1525,7 +1525,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/GenTestCasesParams"
+                                "$ref": "#/components/schemas/GenParams"
                             }
                         }
                     },
@@ -1537,7 +1537,72 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenTestCases"
+                                    "items": {
+                                        "$ref": "#/components/schemas/GenTestCase"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Generate Test Cases Generate Test Cases Post"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpExceptionModel"
+                                }
+                            }
+                        },
+                        "detail": "Failed"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            }
+        },
+        "/generate/prompt-messages": {
+            "post": {
+                "tags": [
+                    "generate"
+                ],
+                "summary": "Generate Prompt Messages",
+                "operationId": "generate_prompt_messages",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GenParams"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/GenPromptMessage"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Generate Prompt Messages Generate Prompt Messages Post"
                                 }
                             }
                         }
@@ -2929,56 +2994,81 @@
                     }
                 ]
             },
-            "GenTestCases": {
+            "GenParams": {
                 "properties": {
-                    "test_cases": {
-                        "items": {
-                            "additionalProperties": {
-                                "type": "string"
-                            },
-                            "type": "object"
-                        },
-                        "type": "array",
-                        "title": "Test Cases"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "test_cases"
-                ],
-                "title": "GenTestCases"
-            },
-            "GenTestCasesParams": {
-                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
                     "description": {
                         "type": "string",
                         "title": "Description"
                     },
-                    "test_cases": {
-                        "items": {
-                            "additionalProperties": {
-                                "type": "string"
-                            },
-                            "type": "object"
+                    "test_case": {
+                        "additionalProperties": {
+                            "type": "string"
                         },
-                        "type": "array",
-                        "title": "Test Cases"
+                        "type": "object",
+                        "title": "Test Case"
                     },
-                    "input_variables": {
+                    "variables": {
                         "items": {
                             "type": "string"
                         },
                         "type": "array",
-                        "title": "Input Variables"
+                        "title": "Variables"
                     }
                 },
                 "type": "object",
                 "required": [
+                    "name",
                     "description",
-                    "test_cases",
-                    "input_variables"
+                    "test_case",
+                    "variables"
                 ],
-                "title": "GenTestCasesParams"
+                "title": "GenParams"
+            },
+            "GenPromptMessage": {
+                "properties": {
+                    "role": {
+                        "$ref": "#/components/schemas/GenRole"
+                    },
+                    "content": {
+                        "type": "string",
+                        "title": "Content"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "role",
+                    "content"
+                ],
+                "title": "GenPromptMessage"
+            },
+            "GenRole": {
+                "type": "string",
+                "enum": [
+                    "System",
+                    "User",
+                    "Assistant"
+                ],
+                "title": "GenRole"
+            },
+            "GenTestCase": {
+                "properties": {
+                    "variables": {
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "type": "object",
+                        "title": "Variables"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "variables"
+                ],
+                "title": "GenTestCase"
             },
             "GradingResult": {
                 "properties": {

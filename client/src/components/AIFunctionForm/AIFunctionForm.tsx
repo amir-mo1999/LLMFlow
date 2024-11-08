@@ -25,7 +25,7 @@ import {
   AIFunction,
   JsonSchemaInput,
   Provider,
-  GenTestCasesParams,
+  GenParams,
 } from "@/api/apiSchemas"
 import Snackbar from "@mui/material/Snackbar"
 
@@ -179,19 +179,17 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
   const { mutate: generateTestCases, isPending: isGeneratingTestCases } = useGenerateTestCases({
     onSuccess: (res) => {
       setOpenSnackbar(true)
-      setSnackbarMsg(
-        `${res.test_cases.length} Test ${res.test_cases.length === 1 ? "Case" : "Cases"} generated`
-      )
+      setSnackbarMsg(`${res.length} Test ${res.length === 1 ? "Case" : "Cases"} generated`)
       const newTestCases = [...testCases]
 
-      res.test_cases.forEach((testCase) => {
+      res.forEach((testCase) => {
         const varNames = inputVariables.reduce((acc, inputVar) => {
           acc.push(inputVar.name)
           return acc
         }, [] as string[])
 
-        if (areKeysMatching(testCase, varNames)) {
-          newTestCases.push({ vars: testCase, assert: [] })
+        if (areKeysMatching(testCase.variables, varNames)) {
+          newTestCases.push({ vars: testCase.variables, assert: [] })
         }
       })
       setTestCases([...newTestCases])
@@ -208,21 +206,18 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       return acc
     }, [] as string[])
 
-    const testCasesParam: GenTestCasesParams["test_cases"] = testCases.reduce(
-      (acc, testCase) => {
-        acc.push(testCase.vars)
-        return acc
-      },
-      [] as GenTestCasesParams["test_cases"]
-    )
+    if (testCases.length >= 1) {
+      const testCase: GenParams["test_case"] = testCases[testCases.length - 1].vars
 
-    const genParams: GenTestCasesParams = {
-      description: description,
-      input_variables: varNames,
-      test_cases: testCasesParam.slice(-2),
+      const genParams: GenParams = {
+        name: name,
+        description: description,
+        variables: varNames,
+        test_case: testCase,
+      }
+
+      generateTestCases({ body: genParams })
     }
-
-    generateTestCases({ body: genParams })
   }
 
   useEffect(updateDisableSubmit, [

@@ -2,7 +2,7 @@
 class GenParams {
   name string
   description string
-  test_case map<string, string>[]
+  test_case map<string, string>
   variables string[]
 }
 
