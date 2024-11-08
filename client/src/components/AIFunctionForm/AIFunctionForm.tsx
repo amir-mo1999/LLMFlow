@@ -219,7 +219,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
     const genParams: GenTestCasesParams = {
       description: description,
       input_variables: varNames,
-      test_cases: testCasesParam,
+      test_cases: testCasesParam.slice(-2),
     }
 
     generateTestCases({ body: genParams })
