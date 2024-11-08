@@ -4,9 +4,9 @@ import { InputVariablePaper, InputVariableOverview } from "@/components"
 import Typography from "@mui/material/Typography"
 import React, { useState } from "react"
 import Box from "@mui/material/Box"
+import Grid from "@mui/material/Grid"
 import GradingResultOverview from "./GradingResultOverview"
 import Divider from "@mui/material/Divider"
-import Stack from "@mui/material/Stack"
 import Collapse from "@mui/material/Collapse"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
@@ -49,16 +49,35 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
         borderColor: theme.palette.primary.main,
         paddingX: 2,
         paddingY: 1,
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "column",
         ...sx,
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%" }}>
-        <Typography sx={{ color: theme.palette.primary.main }} variant="h6">
-          # {index}
-        </Typography>
-        <Stack direction="row" spacing={2}>
-          {cost && <NumberChip labelFirst number={cost} label="Cost" unit="$" />}{" "}
-          {score && (
+      <Grid
+        spacing={1}
+        container
+        sx={{ alignItems: "center", width: "100%", mt: 0 }}
+        direction={"row"}
+      >
+        <Grid>
+          <Typography sx={{ color: theme.palette.primary.main }} noWrap variant="h6">
+            # {index}
+          </Typography>
+        </Grid>
+        <Grid>
+          <IconButton onClick={handleCollapse}>
+            {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
+          </IconButton>
+        </Grid>
+        {cost && (
+          <Grid xs={2}>
+            <NumberChip labelFirst number={cost} label="Cost" unit="$" />
+          </Grid>
+        )}
+        {score && (
+          <Grid xs={1}>
             <NumberChip
               labelFirst
               number={score as number}
@@ -66,14 +85,13 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
               color={score >= 0.8 ? "success" : score >= 0.4 ? "warning" : "error"}
               variant="filled"
             />
-          )}
+          </Grid>
+        )}
+        <Grid xs={3}>
           <NumberChip labelFirst number={latency} label="Latency" unit="ms" />
-        </Stack>
+        </Grid>
+      </Grid>
 
-        <IconButton onClick={handleCollapse} sx={{ marginLeft: "auto", marginRight: 65 }}>
-          {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
-        </IconButton>
-      </Box>
       <Collapse in={open}>
         <Box>
           <Divider sx={{ m: 1 }} />

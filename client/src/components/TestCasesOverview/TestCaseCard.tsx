@@ -11,6 +11,8 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { NumberChip } from "@/components"
 import { useTheme } from "@mui/material"
+import Grid from "@mui/material/Grid"
+
 import { InputVariableOverview, AssertionsOverview, AssertionsForm } from "@/components"
 
 interface TestCaseCardProps {
@@ -48,34 +50,47 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
         ...sx,
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%" }}>
-        <Typography sx={{ color: theme.palette.primary.main }} variant="h6">
-          # {indx}
-        </Typography>
+      <Grid
+        container
+        spacing={1}
+        sx={{ alignItems: "center", justifyContent: "space-between", width: "100%", mt: 0 }}
+      >
+        <Grid>
+          <Typography sx={{ color: theme.palette.primary.main }} variant="h6">
+            # {indx}
+          </Typography>
+        </Grid>
+        <Grid>
+          <IconButton onClick={handleCollapse}>
+            {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
+          </IconButton>
+        </Grid>
         {testCase.assert && (
-          <NumberChip
-            number={testCase.assert.length}
-            label={testCase.assert.length === 1 ? "Assertion" : "Assertions"}
-          />
+          <Grid xs={2}>
+            <NumberChip
+              number={testCase.assert.length}
+              label={testCase.assert.length === 1 ? "Assertion" : "Assertions"}
+            />
+          </Grid>
         )}
-        <IconButton onClick={handleCollapse}>
-          {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
-        </IconButton>
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation()
-            onDelete()
-          }}
-          size="small"
-          sx={{
-            display: displayOnly ? "none" : "normal",
-            color: theme.palette.primary.main,
-            marginLeft: "auto",
-          }}
-        >
-          <ClearIcon sx={{ marginLeft: "auto" }} />
-        </IconButton>
-      </Box>
+        <Grid xs></Grid>
+        <Grid>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete()
+            }}
+            size="small"
+            sx={{
+              display: displayOnly ? "none" : "normal",
+              color: theme.palette.primary.main,
+              marginLeft: "auto",
+            }}
+          >
+            <ClearIcon sx={{ marginLeft: "auto" }} />
+          </IconButton>
+        </Grid>
+      </Grid>
 
       <Collapse in={open}>
         <Box sx={{ my: 1 }}>
