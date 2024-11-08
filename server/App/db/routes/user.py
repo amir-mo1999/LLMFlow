@@ -1,10 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends
 
-from App.dependencies import DB, get_db
-from App.http_exceptions import DocumentNotFound, DuplicateDocument
-from App.models import SuccessResponse, User, UserRootInput
+from App.dependencies import DB, decoded_token, get_db
+from App.http_exceptions import DuplicateDocument
+from App.models import DecodedToken, SuccessResponse, User, UserRootInput
 
 USER_ROUTER = APIRouter()
 
@@ -22,6 +22,7 @@ USER_ROUTER = APIRouter()
 async def post_user(
     user: UserRootInput,
     db: Annotated[DB, Depends(get_db)],
+    decoded_token: Annotated[DecodedToken, Depends(decoded_token)],
 ):
     user = User(**user.model_dump(by_alias=True))
 
@@ -35,21 +36,3 @@ async def post_user(
         return SuccessResponse
 
     raise DuplicateDocument
-
-
-@USER_ROUTER.get(
-    "/user/{username}",
-    response_model=User,
-    responses={404: {"detail": "document not found"}},
-)
-async def get_user(
-    db: Annotated[DB, Depends(get_db)],
-    username: str = Path(..., description="Email of the user to retrieve"),
-):
-    # Check if the user with the given email exists
-    user = await db.get_user(username)
-
-    if user:
-        return user
-    else:
-        raise DocumentNotFound

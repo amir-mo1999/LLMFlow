@@ -67,6 +67,7 @@ const handler = NextAuth({
           expiresIn: "30d",
         })
         try {
+          // TODO: add jwt to this request
           await axios.post(`${process.env.BACKEND_URL}/user`, {
             name: user.name,
             email: user.email,
