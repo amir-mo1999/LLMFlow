@@ -40,7 +40,6 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
   const handleCollapse = () => {
     setOpen(!open)
   }
-
   return (
     <Box
       sx={{
@@ -57,7 +56,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
       <Grid
         columnGap={2}
         container
-        sx={{ alignItems: "center", width: "100%", mt: 0 }}
+        sx={{ alignItems: "center", mt: 0, width: 600 }}
         direction={"row"}
       >
         <Grid>
@@ -71,13 +70,13 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
           </Box>
         </Grid>
 
-        {cost && (
-          <Grid>
+        {cost !== undefined && (
+          <Grid xs>
             <NumberChip labelFirst number={cost} label="Cost" unit="$" />
           </Grid>
         )}
-        {score && (
-          <Grid>
+        {score !== undefined && (
+          <Grid xs>
             <NumberChip
               labelFirst
               number={score as number}
@@ -87,7 +86,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
             />
           </Grid>
         )}
-        <Grid xs={3}>
+        <Grid xs>
           <NumberChip labelFirst number={latency} label="Latency" unit="ms" />
         </Grid>
       </Grid>
