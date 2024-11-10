@@ -49,7 +49,6 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
         borderColor: theme.palette.primary.main,
         paddingX: 2,
         paddingY: 1,
-        alignItems: "center",
         display: "flex",
         flexDirection: "column",
         ...sx,
@@ -94,7 +93,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
       </Grid>
 
       <Collapse in={open}>
-        <Box>
+        <Box sx={{ my: 1 }}>
           <Divider sx={{ m: 1 }} />
           {/* Variables */}
           <Typography variant="h6">Variables</Typography>
