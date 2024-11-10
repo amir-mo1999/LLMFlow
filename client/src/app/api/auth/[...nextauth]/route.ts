@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import jwt from "jsonwebtoken"
 import { JWT } from "next-auth/jwt"
-import axios from "axios"
+import axios, { AxiosHeaders } from "axios"
 
 /**
  * Takes a token, and returns a new token with updated
@@ -67,11 +67,18 @@ const handler = NextAuth({
           expiresIn: "30d",
         })
         try {
-          // TODO: add jwt to this request
-          await axios.post(`${process.env.BACKEND_URL}/user`, {
-            name: user.name,
-            email: user.email,
-          })
+          const headers = new AxiosHeaders()
+          headers.append("authorization", `Bearer ${token.accessToken}`)
+          // TODO: handle errors for post user request
+          const res = await axios.post(
+            `${process.env.BACKEND_URL}/user`,
+            {
+              name: user.name,
+              email: user.email,
+            },
+            { headers: headers }
+          )
+          console.log(res)
         } catch {}
       }
 
