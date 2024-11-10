@@ -9,6 +9,7 @@ import {
   Chip,
   Paper,
   IconButton,
+  Alert,
 } from "@mui/material"
 import ClearIcon from "@mui/icons-material/Clear"
 import {
@@ -400,7 +401,11 @@ const PromptForm: React.FC<PromptFormProps> = ({
             <CloseIcon fontSize="small" />
           </IconButton>
         }
-      />
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: "100%" }}>
+          {snackbarMsg}
+        </Alert>
+      </Snackbar>
     </>
   )
 }

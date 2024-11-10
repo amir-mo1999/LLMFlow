@@ -70,7 +70,7 @@ const handler = NextAuth({
           const headers = new AxiosHeaders()
           headers.append("authorization", `Bearer ${token.accessToken}`)
           // TODO: handle errors for post user request
-          const res = await axios.post(
+          await axios.post(
             `${process.env.BACKEND_URL}/user`,
             {
               name: user.name,
@@ -78,7 +78,6 @@ const handler = NextAuth({
             },
             { headers: headers }
           )
-          console.log(res)
         } catch {}
       }
 

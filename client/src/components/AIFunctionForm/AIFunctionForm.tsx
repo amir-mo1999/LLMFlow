@@ -4,6 +4,7 @@ import { InputVariableForm, JsonSchemaEditor, AssertionsForm, TestCasesForm } fr
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
+import Alert from "@mui/material/Alert"
 import TextField from "@mui/material/TextField"
 import Checkbox from "@mui/material/Checkbox"
 import ListItemText from "@mui/material/ListItemText"
@@ -421,7 +422,11 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
             <CloseIcon fontSize="small" />
           </IconButton>
         }
-      />
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: "100%" }}>
+          {snackbarMsg}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }
