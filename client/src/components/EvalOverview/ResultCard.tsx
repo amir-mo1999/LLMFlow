@@ -53,43 +53,43 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
         ...sx,
       }}
     >
-      <Grid
-        columnGap={2}
-        container
-        sx={{ alignItems: "center", mt: 0, width: 600 }}
-        direction={"row"}
-      >
-        <Grid>
-          <Box display="flex" alignItems={"center"}>
+      <Box display="flex" justifyContent="space-between" onClick={handleCollapse}>
+        <Grid
+          columnGap={2}
+          container
+          sx={{ alignItems: "center", mt: 0, width: 550 }}
+          direction={"row"}
+        >
+          <Grid>
             <Typography sx={{ color: theme.palette.primary.main }} noWrap variant="h6">
               # {index}
             </Typography>
-            <IconButton onClick={handleCollapse}>
-              {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
-            </IconButton>
-          </Box>
-        </Grid>
+          </Grid>
 
-        {cost !== undefined && (
+          {cost !== undefined && (
+            <Grid xs>
+              <NumberChip labelFirst number={cost} label="Cost" unit="$" />
+            </Grid>
+          )}
+          {score !== undefined && (
+            <Grid xs>
+              <NumberChip
+                labelFirst
+                number={score as number}
+                label="Score"
+                color={score >= 0.8 ? "success" : score >= 0.4 ? "warning" : "error"}
+                variant="filled"
+              />
+            </Grid>
+          )}
           <Grid xs>
-            <NumberChip labelFirst number={cost} label="Cost" unit="$" />
+            <NumberChip labelFirst number={latency} label="Latency" unit="ms" />
           </Grid>
-        )}
-        {score !== undefined && (
-          <Grid xs>
-            <NumberChip
-              labelFirst
-              number={score as number}
-              label="Score"
-              color={score >= 0.8 ? "success" : score >= 0.4 ? "warning" : "error"}
-              variant="filled"
-            />
-          </Grid>
-        )}
-        <Grid xs>
-          <NumberChip labelFirst number={latency} label="Latency" unit="ms" />
         </Grid>
-      </Grid>
+        <IconButton onClick={handleCollapse}>
+          {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
+        </IconButton>
+      </Box>
 
       <Collapse in={open}>
         <Box sx={{ my: 1 }}>

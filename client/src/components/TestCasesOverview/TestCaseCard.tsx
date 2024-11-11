@@ -51,19 +51,15 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
       }}
     >
       <Grid
+        onClick={handleCollapse}
         container
         columnGap={2}
         sx={{ alignItems: "center", justifyContent: "space-between", width: "100%", mt: 0 }}
       >
         <Grid>
-          <Box display="flex" alignItems="center">
-            <Typography sx={{ color: theme.palette.primary.main }} variant="h6">
-              # {indx}
-            </Typography>
-            <IconButton onClick={handleCollapse}>
-              {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
-            </IconButton>
-          </Box>
+          <Typography sx={{ color: theme.palette.primary.main }} variant="h6">
+            # {indx}
+          </Typography>
         </Grid>
 
         {testCase.assert && (
@@ -75,7 +71,10 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
           </Grid>
         )}
         <Grid xs></Grid>
-        <Grid>
+        <Grid marginLeft="auto">
+          <IconButton onClick={handleCollapse}>
+            {open ? <ExpandLessIcon fontSize="medium" /> : <ExpandMoreIcon fontSize="medium" />}
+          </IconButton>
           <IconButton
             onClick={(e) => {
               e.stopPropagation()
