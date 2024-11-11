@@ -207,18 +207,18 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       return acc
     }, [] as string[])
 
+    let testCase: GenParams["test_case"] = {}
     if (testCases.length >= 1) {
-      const testCase: GenParams["test_case"] = testCases[testCases.length - 1].vars
-
-      const genParams: GenParams = {
-        name: name,
-        description: description,
-        variables: varNames,
-        test_case: testCase,
-      }
-
-      generateTestCases({ body: genParams })
+      testCase = testCases[testCases.length - 1].vars
     }
+    const genParams: GenParams = {
+      name: name,
+      description: description,
+      variables: varNames,
+      test_case: testCase,
+    }
+      generateTestCases({ body: genParams })
+
   }
 
   useEffect(updateDisableSubmit, [
