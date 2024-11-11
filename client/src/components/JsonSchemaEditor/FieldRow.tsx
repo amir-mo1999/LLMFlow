@@ -122,6 +122,12 @@ const FieldRow: React.FC<FieldRowProps> = ({
     setSettings(settings)
   }
 
+  const setItemsSchema = (inputSchema: JsonSchemaInput) => {
+    const newSchema = { ...schema }
+    newSchema.items = inputSchema
+    setSchema({ ...newSchema })
+  }
+
   const onCloseDialog = () => {
     setOpenDialog(false)
   }
@@ -147,6 +153,16 @@ const FieldRow: React.FC<FieldRowProps> = ({
           }}
         />
       ))
+    }
+    if (type === "array") {
+      return (
+        <FieldRow
+          schema={schema.items ? schema.items : { title: "items", type: "string" }}
+          disableTitleEdit
+          indent={indent + 2}
+          setSchema={setItemsSchema}
+        />
+      )
     }
     return null
   }
