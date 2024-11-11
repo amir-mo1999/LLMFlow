@@ -157,9 +157,11 @@ const FieldRow: React.FC<FieldRowProps> = ({
     if (type === "array") {
       return (
         <FieldRow
+          showAddProperty
           schema={schema.items ? schema.items : { title: "items", type: "string" }}
           disableTitleEdit
           indent={indent + 2}
+          displayOnly={displayOnly}
           setSchema={setItemsSchema}
         />
       )

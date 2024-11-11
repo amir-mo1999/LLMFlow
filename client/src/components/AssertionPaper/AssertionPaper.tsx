@@ -1,4 +1,4 @@
-import { Assertion } from "@/api/apiSchemas"
+import { Assertion, JsonSchemaInput } from "@/api/apiSchemas"
 import React from "react"
 import { SxProps } from "@mui/material"
 import Typography from "@mui/material/Typography"
@@ -13,6 +13,7 @@ import theme from "@/theme"
 import Divider from "@mui/material/Divider"
 import Chip from "@mui/material/Chip"
 import { NumberChip } from "@/components"
+import { parseJsonSchema } from "@/utils"
 
 interface AssertionPaperProps {
   assertion: Assertion
@@ -117,7 +118,13 @@ const AssertionPaper: React.FC<AssertionPaperProps> = ({
           <Typography>
             {typeof assertion.value === "string"
               ? assertion.value
-              : JSON.stringify(assertion.value, null, 2)}
+              : JSON.stringify(
+                  displayOnly
+                    ? assertion.value
+                    : parseJsonSchema(assertion.value as JsonSchemaInput),
+                  null,
+                  2
+                )}
           </Typography>
         </>
       )}

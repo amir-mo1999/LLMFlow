@@ -86,7 +86,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
     if (aiFunction) {
       setAssertions([...aiFunction.assert.filter((assertion) => assertion.type !== "is-json")])
 
-      if (aiFunction.output_schema.type === "object") {
+      if (aiFunction.output_schema.type === "object" || aiFunction.output_schema.type === "array") {
         setUseJsonSchema(true)
         const jsonAssertionIndx = aiFunction.assert.findIndex(
           (assertion) => assertion.type === "is-json"

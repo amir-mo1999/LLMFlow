@@ -65,6 +65,10 @@ export function parseJsonSchema(schema: JsonSchemaInput): JsonSchemaInput {
     return schema
   }
 
+  if (schema.type === "array" && schema.items) {
+    delete schema.items.title
+  }
+
   // Deep copy the schema to avoid mutating the original
   const newSchema: JsonSchemaInput = JSON.parse(JSON.stringify(schema))
 
@@ -88,6 +92,26 @@ export function parseJsonSchema(schema: JsonSchemaInput): JsonSchemaInput {
     newSchema.properties = newProperties
   }
 
+  if (
+    newSchema.items &&
+    newSchema.items.properties &&
+    typeof newSchema.items.properties === "object"
+  ) {
+    const newProperties: { [key: string]: JsonSchemaInput } = {}
+    for (const [key, prop] of Object.entries(newSchema.items.properties)) {
+      if (typeof prop === "object" && prop !== null) {
+        const newKey = prop.title ? prop.title : key
+        // Recursively process the property schema
+        const processedProp = parseJsonSchema(prop)
+        newProperties[newKey] = processedProp
+      } else {
+        // If the property schema is not an object, keep it as is
+        newProperties[key] = prop
+      }
+    }
+    newSchema.items.properties = newProperties
+  }
+
   return newSchema
 }
 
@@ -98,6 +122,10 @@ export function addTitlesToSchema(
   // Base case: if schema is not an object, return it as is
   if (typeof schema !== "object" || schema === null) {
     return schema
+  }
+
+  if (schema.type === "array" && schema.items) {
+    schema.items.title = "items"
   }
 
   // Create a shallow copy to avoid mutating the original schema
@@ -130,6 +158,29 @@ export function addTitlesToSchema(
       }
     }
     newSchema.properties = newProperties
+  }
+
+  if (
+    newSchema.items &&
+    newSchema.items.properties &&
+    typeof newSchema.items.properties === "object"
+  ) {
+    const newProperties: { [key: string]: JsonSchemaInput } = {}
+    for (const [key, prop] of Object.entries(newSchema.items.properties)) {
+      if (typeof prop === "object" && prop !== null) {
+        // Set the 'title' to the key name
+        newProperties[key] = {
+          ...prop,
+          title: key,
+          // Recursively process the property's schema
+          ...addTitlesToSchema(prop, key), // Pass the key as rootTitle for nested objects if desired
+        }
+      } else {
+        // If the property schema is not an object, keep it as is
+        newProperties[key] = prop
+      }
+    }
+    newSchema.items.properties = newProperties
   }
 
   return newSchema
