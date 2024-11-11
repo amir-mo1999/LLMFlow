@@ -14,13 +14,17 @@ from openapi_pydantic import (
     PathItem,
     RequestBody,
     Schema,
+    Server,
 )
 from passlib.context import CryptContext
 
 from App.models import AIFunction, User
 
 PROJECT_SECRET = os.getenv("PROJECT_SECRET")
+SERVER_URL = os.getenv("SERVER_URL")
+
 assert PROJECT_SECRET
+assert SERVER_URL
 
 async def get_app_api_docs() -> OpenAPI:
     root_dir = Path(__file__).resolve().parent.parent.parent
@@ -153,7 +157,13 @@ async def generate_project_api_docs(
         paths[route] = path_item
 
     # Construct the OpenAPI object
-    openapi = OpenAPI(openapi="3.1.0", info=info, paths=paths, components=components)
+    openapi = OpenAPI(
+        openapi="3.1.0",
+        servers=[Server(url=SERVER_URL)],
+        info=info,
+        paths=paths,
+        components=components,
+    )
 
     return openapi
 
