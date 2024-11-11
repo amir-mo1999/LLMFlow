@@ -65,6 +65,14 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
               # {index}
             </Typography>
           </Grid>
+          {gradingResults && (
+            <Grid xs>
+              <NumberChip
+                number={gradingResults.length}
+                label={gradingResults.length === 1 ? "Assertion" : "Assertions"}
+              />
+            </Grid>
+          )}
 
           {cost !== undefined && (
             <Grid xs>
