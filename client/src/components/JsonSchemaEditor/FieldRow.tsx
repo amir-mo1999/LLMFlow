@@ -70,7 +70,6 @@ const FieldRow: React.FC<FieldRowProps> = ({
   const [settings, setSettings] = useState<Settings>(schema)
   const [openDialog, setOpenDialog] = useState(false)
 
-  console.log(title, settings)
   useEffect(() => {
     setType(schema.type)
   }, [schema])
