@@ -3,8 +3,11 @@ import { ProjectSingleOverview } from "@/components"
 import { useContext } from "react"
 import { ProjectContext } from "@/contexts"
 import { useGetProjectApiDocs } from "@/api/apiComponents"
+import { useRouter } from "next/navigation"
 
 export default function Page({ params }: { params: { projectID: string } }) {
+  const router = useRouter()
+
   const { projects, onDeleteProject, aiFunctions, onClickEdit, setSelectedProjectIndx } =
     useContext(ProjectContext)
   const { data: apiDocs, isFetching: isFetchingApiDocs } = useGetProjectApiDocs({
@@ -16,6 +19,10 @@ export default function Page({ params }: { params: { projectID: string } }) {
   if (project === undefined) return <></>
   setSelectedProjectIndx(projects.findIndex((project) => project._id === params.projectID))
 
+  const onClickViewDocs = () => {
+    router.push(`/projects/${params.projectID}/docs`)
+  }
+
   return (
     <ProjectSingleOverview
       onDeleteProject={onDeleteProject}
@@ -24,6 +31,7 @@ export default function Page({ params }: { params: { projectID: string } }) {
       isFetchingApiDocs={isFetchingApiDocs}
       aiFunctions={aiFunctions}
       onClickEdit={onClickEdit}
+      onClickViewDocs={onClickViewDocs}
     ></ProjectSingleOverview>
   )
 }

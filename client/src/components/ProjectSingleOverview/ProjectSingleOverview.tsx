@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField"
 import InputAdornment from "@mui/material/InputAdornment"
 import IconButton from "@mui/material/IconButton"
 import Tooltip from "@mui/material/Tooltip"
+import Button from "@mui/material/Button"
 import VisibilityIcon from "@mui/icons-material/Visibility"
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 import Divider from "@mui/material/Divider"
@@ -26,6 +27,7 @@ interface ProjectSingleOverviewProps {
   isFetchingApiDocs?: boolean
   aiFunctions: AIFunction[]
   onClickEdit?: (_: string) => void
+  onClickViewDocs?: () => void
 }
 
 const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
@@ -34,6 +36,7 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
   apiDocs,
   isFetchingApiDocs = false,
   onClickEdit = () => {},
+  onClickViewDocs = () => {},
 }) => {
   const { mutate: deleteProject } = useDeleteProject({})
   const [showApiKey, setShowApiKey] = useState(false)
@@ -129,6 +132,9 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
         <Divider sx={{ marginY: 2 }}></Divider>
 
         <Box>
+          <Button variant="contained" onClick={onClickViewDocs} sx={{ mr: 5 }}>
+            view json
+          </Button>
           <EditButton onClick={() => onClickEdit(project._id as string)} />
           <DeleteButton onClick={onClickDelete} />
         </Box>
