@@ -197,5 +197,80 @@
         "assert": []
       }
     ]
+  },
+  {
+    "name": "Dynamic Story Generator",
+    "description": "The Dynamic Story Generator function creates a unique and personalized story based on user inputs. The function takes the following parameters:\n- character_name: The main character’s name in the story, adding a personalized touch and making the narrative more relatable.\n- setting: Describes the story's initial environment or location (e.g., \"a bustling city\" or \"an enchanted forest\"), which establishes the atmosphere and context.\n- goal: Represents the main character's objective or mission within the story, driving the narrative forward.\n- obstacle: The central challenge, conflict, or antagonist the main character must overcome, providing tension and stakes.\n- ally_name: The name of a companion who supports the main character during their journey, contributing to character dynamics and plot development.\n- theme: Specifies the overall theme or genre of the story (e.g., \"romance,\" \"mystery,\" or \"adventure\"), shaping the tone and direction of the narrative.",
+    "providers": ["openai:gpt-4o-mini"],
+    "input_variables": [
+      {
+        "name": "character_name"
+      },
+      {
+        "name": "setting"
+      },
+      {
+        "name": "goal"
+      },
+      {
+        "name": "obstacle"
+      },
+      {
+        "name": "ally_name"
+      },
+      {
+        "name": "theme"
+      }
+    ],
+    "output_schema": {
+      "type": "string"
+    },
+    "assert": [],
+    "test_cases": [
+      {
+        "vars": {
+          "character_name": "Luna",
+          "setting": "a mystical island",
+          "goal": "to find the ancient crystal that grants wishes",
+          "obstacle": "a fierce sea dragon guarding the crystal",
+          "ally_name": "Kai",
+          "theme": "fantasy"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "character_name": "Max",
+          "setting": "a small, sleepy town",
+          "goal": "to uncover the mystery behind the missing treasure",
+          "obstacle": "a cunning rival treasure hunter",
+          "ally_name": "Sophie",
+          "theme": "mystery"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "setting": "an ancient castle",
+          "obstacle": "a ghostly guardian",
+          "ally_name": "Elena",
+          "theme": "adventure",
+          "goal": "to rescue the lost princess",
+          "character_name": "Lucas"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "setting": "a futuristic city",
+          "obstacle": "an evil corporation",
+          "ally_name": "Jordan",
+          "theme": "sci-fi",
+          "goal": "to expose the truth behind the corruption",
+          "character_name": "Avery"
+        },
+        "assert": []
+      }
+    ]
   }
 ]
