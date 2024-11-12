@@ -14,6 +14,7 @@ import { StringDialog } from "./Dialogs"
 import SettingsIcon from "@mui/icons-material/Settings"
 
 export type StringSchema = Pick<JsonSchemaInput, "maxLength" | "minLength" | "pattern">
+const stringSettingsKeys = ["maxLength", "minLength", "pattern"]
 export type NumberSchema = Pick<
   JsonSchemaInput,
   "multipleOf" | "maximum" | "exclusiveMaximum" | "minimum" | "exclusiveMinimum"
@@ -69,6 +70,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
   const [settings, setSettings] = useState<Settings>(schema)
   const [openDialog, setOpenDialog] = useState(false)
 
+  console.log(title, settings)
   useEffect(() => {
     setType(schema.type)
   }, [schema])
@@ -234,7 +236,9 @@ const FieldRow: React.FC<FieldRowProps> = ({
                 variant="dot"
                 sx={{}}
                 color="primary"
-                invisible={Object.keys(settings).length === 0 ? true : false}
+                invisible={
+                  stringSettingsKeys.some((key) => Object.hasOwn(settings, key)) ? false : true
+                }
               >
                 <SettingsIcon />
               </Badge>
