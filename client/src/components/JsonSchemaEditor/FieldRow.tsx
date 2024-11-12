@@ -32,9 +32,11 @@ export type ObjectSchema = Pick<
   | "required"
 >
 
+type Settings = StringSchema | NumberSchema | ArraySchema | ObjectSchema
+
 interface FieldRowProps {
   schema: JsonSchemaInput
-  schemaSettings?: StringSchema | NumberSchema | ArraySchema | ObjectSchema
+  schemaSettings?: Settings
   setSchema?: (_: JsonSchemaInput) => void
   displayOnly?: boolean
   disableTitleEdit?: boolean
@@ -48,7 +50,6 @@ interface FieldRowProps {
 
 const FieldRow: React.FC<FieldRowProps> = ({
   schema,
-  schemaSettings = {},
   setSchema = () => {},
   displayOnly = false,
   disableTitleEdit = false,
@@ -65,7 +66,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
     isRoot ? (["object", "array"].includes(schema.type) ? schema.type : "object") : schema.type
   )
   const [title, setTitle] = useState<string>(schema.title ? schema.title : "")
-  const [settings, setSettings] = useState(schemaSettings)
+  const [settings, setSettings] = useState<Settings>(schema)
   const [openDialog, setOpenDialog] = useState(false)
 
   useEffect(() => {
