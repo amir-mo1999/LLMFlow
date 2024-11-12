@@ -17,7 +17,7 @@ const PromptMessagePaper: React.FC<PromptMessagePaperProps> = ({ message, sx, in
         ...sx,
         minWidth: "20%",
         padding: 1,
-        maxHeight: 210,
+        maxHeight: 400,
         height: "auto",
         position: "relative",
         overflow: "auto",
