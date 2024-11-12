@@ -52,8 +52,8 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
     aiFunction ? JSON.parse(JSON.stringify(aiFunction)) : undefined
   )
 
-  const nameCharLimit = 40
-  const descriptionCharLimit = 1000
+  const nameCharLimit = 100
+  const descriptionCharLimit = 2500
   const nameRef = useRef<null | HTMLDivElement>(null)
 
   const [name, setName] = useState<string>(aiFunction ? aiFunction.name : "")

@@ -17,11 +17,11 @@ class InputVariable(RootModel):
 
 
 class AIFunctionRouteInput(RootModel):
-    name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
+    name: Annotated[str, StringConstraints(min_length=1, max_length=100)] = Field(
         ..., examples=["Summarize Texts"]
     )
 
-    description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = (
+    description: Annotated[str, StringConstraints(min_length=1, max_length=2500)] = (
         Field(
             ..., examples=["Summarizes english texts to a given number_of_sentences."]
         )
