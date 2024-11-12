@@ -64,6 +64,8 @@ const RegexInput: React.FC<RegexInputProps> = ({
       helperText={!isValid && showError ? "Invalid regex pattern" : ""}
       disabled={disabled}
       fullWidth
+      multiline
+      maxRows={5}
     />
   )
 }

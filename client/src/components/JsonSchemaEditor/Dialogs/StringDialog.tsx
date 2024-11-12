@@ -54,7 +54,7 @@ const StringDialog: React.FC<StringDialogProps> = ({
   }, [minLength, maxLength, pattern])
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogContent>
         <Box>
           <Typography variant="h6" gutterBottom>
