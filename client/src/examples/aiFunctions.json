@@ -12,8 +12,7 @@
     ],
     "output_schema": {
       "type": "object",
-      "title": "root",
-      "properties": { "translatedText": { "type": "string", "title": "translatedText" } }
+      "properties": { "translatedText": { "type": "string" } }
     },
     "providers": ["openai:gpt-4o-mini", "openai:gpt-4"],
     "assert": [],
@@ -99,6 +98,114 @@
           "number_of_sentences": "2",
           "text": "The art of minimalism is more than just decluttering your space—it's about simplifying life. In a world overflowing with choices and distractions, minimalism encourages you to focus on what truly matters. It's about owning fewer things but cherishing each one more deeply. By stripping away the excess, you create room for clarity, intention, and peace. Whether it’s reducing physical possessions or streamlining your daily habits, minimalism can bring a sense of freedom, allowing you to invest time and energy in experiences and relationships that bring genuine joy."
         }
+      }
+    ]
+  },
+  {
+    "name": "Named Entity Recognition",
+    "description": "This functions aims to recognize named entities in a text. The user specifies the text and the entity types they aim to extract from the text. The function returns the entities in a structured json format. The output represents an array of object. Each object has four keys: entity, entity_type, start_position and end_position. The first is the entity itself, the second specifies the type of the found entity, which is one of the entity types specified under the “entity_types” parameter, and the last two give information on the position of the entity in the text.",
+    "providers": ["openai:gpt-4"],
+    "input_variables": [
+      {
+        "name": "text"
+      },
+      {
+        "name": "entity_types"
+      }
+    ],
+    "output_schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "entitiy": {
+            "type": "string"
+          },
+          "entitiy_type": {
+            "type": "string"
+          },
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "assert": [
+      {
+        "type": "is-json",
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entitiy": {
+                "type": "string"
+              },
+              "entitiy_type": {
+                "type": "string"
+              },
+              "start": {
+                "type": "number"
+              },
+              "end": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "weight": 10
+      },
+      {
+        "type": "python",
+        "value": "# assert that the entity type is in the list of specified entity types\nimport json\n\noutput = json.loads(output)\n\nfor ent in output:\n  if ent[\"entity_type\"] not in context[\"vars\"][\"entity_types\"]:\n    return False\n\nreturn True",
+        "weight": 1
+      }
+    ],
+    "test_cases": [
+      {
+        "vars": {
+          "text": "Marie Curie discovered radium in Paris on December 10, 1898. She was awarded the Nobel Prize in Chemistry in 1911.",
+          "entity_types": "Person, Date, Chemical Element, Location"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "text": "Apple Inc. announced its latest iPhone model on September 12, 2023, at its headquarters in Cupertino, California.",
+          "entity_types": "Organization, Date, Location"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "text": "NASA plans to launch the Artemis II mission to the Moon on November 15, 2024, from the Kennedy Space Center in Florida.",
+          "entity_types": "Organization, Date, Location"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "text": "The novel 'Pride and Prejudice' by Jane Austen was published in 1813 and has remained popular worldwide.",
+          "entity_types": "Literary Work, Person, Date"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "text": "In 1969, Neil Armstrong became the first person to walk on the moon during the Apollo 11 mission.",
+          "entity_types": "Date, Person, Event"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "text": "The artwork 'Starry Night' by Vincent van Gogh is displayed at the Museum of Modern Art in New York.",
+          "entity_types": "Artistic Work, Person, Organization, Location"
+        },
+        "assert": []
       }
     ]
   }

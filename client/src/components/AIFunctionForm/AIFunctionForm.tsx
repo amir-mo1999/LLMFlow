@@ -104,7 +104,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       setDescription(aiFunction.description)
       setInputVariables(aiFunction.input_variables)
       setProviders(aiFunction.providers)
-      setOutputSchema(aiFunction.output_schema)
+      setOutputSchema(addTitlesToSchema(aiFunction.output_schema))
       setAssertions(aiFunction.assert)
       setTestCases(aiFunction.test_cases)
 
