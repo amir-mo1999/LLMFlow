@@ -272,5 +272,168 @@
         "assert": []
       }
     ]
+  },
+  {
+    "name": "Customized Workout Routine",
+    "description": "This AI function creates a customized workout routine based on user preferences, fitness goals, and available equipment, helping users stay fit and motivated.\n\nParameters:\n1.\tfitness_goal: The user's primary fitness objective (e.g., \"weight loss,\" \"muscle gain,\" \"flexibility\").\n2.\texperience_level: The user's current level of fitness or workout experience (e.g., \"beginner,\" \"intermediate,\" \"advanced\").\n3.\tavailable_time: The amount of time the user can dedicate to a workout session (e.g., \"30 minutes\").\n4.\tpreferred_workout_type: The type of workouts the user enjoys or prefers (e.g., \"strength training,\" \"yoga,\" \"HIIT\").\n5.\tavailable_equipment: The workout equipment available to the user (e.g., \"dumbbells,\" \"no equipment\", “calinsthenics”, “machines” or a mixture of several).\n6.\tdays_per_week: The number of days per week the user can commit to working out.\n\nThe function outputs a weekly workout plan in a structured manner. The output is a json array which contains an item for each weekday where a workout is scheduled. Off days are not included in the array. The workout items have the following fields:\n- weekday: lowercased long form of the weekday where a workout should take place (e.g. monday, tuesday, etc.)\n- workout_duration_minutes: the duration of the workout in minutes\n- exercises: an array of exercises for this weekdays workout. An exercise has the following properties:\n     - name: name of the exercise (e.b. shoulder press, bench press, bulgarian deadlift)\n     - repetitions: exercise repetitions for each set\n     - sets: total sets to complete",
+    "providers": ["openai:gpt-4"],
+    "input_variables": [
+      {
+        "name": "fitness_goal"
+      },
+      {
+        "name": "experience_level"
+      },
+      {
+        "name": "available_time"
+      },
+      {
+        "name": "preferred_workout_type"
+      },
+      {
+        "name": "available_equipment"
+      },
+      {
+        "name": "days_per_week"
+      }
+    ],
+    "output_schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "weekday": {
+            "type": "string",
+            "pattern": "^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$"
+          },
+          "workout_duration_minutes": {
+            "type": "number"
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "repetitions": {
+                  "type": "number"
+                },
+                "sets": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "assert": [
+      {
+        "type": "is-json",
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "weekday": {
+                "type": "string",
+                "pattern": "^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$"
+              },
+              "workout_duration_minutes": {
+                "type": "number"
+              },
+              "exercises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "repetitions": {
+                      "type": "number"
+                    },
+                    "sets": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "weight": 10
+      }
+    ],
+    "test_cases": [
+      {
+        "vars": {
+          "fitness_goal": "muscle gain",
+          "experience_level": "intermediate",
+          "available_time": "45 minutes",
+          "preferred_workout_type": "strength training",
+          "available_equipment": "dumbbells and machines",
+          "days_per_week": "5"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "fitness_goal": "flexibility",
+          "experience_level": "beginner",
+          "available_time": "30 minutes",
+          "preferred_workout_type": "yoga",
+          "available_equipment": "no equipment",
+          "days_per_week": "3"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "preferred_workout_type": "HIIT",
+          "fitness_goal": "weight loss",
+          "available_equipment": "dumbbells",
+          "days_per_week": "5",
+          "available_time": "45 minutes",
+          "experience_level": "intermediate"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "preferred_workout_type": "strength training",
+          "fitness_goal": "muscle gain",
+          "available_equipment": "machines",
+          "days_per_week": "4",
+          "available_time": "60 minutes",
+          "experience_level": "advanced"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "fitness_goal": "weight loss",
+          "experience_level": "intermediate",
+          "available_time": "45 minutes",
+          "preferred_workout_type": "HIIT",
+          "available_equipment": "dumbbells",
+          "days_per_week": "5"
+        },
+        "assert": []
+      },
+      {
+        "vars": {
+          "fitness_goal": "flexibility",
+          "experience_level": "beginner",
+          "available_time": "30 minutes",
+          "preferred_workout_type": "yoga",
+          "available_equipment": "no equipment",
+          "days_per_week": "3"
+        },
+        "assert": []
+      }
+    ]
   }
 ]
