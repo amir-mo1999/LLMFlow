@@ -60,18 +60,7 @@
       "type": "string"
     },
     "providers": ["openai:gpt-4o-mini"],
-    "assert": [
-      {
-        "type": "icontains",
-        "value": "the",
-        "weight": 1
-      },
-      {
-        "type": "contains",
-        "value": "thgewgewgewgewge",
-        "weight": 1
-      }
-    ],
+    "assert": [],
     "test_cases": [
       {
         "assert": [
