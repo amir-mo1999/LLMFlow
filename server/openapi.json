@@ -168,62 +168,12 @@
                             }
                         }
                     }
-                }
-            }
-        },
-        "/user/{username}": {
-            "get": {
-                "tags": [
-                    "db"
-                ],
-                "summary": "Get User",
-                "operationId": "get_user",
-                "parameters": [
+                },
+                "security": [
                     {
-                        "name": "username",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "description": "Email of the user to retrieve",
-                            "title": "Username"
-                        },
-                        "description": "Email of the user to retrieve"
+                        "OAuth2PasswordBearer": []
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/User"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "detail": "document not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/HttpExceptionModel"
-                                }
-                            }
-                        },
-                        "description": "Not Found"
-                    },
-                    "422": {
-                        "description": "Validation Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/HTTPValidationError"
-                                }
-                            }
-                        }
-                    }
-                }
+                ]
             }
         },
         "/ai-function": {
@@ -1654,7 +1604,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "maxLength": 40,
+                        "maxLength": 100,
                         "minLength": 1,
                         "title": "Name",
                         "examples": [
@@ -1663,7 +1613,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000,
+                        "maxLength": 2500,
                         "minLength": 1,
                         "title": "Description",
                         "examples": [
@@ -1888,7 +1838,7 @@
                         "anyOf": [
                             {
                                 "type": "string",
-                                "maxLength": 40,
+                                "maxLength": 100,
                                 "minLength": 1
                             },
                             {
@@ -1901,7 +1851,7 @@
                         "anyOf": [
                             {
                                 "type": "string",
-                                "maxLength": 1000,
+                                "maxLength": 2500,
                                 "minLength": 1
                             },
                             {
@@ -1984,7 +1934,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "maxLength": 40,
+                        "maxLength": 100,
                         "minLength": 1,
                         "title": "Name",
                         "examples": [
@@ -1993,7 +1943,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000,
+                        "maxLength": 2500,
                         "minLength": 1,
                         "title": "Description",
                         "examples": [
@@ -3384,7 +3334,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "maxLength": 40,
+                        "maxLength": 50,
                         "minLength": 1,
                         "pattern": "^[^\\s]+$",
                         "title": "Name"
@@ -5170,7 +5120,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "maxLength": 40,
+                        "maxLength": 100,
                         "minLength": 1,
                         "title": "Name",
                         "examples": [
@@ -5179,13 +5129,13 @@
                     },
                     "path_segment_name": {
                         "type": "string",
-                        "maxLength": 20,
+                        "maxLength": 50,
                         "minLength": 1,
                         "title": "Path Segment Name"
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000,
+                        "maxLength": 2500,
                         "minLength": 1,
                         "title": "Description",
                         "examples": [
@@ -5254,7 +5204,7 @@
                         "anyOf": [
                             {
                                 "type": "string",
-                                "maxLength": 40,
+                                "maxLength": 100,
                                 "minLength": 1
                             },
                             {
@@ -5267,7 +5217,7 @@
                         "anyOf": [
                             {
                                 "type": "string",
-                                "maxLength": 20,
+                                "maxLength": 50,
                                 "minLength": 1
                             },
                             {
@@ -5280,7 +5230,7 @@
                         "anyOf": [
                             {
                                 "type": "string",
-                                "maxLength": 1000,
+                                "maxLength": 2500,
                                 "minLength": 1
                             },
                             {
@@ -5311,7 +5261,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "maxLength": 40,
+                        "maxLength": 100,
                         "minLength": 1,
                         "title": "Name",
                         "examples": [
@@ -5320,13 +5270,13 @@
                     },
                     "path_segment_name": {
                         "type": "string",
-                        "maxLength": 20,
+                        "maxLength": 50,
                         "minLength": 1,
                         "title": "Path Segment Name"
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1000,
+                        "maxLength": 2500,
                         "minLength": 1,
                         "title": "Description",
                         "examples": [
@@ -7132,29 +7082,6 @@
                 },
                 "type": "object",
                 "title": "TokenUsage"
-            },
-            "User": {
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "title": "Name"
-                    },
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "title": "Email"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "name",
-                    "email"
-                ],
-                "title": "User"
             },
             "UserRootInput": {
                 "properties": {

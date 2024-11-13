@@ -125,56 +125,6 @@ export const usePostUser = (
   })
 }
 
-export type GetUserPathParams = {
-  /**
-   * Email of the user to retrieve
-   */
-  username: string
-}
-
-export type GetUserError = Fetcher.ErrorWrapper<
-  | {
-      status: 404
-      payload: Schemas.HttpExceptionModel
-    }
-  | {
-      status: 422
-      payload: Schemas.HTTPValidationError
-    }
->
-
-export type GetUserVariables = {
-  pathParams: GetUserPathParams
-} & ApiContext["fetcherOptions"]
-
-export const fetchGetUser = (variables: GetUserVariables, signal?: AbortSignal) =>
-  apiFetch<Schemas.User, GetUserError, undefined, {}, {}, GetUserPathParams>({
-    url: "/user/{username}",
-    method: "get",
-    ...variables,
-    signal,
-  })
-
-export const useGetUser = <TData = Schemas.User>(
-  variables: GetUserVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<Schemas.User, GetUserError, TData>,
-    "queryKey" | "queryFn" | "initialData"
-  >
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options)
-  return reactQuery.useQuery<Schemas.User, GetUserError, TData>({
-    queryKey: queryKeyFn({
-      path: "/user/{username}",
-      operationId: "getUser",
-      variables,
-    }),
-    queryFn: ({ signal }) => fetchGetUser({ ...fetcherOptions, ...variables }, signal),
-    ...options,
-    ...queryOptions,
-  })
-}
-
 export type GetAiFunctionsError = Fetcher.ErrorWrapper<{
   status: 401
   payload: Schemas.HttpExceptionModel
@@ -1171,11 +1121,6 @@ export const useGeneratePromptMessages = (
 }
 
 export type QueryOperation =
-  | {
-      path: "/user/{username}"
-      operationId: "getUser"
-      variables: GetUserVariables
-    }
   | {
       path: "/ai-function"
       operationId: "getAiFunctions"

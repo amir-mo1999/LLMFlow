@@ -5,13 +5,13 @@
  */
 export type AIFunction = {
   /**
-   * @maxLength 40
+   * @maxLength 100
    * @minLength 1
    * @example Summarize Texts
    */
   name: string
   /**
-   * @maxLength 1000
+   * @maxLength 2500
    * @minLength 1
    * @example Summarizes english texts to a given number_of_sentences.
    */
@@ -95,13 +95,13 @@ export type AIFunctionPatchInput = {
 
 export type AIFunctionRouteInput = {
   /**
-   * @maxLength 40
+   * @maxLength 100
    * @minLength 1
    * @example Summarize Texts
    */
   name: string
   /**
-   * @maxLength 1000
+   * @maxLength 2500
    * @minLength 1
    * @example Summarizes english texts to a given number_of_sentences.
    */
@@ -427,7 +427,7 @@ export type Info = {
 
 export type InputVariable = {
   /**
-   * @maxLength 40
+   * @maxLength 50
    * @minLength 1
    * @pattern ^[^\s]+$
    */
@@ -734,18 +734,18 @@ export type PathItem = {
 
 export type Project = {
   /**
-   * @maxLength 40
+   * @maxLength 100
    * @minLength 1
    * @example My Project
    */
   name: string
   /**
-   * @maxLength 20
+   * @maxLength 50
    * @minLength 1
    */
   path_segment_name: string
   /**
-   * @maxLength 1000
+   * @maxLength 2500
    * @minLength 1
    * @example This is a project
    */
@@ -777,18 +777,18 @@ export type ProjectPatchInput = {
 
 export type ProjectRouteInput = {
   /**
-   * @maxLength 40
+   * @maxLength 100
    * @minLength 1
    * @example My Project
    */
   name: string
   /**
-   * @maxLength 20
+   * @maxLength 50
    * @minLength 1
    */
   path_segment_name: string
   /**
-   * @maxLength 1000
+   * @maxLength 2500
    * @minLength 1
    * @example This is a project
    */
@@ -1123,15 +1123,6 @@ export type TokenUsage = {
    * @default 0
    */
   cached?: number | null
-}
-
-export type User = {
-  name: string
-  /**
-   * @format email
-   */
-  email: string
-  _id?: string
 }
 
 export type UserRootInput = {

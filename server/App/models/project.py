@@ -13,27 +13,27 @@ class ProjectAPIRoute(RootModel):
 
 
 class ProjectRouteInput(RootModel):
-    name: Annotated[str, StringConstraints(min_length=1, max_length=40)] = Field(
+    name: Annotated[str, StringConstraints(min_length=1, max_length=100)] = Field(
         ..., examples=["My Project"]
     )
-    path_segment_name: Annotated[str, StringConstraints(min_length=1, max_length=20)]
+    path_segment_name: Annotated[str, StringConstraints(min_length=1, max_length=50)]
 
-    description: Annotated[str, StringConstraints(min_length=1, max_length=1000)] = (
+    description: Annotated[str, StringConstraints(min_length=1, max_length=2500)] = (
         Field(..., examples=["This is a project"])
     )
     api_routes: List[ProjectAPIRoute]
 
 
 class ProjectPatchInput(RootModel):
-    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
+    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100)]] = (
         None
     )
     path_segment_name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=20)]
+        Annotated[str, StringConstraints(min_length=1, max_length=50)]
     ] = None
 
     description: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=1000)]
+        Annotated[str, StringConstraints(min_length=1, max_length=2500)]
     ] = None
     api_routes: Optional[List[ProjectAPIRoute]] = None
 

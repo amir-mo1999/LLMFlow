@@ -12,7 +12,7 @@ from .root_model import RootModel
 
 class InputVariable(RootModel):
     name: Annotated[
-        str, StringConstraints(min_length=1, max_length=40, pattern=r"^[^\s]+$")
+        str, StringConstraints(min_length=1, max_length=50, pattern=r"^[^\s]+$")
     ]
 
 
@@ -109,11 +109,11 @@ class AIFunctionRouteInput(RootModel):
 
 
 class AIFunctionPatchInput(RootModel):
-    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=40)]] = (
+    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100)]] = (
         None
     )
     description: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=1000)]
+        Annotated[str, StringConstraints(min_length=1, max_length=2500)]
     ] = None
     providers: Optional[List[Provider]] = None
 

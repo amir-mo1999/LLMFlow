@@ -27,9 +27,9 @@ const options: Intl.DateTimeFormatOptions = {
   minute: "2-digit",
 }
 
-const nameCharLimit = 40
-const descriptionCharLimit = 1000
-const pathSegmentNameCharLimit = 20
+const nameCharLimit = 50
+const descriptionCharLimit = 2500
+const pathSegmentNameCharLimit = 50
 
 const ProjectForm: React.FC<ProjectFormProps> = ({
   onSubmitProject,
