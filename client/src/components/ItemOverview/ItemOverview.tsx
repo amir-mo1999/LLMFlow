@@ -96,7 +96,7 @@ const ItemOverview: React.FC<ItemOverviewProps> = ({ itemType, onClick, items, s
           flexDirection: "column",
           gap: 2,
           paddingY: 2,
-          marginBottom: 5,
+          marginBottom: 30,
         }}
       >
         {componentToRender}
