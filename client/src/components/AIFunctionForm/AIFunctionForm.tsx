@@ -217,8 +217,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       variables: varNames,
       test_case: testCase,
     }
-      generateTestCases({ body: genParams })
-
+    generateTestCases({ body: genParams })
   }
 
   useEffect(updateDisableSubmit, [
