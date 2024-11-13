@@ -435,5 +435,95 @@
         "assert": []
       }
     ]
+  },
+  {
+    "name": "Customer Support Ticket Categorization",
+    "description": "The Customer Support Ticket Categorization function automatically classifies incoming support tickets into predefined categories, improving the efficiency of ticket triage and routing within a customer support system.\n\nParameters:\n•\tticket_subject: The subject line or brief title of the customer support ticket, providing a concise summary of the issue or inquiry.\n•\tticket_description: A detailed description of the customer's issue, offering context and specifics to help with accurate categorization.\n\nThe function categorizes support tickets into one of the following categories:\n•\tAccount Access Issues\n•\tBilling and Payments\n•\tTechnical Support\n•\tProduct Feedback and Suggestions\n•\tShipping and Delivery Issues\n•\tOrder Status Inquiries\n•\tRefunds and Returns\n•\tSubscription and Renewal Questions\n•\tService Outage or Downtime\n•\tFeature Requests\n•\tSecurity and Privacy Concerns\n•\tPromotions and Discounts\n•\tProduct Information Requests\n•\tComplaint Resolution\n•\tGeneral Inquiry",
+    "providers": ["openai:gpt-4o-mini", "openai:gpt-4", "openai:gpt-3.5-turbo"],
+    "input_variables": [
+      {
+        "name": "ticket_subject"
+      },
+      {
+        "name": "ticket_description"
+      }
+    ],
+    "output_schema": {
+      "type": "string"
+    },
+    "assert": [
+      {
+        "type": "regex",
+        "value": "^(Account Access Issues|Billing and Payments|Technical Support|Product Feedback and Suggestions|Shipping and Delivery Issues|Order Status Inquiries|Refunds and Returns|Subscription and Renewal Questions|Service Outage or Downtime|Feature Requests|Security and Privacy Concerns|Promotions and Discounts|Product Information Requests|Complaint Resolution|General Inquiry)$",
+        "weight": 10
+      }
+    ],
+    "test_cases": [
+      {
+        "vars": {
+          "ticket_subject": "Issue accessing my account",
+          "ticket_description": "I am unable to log into my account despite entering the correct credentials. Please assist me in recovering my access."
+        },
+        "assert": [
+          {
+            "type": "equals",
+            "value": "Account Access Issues",
+            "weight": 10
+          }
+        ]
+      },
+      {
+        "vars": {
+          "ticket_subject": "Question about my recent bill",
+          "ticket_description": "I received my bill for this month, and I would like clarification on an additional charge that was not present in the previous billing cycle."
+        },
+        "assert": [
+          {
+            "type": "equals",
+            "value": "Billing and Payments",
+            "weight": 1
+          }
+        ]
+      },
+      {
+        "vars": {
+          "ticket_subject": "Delivery delay for my order",
+          "ticket_description": "My order was supposed to arrive three days ago, but I have not received any updates on its status. I would like to know when I can expect delivery."
+        },
+        "assert": [
+          {
+            "type": "equals",
+            "value": "Shipping and Delivery Issues",
+            "weight": 1
+          }
+        ]
+      },
+      {
+        "vars": {
+          "ticket_subject": "Question about my subscription renewal",
+          "ticket_description": "I received a notification about my subscription renewal, but I'm unsure if I want to continue. Can you provide more details on the benefits and costs associated with my plan?"
+        },
+        "assert": [
+          {
+            "type": "equals",
+            "value": "Subscription and Renewal Questions",
+            "weight": 1
+          }
+        ]
+      },
+      {
+        "vars": {
+          "ticket_subject": "Request for refund on a defective product",
+          "ticket_description": "I received a faulty item from my last order and would like to initiate a refund process. Please let me know the steps I need to follow."
+        },
+        "assert": [
+          {
+            "type": "equals",
+            "value": "Refunds and Returns",
+            "weight": 1
+          }
+        ]
+      }
+    ]
   }
 ]

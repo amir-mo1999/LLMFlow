@@ -5,6 +5,7 @@ import ListTypesForm from "./ListTypesForm"
 import ThresholdTypeForm from "./ThresholdTypeForm"
 import CodeTypeForm from "./CodeTypeForm"
 import { Typography } from "@mui/material"
+import RegexTypeForm from "./RegexTypeForm"
 
 interface AssertionTypeFormProps {
   open: boolean
@@ -28,9 +29,11 @@ const AssertionTypeForm: React.FC<AssertionTypeFormProps> = ({
     case "contains":
     case "equals":
     case "icontains":
-    case "regex":
     case "starts-with":
       componentToRender = <StringTypeForm value={value} setValue={setValue}></StringTypeForm>
+      break
+    case "regex":
+      componentToRender = <RegexTypeForm value={value} setValue={setValue}></RegexTypeForm>
       break
     case "javascript":
       componentToRender = (
