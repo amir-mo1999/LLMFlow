@@ -103,7 +103,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
         <Box sx={{ my: 1 }}>
           <Divider sx={{ m: 1 }} />
           {/* Variables */}
-          <Typography variant="h6">Variables</Typography>
+          <Typography variant="h6">Parameters</Typography>
           {result.vars ? (
             <InputVariableOverview vars={result.vars} displayOnly></InputVariableOverview>
           ) : (
@@ -111,7 +111,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
           )}
           <Divider sx={{ m: 1 }} />
           {/* LLM Response */}
-          <Typography variant="h6">Response</Typography>
+          <Typography variant="h6">Parameters</Typography>
           {output ? (
             <Box
               sx={{

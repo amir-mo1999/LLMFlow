@@ -99,7 +99,7 @@ const TestCaseCard: React.FC<TestCaseCardProps> = ({
           {/* Variables Section */}
           <Box sx={{ mb: 2 }} onClick={() => onClickVars()}>
             <Typography variant="h6" sx={{ mt: 1 }}>
-              Variables
+              Parameters
             </Typography>
             <InputVariableOverview
               vars={testCase.vars}

@@ -66,7 +66,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
       <Divider sx={{ marginY: 2 }}></Divider>
       {/* Input Variables */}
       <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        Variables
+        Parameters
       </Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
         {aiFunction.input_variables.map((inputVar, indx) => (
