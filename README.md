@@ -138,5 +138,5 @@ Test Cases refer to example data for the parameters of an AI Function. They play
 
 For a start you can simply create an AI Function from one of the provided examples:
 
+https://github.com/user-attachments/assets/2a907476-65d3-45e5-bc15-3c9e0cf8ba15
 
-which are made robust through a set of assertions on the LLM output across example data. They allow to directly define the parameters of an AI use case and the expected output.
