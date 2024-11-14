@@ -164,7 +164,7 @@ const AIFunctionSingleOverview: React.FC<AIFunctionSingleOverviewProps> = ({
           onClick={() => onClickAddPrompt?.(aiFunction._id as string)}
           startIcon={<AddIcon sx={{ mb: 0.4 }} />}
         >
-          Add Prompt
+          Define Prompt
         </Button>
         <DeleteButton onClick={onClickDelete} />
       </Box>
