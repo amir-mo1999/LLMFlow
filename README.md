@@ -134,7 +134,7 @@ You also define if the function returns a simple unstructured string response or
 
 For the sake of evaluating the quality of an AI Function's prompts you may define Assertions and Test Cases. Assertions are used to compare against expected values or conditions. This feature uses [promptfoo](https://github.com/promptfoo/promptfoo) under the hood. There are various Assertion types to choose from, ranging from simple comparisons, to complex regex patterns, and even ones that use self defined Python or JavaScript code, which can define custom and potentially complex assertion logics. 
 
-Test Cases refer to example data for the parameters of an AI Function. They play an integral role in asserting prompt quality. After defining a prompt, it is evaluated against these test cases using the Assertions defined within the AI Function. You may also define Assertions which are only applied to a single Test Case. You can also use AI to generate Test Cases based on the previously defined Test Cases, as well as the name and description of the AI Function.
+Test Cases refer to example data for the parameters of an AI Function. They play an integral role in asserting prompt quality. After defining a prompt, it is evaluated against the Test Cases with the Assertions defined within the AI Function. You may also define Assertions which are only applied to a single Test Case. There is even a feature to AI generate Test Cases based on the previously defined Test Cases, as well as the name and description of the AI Function.
 
 For a start you can simply create an AI Function from one of the provided examples:
 
