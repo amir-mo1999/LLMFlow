@@ -64,7 +64,7 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column", paddingTop: 3 }}>
         {apiDocs === undefined && isFetchingApiDocs ? (
           <CircularProgress />
-        ) : apiDocs && !isFetchingApiDocs ? (
+        ) : apiDocs ? (
           <>
             <TextField
               variant="outlined"
