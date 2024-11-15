@@ -119,7 +119,7 @@ npm run pretty
 
 4. Execute endpoints from Swagger docs
 
-For testing out the backend from the Swagger docs you need to first authenticate using the user and password set in the `ADMIN_USER` and `ADMIN_PASSWORD` env variables. 
+For testing out the backend from the Swagger docs you need to first authenticate using the user and password set in the `ADMIN_USER` and `ADMIN_PASSWORD` env variables.
 
 
 ## Features
@@ -132,7 +132,7 @@ In the web interface you can define an AI Function. You define its name, give it
 
 You also define if the function returns a simple unstructured string response or a structured json response. For the latter you can define complex json objects using a json schema editor.
 
-For the sake of evaluating the quality of an AI Function's prompts you may define Assertions and Test Cases. Assertions are used to compare against expected values or conditions. This feature uses [promptfoo](https://github.com/promptfoo/promptfoo) under the hood. There are various Assertion types to choose from, ranging from simple comparisons, to complex regex patterns, and even ones that use self defined Python or JavaScript code, which can define custom and potentially complex assertion logics. 
+For the sake of evaluating the quality of an AI Function's prompts you may define Assertions and Test Cases. Assertions are used to compare against expected values or conditions. This feature uses [promptfoo](https://github.com/promptfoo/promptfoo) under the hood. There are various Assertion types to choose from, ranging from simple comparisons, to complex regex patterns, and even ones that use self defined Python or JavaScript code, which can define custom and potentially complex assertion logics.
 
 Test Cases refer to example data for the parameters of an AI Function. They play an integral role in asserting prompt quality. After defining a prompt, it is evaluated against the Test Cases with the Assertions defined within the AI Function. You may also define Assertions which are only applied to a single Test Case. There is even a feature to AI generate Test Cases based on the previously defined Test Cases, as well as the name and description of the AI Function.
 
@@ -141,13 +141,13 @@ For a start you can simply create an AI Function from one of the provided exampl
 https://github.com/user-attachments/assets/2a907476-65d3-45e5-bc15-3c9e0cf8ba15
 
 ## Prompts
-In LLM Flow Prompts are defined in the context of AI Functions. They must include the parameters of the respective AI Function in their body and are evaluated against the AI Function’s Test Cases and Assertions. 
+In LLM Flow Prompts are defined in the context of AI Functions. They must include the parameters of the respective AI Function in their body and are evaluated against the AI Function’s Test Cases and Assertions.
 
-Prompts are evaluated for each provider specified under the AI Function. This allows to compare a Prompt’s quality across different providers. Three metrics are computed during the evaluation: 
+Prompts are evaluated for each provider specified under the AI Function. This allows to compare a Prompt’s quality across different providers. Three metrics are computed during the evaluation:
 -	Average cost
 -	Average latency
 -	Average score: the score is computed based on the failed and passed Assertions across all Test Cases
-You may also use the feature to generate a prompt based on the AI Function context to give you a starting point for your prompt development. 
+You may also use the feature to generate a prompt based on the AI Function context to give you a starting point for your prompt development.
 Here is a demo on how to define a prompt:
 
 ## Projects
@@ -156,4 +156,3 @@ Projects are a way to create an API through which you can call various AI Functi
  The API docs are automatically populated with the name, description, and parameters of the selected AI Functions and include one of the defined test cases as an example. Each AI Function within the Project is assigned its own endpoint.
 
 This way you can integrate AI Functions defined in LLM Flow in your own applications. Once a Project is created you do not necessarily need to run the client to call its endpoints.
-

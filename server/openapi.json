@@ -168,12 +168,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "OAuth2PasswordBearer": []
-                    }
-                ]
+                }
             }
         },
         "/ai-function": {
@@ -7093,17 +7088,26 @@
                         "type": "string",
                         "format": "email",
                         "title": "Email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "title": "Password"
                     }
                 },
                 "type": "object",
                 "required": [
                     "name",
-                    "email"
+                    "email",
+                    "password"
                 ],
                 "title": "UserRootInput"
             },
             "UserWithAccessToken": {
                 "properties": {
+                    "_id": {
+                        "type": "string",
+                        "title": " Id"
+                    },
                     "name": {
                         "type": "string",
                         "title": "Name"
@@ -7113,9 +7117,9 @@
                         "format": "email",
                         "title": "Email"
                     },
-                    "_id": {
+                    "hashed_password": {
                         "type": "string",
-                        "title": " Id"
+                        "title": "Hashed Password"
                     },
                     "access_token": {
                         "type": "string",
@@ -7126,6 +7130,7 @@
                 "required": [
                     "name",
                     "email",
+                    "hashed_password",
                     "access_token"
                 ],
                 "title": "UserWithAccessToken"

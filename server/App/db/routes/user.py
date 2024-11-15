@@ -2,10 +2,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from App.dependencies import DB, decoded_token, get_db
-from App.http_exceptions import DuplicateDocument
-from App.models import DecodedToken, SuccessResponse, User, UserRootInput
 from App.auth.utils import get_password_hash
+from App.dependencies import DB, get_db
+from App.http_exceptions import DuplicateDocument
+from App.models import SuccessResponse, User, UserRootInput
 
 USER_ROUTER = APIRouter()
 
@@ -23,7 +23,6 @@ USER_ROUTER = APIRouter()
 async def post_user(
     user: UserRootInput,
     db: Annotated[DB, Depends(get_db)],
-    decoded_token: Annotated[DecodedToken, Depends(decoded_token)],
 ):
     hashed_password = get_password_hash(user.password)
 

@@ -8,11 +8,13 @@ from .root_model import RootModel
 class UserRootInput(RootModel):
     name: str
     email: EmailStr
-    password: str = Field(..., exclude=True)
+    password: str
 
 
-class User(UserRootInput):
+class User(RootModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+    name: str
+    email: EmailStr
     hashed_password: str
 
 class UserWithAccessToken(User):

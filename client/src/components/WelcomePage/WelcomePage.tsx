@@ -38,8 +38,8 @@ const WelcomePage: React.FC = () => {
           </Typography>
           <Typography variant="body1" align="center">
             {/* Placeholder text */}
-            Prompts sit at the core of AI Functions. They are responsible for making
-            models understand your task. An AI Function&apos;s performance is directly linked to the
+            Prompts sit at the core of AI Functions. They are responsible for making models
+            understand your task. An AI Function&apos;s performance is directly linked to the
             quality of its prompts. Assess prompt quality across example data using the predefined
             assertion logic of the respective AI Function. Assertions can range from simple
             comparisons to complete Python or JavaScript scripts that define custom assertion logic.

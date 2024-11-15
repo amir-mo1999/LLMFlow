@@ -1131,15 +1131,17 @@ export type UserRootInput = {
    * @format email
    */
   email: string
+  password: string
 }
 
 export type UserWithAccessToken = {
+  _id?: string
   name: string
   /**
    * @format email
    */
   email: string
-  _id?: string
+  hashed_password: string
   access_token: string
 }
 

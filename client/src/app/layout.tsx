@@ -1,11 +1,8 @@
 "use client"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import Box from "@mui/material/Box"
-import { MyAppBar } from "@/components"
 import { ThemeProvider } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { SessionProvider } from "next-auth/react"
 import { useState, useMemo } from "react"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import lightTheme from "@/theme"
@@ -25,25 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider>
-          <ThemeProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  backgroundColor: "#F3F2F7",
-                  height: "100%",
-                  width: "100%",
-                  overflow: "hidden",
-                }}
-              >
-                <MyAppBar />
-                {children}
-              </Box>
-            </QueryClientProvider>
-          </ThemeProvider>
-        </SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )
