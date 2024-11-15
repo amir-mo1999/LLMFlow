@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from App.dependencies import DB, get_db
-from App.models import User, UserWithAccessToken
+from App.models import UserWithAccessToken
 
-from .utils import create_jwt_token, timedelta, get_password_hash, verify_password
+from .utils import create_jwt_token, timedelta, verify_password
 
 # define router object
 AUTH_ROUTER = APIRouter(prefix="/auth")
