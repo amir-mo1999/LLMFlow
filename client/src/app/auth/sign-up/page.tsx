@@ -87,6 +87,7 @@ export default function Page() {
         />
 
         <TextField
+          label="email"
           variant="outlined"
           fullWidth
           required
