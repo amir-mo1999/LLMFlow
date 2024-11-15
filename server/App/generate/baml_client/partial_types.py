@@ -37,6 +37,7 @@ class GenParams(BaseModel):
     description: Optional[str] = None
     test_case: Dict[str, Optional[str]]
     variables: List[Optional[str]]
+    output_schema: Optional[Union[Optional[None], Optional[str]]] = None
 
 class GenPromptMessage(BaseModel):
 

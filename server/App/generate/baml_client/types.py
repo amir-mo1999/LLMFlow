@@ -52,6 +52,7 @@ class GenParams(BaseModel):
     description: str
     test_case: Dict[str, str]
     variables: List[str]
+    output_schema: Union[Optional[None], str]
 
 class GenPromptMessage(BaseModel):
 

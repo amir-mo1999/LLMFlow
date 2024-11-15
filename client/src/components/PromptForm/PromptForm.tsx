@@ -234,6 +234,10 @@ const PromptForm: React.FC<PromptFormProps> = ({
           description: aiFunction.description,
           test_case: aiFunction.test_cases[0].vars,
           variables: varNames,
+          output_schema:
+            aiFunction.output_schema.type === "string"
+              ? null
+              : JSON.stringify(aiFunction.output_schema, null, 2),
         }
 
         generatePromptMessages({ body: body })

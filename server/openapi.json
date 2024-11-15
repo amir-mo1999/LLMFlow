@@ -2973,6 +2973,17 @@
                         },
                         "type": "array",
                         "title": "Variables"
+                    },
+                    "output_schema": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Output Schema"
                     }
                 },
                 "type": "object",
@@ -2980,7 +2991,8 @@
                     "name",
                     "description",
                     "test_case",
-                    "variables"
+                    "variables",
+                    "output_schema"
                 ],
                 "title": "GenParams"
             },
@@ -7117,10 +7129,6 @@
                         "format": "email",
                         "title": "Email"
                     },
-                    "hashed_password": {
-                        "type": "string",
-                        "title": "Hashed Password"
-                    },
                     "access_token": {
                         "type": "string",
                         "title": "Access Token"
@@ -7130,7 +7138,6 @@
                 "required": [
                     "name",
                     "email",
-                    "hashed_password",
                     "access_token"
                 ],
                 "title": "UserWithAccessToken"

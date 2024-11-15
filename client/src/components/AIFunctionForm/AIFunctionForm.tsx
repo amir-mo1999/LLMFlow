@@ -216,6 +216,7 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       description: description,
       variables: varNames,
       test_case: testCase,
+      output_schema: null,
     }
     generateTestCases({ body: genParams })
   }

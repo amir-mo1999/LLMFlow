@@ -338,6 +338,7 @@ export type GenParams = {
     [key: string]: string
   }
   variables: string[]
+  output_schema: string | null
 }
 
 export type GenPromptMessage = {
@@ -1141,7 +1142,6 @@ export type UserWithAccessToken = {
    * @format email
    */
   email: string
-  hashed_password: string
   access_token: string
 }
 
