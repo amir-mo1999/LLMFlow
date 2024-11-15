@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Box, TextField, Button, Typography, Alert } from "@mui/material"
+import { Box, TextField, Button, Typography, Alert, Link } from "@mui/material"
 import { signIn } from "next-auth/react"
 
 export default function Page() {
@@ -100,6 +100,10 @@ export default function Page() {
         >
           {loading ? "Signing In..." : "Sign In"}
         </Button>
+
+        <Typography sx={{ mt: 2 }} align="center">
+          Don&apos;t have an account? <Link href="/auth/sign-up">Sign Up</Link>
+        </Typography>
       </Box>
     </Box>
   )

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Box, TextField, Button, Typography, Alert } from "@mui/material"
+import { Box, TextField, Button, Typography, Alert, Link } from "@mui/material"
 import { usePostUser } from "@/api/apiComponents"
 
 export default function Page() {
@@ -87,7 +87,7 @@ export default function Page() {
         />
 
         <TextField
-          label="email"
+          label="Email"
           variant="outlined"
           fullWidth
           required
@@ -122,6 +122,10 @@ export default function Page() {
         >
           {isPending ? "Submitting..." : "Sign Up"}
         </Button>
+
+        <Typography sx={{ mt: 2 }} align="center">
+          Already have an account? <Link href="/auth/sign-in">Sign In</Link>
+        </Typography>
       </Box>
     </Box>
   )
