@@ -124,7 +124,7 @@ For testing out the backend from the Swagger docs you need to first authenticate
 
 ## Features
 
-### Defining AI Functions
+### AI Functions
 AI Functions represent contracts between your own business logic and an LLM provider. You pass a set of parameters to them and they return a structured output.
 
 In the web interface you can define an AI Function. You define its name, give it a description, define the parameters it accepts and select the providers that it may use:
@@ -139,4 +139,21 @@ Test Cases refer to example data for the parameters of an AI Function. They play
 For a start you can simply create an AI Function from one of the provided examples:
 
 https://github.com/user-attachments/assets/2a907476-65d3-45e5-bc15-3c9e0cf8ba15
+
+## Prompts
+In LLM Flow Prompts are defined in the context of AI Functions. They must include the parameters of the respective AI Function in their body and are evaluated against the AI Function’s Test Cases and Assertions. 
+
+Prompts are evaluated for each provider specified under the AI Function. This allows to compare a Prompt’s quality across different providers. Three metrics are computed during the evaluation: 
+-	Average cost
+-	Average latency
+-	Average score: the score is computed based on the failed and passed Assertions across all Test Cases
+You may also use the feature to generate a prompt based on the AI Function context to give you a starting point for your prompt development. 
+Here is a demo on how to define a prompt:
+
+## Projects
+Projects are a way to create an API through which you can call various AI Functions. In the web interface a custom Swagger doc is generated for each project that you can use to test out the API in the client itself. You may also export the OpenAPI specification to generate your own client bindings using code generators like [openapi-generator]( https://github.com/OpenAPITools/openapi-generator).
+
+ The API docs are automatically populated with the name, description, and parameters of the selected AI Functions and include one of the defined test cases as an example. Each AI Function within the Project is assigned its own endpoint.
+
+This way you can integrate AI Functions defined in LLM Flow in your own applications. Once a Project is created you do not necessarily need to run the client to call its endpoints.
 
