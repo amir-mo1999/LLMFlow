@@ -237,8 +237,8 @@ class DB:
             return None
         return Project(**project)
 
-    async def get_user(self, username: str) -> User | None:
-        user = await self.users.find_one({"username": username})
+    async def get_user(self, email: str) -> User | None:
+        user = await self.users.find_one({"email": email})
         if user is None:
             return None
 

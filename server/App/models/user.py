@@ -17,5 +17,8 @@ class User(RootModel):
     email: EmailStr
     hashed_password: str
 
-class UserWithAccessToken(User):
+class UserWithAccessToken(RootModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+    name: str
+    email: EmailStr
     access_token: str

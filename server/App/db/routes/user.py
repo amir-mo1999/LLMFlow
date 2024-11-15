@@ -21,12 +21,12 @@ USER_ROUTER = APIRouter()
     },
 )
 async def post_user(
-    user: UserRootInput,
+    user_input: UserRootInput,
     db: Annotated[DB, Depends(get_db)],
 ):
-    hashed_password = get_password_hash(user.password)
+    hashed_password = get_password_hash(user_input.password)
 
-    user = User(**user.model_dump(by_alias=True), hashed_password=hashed_password)
+    user = User(**user_input.model_dump(by_alias=True), hashed_password=hashed_password)
 
     result = await db.insert(
         user,

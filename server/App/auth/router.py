@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from App.dependencies import DB, get_db
 from App.models import User, UserWithAccessToken
 
-from .utils import create_jwt_token, timedelta
+from .utils import create_jwt_token, timedelta, get_password_hash, verify_password
 
 # define router object
 AUTH_ROUTER = APIRouter(prefix="/auth")
@@ -28,15 +28,16 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Annotated[DB, Depends(get_db)],
 ):
-    if form_data.username == os.getenv(
-        "ADMIN_USER"
-    ) and form_data.password == os.getenv("ADMIN_PASSWORD"):
-        user = User(name="admin", email="admin@admin.com")
-        token = create_jwt_token(user=user, expires_delta=ACCESS_TOKEN_EXPIRES)
-        user_with_token = UserWithAccessToken(
-            name="admin", email="admin@admin.com", access_token=token
-        )
-        return user_with_token
+    email = form_data.username
+    password = form_data.password
+    user = await db.get_user(email=email)
 
-    else:
+    if user is None or not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
+
+    token = create_jwt_token(user=user, expires_delta=ACCESS_TOKEN_EXPIRES)
+
+    user_with_token = UserWithAccessToken(
+        name=user.name, email=user.email, access_token=token
+    )
+    return user_with_token
