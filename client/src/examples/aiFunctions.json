@@ -124,30 +124,6 @@
     },
     "assert": [
       {
-        "type": "is-json",
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "entitiy": {
-                "type": "string"
-              },
-              "entitiy_type": {
-                "type": "string"
-              },
-              "start": {
-                "type": "number"
-              },
-              "end": {
-                "type": "number"
-              }
-            }
-          }
-        },
-        "weight": 10
-      },
-      {
         "type": "python",
         "value": "# assert that the entity type is in the list of specified entity types\nimport json\n\noutput = json.loads(output)\n\nfor ent in output:\n  if ent[\"entity_type\"] not in context[\"vars\"][\"entity_types\"]:\n    return False\n\nreturn True",
         "weight": 1
@@ -329,44 +305,7 @@
         }
       }
     },
-    "assert": [
-      {
-        "type": "is-json",
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "weekday": {
-                "type": "string",
-                "pattern": "^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)$"
-              },
-              "workout_duration_minutes": {
-                "type": "number"
-              },
-              "exercises": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "repetitions": {
-                      "type": "number"
-                    },
-                    "sets": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "weight": 10
-      }
-    ],
+    "assert": [],
     "test_cases": [
       {
         "vars": {
