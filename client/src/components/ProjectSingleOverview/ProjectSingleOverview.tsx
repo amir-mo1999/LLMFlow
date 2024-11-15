@@ -114,17 +114,7 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
                 },
               }}
             />
-            <SwaggerUI
-              spec={apiDocs}
-              requestInterceptor={(req) => {
-                if (req.url === "/openapi.json") {
-                  return req
-                }
-                const parsedUrl = new URL(req.url)
-                req.url = "/api/proxy" + parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
-                return req
-              }}
-            ></SwaggerUI>
+            <SwaggerUI spec={apiDocs}></SwaggerUI>
           </>
         ) : (
           <></>
