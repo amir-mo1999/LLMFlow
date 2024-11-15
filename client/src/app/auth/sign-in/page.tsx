@@ -3,8 +3,11 @@
 import React, { useState } from "react"
 import { Box, TextField, Button, Typography, Alert, Link } from "@mui/material"
 import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export default function Page() {
+  const router = useRouter()
+
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [error, setError] = useState<string | null>(null)
@@ -29,6 +32,7 @@ export default function Page() {
       setSuccess(true)
       setEmail("")
       setPassword("")
+      router.push("/")
     }
     setLoading(false)
   }
