@@ -15,13 +15,8 @@
 # fmt: off
 import typing
 
-from baml_py.type_builder import (
-    ClassBuilder,
-    ClassPropertyBuilder,
-    EnumBuilder,
-    EnumValueBuilder,
-    FieldType,
-)
+from baml_py.baml_py import ClassBuilder, EnumBuilder, EnumValueBuilder, FieldType
+from baml_py.type_builder import ClassPropertyBuilder
 from baml_py.type_builder import TypeBuilder as _TypeBuilder
 
 

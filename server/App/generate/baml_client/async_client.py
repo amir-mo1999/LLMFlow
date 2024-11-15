@@ -70,7 +70,7 @@ class BamlAsyncClient:
     ) -> List[types.GenPromptMessage]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
-        tb = __tb__._tb
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
       else:
         tb = None
       __cr__ = baml_options.get("client_registry", None)
@@ -93,7 +93,7 @@ class BamlAsyncClient:
     ) -> List[types.GenTestCase]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
-        tb = __tb__._tb
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
       else:
         tb = None
       __cr__ = baml_options.get("client_registry", None)
@@ -127,7 +127,7 @@ class BamlStreamClient:
     ) -> baml_py.BamlStream[List[partial_types.GenPromptMessage], List[types.GenPromptMessage]]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
-        tb = __tb__._tb
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
       else:
         tb = None
       __cr__ = baml_options.get("client_registry", None)
@@ -157,7 +157,7 @@ class BamlStreamClient:
     ) -> baml_py.BamlStream[List[partial_types.GenTestCase], List[types.GenTestCase]]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
-        tb = __tb__._tb
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
       else:
         tb = None
       __cr__ = baml_options.get("client_registry", None)
