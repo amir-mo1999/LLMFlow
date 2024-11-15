@@ -22,8 +22,6 @@ Use the Docker setup if you want to simply run the application without much effo
 
 Prerequisites:
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- Registering a project in the [Google Cloud Platform](https://console.cloud.google.com). Refer to this guide: [guide](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid?hl=en)
-
 
 How to setup:
 
