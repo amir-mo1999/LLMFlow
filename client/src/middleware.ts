@@ -13,7 +13,7 @@ export default withAuth(
       authorized: ({ token }) => !!token, // Only allow if token exists
     },
     pages: {
-      signIn: "/auth/signin", // Redirect to sign-in page if not authorized
+      signIn: "/auth/sign-in", // Redirect to sign-in page if not authorized
     },
   }
 )

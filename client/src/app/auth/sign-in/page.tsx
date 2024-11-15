@@ -18,7 +18,6 @@ export default function Page() {
     setLoading(true)
 
     const res = await signIn("credentials", {
-      redirect: false,
       username: email,
       password,
     })

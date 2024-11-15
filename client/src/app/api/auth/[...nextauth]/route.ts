@@ -1,44 +1,12 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import jwt from "jsonwebtoken"
-import DecodedToken from "next-auth"
-import { UserWithAccessToken } from "@/api/apiSchemas"
 
 const apiUrl = process.env.BACKEND_URL || ""
-
-async function refreshAccessToken(access_token: string) {
-  try {
-    const response = await fetch(apiUrl + "/auth/refresh-token", {
-      headers: {
-        Authorization: "Bearer " + access_token,
-      },
-      method: "GET",
-    })
-
-    const userWithToken: UserWithAccessToken = await response.json()
-
-    if (!response.ok) {
-      throw userWithToken
-    }
-
-    return userWithToken.access_token
-  } catch (error) {
-    return {
-      error: "RefreshAccessTokenError",
-    }
-  }
-}
 
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         username: {
           label: "E-Mail",
@@ -73,15 +41,13 @@ const handler = NextAuth({
             body: formData,
           })
 
-          console.log(response)
-
           if (response.ok) {
             const result = await response.json()
             return result
           } else {
             return null
           }
-        } catch (error) {
+        } catch {
           return null
         }
       },
@@ -92,6 +58,8 @@ const handler = NextAuth({
       // after login add user data to token
       if (user) {
         token.user = user
+        //@ts-expect-error: the server returns the user with an access token but we did not specify the return type
+        token.accessToken = user.access_token
       }
       return { ...token, ...user }
     },
@@ -101,13 +69,16 @@ const handler = NextAuth({
       return session
     },
     // redirect user to base route after login
-    async redirect(params: { url: string; baseUrl: string }) {
+    async redirect() {
       return (process.env.NEXTAUTH_URL as string) + "/ai-functions"
     },
   },
   session: {
     strategy: "jwt",
     maxAge: 60 * 60 * 24,
+  },
+  pages: {
+    signIn: "/auth/sign-in",
   },
 })
 
