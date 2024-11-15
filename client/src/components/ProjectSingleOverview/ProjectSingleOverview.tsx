@@ -121,10 +121,12 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
                   return req
                 }
                 const parsedUrl = new URL(req.url)
+
                 parsedUrl.pathname = parsedUrl.pathname.replace(
-                  `/${apiDocs.servers ? apiDocs.servers[0] : ""}`,
+                  `/${apiDocs.servers ? apiDocs.servers[0].url.replace(/^https?:\/\//, "") : ""}`,
                   ""
                 )
+                console.log(parsedUrl)
                 req.url = "/api/proxy" + parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
                 return req
               }}
