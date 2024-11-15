@@ -19,12 +19,12 @@ export default function Page() {
 
     const res = await signIn("credentials", {
       redirect: false,
-      email,
+      username: email,
       password,
     })
 
     if (res?.error) {
-      setError(res.error)
+      setError("Invalid credentials")
     } else {
       setSuccess(true)
       setEmail("")
