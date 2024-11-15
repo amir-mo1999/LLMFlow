@@ -9,7 +9,6 @@ type HandlerFunction = (_: NextRequest, __: { path: string[] }) => Promise<NextR
  * Common handler to process all HTTP methods.
  */
 const handleRequest: HandlerFunction = async (request, { path }) => {
-  // Retrieve the token using next-auth's getToken
   const token = await getToken({
     req: request,
     secret: process.env.JWT_SECRET,
@@ -18,14 +17,6 @@ const handleRequest: HandlerFunction = async (request, { path }) => {
   // parse url
   const query = new URL(request.url).search
 
-  // If no token is found, return a 401 Unauthorized response
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
-
-  // Extract the JWT token (adjust based on your token structure)
-  const jwtToken = token.accessToken
-
   // Construct the backend URL
   const backendPath = path.join("/")
   const backendUrl = `${process.env.BACKEND_URL}/${backendPath}${query}`
@@ -33,7 +24,12 @@ const handleRequest: HandlerFunction = async (request, { path }) => {
   const headers = new Headers()
   headers.append("api_key", request.headers.get("api_key") || "")
   headers.append("Content-type", "application/json")
-  headers.append("authorization", `Bearer ${jwtToken}`)
+
+  // If no token is found, return a 401 Unauthorized response
+  if (token) {
+    const jwtToken = token.accessToken
+    headers.append("authorization", `Bearer ${jwtToken}`)
+  }
 
   // Prepare the fetch options
   const fetchOptions: RequestInit = {

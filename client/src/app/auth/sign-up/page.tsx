@@ -24,9 +24,10 @@ export default function Page() {
       if (err.stack.status === 409) {
         setEmailError(true)
         setEmailErrorMsg("User with this email already exists")
+      } else {
+        setEmailError(true)
+        setEmailErrorMsg("Please enter a valid email")
       }
-      setEmailError(true)
-      setEmailErrorMsg("Please enter a valid email")
     },
   })
 
