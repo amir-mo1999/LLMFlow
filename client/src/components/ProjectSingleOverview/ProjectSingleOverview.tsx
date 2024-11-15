@@ -128,6 +128,11 @@ const ProjectSingleOverview: React.FC<ProjectSingleOverviewProps> = ({
                 )
                 parsedUrl.pathname = parsedUrl.pathname.replace("/api/proxy/projects", "/api/proxy")
                 req.url = "/api/proxy" + parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
+                req.url = req.url.replace(
+                  `/${apiDocs.servers ? apiDocs.servers[0].url.replace(/^https?:\/\//, "") : ""}`,
+                  ""
+                )
+
                 return req
               }}
             ></SwaggerUI>
