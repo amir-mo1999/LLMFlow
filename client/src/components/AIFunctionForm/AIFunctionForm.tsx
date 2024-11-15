@@ -383,7 +383,12 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
           <Typography variant="h6" sx={{ my: 1 }}>
             JSON Schema
           </Typography>
-          <JsonSchemaEditor schema={outputSchema} setSchema={setOutputSchema}></JsonSchemaEditor>
+          <JsonSchemaEditor
+            schema={
+              outputSchema.type === "string" ? { type: "object", title: "root" } : outputSchema
+            }
+            setSchema={setOutputSchema}
+          ></JsonSchemaEditor>
         </>
       ) : (
         <></>
