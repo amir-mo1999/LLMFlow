@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from App.dependencies import DB, decoded_token, get_db
 from App.http_exceptions import DuplicateDocument
 from App.models import DecodedToken, SuccessResponse, User, UserRootInput
+from App.auth.utils import get_password_hash
 
 USER_ROUTER = APIRouter()
 
@@ -24,7 +25,9 @@ async def post_user(
     db: Annotated[DB, Depends(get_db)],
     decoded_token: Annotated[DecodedToken, Depends(decoded_token)],
 ):
-    user = User(**user.model_dump(by_alias=True))
+    hashed_password = get_password_hash(user.password)
+
+    user = User(**user.model_dump(by_alias=True), hashed_password=hashed_password)
 
     result = await db.insert(
         user,
