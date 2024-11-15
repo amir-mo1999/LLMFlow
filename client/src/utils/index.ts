@@ -160,6 +160,10 @@ export function addTitlesToSchema(
     newSchema.properties = newProperties
   }
 
+  if (newSchema.items) {
+    newSchema.items.title = "items"
+  }
+
   if (
     newSchema.items &&
     newSchema.items.properties &&
@@ -182,7 +186,6 @@ export function addTitlesToSchema(
     }
     newSchema.items.properties = newProperties
   }
-
   return newSchema
 }
 
