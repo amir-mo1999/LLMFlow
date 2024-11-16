@@ -4,10 +4,14 @@ LLM Flow is a tool designed to facilitate the process of AI development, startin
 See the [Features](#features) section for more detail.
 
 ## Built With
-- FastAPI
-- Next.js
-- Express.js
-- MongoDB
+[![Next][Next.js]][Next-url]
+[![React][React.js]][React-url]
+[![FastAPI][FastAPI]][FastAPI-url]
+[![MongoDB][MongoDB]][MongoDB-url]
+
+## Dependencies
+- [Promptfoo](https://github.com/promptfoo/promptfoo)
+- [BAML](https://github.com/BoundaryML/baml)
 
 ## Getting Started
 The project is divided into three services which all have to be set up individually:
@@ -138,7 +142,7 @@ For a start you can simply create an AI Function from one of the provided exampl
 
 https://github.com/user-attachments/assets/2a907476-65d3-45e5-bc15-3c9e0cf8ba15
 
-## Prompts
+### Prompts
 In LLM Flow Prompts are defined in the context of AI Functions. They must include the parameters of the respective AI Function in their body and are evaluated against the its Test Cases and Assertions.
 
 Prompts are evaluated for each provider specified under the AI Function. This allows to compare a Prompt’s quality across different providers. Three metrics are computed during the evaluation:
@@ -152,9 +156,21 @@ Here is a demo on how to define a prompt:
 https://github.com/user-attachments/assets/208bb017-4e40-43f0-b11a-bfc776571cb7
 
 
-## Projects
+### Projects
 Projects are a way to create an API through which you can call various AI Functions. In the web interface a custom Swagger doc is generated for each project that you can use to test out the API in the client itself. You may also export the OpenAPI specification to generate your own client bindings using code generators like [openapi-generator]( https://github.com/OpenAPITools/openapi-generator).
 
  The API docs are automatically populated with the name, description, and parameters of the selected AI Functions and include one of the defined test cases as an example. Each AI Function within the Project is assigned its own endpoint.
 
 This way you can integrate AI Functions defined in LLM Flow in your own applications. Once a Project is created you do not necessarily need to run the client to call its endpoints.
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[FastAPI-url]: https://fastapi.tiangolo.com/
+[FastAPI]: https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi
+[MongoDB]: https://img.shields.io/badge/-MongoDB-13aa52?style=for-the-badge&logo=mongodb&logoColor=white
+[MongoDB-url]: https://www.mongodb.com
