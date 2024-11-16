@@ -163,6 +163,12 @@ Projects are a way to create an API through which you can call various AI Functi
  The API docs are automatically populated with the name, description, and parameters of the selected AI Functions and include one of the defined test cases as an example. Each AI Function within the Project is assigned its own endpoint.
 
 This way you can integrate AI Functions defined in LLM Flow in your own applications. Once a Project is created you do not necessarily need to run the client to call its endpoints.
+Here is demo on how to create and use Projects:
+
+
+https://github.com/user-attachments/assets/44d42676-617d-4f56-b535-ebb4b3b4d5a1
+
+
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
