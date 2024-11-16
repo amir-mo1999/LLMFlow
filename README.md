@@ -223,10 +223,6 @@ npm run lint
 npm run pretty
 ```
 
-4. Execute endpoints from Swagger docs
-
-For testing out the backend from the Swagger docs you need to first authenticate using the user and password set in the `ADMIN_USER` and `ADMIN_PASSWORD` env variables.
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
