@@ -33,7 +33,7 @@
 <h3 align="center">LLM Flow</h3>
 
   <p align="center">
-    LLM Flow is a tool designed to facilitate the process of AI development, starting at defining isolated AI use cases or functions, implementing prompts, assessing and improving prompt quality, and generating APIs to integrate AI functionality into your own applications.
+    LLM Flow is a tool designed to facilitate the process of AI development, starting at defining isolated AI use cases (AI Functions), implementing prompts, assessing and improving prompt quality, and generating APIs to integrate AI functionality into your own applications.
     <br />
     <a href="#usage"><strong>Explore the features »</strong></a>
   </p>
