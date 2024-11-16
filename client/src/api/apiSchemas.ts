@@ -60,7 +60,7 @@ export type AIFunctionOutput = {
   /**
    * @example The weather is sunny today.
    */
-  response: string | Record<string, any>
+  response: string | Record<string, any> | any[]
   /**
    * @example 0.9
    */

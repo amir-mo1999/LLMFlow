@@ -65,17 +65,21 @@ async def execute_ai_function(provider: Provider,
             if grading_result.assertion.type == "is-json" and grading_result.passed:
                 is_json = True
 
+        response = (
+            json.loads(result.response.output) if is_json else result.response.output
+        )
+
         # parse as AIFunctionOutput
         output = AIFunctionOutput(
-            prompt_messages=[PromptMessage(**data) for data in json.loads(result.prompt.raw)],
-            response=json.loads(result.response.output)
-            if is_json
-            else result.response.output,
+            prompt_messages=[
+                PromptMessage(**data) for data in json.loads(result.prompt.raw)
+            ],
+            response=response,
             score=result.score,
             cost=result.cost,
             latency=result.latencyMs,
             is_json=is_json,
-            provider=provider
+            provider=provider,
         )
 
         return output

@@ -182,7 +182,7 @@ class AIFunctionOutput(RootModel):
             {"role": "user", "content": "Hey, AI! What's the weather like today?"}
         ],
     )
-    response: str | Dict[str, Any] = Field(
+    response: str | Dict[str, Any] | List[Any] = Field(
         ..., examples=["The weather is sunny today."]
     )
     score: float = Field(..., examples=[0.9])
