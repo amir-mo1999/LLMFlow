@@ -8,6 +8,7 @@ See the [Features](#features) section for more detail.
 [![React][React.js]][React-url]
 [![FastAPI][FastAPI]][FastAPI-url]
 [![MongoDB][MongoDB]][MongoDB-url]
+[![Express.js][Express.js]][Express.js-url]
 
 ## Dependencies
 - [Promptfoo](https://github.com/promptfoo/promptfoo)
@@ -174,3 +175,5 @@ This way you can integrate AI Functions defined in LLM Flow in your own applicat
 [FastAPI]: https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi
 [MongoDB]: https://img.shields.io/badge/-MongoDB-13aa52?style=for-the-badge&logo=mongodb&logoColor=white
 [MongoDB-url]: https://www.mongodb.com
+[Express.js]: https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=fff&style=flat
+[Express.js-url]: https://expressjs.com/
