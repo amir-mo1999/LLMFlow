@@ -139,7 +139,7 @@ For a start you can simply create an AI Function from one of the provided exampl
 https://github.com/user-attachments/assets/2a907476-65d3-45e5-bc15-3c9e0cf8ba15
 
 ## Prompts
-In LLM Flow Prompts are defined in the context of AI Functions. They must include the parameters of the respective AI Function in their body and are evaluated against the AI Function’s Test Cases and Assertions.
+In LLM Flow Prompts are defined in the context of AI Functions. They must include the parameters of the respective AI Function in their body and are evaluated against the its Test Cases and Assertions.
 
 Prompts are evaluated for each provider specified under the AI Function. This allows to compare a Prompt’s quality across different providers. Three metrics are computed during the evaluation:
 -	Average cost
@@ -147,6 +147,10 @@ Prompts are evaluated for each provider specified under the AI Function. This al
 -	Average score: the score is computed based on the failed and passed Assertions across all Test Cases
 You may also use the feature to generate a prompt based on the AI Function context to give you a starting point for your prompt development.
 Here is a demo on how to define a prompt:
+
+
+https://github.com/user-attachments/assets/208bb017-4e40-43f0-b11a-bfc776571cb7
+
 
 ## Projects
 Projects are a way to create an API through which you can call various AI Functions. In the web interface a custom Swagger doc is generated for each project that you can use to test out the API in the client itself. You may also export the OpenAPI specification to generate your own client bindings using code generators like [openapi-generator]( https://github.com/OpenAPITools/openapi-generator).
