@@ -107,7 +107,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "entitiy": {
+          "entity": {
             "type": "string"
           },
           "entitiy_type": {
