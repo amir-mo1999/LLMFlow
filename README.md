@@ -148,6 +148,7 @@ Prerequisites:
 - [Python 3.12](https://www.python.org/downloads/release/python-3120/)
 - [Pipenv](https://pipenv.pypa.io/en/latest/)
 - [Node 22](https://nodejs.org/en/blog/announcements/v22-release-announce)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 You may also use a different node version. However, I only tested the setup using Node 22.
 
@@ -156,6 +157,12 @@ How to setup:
 1. Setup env files
 
 For all three services create a `.env` file in their respective root folders by copying and renaming the `.env.template` file. Replace the secrets in the templates with your own.
+2. Start Database Service:
+
+In the root folder run:
+```
+docker compose up mongo -d
+```
 
 2. Start `backend`
 
