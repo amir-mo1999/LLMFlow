@@ -35,7 +35,7 @@ export default function Layout({
     <PageContainer>
       <SideBarContainer>
         <Button sx={{ marginBottom: 2 }} variant="contained" onClick={onClickCreate}>
-          Create AI Function
+          New AI Function
         </Button>
         <ItemOverview
           itemType="AI Function"

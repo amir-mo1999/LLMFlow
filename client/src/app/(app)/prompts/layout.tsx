@@ -64,7 +64,7 @@ export default function Layout({
           disabled={aiFunctions.length === 0 ? true : false}
           onClick={onClickCreate}
         >
-          Create Prompt
+          New Prompt
         </Button>
         <ItemOverview
           itemType="Prompt"

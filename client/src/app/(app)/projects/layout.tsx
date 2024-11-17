@@ -34,7 +34,7 @@ export default function Layout({
     <PageContainer>
       <SideBarContainer>
         <Button sx={{ marginBottom: 2 }} variant="contained" onClick={onClickCreate}>
-          Create Project
+          New Project
         </Button>
         <ItemOverview
           itemType="Project"
