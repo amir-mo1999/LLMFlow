@@ -87,6 +87,7 @@
 [![FastAPI][FastAPI]][FastAPI-url]
 [![MongoDB][MongoDB]][MongoDB-url]
 [![Express.js][Express.js]][Express.js-url]
+[![Mui][Mui]][Mui-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -353,3 +354,5 @@ Project Link: [https://github.com/amir-mo1999/LLMFlow](https://github.com/amir-m
 [MongoDB-url]: https://www.mongodb.com
 [Express.js]: https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=fff&style=flat
 [Express.js-url]: https://expressjs.com/
+[Mui]: https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white
+[Mui-url]: https://mui.com/material-ui/
