@@ -111,7 +111,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result, index, sx }) => {
           )}
           <Divider sx={{ m: 1 }} />
           {/* LLM Response */}
-          <Typography variant="h6">Parameters</Typography>
+          <Typography variant="h6">Output</Typography>
           {output ? (
             <Box
               sx={{
