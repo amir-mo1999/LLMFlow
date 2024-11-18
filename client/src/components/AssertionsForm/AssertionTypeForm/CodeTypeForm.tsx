@@ -14,7 +14,6 @@ interface CodeTypeFormProps {
 
 const CodeTypeForm: React.FC<CodeTypeFormProps> = ({ value, setValue, extension, sx }) => {
   const pythonDefault = `# Implement your assertion logic as a script that returns 'True' if the result passed the assertion and 'False' otherwise.
-# You may also return an instance of the "GradingResult" object
 # "output" is the raw string response of the Provider, "context" holds test case data and is an AssertContext instance
 # class AssertContext(TypedDict):
 #   prompt: str
