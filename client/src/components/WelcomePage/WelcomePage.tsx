@@ -9,7 +9,7 @@ const WelcomePage: React.FC = () => {
       sx={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 25 }}
     >
       <Typography variant="h2" sx={{ mb: 3 }}>
-        Welcome to the LLM Flow!
+        Welcome to LLM Flow!
       </Typography>
       <Typography variant="h6" align="center" sx={{ width: 1000 }}>
         LLM Flow is a web tool designed to facilitate the process of AI development, starting at
