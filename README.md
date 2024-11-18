@@ -148,6 +148,7 @@ Prerequisites:
 - [Python 3.12](https://www.python.org/downloads/release/python-3120/)
 - [Pipenv](https://pipenv.pypa.io/en/latest/)
 - [Node 22](https://nodejs.org/en/blog/announcements/v22-release-announce)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 You may also use a different node version. However, I only tested the setup using Node 22.
 
@@ -157,7 +158,14 @@ How to setup:
 
 For all three services create a `.env` file in their respective root folders by copying and renaming the `.env.template` file. Replace the secrets in the templates with your own.
 
-2. Start `backend`
+2. Start Database Service:
+
+In the root folder run:
+```
+docker compose up mongo -d
+```
+
+3. Start `backend`
 
 To run the `backend` you can use the VS Code debugger to start it up or run the following in the `backend` folder:
 
@@ -166,7 +174,7 @@ pipenv install
 pipenv run python3.12 wsgi.py
 ```
 
-3. Start `promptfoo-server`
+4. Start `promptfoo-server`
 
 In the `promptfoo-server` folder run:
 
@@ -175,7 +183,7 @@ npm install
 npm run start
 ```
 
-4. Start `client`:
+5. Start `client`:
 
 In the `client` folder run:
 
@@ -184,7 +192,7 @@ npm install
 npm run dev
 ```
 
-5. Access application:
+6. Access application:
 
 - `client`: http://localhost:3000/
 - `backend`: http://localhost:4000/docs
