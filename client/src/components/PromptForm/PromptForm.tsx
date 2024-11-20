@@ -21,7 +21,7 @@ import {
   RoleEnum,
   GenRole,
 } from "@/api/apiSchemas"
-import { AIFunctionPaper, SelectAIFunctionDialog } from "@/components"
+import { AIFunctionPaper, HelpIcon, SelectAIFunctionDialog } from "@/components"
 import { usePostPrompt, usePatchPrompt } from "@/api/apiComponents"
 import Divider from "@mui/material/Divider"
 import Snackbar from "@mui/material/Snackbar"
@@ -290,7 +290,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
           <>
             <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
               <Typography variant="h5">Prompt Messages</Typography>
-
+              <HelpIcon title="Use System messages to define the overall rules, instructions and behavior of the model, User messages for the main input and context, and Assistant messages to give examples for what a model response may look like. The prompt must include all parameters of the AI Function. Consider also including the output schema for AI Functions with a structured output. You can click on the parameters and output schema to insert them."/>
               <Button onClick={addMessage}>
                 <AddIcon />
               </Button>
