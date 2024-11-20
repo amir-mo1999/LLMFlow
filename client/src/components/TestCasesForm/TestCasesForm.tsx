@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography"
 import TestCasesFormDialog from "./TestCasesFormDialog"
 import { TestCaseInput, InputVariable, Assertion } from "@/api/apiSchemas"
 import AddIcon from "@mui/icons-material/Add"
-import { TestCasesOverview } from "@/components"
+import { TestCasesOverview, HelpIcon } from "@/components"
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome"
 import CircularProgress from "@mui/material/CircularProgress"
 
@@ -111,8 +111,17 @@ const TestCasesForm: React.FC<TestCasesFormProps> = ({
 
   return (
     <Box>
-      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: 2,
+          marginBottom: 1,
+          alignItems: "center",
+        }}
+      >
         <Typography variant="h5">Test Cases</Typography>
+        <HelpIcon title="Test cases provide example data for the parameters of your AI Function. They are used to evaluate prompts. You can define assertions, which are only applied to a single test case. You can either define your own test cases or AI generate them. To generate them you must first set the name, description and parameters." />
         <Button onClick={handleOpenAddDialog} color="primary">
           <AddIcon />
         </Button>

@@ -1,6 +1,12 @@
 "use client"
 import React, { useState, useEffect, useRef } from "react"
-import { InputVariableForm, JsonSchemaEditor, AssertionsForm, TestCasesForm } from "@/components"
+import {
+  InputVariableForm,
+  JsonSchemaEditor,
+  AssertionsForm,
+  TestCasesForm,
+  HelpIcon,
+} from "@/components"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
@@ -316,9 +322,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
         <Divider sx={{ marginY: 2 }}></Divider>
       </Box>
 
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        Name
-      </Typography>
+      <Box display="flex" alignItems="center" paddingBottom={1} gap={2}>
+        <Typography variant="h5">Name</Typography>
+        <HelpIcon title="The name should clearly state what use case the AI Function aims to encompass. Keep it short and concise. The name is used when generating test cases or prompts for your AI Function." />
+      </Box>
       <TextField
         ref={nameRef}
         sx={{ width: "100%" }}
@@ -330,9 +337,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
 
       <Divider sx={{ marginY: 2 }}></Divider>
 
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        Description
-      </Typography>
+      <Box display="flex" alignItems="center" paddingBottom={1} gap={2}>
+        <Typography variant="h5">Description</Typography>
+        <HelpIcon title="The description is very important when generating test cases or prompts for your AI Function. It should explain what the AI Function does, the parameters it takes and the output it provides." />
+      </Box>
       <TextField
         value={description}
         onChange={onDescriptionChange}
@@ -345,9 +353,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
 
       <InputVariableForm inputVariables={inputVariables} setInputVariables={setInputVariables} />
       <Divider sx={{ marginY: 2 }}></Divider>
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        Providers
-      </Typography>
+      <Box display="flex" alignItems="center" paddingBottom={1} gap={2}>
+        <Typography variant="h5">Providers</Typography>
+        <HelpIcon title="When defining prompts for your AI Function they are evaluated for each provider you select here. In a project your AI Function can only be called with one of the specified providers." />
+      </Box>
       <Select
         value={providers}
         multiple
@@ -364,9 +373,10 @@ const AIFunctionForm: React.FC<AIFunctionFormProps> = ({
       </Select>
       <Divider sx={{ marginY: 2 }}></Divider>
 
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        Output Type
-      </Typography>
+      <Box display="flex" alignItems="center" paddingBottom={1} gap={2}>
+        <Typography variant="h5">Output Type</Typography>
+        <HelpIcon title="You can either select string if your AI Function outputs unstructured data as a simple text or json for structured outputs. You can define a json schema using the json schema editor below. When opting for the json output type, a is-json assertion it automatically generated, which asserts that the output of the AI Function passes against the specified json schema." />
+      </Box>
       <Select
         value={useJsonSchema ? "json" : "string"}
         size="small"
