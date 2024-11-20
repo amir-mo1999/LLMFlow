@@ -8,6 +8,8 @@ import { SxProps } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import ClearIcon from "@mui/icons-material/Clear"
 import Typography from "@mui/material/Typography"
+import Tooltip from "@mui/material/Tooltip"
+import HelpIcon from "../HelpIcon/HelpIcon"
 
 interface InputVariableFormProps {
   inputVariables: AIFunctionRouteInput["input_variables"]
@@ -41,12 +43,22 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
 
   return (
     <Box sx={{ ...sx }}>
-      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, paddingBottom: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 2,
+          paddingBottom: 1,
+        }}
+      >
         <Typography variant="h5">Parameters</Typography>
-
-        <Button onClick={handleAddVariable}>
-          <AddIcon />
-        </Button>
+        <HelpIcon title="Parameters are the input of an AI function. Test cases must provide example data for all parameters. They must also be included in the prompts for the AI Function." />
+        <Tooltip title="add parameter" placement="top">
+          <Button onClick={handleAddVariable}>
+            <AddIcon />
+          </Button>
+        </Tooltip>
       </Box>
       {inputVariables.map((inputVar, index) => (
         <Box key={index} display="flex" alignItems="center" pb={1}>
@@ -56,9 +68,11 @@ const InputVariableForm: React.FC<InputVariableFormProps> = ({
             fullWidth
             helperText={`${inputVar.name.length}/${maxVarNameChars}`}
           />
-          <Button onClick={handleDeleteVariable(index)}>
-            <ClearIcon />
-          </Button>
+          <Tooltip title="delete" placement="top">
+            <Button onClick={handleDeleteVariable(index)}>
+              <ClearIcon />
+            </Button>
+          </Tooltip>
         </Box>
       ))}
     </Box>
