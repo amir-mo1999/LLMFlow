@@ -226,7 +226,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
 
         {!displayOnly && (
           <Tooltip
-            title="tooltip"
+            title="Advanced Settings"
             placement="top"
             sx={{ display: type === "string" ? "normal" : "none" }}
           >
