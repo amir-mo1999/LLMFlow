@@ -110,7 +110,7 @@
           "entity": {
             "type": "string"
           },
-          "entitiy_type": {
+          "entity_type": {
             "type": "string"
           },
           "start": {
