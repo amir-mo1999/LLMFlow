@@ -89,7 +89,7 @@ const FieldRow: React.FC<FieldRowProps> = ({
     const newType = event.target.value as JsonSchemaInput["type"]
     setType(newType)
     setSettings({})
-    updateSchema({ type: newType })
+    updateSchema({ type: newType, items: undefined, properties: undefined })
   }
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
